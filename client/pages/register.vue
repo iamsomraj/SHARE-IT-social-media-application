@@ -1,11 +1,13 @@
 <template>
   <div class="flex justify-center items-center h-96">
-    <LoginForm />
+    <RegisterForm />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HomePage',
+  name: 'RegisterPage',
 }
 </script>
+
+<style lang="scss" scoped></style>

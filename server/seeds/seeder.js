@@ -68,6 +68,14 @@ async function main() {
       follower_id: insertedPersons[1].id,
       followed_id: insertedPersons[2].id,
     },
+    {
+      follower_id: insertedPersons[1].id,
+      followed_id: insertedPersons[0].id,
+    },
+    {
+      follower_id: insertedPersons[2].id,
+      followed_id: insertedPersons[0].id,
+    },
   ]);
   console.log("Following Records:", followingRecords);
 }

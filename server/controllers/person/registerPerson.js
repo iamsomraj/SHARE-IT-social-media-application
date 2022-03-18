@@ -5,7 +5,7 @@ const { generateToken, hash } = require("../../utils/index.js");
 /**
  * @access public
  * @description registers one person
- * @route POST /api/v1/users/
+ * @route POST /api/v1/persons/
  */
 const registerPerson = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;

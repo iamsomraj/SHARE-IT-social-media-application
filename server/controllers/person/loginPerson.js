@@ -5,7 +5,7 @@ const { generateToken, validateHash } = require("../../utils/index.js");
 /**
  * @access public
  * @description logins one person
- * @route POST /api/v1/users/auth
+ * @route POST /api/v1/persons/auth
  */
 const loginPerson = asyncHandler(async (req, res) => {
   const { email, password } = req.body;

@@ -1,16 +1,18 @@
+import axios from 'axios';
+import { BASE_URL } from '../util/';
+
 export const state = () => ({
-  isLoggedIn: false,
-  user: {
-    email: '',
-    password: '',
-    auth_token: '',
+  user: null,
+});
+
+export const getters = {
+  getUser(state) {
+    return () => state.user;
   },
-})
+};
 
 export const mutations = {
-  login(state, user) {
-    state.isLoggedIn = true
-    state.user = user
-    state.user.auth_token = Math.random().toString()
+  setUser(state, user) {
+    state.user = user;
   },
-}
+};

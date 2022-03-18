@@ -10,3 +10,12 @@ export const userRegister = async (user) => {
   const { data } = await axios.post(`${BASE_URL}/persons/`, user);
   return data;
 };
+
+export const getUserProfileById = async (id, token) => {
+  const { data } = await axios.get(`${BASE_URL}/persons/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
+};

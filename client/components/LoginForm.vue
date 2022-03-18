@@ -27,7 +27,7 @@
         </NuxtLink>
       </div>
     </form>
-    <Footer />  
+    <Footer />
   </div>
 </template>
 
@@ -55,7 +55,14 @@ export default {
         password: this.password,
       };
       const loggedInUser = await userLogin(formData);
+      /**
+       * Logging in the user in the vuex state
+       */
       this.$store.commit('auth/setUser', loggedInUser);
+      /**
+       * navigating to profile page
+       */
+      this.$router.push(`profile/${loggedInUser.id}`);
     },
   },
 };

@@ -8,12 +8,6 @@ const asyncHandler = require("express-async-handler");
  */
 const getPersonProfile = asyncHandler(async (req, res) => {
   let person, id;
-
-  console.log({
-    req_user: req.user,
-    params: req.params,
-  });
-
   /**
    * If the same person is asking for his own profile,
    * then no further request is made to fetch person details

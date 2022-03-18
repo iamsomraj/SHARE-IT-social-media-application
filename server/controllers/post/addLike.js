@@ -10,7 +10,6 @@ const Post = require("../../models/Post.js");
  */
 const addLike = asyncHandler(async (req, res) => {
   const id = parseInt(req.params.id);
-  console.log('addLike');
   const post = await Post.query().findOne({ id });
 
   if (!post) {

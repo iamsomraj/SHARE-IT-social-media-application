@@ -40,8 +40,7 @@ export default {
     async onLikeHandler(id) {
       const user = this.$store.getters['auth/getUser']();
       const profile = await addLikeToPost(id, user.token);
-      console.log({ token: user.token, id, profile });
-      // this.$store.commit('profile/setProfile', profile);
+      this.$store.commit('profile/setProfile', profile);
     },
   },
 };

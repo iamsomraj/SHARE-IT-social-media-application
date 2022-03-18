@@ -21,7 +21,7 @@ export const getUserProfileById = async (id, token) => {
 };
 
 export const addLikeToPost = async (id, token) => {
-  const { data } = await axios.post(`${BASE_URL}/posts/${id}`, {
+  const { data } = await axios.get(`${BASE_URL}/posts/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

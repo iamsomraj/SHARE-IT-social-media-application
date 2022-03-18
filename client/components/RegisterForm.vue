@@ -61,6 +61,10 @@ export default {
       };
       const registeredUser = await userRegister(formData);
       this.$store.commit('auth/setUser', registeredUser);
+      /**
+       * navigating to profile page
+       */
+      this.$router.push(`profile/${registeredUser.id}`);
     },
   },
 };

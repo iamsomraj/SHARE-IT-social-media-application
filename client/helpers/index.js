@@ -19,3 +19,12 @@ export const getUserProfileById = async (id, token) => {
   });
   return data;
 };
+
+export const addLikeToPost = async (id, token) => {
+  const { data } = await axios.post(`${BASE_URL}/posts/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
+};

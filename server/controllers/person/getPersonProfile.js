@@ -1,5 +1,6 @@
 const Person = require("../../models/Person.js");
 const asyncHandler = require("express-async-handler");
+const Like = require("../../models/Like.js");
 
 /**
  * @access private
@@ -21,10 +22,15 @@ const getPersonProfile = asyncHandler(async (req, res) => {
   }
 
   if (person) {
-    const posts = await Person.relatedQuery("posts").for(id);
+    const posts = await Person.relatedQuery("posts").for(id).orderBy('createdAt');
     const followers = await Person.relatedQuery("followers").for(id);
     const followings = await Person.relatedQuery("followings").for(id);
     const likes = await Person.relatedQuery("likes").for(id);
+
+    for (let post of posts) {
+      const likesOnPost = await Like.query().where("master_id", "=", post.id);
+      post.likesOnPost = likesOnPost;
+    }
 
     res.json({
       id: person.id,

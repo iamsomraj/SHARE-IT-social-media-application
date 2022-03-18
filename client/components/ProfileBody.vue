@@ -13,8 +13,16 @@
       <div>
         {{ post.content }}
       </div>
-      <div class="text-xs flex justify-between items-center">
-        <button class="text-gray-400 font-extrabold">Like</button>
+      <div class="text-xs flex justify-evenly items-center space-x-3">
+        <div v-if="post.likesOnPost.length > 0">
+          {{ post.likesOnPost.length }} Likes
+        </div>
+        <button
+          class="text-gray-400 font-extrabold"
+          @click="onLikeHandler(post.id)"
+        >
+          Like
+        </button>
         <div>
           {{ (post.updatedAt ? post.updatedAt : post.createdAt).slice(0, 10) }}
         </div>
@@ -24,9 +32,18 @@
 </template>
 
 <script>
+import { addLikeToPost } from '../helpers/index.js';
 export default {
   name: 'ProfileBody',
   props: ['profile'],
+  methods: {
+    async onLikeHandler(id) {
+      const user = this.$store.getters['auth/getUser']();
+      const profile = await addLikeToPost(id, user.token);
+      console.log({ token: user.token, id, profile });
+      // this.$store.commit('profile/setProfile', profile);
+    },
+  },
 };
 </script>
 

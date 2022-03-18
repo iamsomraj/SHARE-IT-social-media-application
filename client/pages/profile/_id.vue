@@ -25,7 +25,6 @@ export default {
      * when user is not logged in
      */
     if (!user) {
-      console.log('redirect', user);
       this.$router.push('/');
     }
   },

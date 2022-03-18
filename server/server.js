@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 const personRoutes = require("./routes/personRoutes.js");
+const postRoutes = require("./routes/postRoutes.js");
 const { pageNotFound, errorHandler } = require("./middlewares/error.js");
 
 const app = express();
@@ -12,7 +13,7 @@ if (!isProd) app.use(cors());
 
 app.use(express.json());
 app.use("/api/v1/persons", personRoutes);
-// app.use("/api/v1/posts", null);
+app.use("/api/v1/posts", postRoutes);
 
 app.use(pageNotFound);
 app.use(errorHandler);

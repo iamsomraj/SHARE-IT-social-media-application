@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { userLogin } from '../api/';
+import { userLogin } from '../helpers/';
 
 export default {
   name: 'LoginForm',

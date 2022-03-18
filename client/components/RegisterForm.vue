@@ -1,7 +1,7 @@
 <template>
   <div>
-    <form class="space-y-4">
-       <div>
+    <form class="space-y-4" @submit="onRegister">
+      <div>
         <input
           class="px-4 py-3 outline-none border-2 border-gray-200 rounded"
           placeholder="Name"
@@ -25,10 +25,15 @@
         />
       </div>
       <div class="flex justify-evenly items-center text-white space-x-4">
-        <button class="bg-red-400 w-full p-2 font-bold rounded">Register</button>
-        <button class="bg-blue-400 w-full p-2 font-bold rounded">
-          Login
+        <button class="bg-red-400 w-full p-2 font-bold rounded">
+          Register
         </button>
+        <NuxtLink
+          to="/"
+          class="bg-blue-400 w-full p-2 font-bold rounded text-center"
+        >
+          Login
+        </NuxtLink>
       </div>
     </form>
     <Footer />
@@ -36,16 +41,29 @@
 </template>
 
 <script>
+import { userRegister } from '../helpers';
 export default {
-  name: 'LoginForm',
+  name: 'RegisterForm',
   data() {
     return {
       name: '',
       email: '',
       password: '',
-    }
+    };
   },
-}
+  methods: {
+    async onRegister(e) {
+      e.preventDefault();
+      const formData = {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+      };
+      const registeredUser = await userRegister(formData);
+      this.$store.commit('auth/setUser', registeredUser);
+    },
+  },
+};
 </script>
 
 <style scoped></style>

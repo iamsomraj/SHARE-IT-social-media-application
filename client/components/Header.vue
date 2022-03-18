@@ -12,9 +12,11 @@
       >
     </div>
     <div v-else class="flex items-center space-x-4 font-bold">
-      <NuxtLink :to="`/profile/${user.id}`" class="text-green-500 tracking-tight text-2xl font-bold">{{
-        user.name
-      }}</NuxtLink>
+      <NuxtLink
+        :to="`/profile/${user.id}`"
+        class="text-green-500 tracking-tight text-2xl font-bold"
+        >{{ user.name }}</NuxtLink
+      >
       <button
         @click="onLogout"
         class="text-white font-bold bg-red-400 px-3 py-2 rounded"

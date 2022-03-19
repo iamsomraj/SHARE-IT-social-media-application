@@ -43,3 +43,12 @@ export const createPost = async (content, token) => {
   );
   return data;
 };
+
+export const getUserFeed = async (token) => {
+  const { data } = await axios.get(`${BASE_URL}/posts/feed`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
+};

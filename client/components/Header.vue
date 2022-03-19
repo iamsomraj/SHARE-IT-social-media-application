@@ -12,11 +12,12 @@
       >
     </div>
     <div v-else class="flex items-center space-x-4 font-bold">
-      <NuxtLink
-        :to="'/feed'"
+      <div
+        @click="onFeed"
         class="text-green-500 tracking-tight text-2xl font-bold"
-        >yourfeed</NuxtLink
       >
+        yourfeed
+      </div>
       <button
         @click="onLogout"
         class="text-white font-bold bg-red-400 px-3 py-2 rounded"
@@ -43,6 +44,9 @@ export default {
       this.$store.commit('auth/setUser', null);
       this.$store.commit('profile/setProfile', null);
       this.$router.push('/');
+    },
+    onFeed() {
+      this.$router.push('/feed');
     },
   },
 };

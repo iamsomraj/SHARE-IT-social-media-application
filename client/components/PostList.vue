@@ -6,6 +6,8 @@
       class="px-6 py-3 border-t border-b border-separate"
     >
       <PostListItem
+        @onPostLike="onPostLike"
+        :id="post.id"
         :name="name"
         :content="post.content"
         :numberOfLikes="post.likesOnPost.length"
@@ -19,6 +21,11 @@
 export default {
   name: 'PostList',
   props: ['posts', 'name'],
+  methods: {
+    onPostLike(id) {
+      this.$emit('onPostLike', id);
+    },
+  },
 };
 </script>
 

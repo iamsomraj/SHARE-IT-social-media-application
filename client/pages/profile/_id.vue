@@ -11,13 +11,14 @@
         :posts="profile.posts"
         :name="profile.name"
         @onPostCreate="onPostCreate"
+        @onPostLike="onPostLike"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { createPost, getUserProfileById } from '../../helpers';
+import { addLikeToPost, createPost, getUserProfileById } from '../../helpers';
 export default {
   name: 'ProfileIdPage',
   computed: {
@@ -46,6 +47,12 @@ export default {
       const newPost = await createPost(postInput, this.user.token);
       const id = parseInt(this.$router.currentRoute.params.id); // getting id from url
       const fetchedProfile = await getUserProfileById(id, this.user.token);
+      this.$store.commit('profile/setProfile', fetchedProfile);
+    },
+    async onPostLike(id) {
+      await addLikeToPost(id, this.user.token);
+      const urlId = parseInt(this.$router.currentRoute.params.id); // getting id from url
+      const fetchedProfile = await getUserProfileById(urlId, this.user.token);
       this.$store.commit('profile/setProfile', fetchedProfile);
     },
   },

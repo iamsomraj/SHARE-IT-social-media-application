@@ -5,7 +5,7 @@ const Post = require("../../models/Post.js");
 
 /**
  * @access private
- * @description adds one like for one post
+ * @description creates post
  * @route POST /api/v1/posts/create
  */
 const createPost = asyncHandler(async (req, res) => {

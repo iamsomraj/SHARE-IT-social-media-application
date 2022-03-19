@@ -1,5 +1,7 @@
-const addLike = require('./addLike');
+const addLike = require("./addLike.js");
+const createPost = require("./createPost.js");
 
 module.exports = {
-  addLike
-}
+  addLike,
+  createPost,
+};

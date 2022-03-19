@@ -45,7 +45,7 @@ async function main() {
   const likeRecords = await Like.query().insert([
     {
       master_id: insertedPost[0].id,
-      owner_id: insertedPersons[0].id,
+      owner_id: insertedPersons[2].id,
     },
     {
       master_id: insertedPost[0].id,

@@ -1,7 +1,12 @@
 <template>
   <div>
     <div v-if="profile">
-      <ProfileHeader :profile="profile" />
+      <ProfileHeader
+        :name="profile.name"
+        :numberOfPosts="profile.posts.length"
+        :numberOfFollowers="profile.followers.length"
+        :numberOfFollowings="profile.followings.length"
+      />
       <ProfileBody :profile="profile" />
     </div>
   </div>

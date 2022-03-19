@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { getUserProfileById } from '../../helpers';
+import { createPost, getUserProfileById } from '../../helpers';
 export default {
   name: 'ProfileIdPage',
   computed: {
@@ -42,8 +42,11 @@ export default {
     this.$store.commit('profile/setProfile', fetchedProfile);
   },
   methods: {
-    onPostCreate(postInput) {
-      alert(postInput);
+    async onPostCreate(postInput) {
+      const newPost = await createPost(postInput, this.user.token);
+      const id = parseInt(this.$router.currentRoute.params.id); // getting id from url
+      const fetchedProfile = await getUserProfileById(id, this.user.token);
+      this.$store.commit('profile/setProfile', fetchedProfile);
     },
   },
 };

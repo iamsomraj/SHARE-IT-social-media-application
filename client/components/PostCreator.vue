@@ -27,6 +27,7 @@ export default {
     onPostCreate(e) {
       e.preventDefault();
       this.$emit('onPostCreate', this.postInput);
+      this.postInput = '';
     },
   },
 };

@@ -24,16 +24,12 @@ export default {
     profile() {
       return this.$store.getters['profile/getProfile']();
     },
+    user() {
+      return this.$store.getters['auth/getUser']();
+    },
   },
   created() {
-    /**
-     * fetching user detail
-     */
-    const user = this.$store.getters['auth/getUser']();
-    /**
-     * when user is not logged in
-     */
-    if (!user) {
+    if (!this.user) {
       this.$router.push('/');
     }
   },
@@ -41,9 +37,8 @@ export default {
     /**
      * fetching user detail
      */
-    const user = this.$store.getters['auth/getUser']();
     const id = parseInt(this.$router.currentRoute.params.id); // getting id from url
-    const fetchedProfile = await getUserProfileById(id, user.token);
+    const fetchedProfile = await getUserProfileById(id, this.user.token);
     this.$store.commit('profile/setProfile', fetchedProfile);
   },
   methods: {

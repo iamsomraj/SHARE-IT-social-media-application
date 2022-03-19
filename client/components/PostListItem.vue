@@ -9,7 +9,10 @@
       {{ content }}
     </div>
     <div class="text-xs flex justify-evenly items-center space-x-2">
-      <div>{{ numberOfLikes }} Likes</div>
+      <div class="flex justify-center items-center space-x-1">
+        <div>{{ numberOfLikes }}</div>
+        <Heart />
+      </div>
       <div>
         {{ date }}
       </div>

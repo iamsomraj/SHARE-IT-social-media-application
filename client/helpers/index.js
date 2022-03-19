@@ -28,3 +28,18 @@ export const addLikeToPost = async (id, token) => {
   });
   return data;
 };
+
+export const createPost = async (content, token) => {
+  const { data } = await axios.post(
+    `${BASE_URL}/posts/create`,
+    {
+      content,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return data;
+};

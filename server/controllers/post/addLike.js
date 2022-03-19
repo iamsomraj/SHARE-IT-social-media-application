@@ -39,7 +39,7 @@ const addLike = asyncHandler(async (req, res) => {
 
   const posts = await Person.relatedQuery("posts")
     .for(req.user.id)
-    .orderBy("createdAt");
+    .orderBy("createdAt", "DESC");
   const followers = await Person.relatedQuery("followers").for(req.user.id);
   const followings = await Person.relatedQuery("followings").for(req.user.id);
   const likes = await Person.relatedQuery("likes").for(req.user.id);

@@ -13,9 +13,9 @@
     </div>
     <div v-else class="flex items-center space-x-4 font-bold">
       <NuxtLink
-        :to="`/profile/${user.id}`"
+        :to="'/feed'"
         class="text-green-500 tracking-tight text-2xl font-bold"
-        >{{ user.name }}</NuxtLink
+        >yourfeed</NuxtLink
       >
       <button
         @click="onLogout"

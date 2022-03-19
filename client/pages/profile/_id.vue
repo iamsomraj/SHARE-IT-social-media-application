@@ -7,7 +7,7 @@
         :numberOfFollowers="profile.followers.length"
         :numberOfFollowings="profile.followings.length"
       />
-      <ProfileBody :profile="profile" />
+      <ProfileBody :posts="profile.posts" :name="profile.name" />
     </div>
   </div>
 </template>

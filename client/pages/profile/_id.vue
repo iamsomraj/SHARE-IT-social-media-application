@@ -7,7 +7,11 @@
         :numberOfFollowers="profile.followers.length"
         :numberOfFollowings="profile.followings.length"
       />
-      <ProfileBody :posts="profile.posts" :name="profile.name" />
+      <ProfileBody
+        :posts="profile.posts"
+        :name="profile.name"
+        @onPostCreate="onPostCreate"
+      />
     </div>
   </div>
 </template>
@@ -41,6 +45,11 @@ export default {
     const id = parseInt(this.$router.currentRoute.params.id); // getting id from url
     const fetchedProfile = await getUserProfileById(id, user.token);
     this.$store.commit('profile/setProfile', fetchedProfile);
+  },
+  methods: {
+    onPostCreate(postInput) {
+      alert(postInput);
+    },
   },
 };
 </script>

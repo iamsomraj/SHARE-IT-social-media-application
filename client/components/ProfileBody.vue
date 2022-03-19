@@ -1,5 +1,6 @@
 <template>
   <div class="my-2">
+    <PostCreator @onPostCreate="onPostCreate" />
     <PostList :posts="posts" :name="name" />
   </div>
 </template>
@@ -10,10 +11,8 @@ export default {
   name: 'ProfileBody',
   props: ['posts', 'name'],
   methods: {
-    async onLikeHandler(id) {
-      const user = this.$store.getters['auth/getUser']();
-      const profile = await addLikeToPost(id, user.token);
-      this.$store.commit('profile/setProfile', profile);
+    onPostCreate(postInput) {
+      this.$emit('onPostCreate', postInput);
     },
   },
 };

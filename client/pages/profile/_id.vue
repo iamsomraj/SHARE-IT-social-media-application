@@ -16,10 +16,10 @@
 import { getUserProfileById } from '../../helpers';
 export default {
   name: 'ProfileIdPage',
-  data() {
-    return {
-      profile: null,
-    };
+  computed: {
+    profile() {
+      return this.$store.getters['profile/getProfile']();
+    },
   },
   created() {
     /**
@@ -41,7 +41,6 @@ export default {
     const id = parseInt(this.$router.currentRoute.params.id); // getting id from url
     const fetchedProfile = await getUserProfileById(id, user.token);
     this.$store.commit('profile/setProfile', fetchedProfile);
-    this.profile = fetchedProfile;
   },
 };
 </script>

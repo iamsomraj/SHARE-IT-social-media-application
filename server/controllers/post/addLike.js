@@ -32,32 +32,19 @@ const addLike = asyncHandler(async (req, res) => {
     throw new Error("Invalid duplicate like operation!");
   }
 
-  await Like.query().insert({
+  const likeRecord = await Like.query().insert({
     master_id: post.id,
     owner_id: req.user.id,
   });
 
-  const posts = await Person.relatedQuery("posts")
-    .for(req.user.id)
-    .orderBy("createdAt", "DESC");
-  const followers = await Person.relatedQuery("followers").for(req.user.id);
-  const followings = await Person.relatedQuery("followings").for(req.user.id);
-  const likes = await Person.relatedQuery("likes").for(req.user.id);
-
-  for (let post of posts) {
-    const likesOnPost = await Like.query().where("master_id", "=", post.id);
-    post.likesOnPost = likesOnPost;
+  if (likeRecord) {
+    res.json({
+      likeRecord,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Something went wrong during Like operation");
   }
-
-  res.json({
-    id: req.user.id,
-    name: req.user.name,
-    email: req.user.email,
-    posts,
-    followers,
-    followings,
-    likes,
-  });
 });
 
 module.exports = addLike;

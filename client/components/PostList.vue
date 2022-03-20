@@ -8,7 +8,8 @@
       <PostListItem
         @onPostLike="onPostLike"
         :id="post.id"
-        :name="name"
+        :ownerName="post.owner.name"
+        :ownerId="post.owner.id"
         :content="post.content"
         :numberOfLikes="post.likesOnPost.length"
         :date="(post.updatedAt ? post.updatedAt : post.createdAt).slice(0, 10)"
@@ -20,7 +21,7 @@
 <script>
 export default {
   name: 'PostList',
-  props: ['posts', 'name'],
+  props: ['posts'],
   methods: {
     onPostLike(id) {
       this.$emit('onPostLike', id);

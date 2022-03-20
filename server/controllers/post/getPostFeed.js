@@ -21,9 +21,19 @@ const getPostFeed = asyncHandler(async (req, res) => {
     const postRecords = await Post.query()
       .where("owner_id", "=", follower_id)
       .orderBy("createdAt", "DESC");
-    posts.push(postRecords);
+    posts.push(...postRecords);
   }
 
+  for (let post of posts) {
+    const likesOnPost = await Like.query().where("master_id", "=", post.id);
+    const personRecord = await Person.query().findOne({ id: post.owner_id });
+    post.likesOnPost = likesOnPost;
+    post.owner = {
+      id: personRecord.id,
+      name: personRecord.name,
+      email: personRecord.email,
+    };
+  }
   res.json({
     posts,
   });

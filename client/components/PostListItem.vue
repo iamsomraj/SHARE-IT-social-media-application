@@ -1,9 +1,10 @@
 <template>
   <div class="space-y-4">
     <div
-      class="inline rounded-lg bg-gray-400 px-2 py-1 text-xs text-white font-extrabold"
+      class="inline rounded-lg bg-gray-400 px-2 py-1 cursor-pointer text-xs text-white font-extrabold"
+      @click="$router.push(`/profile/${ownerId}`)"
     >
-      @{{ name }}
+      @{{ ownerName }}
     </div>
     <div>
       {{ content }}
@@ -26,7 +27,7 @@
 <script>
 export default {
   name: 'PostListItem',
-  props: ['id', 'name', 'content', 'numberOfLikes', 'date'],
+  props: ['id', 'ownerName', 'ownerId', 'content', 'numberOfLikes', 'date'],
   methods: {
     onPostLike(id) {
       this.$emit('onPostLike', id);

@@ -32,6 +32,7 @@ const getPersonProfile = asyncHandler(async (req, res) => {
     for (let post of posts) {
       const likesOnPost = await Like.query().where("master_id", "=", post.id);
       post.likesOnPost = likesOnPost;
+      post.owner = { id: person.id, name: person.name, email: person.email };
     }
 
     res.json({

@@ -1,7 +1,7 @@
 <template>
   <div class="my-2">
     <PostCreator @onPostCreate="onPostCreate" />
-    <PostList :posts="posts" :name="name" @onPostLike="onPostLike" />
+    <PostList :posts="posts" @onPostLike="onPostLike" />
   </div>
 </template>
 

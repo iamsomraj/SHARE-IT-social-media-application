@@ -8,13 +8,12 @@
       :numberOfFollowers="user.followers.length"
       :numberOfFollowings="user.followings.length"
     />
-    <NuxtLink to="/people">Explore</NuxtLink>
-    <PostList v-if="posts" :posts="posts" @onPostLike="onPostLike" />
+    {{ people }}
   </div>
 </template>
 
 <script>
-import { getUserFeed, addLikeToPost } from '../../helpers';
+import { getUserFeed, addLikeToPost, getPeople } from '../../helpers';
 export default {
   name: 'FeedPage',
   computed: {
@@ -24,19 +23,12 @@ export default {
   },
   async asyncData(context) {
     const token = context.store.getters['auth/getUser']().token;
-    const data = await getUserFeed(token);
+    const data = await getPeople(token);
     return {
-      posts: data.posts,
+      people: data.people,
     };
   },
-  methods: {
-    async onPostLike(id) {
-      const token = this.$store.getters['auth/getUser']().token;
-      await addLikeToPost(id, token);
-      const data = await getUserFeed(token);
-      this.posts = data.posts;
-    },
-  },
+  methods: {},
 };
 </script>
 

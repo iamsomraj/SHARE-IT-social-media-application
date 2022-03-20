@@ -61,3 +61,12 @@ export const followPerson = async (id, token) => {
   });
   return data;
 };
+
+export const getPeople = async (token) => {
+  const { data } = await axios.get(`${BASE_URL}/persons/people`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
+};

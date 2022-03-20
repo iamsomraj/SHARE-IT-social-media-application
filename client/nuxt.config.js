@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'client',
+    title: 'SHARE IT - share thoughts, posts',
     htmlAttrs: {
       lang: 'en',
     },
@@ -43,4 +43,4 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
-}
+};

@@ -13,13 +13,19 @@
         :name="profile.name"
         @onPostCreate="onPostCreate"
         @onPostLike="onPostLike"
+        @onUserFollow="onUserFollow"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { addLikeToPost, createPost, getUserProfileById } from '../../helpers';
+import {
+  addLikeToPost,
+  createPost,
+  followPerson,
+  getUserProfileById,
+} from '../../helpers';
 export default {
   name: 'ProfileIdPage',
   computed: {
@@ -52,6 +58,12 @@ export default {
     },
     async onPostLike(id) {
       await addLikeToPost(id, this.user.token);
+      const urlId = parseInt(this.$router.currentRoute.params.id); // getting id from url
+      const fetchedProfile = await getUserProfileById(urlId, this.user.token);
+      this.$store.commit('profile/setProfile', fetchedProfile);
+    },
+    async onUserFollow(id) {
+      await followPerson(id, this.user.token);
       const urlId = parseInt(this.$router.currentRoute.params.id); // getting id from url
       const fetchedProfile = await getUserProfileById(urlId, this.user.token);
       this.$store.commit('profile/setProfile', fetchedProfile);

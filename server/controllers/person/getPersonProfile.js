@@ -25,8 +25,8 @@ const getPersonProfile = asyncHandler(async (req, res) => {
     const posts = await Person.relatedQuery("posts")
       .for(id)
       .orderBy("createdAt", "DESC");
-    const followers = await Person.relatedQuery("followers").for(id);
-    const followings = await Person.relatedQuery("followings").for(id);
+    const followings = await Person.relatedQuery("followers").for(id);
+    const followers = await Person.relatedQuery("followings").for(id);
 
     for (let post of posts) {
       const likesOnPost = await Like.query().where("master_id", "=", post.id);

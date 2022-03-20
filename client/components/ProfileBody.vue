@@ -26,7 +26,7 @@ export default {
       this.$emit('onPostLike', id);
     },
     onUserFollow() {
-      alert('Follow clicked');
+      this.$emit('onUserFollow', this.profile.id);
     },
   },
 };

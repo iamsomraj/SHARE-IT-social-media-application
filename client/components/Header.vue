@@ -14,7 +14,7 @@
     <div v-else class="flex items-center space-x-4 font-bold">
       <div
         @click="onFeed"
-        class="text-green-500 tracking-tight text-2xl font-bold"
+        class="text-green-500 cursor-pointer tracking-tight text-2xl font-bold"
       >
         yourfeed
       </div>

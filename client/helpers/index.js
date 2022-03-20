@@ -52,3 +52,12 @@ export const getUserFeed = async (token) => {
   });
   return data;
 };
+
+export const followPerson = async (id, token) => {
+  const { data } = await axios.post(`${BASE_URL}/persons/follow/${id}`, null, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
+};

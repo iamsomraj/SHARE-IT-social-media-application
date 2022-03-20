@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="flex flex-col items-center m-4 space-y-2">
     <div
       v-for="post in posts"
       :key="post.id"
-      class="px-6 py-3 border-t border-b border-separate"
+      class="px-6 py-3 border rounded w-full md:w-2/3"
     >
       <PostListItem
         @onPostLike="onPostLike"

@@ -4,7 +4,7 @@
       <div>
         <input
           class="px-4 py-3 outline-none border-2 border-gray-200 rounded"
-          placeholder="Name"
+          placeholder="Username"
           v-model="name"
         />
       </div>

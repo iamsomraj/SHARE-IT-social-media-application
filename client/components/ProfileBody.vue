@@ -1,7 +1,11 @@
 <template>
   <div class="my-2">
     <PostCreator v-if="user.id === profile.id" @onPostCreate="onPostCreate" />
-    <UserFollower v-if="user.id !== profile.id" @onUserFollow="onUserFollow" />
+    <UserFollower
+      v-if="user.id !== profile.id"
+      @onUserFollow="onUserFollow"
+      :doesUserFollow="doesUserFollow"
+    />
     <PostList :posts="posts" @onPostLike="onPostLike" />
   </div>
 </template>
@@ -16,6 +20,10 @@ export default {
     },
     profile() {
       return this.$store.getters['profile/getProfile']();
+    },
+    doesUserFollow() {
+      const followers = this.user.followers;
+      return followers.some((person) => person.followed_id === this.profile.id);
     },
   },
   methods: {

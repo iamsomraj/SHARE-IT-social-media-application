@@ -15,7 +15,7 @@
         @click="onPostLike(id)"
       >
         <div>{{ numberOfLikes }}</div>
-        <Heart />
+        <Heart :red="numberOfLikes === 0 ? 'none' : 'red'" />
       </div>
       <div>
         {{ date }}

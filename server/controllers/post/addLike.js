@@ -22,16 +22,6 @@ const addLike = asyncHandler(async (req, res) => {
     throw new Error("Request is invalid!");
   }
 
-  const likeExists = await Like.query().findOne({
-    master_id: post.id,
-    owner_id: req.user.id,
-  });
-
-  if (likeExists) {
-    res.status(400);
-    throw new Error("Invalid duplicate like operation!");
-  }
-
   const likeRecord = await Like.query().insert({
     master_id: post.id,
     owner_id: req.user.id,

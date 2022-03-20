@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.route("/").post(registerPerson);
 router.route("/auth").post(loginPerson);
-router.route("/follow").post(protect, followPerson);
+router.route("/follow/:id").post(protect, followPerson);
 router.route("/:id").get(protect, getPersonProfile);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Like = require("../../models/Like.js");
 const Person = require("../../models/Person.js");
-const Post = require("../../models/Post.js");
+const Following = require("../../models/Following.js");
 
 /**
  * @access private
@@ -10,11 +10,16 @@ const Post = require("../../models/Post.js");
  */
 const followPerson = asyncHandler(async (req, res) => {
   const id = parseInt(req.params.id);
-  const post = await Post.query().findOne({ id });
+  if (!req || !req.user || !id) {
+    res.status(400);
+    throw new Error("Request is invalid!");
+  }
 
-  if (!post) {
+  const personToBeFollowed = await Person.query().findOne({ id });
+
+  if (!personToBeFollowed) {
     res.status(404);
-    throw new Error("Post not found!");
+    throw new Error("Person not found!");
   }
 
   if (!req || !req.user) {
@@ -22,28 +27,18 @@ const followPerson = asyncHandler(async (req, res) => {
     throw new Error("Request is invalid!");
   }
 
-  const likeExists = await Like.query().findOne({
-    master_id: post.id,
-    owner_id: req.user.id,
+  const followRecord = await Following.query().insert({
+    follower_id: req.user.id,
+    followed_id: id,
   });
 
-  if (likeExists) {
-    res.status(400);
-    throw new Error("Invalid duplicate like operation!");
-  }
-
-  const likeRecord = await Like.query().insert({
-    master_id: post.id,
-    owner_id: req.user.id,
-  });
-
-  if (likeRecord) {
+  if (followRecord) {
     res.json({
-      likeRecord,
+      followRecord,
     });
   } else {
     res.status(400);
-    throw new Error("Something went wrong during Like operation");
+    throw new Error("Something went wrong during Follow operation");
   }
 });
 

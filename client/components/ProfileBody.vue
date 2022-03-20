@@ -1,6 +1,7 @@
 <template>
   <div class="my-2">
     <PostCreator v-if="user.id === profile.id" @onPostCreate="onPostCreate" />
+    <UserFollower v-if="user.id !== profile.id" @onUserFollow="onUserFollow" />
     <PostList :posts="posts" @onPostLike="onPostLike" />
   </div>
 </template>
@@ -23,6 +24,9 @@ export default {
     },
     onPostLike(id) {
       this.$emit('onPostLike', id);
+    },
+    onUserFollow() {
+      alert('Follow clicked');
     },
   },
 };

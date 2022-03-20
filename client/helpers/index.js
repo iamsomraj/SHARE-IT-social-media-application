@@ -70,3 +70,12 @@ export const getPeople = async (token) => {
   });
   return data;
 };
+
+export const getUserData = async (token) => {
+  const { data } = await axios.get(`${BASE_URL}/persons/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
+};

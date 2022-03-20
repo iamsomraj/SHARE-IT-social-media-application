@@ -24,6 +24,7 @@ import {
   addLikeToPost,
   createPost,
   followPerson,
+  getUserData,
   getUserProfileById,
 } from '../../helpers';
 export default {
@@ -66,7 +67,9 @@ export default {
       await followPerson(id, this.user.token);
       const urlId = parseInt(this.$router.currentRoute.params.id); // getting id from url
       const fetchedProfile = await getUserProfileById(urlId, this.user.token);
+      const fetchedUser = await getUserData(this.user.token);
       this.$store.commit('profile/setProfile', fetchedProfile);
+      this.$store.commit('auth/setUser', fetchedUser);
     },
   },
 };

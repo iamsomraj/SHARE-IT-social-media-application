@@ -5,8 +5,8 @@
       :id="user.id"
       :name="user.name"
       :numberOfPosts="user.posts.length"
-      :numberOfFollowers="user.followers.length"
-      :numberOfFollowings="user.followings.length"
+      :numberOfFollowings="user.followers.length"
+      :numberOfFollowers="user.followings.length"
     />
     <div class="flex justify-center m-4">
       <NuxtLink

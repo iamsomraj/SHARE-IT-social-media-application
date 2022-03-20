@@ -7,6 +7,16 @@
 <script>
 export default {
   name: 'RegisterPage',
+  computed: {
+    user() {
+      return this.$store.getters['auth/getUser']();
+    },
+  },
+  created() {
+    if (this.user && this.user.token) {
+      this.$router.push('/feed');
+    }
+  },
 };
 </script>
 

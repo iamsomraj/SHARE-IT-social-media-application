@@ -7,5 +7,15 @@
 <script>
 export default {
   name: 'HomePage',
-}
+  computed: {
+    user() {
+      return this.$store.getters['auth/getUser']();
+    },
+  },
+  created() {
+    if (this.user && this.user.token) {
+      this.$router.push('/feed');
+    }
+  },
+};
 </script>

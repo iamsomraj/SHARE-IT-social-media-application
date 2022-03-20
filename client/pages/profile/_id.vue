@@ -2,6 +2,7 @@
   <div>
     <div v-if="profile">
       <ProfileHeader
+        :id="profile.id"
         :name="profile.name"
         :numberOfPosts="profile.posts.length"
         :numberOfFollowers="profile.followers.length"

@@ -1,6 +1,11 @@
 <template>
   <div class="flex justify-evenly items-center text-sm space-x-2">
-    <div class="text-xl text-gray-500 font-extrabold">{{ name }}</div>
+    <div
+      class="text-xl text-gray-500 font-extrabold cursor-pointer"
+      @click="$router.push(`/profile/${id}`)"
+    >
+      {{ name }}
+    </div>
     <div class="px-1 py-2 text-center">
       <div>{{ numberOfPosts }}</div>
       <div>Posts</div>
@@ -19,7 +24,13 @@
 <script>
 export default {
   name: 'ProfileHeader',
-  props: ['name', 'numberOfPosts', 'numberOfFollowers', 'numberOfFollowings'],
+  props: [
+    'id',
+    'name',
+    'numberOfPosts',
+    'numberOfFollowers',
+    'numberOfFollowings',
+  ],
 };
 </script>
 

@@ -1,6 +1,14 @@
 <template>
   <div>
-    <PostList :posts="posts" @onPostLike="onPostLike" />
+    <ProfileHeader
+      v-if="user"
+      :id="user.id"
+      :name="user.name"
+      :numberOfPosts="user.posts.length"
+      :numberOfFollowers="user.followers.length"
+      :numberOfFollowings="user.followings.length"
+    />
+    <PostList v-if="posts" :posts="posts" @onPostLike="onPostLike" />
   </div>
 </template>
 
@@ -8,6 +16,11 @@
 import { getUserFeed, addLikeToPost } from '../../helpers';
 export default {
   name: 'FeedPage',
+  computed: {
+    user() {
+      return this.$store.getters['auth/getUser']();
+    },
+  },
   async asyncData(context) {
     const token = context.store.getters['auth/getUser']().token;
     const data = await getUserFeed(token);

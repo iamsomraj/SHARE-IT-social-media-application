@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const Like = require("../../models/Like.js");
 const Person = require("../../models/Person.js");
 const { generateToken, hash } = require("../../utils/index.js");
 
@@ -33,12 +34,27 @@ const registerPerson = asyncHandler(async (req, res) => {
     password: hash(password),
   });
 
+  const posts = await Person.relatedQuery("posts")
+    .for(user.id)
+    .orderBy("createdAt", "DESC");
+  const followers = await Person.relatedQuery("followers").for(user.id);
+  const followings = await Person.relatedQuery("followings").for(user.id);
+
+  for (let post of posts) {
+    const likesOnPost = await Like.query().where("master_id", "=", post.id);
+    post.likesOnPost = likesOnPost;
+    post.owner = { id: user.id, name: user.name, email: user.email };
+  }
+
   if (registerPerson) {
     res.status(201).json({
       id: user.id,
       name: user.name,
       email: user.email,
       token: generateToken(user.id),
+      posts,
+      followers,
+      followings,
     });
   } else {
     res.status(400);

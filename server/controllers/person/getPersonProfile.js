@@ -27,7 +27,6 @@ const getPersonProfile = asyncHandler(async (req, res) => {
       .orderBy("createdAt", "DESC");
     const followers = await Person.relatedQuery("followers").for(id);
     const followings = await Person.relatedQuery("followings").for(id);
-    const likes = await Person.relatedQuery("likes").for(id);
 
     for (let post of posts) {
       const likesOnPost = await Like.query().where("master_id", "=", post.id);
@@ -42,7 +41,6 @@ const getPersonProfile = asyncHandler(async (req, res) => {
       posts,
       followers,
       followings,
-      likes,
     });
   } else {
     res.status(404);

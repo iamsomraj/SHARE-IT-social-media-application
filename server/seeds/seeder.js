@@ -53,31 +53,6 @@ async function main() {
     },
   ]);
   console.log("Inserted Like", { likeRecord: likeRecords });
-
-  // Inserting Following Records
-  const followingRecords = await Following.query().insert([
-    {
-      follower_id: insertedPersons[0].id,
-      followed_id: insertedPersons[1].id,
-    },
-    {
-      follower_id: insertedPersons[0].id,
-      followed_id: insertedPersons[2].id,
-    },
-    {
-      follower_id: insertedPersons[1].id,
-      followed_id: insertedPersons[2].id,
-    },
-    {
-      follower_id: insertedPersons[1].id,
-      followed_id: insertedPersons[0].id,
-    },
-    {
-      follower_id: insertedPersons[2].id,
-      followed_id: insertedPersons[0].id,
-    },
-  ]);
-  console.log("Following Records:", followingRecords);
 }
 
 main()

@@ -9,11 +9,11 @@ const Post = require("../../models/Post.js");
  * @route GET /api/v1/posts/feed
  */
 const getPostFeed = asyncHandler(async (req, res) => {
-  const followingRecords = await Person.relatedQuery("followings").for(
+  const followingRecords = await Person.relatedQuery("followers").for(
     req.user.id
   );
   const followingRecordIdList = followingRecords.map(
-    (person) => person.follower_id
+    (person) => person.followed_id
   );
 
   let posts = [];

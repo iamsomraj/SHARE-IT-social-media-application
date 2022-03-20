@@ -1,0 +1,20 @@
+<template>
+  <div>
+    <div v-for="person in people" :key="person.key">
+      <div class="flex justify-around items-center m-4 py-6">
+        <div>{{ person.name }}</div>
+        <div>{{ person.email }}</div>
+        <button class="bg-">Check Profile</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'ExploreMain',
+    props: ['people'],
+  };
+</script>
+
+<style lang="scss" scoped></style>

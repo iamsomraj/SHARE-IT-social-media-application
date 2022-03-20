@@ -8,7 +8,13 @@
       :numberOfFollowers="user.followers.length"
       :numberOfFollowings="user.followings.length"
     />
-    <NuxtLink to="/people">Explore</NuxtLink>
+    <div class="flex justify-center m-4">
+      <NuxtLink
+        to="/people"
+        class="block w-full md:w-2/3 bg-yellow-500 p-2 text-center cursor-pointer text-2xl md:text-xl text-yellow-50 font-bold rounded"
+        >Explore</NuxtLink
+      >
+    </div>
     <PostList v-if="posts" :posts="posts" @onPostLike="onPostLike" />
   </div>
 </template>

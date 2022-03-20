@@ -12,7 +12,9 @@ const getPeople = asyncHandler(async (req, res) => {
     throw new Error("Request is invalid!");
   }
 
-  const people = await Person.query().where("id", "!=", req.user.id);
+  const people = await Person.query()
+    .select("id", "name", "email")
+    .where("id", "!=", req.user.id);
 
   if (!people) {
     res.status(404);

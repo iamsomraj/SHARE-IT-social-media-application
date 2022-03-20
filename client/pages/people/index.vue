@@ -8,12 +8,12 @@
       :numberOfFollowers="user.followers.length"
       :numberOfFollowings="user.followings.length"
     />
-    {{ people }}
+    <ExploreMain :people="people" />
   </div>
 </template>
 
 <script>
-import { getUserFeed, addLikeToPost, getPeople } from '../../helpers';
+import { getPeople } from '../../helpers';
 export default {
   name: 'FeedPage',
   computed: {

@@ -34,6 +34,14 @@ const getPostFeed = asyncHandler(async (req, res) => {
       email: personRecord.email,
     };
   }
+
+  /**
+   * Sorting latest posts based on created date
+   */
+  posts.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
   res.json({
     posts,
   });

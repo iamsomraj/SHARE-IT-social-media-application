@@ -10,6 +10,27 @@ Nuxt-Express-Postgres-Social-Media-App is a full-stack application, where users 
 - Follow User
 - User Feed
 
+## Screenshots
+
+- Login
+  <img src="/assets/Login.png" alt="Login" />
+
+- Explore
+  <img src="/assets/Explore.png" alt="Explore" />
+
+- Feed
+  <img src="/assets/Feed.png" alt="Feed" />
+
+- Profile
+  <img src="/assets/Profile.png" alt="Profile" />
+  
+- Followed
+  <img src="/assets/Followed.png" alt="Followed" />
+
+## Walkthrough Video
+
+[Video](https://youtu.be/OsheRzgu9s4)
+
 ## Run This Application
 
 Following steps are required to run the application:

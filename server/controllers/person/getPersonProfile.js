@@ -4,29 +4,27 @@ const Like = require("../../models/Like.js");
 
 /**
  * @access private
- * @description fetches every detail about one person by id
- * @route GET /api/v1/persons/:id
+ * @description fetches every detail about one person by uuid
+ * @route GET /api/v1/persons/:uuid
  */
 const getPersonProfile = asyncHandler(async (req, res) => {
-  let person, id;
+  let person, uuid;
   /**
    * If the same person is asking for his own profile,
    * then no further request is made to fetch person details
    */
   if (req.user.id == req.params.id) {
     person = { ...req.user };
-    id = parseInt(person.id);
+    uuid = parseInt(person.id);
   } else {
-    id = parseInt(req.params.id);
-    person = await Person.query().findOne({ id });
+    uuid = parseInt(req.params.id);
+    person = await Person.query().findOne({ id: uuid });
   }
 
   if (person) {
-    const posts = await Person.relatedQuery("posts")
-      .for(id)
-      .orderBy("createdAt", "DESC");
-    const followings = await Person.relatedQuery("followers").for(id);
-    const followers = await Person.relatedQuery("followings").for(id);
+    const posts = await Person.relatedQuery("posts").for(uuid).orderBy("createdAt", "DESC");
+    const followings = await Person.relatedQuery("followers").for(uuid);
+    const followers = await Person.relatedQuery("followings").for(uuid);
 
     for (let post of posts) {
       const likesOnPost = await Like.query().where("master_id", "=", post.id);

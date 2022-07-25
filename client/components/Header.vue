@@ -33,7 +33,7 @@ export default {
   name: 'Header',
   computed: {
     isLoggedIn() {
-      return this.$store.getters['auth/user'] !== null;
+      return this.$store.getters['auth/isLoggedIn'];
     },
     user() {
       return this.$store.getters['auth/user'];

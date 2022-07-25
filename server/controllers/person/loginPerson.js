@@ -37,6 +37,7 @@ const loginPerson = asyncHandler(async (req, res) => {
     }
     res.json({
       id: user.id,
+      uuid: user.uuid,
       name: user.name,
       email: user.email,
       token: generateToken(user.id),

@@ -11,19 +11,19 @@ export const userRegister = async (user) => {
   return data;
 };
 
-export const getUserProfileById = async (id, token) => {
-  const { data } = await axios.get(`${BASE_URL}/persons/${id}`, {
+export const getUserProfile = async (uuid, token) => {
+  const { data } = await axios.get(`${BASE_URL}/persons/${uuid}`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token ? token : ''}`,
     },
   });
   return data;
 };
 
-export const addLikeToPost = async (id, token) => {
-  const { data } = await axios.post(`${BASE_URL}/posts/${id}`, null, {
+export const addLikeToPost = async (uuid, token) => {
+  const { data } = await axios.post(`${BASE_URL}/posts/${uuid}`, null, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token ? token : ''}`,
     },
   });
   return data;
@@ -37,7 +37,7 @@ export const createPost = async (content, token) => {
     },
     {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token ? token : ''}`,
       },
     }
   );
@@ -47,7 +47,7 @@ export const createPost = async (content, token) => {
 export const getUserFeed = async (token) => {
   const { data } = await axios.get(`${BASE_URL}/posts/feed`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token ? token : ''}`,
     },
   });
   return data;
@@ -56,7 +56,7 @@ export const getUserFeed = async (token) => {
 export const followPerson = async (id, token) => {
   const { data } = await axios.post(`${BASE_URL}/persons/follow/${id}`, null, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token ? token : ''}`,
     },
   });
   return data;
@@ -65,7 +65,7 @@ export const followPerson = async (id, token) => {
 export const getPeople = async (token) => {
   const { data } = await axios.get(`${BASE_URL}/persons/people`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token ? token : ''}`,
     },
   });
   return data;
@@ -74,7 +74,7 @@ export const getPeople = async (token) => {
 export const getUserData = async (token) => {
   const { data } = await axios.get(`${BASE_URL}/persons/`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token ? token : ''}`,
     },
   });
   return data;

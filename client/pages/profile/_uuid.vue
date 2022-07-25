@@ -25,10 +25,11 @@ import {
   createPost,
   followPerson,
   getUserData,
-  getUserProfileById,
+  getUserProfile,
 } from '../../helpers';
 export default {
   name: 'ProfileIdPage',
+  middleware: 'authenticated',
   computed: {
     profile() {
       return this.$store.getters['profile/profile'];
@@ -39,41 +40,41 @@ export default {
     token() {
       return this.$store.getters['auth/token'];
     },
-  },
-  created() {
-    if (!this.user) {
-      this.$router.push('/');
-    }
+    isLoggedIn() {
+      return this.$store.getters['auth/isLoggedIn'];
+    },
   },
   async fetch() {
-    /**
-     * fetching user detail
-     */
-    const id = parseInt(this.$router.currentRoute.params.id); // getting id from url
-    const fetchedProfile = await getUserProfileById(id, this.token);
+    /* BEGIN: FETCHING PROFILE DETAIL */
+    const uuid = this.$router.currentRoute.params.uuid; // GETTING UUID FROM URL
+    const fetchedProfile = await getUserProfile(uuid, this.token);
     this.$store.commit('profile/setProfile', fetchedProfile);
+    /* END: FETCHING PROFILE DETAIL */
   },
   methods: {
     async onPostCreate(postInput) {
-      const newPost = await createPost(postInput, this.user.token);
-      const id = parseInt(this.$router.currentRoute.params.id); // getting id from url
-      const fetchedProfile = await getUserProfileById(id, this.token);
+      const newPost = await createPost(postInput, this.token);
+      const uuid = this.$router.currentRoute.params.uuid; // GETTING UUID FROM URL
+      const fetchedProfile = await getUserProfile(uuid, this.token);
       this.$store.commit('profile/setProfile', fetchedProfile);
     },
-    async onPostLike(id) {
-      await addLikeToPost(id, this.token);
-      const urlId = parseInt(this.$router.currentRoute.params.id); // getting id from url
-      const fetchedProfile = await getUserProfileById(urlId, this.user.token);
+    async onPostLike(uuid) {
+      await addLikeToPost(uuid, this.token);
+      const current_profile_uuid = this.$router.currentRoute.params.uuid; // GETTING UUID FROM URL
+      const fetchedProfile = await getUserProfile(
+        current_profile_uuid,
+        this.token
+      );
       this.$store.commit('profile/setProfile', fetchedProfile);
     },
     async onUserFollow(id) {
       await followPerson(id, this.token);
-      const urlId = parseInt(this.$router.currentRoute.params.id); // getting id from url
-      const fetchedProfile = await getUserProfileById(urlId, this.token);
+      const uuid = this.$router.currentRoute.params.uuid; // GETTING UUID FROM URL
+      const fetchedProfile = await getUserProfile(uuid, this.token);
       const fetchedUser = await getUserData(this.token);
       this.$store.commit('profile/setProfile', fetchedProfile);
       this.$store.commit('auth/setUser', fetchedUser);
-      this.$store.commit('auth/setToken', fetchedUser.token);
+      this.$store.commit('auth/setToken', fetchedUser?.token || null);
     },
   },
 };

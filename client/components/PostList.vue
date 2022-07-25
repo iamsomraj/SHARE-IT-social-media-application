@@ -8,6 +8,7 @@
       <PostListItem
         @onPostLike="onPostLike"
         :id="post.id"
+        :uuid="post.uuid"
         :ownerName="post.owner.name"
         :ownerId="post.owner.id"
         :content="post.content"
@@ -23,8 +24,8 @@ export default {
   name: 'PostList',
   props: ['posts'],
   methods: {
-    onPostLike(id) {
-      this.$emit('onPostLike', id);
+    onPostLike(uuid) {
+      this.$emit('onPostLike', uuid);
     },
   },
 };

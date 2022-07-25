@@ -6,6 +6,7 @@ export const state = () => ({
 export const getters = {
   user: (state) => state.user,
   token: (state) => state.token,
+  isLoggedIn: (state) => state.token && state.user,
 };
 
 export const mutations = {

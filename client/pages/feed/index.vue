@@ -24,6 +24,7 @@
 import { getUserFeed, addLikeToPost } from '../../helpers';
 export default {
   name: 'FeedPage',
+  middleware: 'authenticated',
   data() {
     return {
       posts: [],
@@ -42,8 +43,8 @@ export default {
     this.posts = data.posts;
   },
   methods: {
-    async onPostLike(id) {
-      await addLikeToPost(id, this.token);
+    async onPostLike(uuid) {
+      await addLikeToPost(uuid, this.token);
       const data = await getUserFeed(this.token);
       this.posts = data.posts;
     },

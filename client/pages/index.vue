@@ -16,7 +16,7 @@ export default {
     }
   },
   created() {
-    if (this.user && this.user.token) {
+    if (this.user && this.token) {
       this.$router.push('/feed');
     }
   },

@@ -1,5 +1,6 @@
 const { Model } = require("objection");
 const Person = require("./Person.js");
+const { randomUUID } = require("crypto");
 
 class Post extends Model {
   static get tableName() {
@@ -8,6 +9,7 @@ class Post extends Model {
 
   $beforeInsert() {
     this.createdAt = new Date();
+    this.uuid = randomUUID();
   }
 
   $beforeUpdate() {

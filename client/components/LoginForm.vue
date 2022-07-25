@@ -58,11 +58,11 @@ export default {
        * Logging in the user in the vuex state
        */
       this.$store.commit('auth/setUser', loggedInUser);
-      this.$store.commit('auth/setToken', loggedInUser.token);
+      this.$store.commit('auth/setToken', loggedInUser?.token || null);
       /**
        * navigating to profile page
        */
-      this.$router.push(`profile/${loggedInUser.id}`);
+      this.$router.push(`profile/${loggedInUser.uuid}`);
     },
   },
 };

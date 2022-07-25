@@ -16,6 +16,7 @@
 import { getPeople } from '../../helpers';
 export default {
   name: 'FeedPage',
+  middleware: 'authenticated',
   data() {
     return {
       people: [],

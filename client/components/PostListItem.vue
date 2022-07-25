@@ -12,7 +12,7 @@
     <div class="text-xs flex justify-evenly items-center space-x-2">
       <div
         class="flex justify-center items-center space-x-1 cursor-pointer"
-        @click="onPostLike(id)"
+        @click="onPostLike(uuid)"
       >
         <div>{{ numberOfLikes }}</div>
         <Heart :red="numberOfLikes === 0 ? 'none' : 'red'" />
@@ -27,10 +27,10 @@
 <script>
 export default {
   name: 'PostListItem',
-  props: ['id', 'ownerName', 'ownerId', 'content', 'numberOfLikes', 'date'],
+  props: ['uuid', 'ownerName', 'ownerId', 'content', 'numberOfLikes', 'date'],
   methods: {
-    onPostLike(id) {
-      this.$emit('onPostLike', id);
+    onPostLike(uuid) {
+      this.$emit('onPostLike', uuid);
     },
   },
 };

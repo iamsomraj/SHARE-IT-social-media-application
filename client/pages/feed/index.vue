@@ -15,6 +15,7 @@
         >Explore</NuxtLink
       >
     </div>
+    {{ posts }}
     <PostList v-if="posts" :posts="posts" @onPostLike="onPostLike" />
   </div>
 </template>
@@ -23,23 +24,27 @@
 import { getUserFeed, addLikeToPost } from '../../helpers';
 export default {
   name: 'FeedPage',
+  data() {
+    return {
+      posts: [],
+    };
+  },
   computed: {
     user() {
-      return this.$store.getters['auth/getUser']();
+      return this.$store.getters['auth/user'];
+    },
+    token() {
+      return this.$store.getters['auth/token'];
     },
   },
-  async asyncData(context) {
-    const token = context.store.getters['auth/getUser']().token;
-    const data = await getUserFeed(token);
-    return {
-      posts: data.posts,
-    };
+  async fetch() {
+    const data = await getUserFeed(this.token);
+    this.posts = data.posts;
   },
   methods: {
     async onPostLike(id) {
-      const token = this.$store.getters['auth/getUser']().token;
-      await addLikeToPost(id, token);
-      const data = await getUserFeed(token);
+      await addLikeToPost(id, this.token);
+      const data = await getUserFeed(this.token);
       this.posts = data.posts;
     },
   },

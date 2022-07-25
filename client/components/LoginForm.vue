@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form class="space-y-4" @submit="onSubmit">
+    <form class="space-y-4" @submit.prevent="onSubmit">
       <div>
         <input
           class="px-4 py-3 outline-none border-2 border-gray-200 rounded"
@@ -43,13 +43,12 @@ export default {
     };
   },
   computed: {
-    getUser() {
-      return this.$store.getters['auth/getUser']();
+    user() {
+      return this.$store.getters['auth/user'];
     },
   },
   methods: {
-    async onSubmit(e) {
-      e.preventDefault();
+    async onSubmit() {
       const formData = {
         email: this.email,
         password: this.password,
@@ -59,6 +58,7 @@ export default {
        * Logging in the user in the vuex state
        */
       this.$store.commit('auth/setUser', loggedInUser);
+      this.$store.commit('auth/setToken', loggedInUser.token);
       /**
        * navigating to profile page
        */

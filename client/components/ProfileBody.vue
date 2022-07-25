@@ -16,10 +16,10 @@ export default {
   props: ['posts', 'name'],
   computed: {
     user() {
-      return this.$store.getters['auth/getUser']();
+      return this.$store.getters['auth/user'];
     },
     profile() {
-      return this.$store.getters['profile/getProfile']();
+      return this.$store.getters['profile/profile'];
     },
     doesUserFollow() {
       const followers = this.user.followers;

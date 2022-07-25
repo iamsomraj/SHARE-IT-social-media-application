@@ -9,11 +9,14 @@ export default {
   name: 'RegisterPage',
   computed: {
     user() {
-      return this.$store.getters['auth/getUser']();
+      return this.$store.getters['auth/user'];
+    },
+    token() {
+      return this.$store.getters['auth/token'];
     },
   },
   created() {
-    if (this.user && this.user.token) {
+    if (this.user && this.token) {
       this.$router.push('/feed');
     }
   },

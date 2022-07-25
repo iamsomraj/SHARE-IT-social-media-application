@@ -3,9 +3,7 @@ export const state = () => ({
 });
 
 export const getters = {
-  getProfile(state) {
-    return () => state.profile;
-  },
+  profile: (state) => state.profile,
 };
 
 export const mutations = {

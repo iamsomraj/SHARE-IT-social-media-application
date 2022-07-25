@@ -13,7 +13,7 @@
     </div>
     <div v-else class="flex items-center space-x-4 font-bold">
       <div
-        @click="onFeed"
+        @click="redirectToFeed"
         class="text-green-500 cursor-pointer tracking-tight text-2xl font-bold"
       >
         yourfeed
@@ -33,19 +33,20 @@ export default {
   name: 'Header',
   computed: {
     isLoggedIn() {
-      return this.$store.getters['auth/getUser']() !== null;
+      return this.$store.getters['auth/user'] !== null;
     },
     user() {
-      return this.$store.getters['auth/getUser']();
+      return this.$store.getters['auth/user'];
     },
   },
   methods: {
     onLogout() {
       this.$store.commit('auth/setUser', null);
+      this.$store.commit('auth/setToken', null);
       this.$store.commit('profile/setProfile', null);
       this.$router.push('/');
     },
-    onFeed() {
+    redirectToFeed() {
       this.$router.push('/feed');
     },
   },

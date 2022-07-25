@@ -61,6 +61,7 @@ export default {
       };
       const registeredUser = await userRegister(formData);
       this.$store.commit('auth/setUser', registeredUser);
+      this.$store.commit('auth/setToken', registeredUser.token);
       /**
        * navigating to profile page
        */

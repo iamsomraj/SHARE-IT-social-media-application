@@ -16,19 +16,23 @@
 import { getPeople } from '../../helpers';
 export default {
   name: 'FeedPage',
-  computed: {
-    user() {
-      return this.$store.getters['auth/getUser']();
-    },
-  },
-  async asyncData(context) {
-    const token = context.store.getters['auth/getUser']().token;
-    const data = await getPeople(token);
+  data() {
     return {
-      people: data.people,
+      people: [],
     };
   },
-  methods: {},
+  computed: {
+    user() {
+      return this.$store.getters['auth/user'];
+    },
+    token() {
+      return this.$store.getters['auth/token'];
+    },
+  },
+  async fetch() {
+    const data = await getPeople(this.token);
+    this.people = data.people;
+  },
 };
 </script>
 

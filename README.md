@@ -57,7 +57,7 @@ To run this project, you will need to add the following environment variables to
 
 Create these environment variables, save them in Coding Pillow Editor root folder. File name can be `.env`.
 
-- `.env` file -
+- `.env` file for server (.env) -
 
 ```
 PORT = {EXPRESS_SERVER_PORT}
@@ -65,6 +65,13 @@ DATABASE_URL = postgres://{USERNAME}:@{HOSTNAME}:{DATABASE_PORT}/{DATABASE}
 NODE_ENV = development
 SALT = {YOUR_SALT}
 JWT_SECRET = {YOUR_SECRET}
+```
+
+
+- `.env` file for client (.env) -
+
+```
+DEV_API = {EXPRESS_SERVER_API_ROUTE};
 ```
 
 - Run Migrations

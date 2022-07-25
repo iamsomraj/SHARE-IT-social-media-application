@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://localhost:8888/api/v1';
+export const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://blah.blah.com' : process.env.DEV_API;

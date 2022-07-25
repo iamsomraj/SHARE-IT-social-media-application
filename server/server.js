@@ -7,9 +7,9 @@ const postRoutes = require("./routes/postRoutes.js");
 const { pageNotFound, errorHandler } = require("./middlewares/error.js");
 
 const app = express();
-const isProd = process.env.NODE_ENV === "production";
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
-if (!isProd) app.use(cors());
+if (!IS_PRODUCTION) app.use(cors());
 
 app.use(express.json());
 app.use("/api/v1/persons", personRoutes);

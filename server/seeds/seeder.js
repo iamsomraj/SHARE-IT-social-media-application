@@ -14,11 +14,11 @@ async function main() {
 
   // Insert 3 person records to the database.
   const insertedPersons = await Person.query().insert(person_data);
-  console.log("Inserted Person Records:", { insertedPersons });
+  console.log("🚀 ~ file: seeder.js ~ insertedPersons", insertedPersons);
 
   // Read all rows from the persons table.
   const personRecords = await Person.query();
-  console.log("Fetched Person Records:", { personRecords });
+  console.log("🚀 ~ file: seeder.js ~ personRecords", personRecords);
 
   // Inserting Post for a Person
   const insertedPost = await Post.query().insert([
@@ -39,7 +39,7 @@ async function main() {
       owner_id: insertedPersons[2].id,
     },
   ]);
-  console.log("Inserted Post", { insertedPost });
+  console.log("🚀 ~ file: seeder.js ~ insertedPost", insertedPost);
 
   // Inserting Like Records
   const likeRecords = await Like.query().insert([
@@ -52,7 +52,7 @@ async function main() {
       owner_id: insertedPersons[1].id,
     },
   ]);
-  console.log("Inserted Like", { likeRecord: likeRecords });
+  console.log("🚀 ~ file: seeder.js ~ likeRecords", likeRecords);
 }
 
 main()

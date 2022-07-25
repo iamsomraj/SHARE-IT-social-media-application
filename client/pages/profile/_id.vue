@@ -52,7 +52,6 @@ export default {
     const id = parseInt(this.$router.currentRoute.params.id); // getting id from url
     const fetchedProfile = await getUserProfileById(id, this.token);
     this.$store.commit('profile/setProfile', fetchedProfile);
-    console.log("🚀 ~ file: _id.vue ~ line 55 ~ fetch ~ fetchedProfile", fetchedProfile);
   },
   methods: {
     async onPostCreate(postInput) {

@@ -1,1 +1,1 @@
-export const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://blah.blah.com' : process.env.DEV_API;
+export const BASE_URL = process.env.NODE_ENV === 'production' ? process.env.PROD_API : process.env.DEV_API;

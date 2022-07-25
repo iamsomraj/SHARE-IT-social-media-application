@@ -68,10 +68,12 @@ JWT_SECRET = {YOUR_SECRET}
 ```
 
 
-- `.env` file for client (.env) -
+- `.env` file for client (client/.env) -
 
 ```
-DEV_API = {EXPRESS_SERVER_API_ROUTE};
+DEV_API = {DEVELOPMENT_EXPRESS_SERVER_API_ROUTE};
+PROD_API = {PROUDCTION_EXPRESS_SERVER_API_ROUTE};
+NODE_ENV = development
 ```
 
 - Run Migrations

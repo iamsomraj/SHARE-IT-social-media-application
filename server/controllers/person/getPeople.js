@@ -3,7 +3,7 @@ const Person = require("../../models/Person.js");
 
 /**
  * @access private
- * @description adds follower to a person
+ * @description fetches list of people to show in the explore page
  * @route POST /api/v1/persons/people
  */
 const getPeople = asyncHandler(async (req, res) => {
@@ -12,9 +12,7 @@ const getPeople = asyncHandler(async (req, res) => {
     throw new Error("Request is invalid!");
   }
 
-  const people = await Person.query()
-    .select("id", "name", "email")
-    .where("id", "!=", req.user.id);
+  const people = await Person.query().select("uuid", "id", "name", "email").where("id", "!=", req.user.id);
 
   if (!people) {
     res.status(404);

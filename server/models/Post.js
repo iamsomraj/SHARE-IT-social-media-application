@@ -30,6 +30,7 @@ class Post extends Model {
       required: ["content", "owner_id"],
       properties: {
         id: { type: "integer" },
+        uuid: { type: "string" },
         content: { type: "string", minLength: 1, maxLength: 255 },
         owner_id: { type: "integer" },
         createdAt: { type: "string" },

@@ -15,7 +15,7 @@ export default {
       return this.$store.getters['auth/token'];
     },
   },
-  created() {
+  fetch() {
     if (this.user && this.token) {
       this.$router.push('/feed');
     }

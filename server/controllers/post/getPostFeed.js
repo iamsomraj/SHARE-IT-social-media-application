@@ -9,18 +9,12 @@ const Post = require("../../models/Post.js");
  * @route GET /api/v1/posts/feed
  */
 const getPostFeed = asyncHandler(async (req, res) => {
-  const followingRecords = await Person.relatedQuery("followers").for(
-    req.user.id
-  );
-  const followingRecordIdList = followingRecords.map(
-    (person) => person.followed_id
-  );
+  const followingRecords = await Person.relatedQuery("followers").for(req.user.id);
+  const followingRecordIdList = followingRecords.map((person) => person.followed_id);
 
   let posts = [];
   for (let follower_id of followingRecordIdList) {
-    const postRecords = await Post.query()
-      .where("owner_id", "=", follower_id)
-      .orderBy("createdAt", "DESC");
+    const postRecords = await Post.query().where("owner_id", "=", follower_id).orderBy("createdAt", "DESC");
     posts.push(...postRecords);
   }
 
@@ -29,6 +23,7 @@ const getPostFeed = asyncHandler(async (req, res) => {
     const personRecord = await Person.query().findOne({ id: post.owner_id });
     post.likesOnPost = likesOnPost;
     post.owner = {
+      uuid: personRecord.uuid,
       id: personRecord.id,
       name: personRecord.name,
       email: personRecord.email,
@@ -38,9 +33,7 @@ const getPostFeed = asyncHandler(async (req, res) => {
   /**
    * Sorting latest posts based on created date
    */
-  posts.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+  posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   res.json({
     posts,

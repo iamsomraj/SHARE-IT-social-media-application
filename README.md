@@ -1,6 +1,6 @@
-# Nuxt-Express-Postgres-Social-Media-App
+# SHARE-IT-social-media-application
 
-Nuxt-Express-Postgres-Social-Media-App is a full-stack application, where users can register and login in the portal. Users can also create and like posts. There is also a feed where users can see posts from followed users.
+SHARE-IT-social-media-application is a full-stack application, where users can register and login in the portal. Users can also create and like posts. There is also a feed where users can see posts from followed users.
 
 ## Features
 
@@ -37,13 +37,13 @@ Following steps are required to run the application:
 
 - Open Terminal
 
-- Clone Nuxt-Express-Postgres-Social-Media-App Repository
+- Clone SHARE-IT-social-media-application Repository
 
 ```bash
-    git clone https://github.com/iamsomraj/Nuxt-Express-Postgres-Social-Media-App.git
+    git clone https://github.com/iamsomraj/SHARE-IT-social-media-application.git
 ```
 
-- Go to Root Directory of Nuxt-Express-Postgres-Social-Media-App
+- Go to Root Directory of SHARE-IT-social-media-application
 
 - Setup Environment Variables
 
@@ -82,7 +82,7 @@ NODE_ENV = development
     npx knex migrate:latest
 ```
 
-- Start Nuxt-Express-Postgres-Social-Media-App
+- Start SHARE-IT-social-media-application
 
 ```bash
   npm run dev

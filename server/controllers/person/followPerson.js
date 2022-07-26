@@ -10,7 +10,7 @@ const Following = require("../../models/Following.js");
  */
 const followPerson = asyncHandler(async (req, res) => {
   const uuid = req.params.uuid;
-  if (!req || !req.user || !id) {
+  if (!req || !req.user || !uuid) {
     res.status(400);
     throw new Error("Request is invalid!");
   }

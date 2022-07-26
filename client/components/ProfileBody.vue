@@ -34,7 +34,7 @@ export default {
       this.$emit('onPostLike', id);
     },
     onUserFollow() {
-      this.$emit('onUserFollow', this.profile.id);
+      this.$emit('onUserFollow', this.profile.uuid);
     },
   },
 };

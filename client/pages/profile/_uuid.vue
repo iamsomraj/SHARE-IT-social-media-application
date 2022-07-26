@@ -68,9 +68,9 @@ export default {
       );
       this.$store.commit('profile/setProfile', fetchedProfile);
     },
-    async onUserFollow(id) {
-      await followPerson(id, this.token);
-      const uuid = this.$router.currentRoute.params.uuid; // GETTING UUID FROM URL
+    async onUserFollow(uuid) {
+      await followPerson(uuid, this.token);
+      const currentPersonUUID = this.$router.currentRoute.params.uuid; // GETTING UUID FROM URL
       const fetchedProfile = await getUserProfile(uuid, this.token);
       const fetchedUser = await getUserData(this.token);
       this.$store.commit('profile/setProfile', fetchedProfile);

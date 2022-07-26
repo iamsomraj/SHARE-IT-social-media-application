@@ -8,10 +8,8 @@ const Like = require("../../models/Like.js");
  * @route GET /api/v1/persons/:uuid
  */
 const getPersonProfile = asyncHandler(async (req, res) => {
-  console.log("🚀 ~ file: getPersonProfile.js ~ line 11 ~ getPersonProfile ~ req", req.params);
   const uuid = req.params.uuid;
   const person = await Person.query().findOne({ uuid });
-  console.log("🚀 ~ file: getPersonProfile.js ~ line 14 ~ getPersonProfile ~ person", person);
 
   if (person) {
     const posts = await Person.relatedQuery("posts").for(person.id).orderBy("createdAt", "DESC");

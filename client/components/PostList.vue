@@ -6,14 +6,15 @@
       class="px-6 py-3 border rounded w-full md:w-2/3"
     >
       <PostListItem
-        @onPostLike="onPostLike"
         :id="post.id"
         :uuid="post.uuid"
         :ownerName="post.owner.name"
         :ownerId="post.owner.id"
+        :ownerUUID="post.owner.uuid"
         :content="post.content"
         :numberOfLikes="post.likesOnPost.length"
         :date="(post.updatedAt ? post.updatedAt : post.createdAt).slice(0, 10)"
+        @onPostLike="onPostLike"
       />
     </div>
   </div>

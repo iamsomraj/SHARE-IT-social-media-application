@@ -2,7 +2,7 @@
   <div class="space-y-4">
     <div
       class="inline rounded-lg bg-gray-400 px-2 py-1 cursor-pointer text-xs text-white font-extrabold"
-      @click="$router.push(`/profile/${ownerId}`)"
+      @click="$router.push(`/profile/${ownerUUID}`)"
     >
       @{{ ownerName }}
     </div>
@@ -27,7 +27,15 @@
 <script>
 export default {
   name: 'PostListItem',
-  props: ['uuid', 'ownerName', 'ownerId', 'content', 'numberOfLikes', 'date'],
+  props: [
+    'uuid',
+    'ownerName',
+    'ownerId',
+    'ownerUUID',
+    'content',
+    'numberOfLikes',
+    'date',
+  ],
   methods: {
     onPostLike(uuid) {
       this.$emit('onPostLike', uuid);

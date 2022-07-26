@@ -36,6 +36,7 @@ class Person extends Model {
       required: ["name", "email", "password"],
       properties: {
         id: { type: "integer" },
+        uuid: { type: "string" },
         name: { type: "string", minLength: 1, maxLength: 255 },
         email: { type: "string" },
         password: { type: "string" },

@@ -2,6 +2,7 @@
   <div>
     <ProfileHeader
       v-if="user"
+      :uuid="user.uuid"
       :id="user.id"
       :name="user.name"
       :numberOfPosts="user.posts.length"

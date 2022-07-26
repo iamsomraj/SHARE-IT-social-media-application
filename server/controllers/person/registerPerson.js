@@ -34,16 +34,14 @@ const registerPerson = asyncHandler(async (req, res) => {
     password: hash(password),
   });
 
-  const posts = await Person.relatedQuery("posts")
-    .for(user.id)
-    .orderBy("createdAt", "DESC");
+  const posts = await Person.relatedQuery("posts").for(user.id).orderBy("createdAt", "DESC");
   const followers = await Person.relatedQuery("followers").for(user.id);
   const followings = await Person.relatedQuery("followings").for(user.id);
 
   for (let post of posts) {
     const likesOnPost = await Like.query().where("master_id", "=", post.id);
     post.likesOnPost = likesOnPost;
-    post.owner = { id: user.id, name: user.name, email: user.email };
+    post.owner = { uuid: user.uuid, id: user.id, name: user.name, email: user.email };
   }
 
   if (registerPerson) {

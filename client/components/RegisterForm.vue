@@ -65,7 +65,7 @@ export default {
       /**
        * navigating to profile page
        */
-      this.$router.push(`profile/${registeredUser.id}`);
+      this.$router.push(`profile/${registeredUser.uuid}`);
     },
   },
 };

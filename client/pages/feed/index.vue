@@ -15,7 +15,6 @@
         >Explore</NuxtLink
       >
     </div>
-    {{ posts }}
     <PostList v-if="posts" :posts="posts" @onPostLike="onPostLike" />
   </div>
 </template>

@@ -6,11 +6,11 @@ const Post = require("../../models/Post.js");
 /**
  * @access private
  * @description adds one like for one post
- * @route POST /api/v1/posts/:id
+ * @route POST /api/v1/posts/:uuid
  */
 const addLike = asyncHandler(async (req, res) => {
-  const id = parseInt(req.params.id);
-  const post = await Post.query().findOne({ id });
+  const uuid = req.params.uuid;
+  const post = await Post.query().findOne({ uuid });
 
   if (!post) {
     res.status(404);

@@ -12,8 +12,8 @@ const router = express.Router();
 
 router.route("/").post(registerPerson).get(protect, getUserData);
 router.route("/auth").post(loginPerson);
-router.route("/follow/:id").post(protect, followPerson);
+router.route("/follow/:uuid").post(protect, followPerson);
 router.route("/people").get(protect, getPeople);
-router.route("/:id").get(protect, getPersonProfile);
+router.route("/:uuid").get(protect, getPersonProfile);
 
 module.exports = router;

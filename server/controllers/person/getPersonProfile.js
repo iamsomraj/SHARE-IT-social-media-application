@@ -8,23 +8,13 @@ const Like = require("../../models/Like.js");
  * @route GET /api/v1/persons/:uuid
  */
 const getPersonProfile = asyncHandler(async (req, res) => {
-  let person, uuid;
-  /**
-   * If the same person is asking for his own profile,
-   * then no further request is made to fetch person details
-   */
-  if (req.user.id == req.params.id) {
-    person = { ...req.user };
-    uuid = parseInt(person.id);
-  } else {
-    uuid = parseInt(req.params.id);
-    person = await Person.query().findOne({ id: uuid });
-  }
+  const uuid = req.params.uuid;
+  const person = await Person.query().findOne({ uuid });
 
   if (person) {
-    const posts = await Person.relatedQuery("posts").for(uuid).orderBy("createdAt", "DESC");
-    const followings = await Person.relatedQuery("followers").for(uuid);
-    const followers = await Person.relatedQuery("followings").for(uuid);
+    const posts = await Person.relatedQuery("posts").for(person.id).orderBy("createdAt", "DESC");
+    const followings = await Person.relatedQuery("followers").for(person.id);
+    const followers = await Person.relatedQuery("followings").for(person.id);
 
     for (let post of posts) {
       const likesOnPost = await Like.query().where("master_id", "=", post.id);
@@ -33,6 +23,7 @@ const getPersonProfile = asyncHandler(async (req, res) => {
     }
 
     res.json({
+      uuid: person.uuid,
       id: person.id,
       name: person.name,
       email: person.email,

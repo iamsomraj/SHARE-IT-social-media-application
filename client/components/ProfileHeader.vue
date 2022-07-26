@@ -2,7 +2,7 @@
   <div class="flex justify-evenly items-center text-sm space-x-2">
     <div
       class="text-xl text-gray-500 font-extrabold cursor-pointer"
-      @click="$router.push(`/profile/${id}`)"
+      @click="$router.push(`/profile/${uuid}`)"
     >
       {{ name }}
     </div>
@@ -25,6 +25,7 @@
 export default {
   name: 'ProfileHeader',
   props: [
+    'uuid',
     'id',
     'name',
     'numberOfPosts',

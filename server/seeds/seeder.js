@@ -3,24 +3,22 @@ const Following = require("../models/Following.js");
 const Like = require("../models/Like.js");
 const Person = require("../models/Person.js");
 const Post = require("../models/Post.js");
-const { person_data } = require("../utils/dummy-data.js");
+const { person_data } = require("../utils/data/dummy-data.js");
 
 async function main() {
-  // Delete all data from the db.
+  /* DELETE ALL THE DATA THAT IS PRESENT IN DATABASE */
   await Following.query().delete();
   await Like.query().delete();
   await Post.query().delete();
   await Person.query().delete();
 
-  // Insert 3 person records to the database.
+  /* BEGIN: PERSON MODEL HANDLING */
+  /* INSERT PERSON RECORDS */
   const insertedPersons = await Person.query().insert(person_data);
-  console.log("🚀 ~ file: seeder.js ~ insertedPersons", insertedPersons);
+  /* END: PERSON MODEL HANDLING */
 
-  // Read all rows from the persons table.
-  const personRecords = await Person.query();
-  console.log("🚀 ~ file: seeder.js ~ personRecords", personRecords);
-
-  // Inserting Post for a Person
+  /* BEGIN: POST MODEL HANDLING */
+  /* INSERT POST RECORDS */
   const insertedPost = await Post.query().insert([
     {
       content: "dogs",
@@ -39,10 +37,11 @@ async function main() {
       owner_id: insertedPersons[2].id,
     },
   ]);
-  console.log("🚀 ~ file: seeder.js ~ insertedPost", insertedPost);
+  /* END: POST MODEL HANDLING */
 
-  // Inserting Like Records
-  const likeRecords = await Like.query().insert([
+  /* BEGIN: LIKE MODEL HANDLING */
+  /* INSERT LIKE RECORDS */
+  await Like.query().insert([
     {
       master_id: insertedPost[0].id,
       owner_id: insertedPersons[2].id,
@@ -52,7 +51,7 @@ async function main() {
       owner_id: insertedPersons[1].id,
     },
   ]);
-  console.log("🚀 ~ file: seeder.js ~ likeRecords", likeRecords);
+  /* END: LIKE MODEL HANDLING */
 }
 
 main()

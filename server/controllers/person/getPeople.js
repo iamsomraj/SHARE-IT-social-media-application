@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Person = require("../../models/Person.js");
+const { GENERAL_MESSAGES } = require("../../utils/constants/messages.js");
 
 /**
  * @access private
@@ -9,7 +10,7 @@ const Person = require("../../models/Person.js");
 const getPeople = asyncHandler(async (req, res) => {
   if (!req || !req.user) {
     res.status(400);
-    throw new Error("Request is invalid!");
+    throw new Error(GENERAL_MESSAGES.INVALID_REQUEST);
   }
 
   const people = await Person.query().select("uuid", "id", "name", "email").where("id", "!=", req.user.id);

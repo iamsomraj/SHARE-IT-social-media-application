@@ -3,16 +3,14 @@ const dotenv = require("dotenv");
 const jsonwebtoken = require("jsonwebtoken");
 dotenv.config();
 
-const salt = process.env.SALT.toString("hex");
+const SALT = process.env.SALT.toString("hex");
 
 const hash = (password) => {
-  return crypto.pbkdf2Sync(password, salt, 1000, 64, `sha512`).toString(`hex`);
+  return crypto.pbkdf2Sync(password, SALT, 1000, 64, `sha512`).toString(`hex`);
 };
 
 const validateHash = (password, already_hashed_password) => {
-  var current_hash = crypto
-    .pbkdf2Sync(password, salt, 1000, 64, `sha512`)
-    .toString(`hex`);
+  var current_hash = crypto.pbkdf2Sync(password, SALT, 1000, 64, `sha512`).toString(`hex`);
   return current_hash === already_hashed_password;
 };
 

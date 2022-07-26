@@ -1,4 +1,4 @@
-const { hash } = require("./index.js");
+const { hash } = require("../index");
 
 const person_data = [
   { name: "johndoe", email: "johndoe@example.com", password: hash("1234") },

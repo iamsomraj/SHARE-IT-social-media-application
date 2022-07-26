@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Like = require("../../models/Like.js");
 const Person = require("../../models/Person.js");
-const { generateToken, hash } = require("../../utils/index.js");
+const { generateToken, hash } = require("../../utils/helpers/index.js");
 
 /**
  * @access public

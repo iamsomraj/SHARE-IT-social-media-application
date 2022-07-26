@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Like = require("../../models/Like.js");
 const Person = require("../../models/Person.js");
 const Following = require("../../models/Following.js");
+const { GENERAL_MESSAGES } = require("../../utils/constants/messages.js");
 
 /**
  * @access private
@@ -12,7 +13,7 @@ const followPerson = asyncHandler(async (req, res) => {
   const uuid = req.params.uuid;
   if (!req || !req.user || !uuid) {
     res.status(400);
-    throw new Error("Request is invalid!");
+    throw new Error(GENERAL_MESSAGES.INVALID_REQUEST);
   }
 
   const personToBeFollowed = await Person.query().findOne({ uuid });
@@ -24,7 +25,7 @@ const followPerson = asyncHandler(async (req, res) => {
 
   if (!req || !req.user) {
     res.status(400);
-    throw new Error("Request is invalid!");
+    throw new Error(GENERAL_MESSAGES.INVALID_REQUEST);
   }
 
   const followRecord = await Following.query().insert({

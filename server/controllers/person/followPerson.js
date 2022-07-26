@@ -6,16 +6,16 @@ const Following = require("../../models/Following.js");
 /**
  * @access private
  * @description adds follower to a person
- * @route POST /api/v1/persons/follow/:id
+ * @route POST /api/v1/persons/follow/:uuid
  */
 const followPerson = asyncHandler(async (req, res) => {
-  const id = parseInt(req.params.id);
+  const uuid = req.params.uuid;
   if (!req || !req.user || !id) {
     res.status(400);
     throw new Error("Request is invalid!");
   }
 
-  const personToBeFollowed = await Person.query().findOne({ id });
+  const personToBeFollowed = await Person.query().findOne({ uuid });
 
   if (!personToBeFollowed) {
     res.status(404);
@@ -29,7 +29,7 @@ const followPerson = asyncHandler(async (req, res) => {
 
   const followRecord = await Following.query().insert({
     follower_id: req.user.id,
-    followed_id: id,
+    followed_id: personToBeFollowed.id,
   });
 
   if (followRecord) {

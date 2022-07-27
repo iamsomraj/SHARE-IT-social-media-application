@@ -13,3 +13,5 @@ const HTTP_CODES = Object.freeze({
   BAD_GATEWAY: 502,
   SERVICE_UNAVAILABLE: 503,
 });
+
+module.exports = HTTP_CODES;

@@ -5,6 +5,7 @@ const person_data = [
   { name: "janedoe", email: "janedoe@example.com", password: hash("1234") },
   { name: "amydoe", email: "amydoe@example.com", password: hash("1234") },
 ];
-module.exports = {
-  person_data,
-};
+
+const data = { person_data };
+
+module.exports = data;

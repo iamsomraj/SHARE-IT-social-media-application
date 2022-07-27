@@ -3,6 +3,9 @@ const Person = require("../../models/Person");
 const { generateToken, validateHash } = require("../../utils/helpers");
 const RootService = require("../Root/RootService");
 
+/**
+ * CLASS FOR HANDLING REQUESTS MADE BY ALL PERSON RELATED CONTROLLERS
+ */
 class PersonService extends RootService {
   constructor() {
     super();
@@ -25,7 +28,7 @@ class PersonService extends RootService {
       email,
     });
     /* CHECKING IF PERSON RECORD EXISTS OR NOT */
-    if (!personRecord) this.raiseError("404", "User not found!");
+    if (!personRecord) this.raiseError("404", PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
     /* CHECKING IF PASSWORD MATCHES OR NOT */
     if (!validateHash(password, personRecord.password)) this.raiseError("401", "Invalid password!");
     /* END: DATABASE VALIDATIONS */

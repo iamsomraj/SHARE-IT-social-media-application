@@ -14,9 +14,9 @@ const hash = (password) => {
   return crypto.pbkdf2Sync(password, SALT, BASE_ITERATIONS_FOR_CRYPTO, BASE_KEY_LENGTH_FOR_CRYPTO, BASE_DIGEST_ALGORITHM_FOR_CRYPTO).toString(BASE_RADIX_FOR_CRYPTO);
 };
 
-const validateHash = (password, already_hashed_password) => {
+const validateHash = (password, hashedPassword) => {
   var current_hash = crypto.pbkdf2Sync(password, SALT, BASE_ITERATIONS_FOR_CRYPTO, BASE_KEY_LENGTH_FOR_CRYPTO, BASE_DIGEST_ALGORITHM_FOR_CRYPTO).toString(BASE_RADIX_FOR_CRYPTO);
-  return current_hash === already_hashed_password;
+  return current_hash === hashedPassword;
 };
 
 const generateToken = (id) => {

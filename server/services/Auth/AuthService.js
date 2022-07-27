@@ -1,6 +1,6 @@
 const { AUTH_ERROR_MESSAGES, PERSON_ERROR_MESSAGES } = require("../../utils/constants/messages");
 const RootService = require("../Root/RootService");
-const { jwt } = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const Person = require("../../models/Person");
 
 /**

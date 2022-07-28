@@ -14,6 +14,7 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
   FOLLOW_FAILURE: "Follow failed!",
   LIKE_FAILURE: "Like failed!",
   POST_FAILURE: "Post failed!",
+  WRONG_CREDENTIALS: "Wrong Credentials!",
 });
 
 const AUTH_ERROR_MESSAGES = Object.freeze({
@@ -26,6 +27,7 @@ const AUTH_ERROR_MESSAGES = Object.freeze({
 
 const GENERAL_MESSAGES = Object.freeze({
   INVALID_REQUEST: "Request is invalid!",
+  SOMETHING_WENT_WRONG: "Something went wrong!",
 });
 
 module.exports = {

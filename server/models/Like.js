@@ -8,11 +8,11 @@ class Like extends Model {
   }
 
   $beforeInsert() {
-    this.createdAt = new Date();
+    this.createdAt = new Date().toISOString();
   }
 
   $beforeUpdate() {
-    this.updatedAt = new Date();
+    this.updatedAt = new Date().toISOString();
   }
 
   static get masterIdColumn() {
@@ -33,28 +33,50 @@ class Like extends Model {
         owner_id: { type: "integer" },
         createdAt: { type: "string" },
         updatedAt: { type: "string" },
+        createdBy: { type: "integer" },
+        updatedBy: { type: "integer" },
       },
     };
   }
 
-  static relationMappings = {
-    owner: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: Person,
-      join: {
-        from: "likes.owner_id",
-        to: "persons.id",
+  static get relationMappings() {
+    const Post = require("./Post.js");
+    const Person = require("./Person.js");
+    return {
+      owner: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Person,
+        join: {
+          from: "likes.owner_id",
+          to: "persons.id",
+        },
       },
-    },
-    master: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: Post,
-      join: {
-        from: "likes.master_id",
-        to: "posts.id",
+      master: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Post,
+        join: {
+          from: "likes.master_id",
+          to: "posts.id",
+        },
       },
-    },
-  };
+      createdPerson: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Person,
+        join: {
+          from: "likes.createdBy",
+          to: "persons.id",
+        },
+      },
+      updatedPerson: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Person,
+        join: {
+          from: "likes.updatedBy",
+          to: "persons.id",
+        },
+      },
+    };
+  }
 }
 
 module.exports = Like;

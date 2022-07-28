@@ -2,6 +2,7 @@ const { AUTH_ERROR_MESSAGES, PERSON_ERROR_MESSAGES } = require("../../utils/cons
 const RootService = require("../Root/RootService");
 const jwt = require("jsonwebtoken");
 const Person = require("../../models/Person");
+const HTTP_CODES = require("../../utils/constants/http-codes");
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL AUTH RELATED CONTROLLERS, INCLUDING AUTH MIDDLEWARE

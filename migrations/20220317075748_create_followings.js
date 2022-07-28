@@ -6,6 +6,8 @@ exports.up = function (knex) {
       table.integer("followed_id").references("persons.id");
       table.string("createdAt");
       table.string("updatedAt");
+      table.integer("createdBy").references("persons.id");
+      table.integer("updatedBy").references("persons.id");
     }),
   ]);
 };

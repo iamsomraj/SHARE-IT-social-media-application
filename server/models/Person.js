@@ -8,12 +8,12 @@ class Person extends Model {
   }
 
   $beforeInsert() {
-    this.createdAt = new Date();
+    this.createdAt = new Date().toISOString();
     this.uuid = randomUUID();
   }
 
   $beforeUpdate() {
-    this.updatedAt = new Date();
+    this.updatedAt = new Date().toISOString();
   }
 
   static get nameColumn() {
@@ -80,6 +80,14 @@ class Person extends Model {
           from: "persons.id",
           to: "likes.owner_id",
         },
+      },
+    };
+  }
+
+  static get modifiers() {
+    return {
+      defaultSelects(builder) {
+        builder.select("id", "uuid", "name", "email", "createdAt", "updatedAt");
       },
     };
   }

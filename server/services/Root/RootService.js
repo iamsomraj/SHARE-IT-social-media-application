@@ -1,5 +1,15 @@
 /**
- * CLASS ROOTSERVICE
+ * CLASS ROOTERROR FOR HANDLING ERRORS
+ */
+class RootError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.status = status;
+  }
+}
+
+/**
+ * CLASS ROOTSERVICE FOR HANDLING SERVICES
  */
 class RootService {
   /**
@@ -8,8 +18,7 @@ class RootService {
    * @param {*} message
    */
   raiseError(status, message) {
-    res.status(status, message);
-    throw new Error(message);
+    throw new RootError(status, message);
   }
 }
 

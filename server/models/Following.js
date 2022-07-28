@@ -32,6 +32,8 @@ class Following extends Model {
         followed_id: { type: "integer" },
         createdAt: { type: "string" },
         updatedAt: { type: "string" },
+        createdBy: { type: "integer" },
+        updatedBy: { type: "integer" },
       },
     };
   }
@@ -50,6 +52,22 @@ class Following extends Model {
       modelClass: Person,
       join: {
         from: "followings.follower_id",
+        to: "persons.id",
+      },
+    },
+    createdPerson: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: Person,
+      join: {
+        from: "likes.createdBy",
+        to: "persons.id",
+      },
+    },
+    updatedPerson: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: Person,
+      join: {
+        from: "likes.updatedBy",
         to: "persons.id",
       },
     },

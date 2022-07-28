@@ -23,18 +23,34 @@ async function main() {
     {
       content: "dogs",
       owner_id: insertedPersons[0].id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: insertedPersons[0].id,
+      updatedBy: insertedPersons[0].id,
     },
     {
       content: "dogs and cats",
       owner_id: insertedPersons[0].id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: insertedPersons[0].id,
+      updatedBy: insertedPersons[0].id,
     },
     {
       content: "cats",
       owner_id: insertedPersons[1].id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: insertedPersons[1].id,
+      updatedBy: insertedPersons[1].id,
     },
     {
       content: "birds",
       owner_id: insertedPersons[2].id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: insertedPersons[2].id,
+      updatedBy: insertedPersons[2].id,
     },
   ]);
   /* END: POST MODEL HANDLING */
@@ -45,10 +61,18 @@ async function main() {
     {
       master_id: insertedPost[0].id,
       owner_id: insertedPersons[2].id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: insertedPersons[2].id,
+      updatedBy: insertedPersons[2].id,
     },
     {
       master_id: insertedPost[0].id,
       owner_id: insertedPersons[1].id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: insertedPersons[1].id,
+      updatedBy: insertedPersons[1].id,
     },
   ]);
   /* END: LIKE MODEL HANDLING */

@@ -24,9 +24,12 @@ class PersonService extends RootService {
     /* END: VALIDATIONS */
 
     /* BEGIN: DATABASE VALIDATIONS */
-    const personRecord = await Person.query().findOne({
-      email,
-    });
+    const personRecord = await Person.query()
+      .findOne({
+        email,
+      })
+      .withGraphFetched("[followings, followers, posts, likes]");
+      
     /* CHECKING IF PERSON RECORD EXISTS OR NOT */
     if (!personRecord) this.raiseError("404", PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
     /* CHECKING IF PASSWORD MATCHES OR NOT */

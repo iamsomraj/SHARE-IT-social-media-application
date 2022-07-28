@@ -4,9 +4,13 @@ const jwt = require("jsonwebtoken");
 const Person = require("../../models/Person");
 
 /**
- * CLASS FOR HANDLING REQUESTS MADE BY ALL AUTH RELATED CONTROLLERS, INCLUDING MIDDLEWARE
+ * CLASS FOR HANDLING REQUESTS MADE BY ALL AUTH RELATED CONTROLLERS, INCLUDING AUTH MIDDLEWARE
  */
 class AuthService extends RootService {
+  constructor() {
+    super();
+  }
+
   /**
    * @description CHECKS FOR TOKEN IN THE HEADER AND RETURNS DECODED TOKEN INFORMATION
    * @param {{ headers: { authorization: string }}} req

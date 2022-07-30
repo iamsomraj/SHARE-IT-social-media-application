@@ -27,26 +27,34 @@ class PersonService extends RootService {
     /* END: VALIDATIONS */
 
     /* BEGIN: DATABASE VALIDATIONS */
-    const personRecord = await PersonsModel.query()
-      .findOne({
-        email,
-        is_deleted: false,
-      })
-      .withGraphFetched("[person_followers, person_followings, person_posts.[post_likes, post_stats, creator(defaultSelects), updater(defaultSelects)], person_post_likes.[post, creator(defaultSelects), updater(defaultSelects)]]");
-
+    let personRecord = await PersonsModel.query().findOne({
+      email,
+      is_deleted: false,
+    });
     /* CHECKING IF PERSON RECORD EXISTS OR NOT */
     if (!personRecord) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
     /* CHECKING IF PASSWORD MATCHES OR NOT */
     if (!validateHash(password, personRecord.password)) this.raiseError(HTTP_CODES.UNAUTHORIZED, PERSON_ERROR_MESSAGES.WRONG_CREDENTIALS);
     /* END: DATABASE VALIDATIONS */
 
-    /* REMOVING PASSWORD FROM PERSON RECORD */
-    delete personRecord.password;
+    /* BEGIN: PERSON DETAILS FETCHING */
+    personRecord = await PersonsModel.query()
+      .select("persons.id", "persons.uuid", "persons.name", "persons.email", "persons.created_at", "persons.updated_at")
+      .findOne({
+        email,
+      })
+      .withGraphFetched("[person_followers, person_followings, person_posts.[post_likes.creator, post_stats]]");
+    /* END: PERSON DETAILS FETCHING */
+
+    /* BEGIN: TOKEN GENERATION */
+    const token = generateToken(personRecord.id);
+    /* END: TOKEN GENERATION */
 
     const result = {
       ...personRecord,
-      token: generateToken(personRecord.id),
+      token,
     };
+
     return result;
   }
 }

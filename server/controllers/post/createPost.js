@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
-const Like = require("../../models/Like.js");
-const Person = require("../../models/Person.js");
-const Post = require("../../models/Post.js");
+const PostLikesModel = require("../../models/PostLikesModel.js");
+const PersonsModel = require("../../models/PersonsModel.js");
+const PostsModel = require("../../models/PostsModel.js");
 
 /**
  * @access private
@@ -10,16 +10,16 @@ const Post = require("../../models/Post.js");
  */
 const createPost = asyncHandler(async (req, res) => {
   const { content } = req.body;
-  const owner_id = req.user.id;
+  const created_by = req.user.id;
 
   if (!content) {
     res.status(400);
-    throw new Error("Post data is invalid!");
+    throw new Error("PostsModel data is invalid!");
   }
 
-  const post = await Post.query().insert({
+  const post = await PostsModel.query().insert({
     content,
-    owner_id,
+    created_by,
   });
 
   if (post) {

@@ -1,6 +1,6 @@
-const Person = require("../../models/Person.js");
+const PersonsModel = require("../../models/PersonsModel.js");
 const asyncHandler = require("express-async-handler");
-const Like = require("../../models/Like.js");
+const PostLikesModel = require("../../models/PostLikesModel.js");
 
 /**
  * @access private
@@ -9,15 +9,15 @@ const Like = require("../../models/Like.js");
  */
 const getPersonProfile = asyncHandler(async (req, res) => {
   const uuid = req.params.uuid;
-  const person = await Person.query().findOne({ uuid });
+  const person = await PersonsModel.query().findOne({ uuid });
 
   if (person) {
-    const posts = await Person.relatedQuery("posts").for(person.id).orderBy("createdAt", "DESC");
-    const followings = await Person.relatedQuery("followers").for(person.id);
-    const followers = await Person.relatedQuery("followings").for(person.id);
+    const posts = await PersonsModel.relatedQuery("posts").for(person.id).orderBy("created_at", "DESC");
+    const followings = await PersonsModel.relatedQuery("followers").for(person.id);
+    const followers = await PersonsModel.relatedQuery("followings").for(person.id);
 
     for (let post of posts) {
-      const likesOnPost = await Like.query().where("master_id", "=", post.id);
+      const likesOnPost = await PostLikesModel.query().where("post_id", "=", post.id);
       post.likesOnPost = likesOnPost;
       post.owner = { uuid: person.uuid, id: person.id, name: person.name, email: person.email };
     }

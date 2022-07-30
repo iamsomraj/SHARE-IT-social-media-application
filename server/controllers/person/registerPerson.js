@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
-const Like = require("../../models/Like.js");
-const Person = require("../../models/Person.js");
+const PostLikesModel = require("../../models/PostLikesModel.js");
+const PersonsModel = require("../../models/PersonsModel.js");
 const { generateToken, hash } = require("../../utils/helpers/index.js");
 
 /**
@@ -16,7 +16,7 @@ const registerPerson = asyncHandler(async (req, res) => {
     throw new Error("User data is invalid");
   }
 
-  const doesUserExist = await Person.query().findOne({
+  const doesUserExist = await PersonsModel.query().findOne({
     email,
   });
 
@@ -28,18 +28,18 @@ const registerPerson = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const user = await Person.query().insert({
+  const user = await PersonsModel.query().insert({
     name,
     email,
     password: hash(password),
   });
 
-  const posts = await Person.relatedQuery("posts").for(user.id).orderBy("createdAt", "DESC");
-  const followers = await Person.relatedQuery("followers").for(user.id);
-  const followings = await Person.relatedQuery("followings").for(user.id);
+  const posts = await PersonsModel.relatedQuery("posts").for(user.id).orderBy("created_at", "DESC");
+  const followers = await PersonsModel.relatedQuery("followers").for(user.id);
+  const followings = await PersonsModel.relatedQuery("followings").for(user.id);
 
   for (let post of posts) {
-    const likesOnPost = await Like.query().where("master_id", "=", post.id);
+    const likesOnPost = await PostLikesModel.query().where("post_id", "=", post.id);
     post.likesOnPost = likesOnPost;
     post.owner = { uuid: user.uuid, id: user.id, name: user.name, email: user.email };
   }

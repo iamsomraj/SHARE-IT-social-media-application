@@ -13,7 +13,7 @@
         :ownerUUID="post.owner.uuid"
         :content="post.content"
         :numberOfLikes="post.likesOnPost.length"
-        :date="(post.updatedAt ? post.updatedAt : post.createdAt).slice(0, 10)"
+        :date="(post.updated_at ? post.updated_at : post.created_at).slice(0, 10)"
         @onPostLike="onPostLike"
       />
     </div>

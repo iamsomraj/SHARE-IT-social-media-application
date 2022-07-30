@@ -10,12 +10,16 @@ const pageNotFound = (req, res, next) => {
 
 const errorHandler = (err, req, res, next) => {
   const statusCode = !err.status ? HTTP_CODES.INTERNAL_SERVER_ERROR : err.status;
-  if (ENVIRONMENT.IS_DEVELOPMENT) console.error(err);
-  res.status(statusCode).json({
-    status: false,
+
+  const result = {
+    state: false,
     message: err?.message || GENERAL_MESSAGES.SOMETHING_WENT_WRONG,
-    data: ENVIRONMENT.IS_PRODUCTION && err.stack,
-  });
+    data: ENVIRONMENT.IS_PRODUCTION ? "" : err.stack,
+  };
+
+  if (ENVIRONMENT.IS_DEVELOPMENT) console.error(result);
+
+  res.status(statusCode).json(result);
 };
 
 module.exports = {

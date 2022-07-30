@@ -1,7 +1,7 @@
 const { AUTH_ERROR_MESSAGES, PERSON_ERROR_MESSAGES } = require("../../utils/constants/messages");
 const RootService = require("../Root/RootService");
 const jwt = require("jsonwebtoken");
-const Person = require("../../models/Person");
+const PersonsModel = require("../../models/PersonsModel");
 const HTTP_CODES = require("../../utils/constants/http-codes");
 
 /**
@@ -51,7 +51,7 @@ class AuthService extends RootService {
    */
   async getUserFromToken(req) {
     const decoded = this.verifyTokenAndReturnDecoded(req);
-    const result = await Person.query().findOne({ id: parseInt(decoded.id) });
+    const result = await PersonsModel.query().findOne({ id: parseInt(decoded.id) });
     if (!result) {
       this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
     }

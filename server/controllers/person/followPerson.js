@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
-const Like = require("../../models/Like.js");
-const Person = require("../../models/Person.js");
-const Following = require("../../models/Following.js");
+const PostLikesModel = require("../../models/PostLikesModel.js");
+const PersonsModel = require("../../models/PersonsModel.js");
+const FollowingsModel = require("../../models/FollowingsModel.js");
 const { GENERAL_MESSAGES } = require("../../utils/constants/messages.js");
 
 /**
@@ -16,7 +16,7 @@ const followPerson = asyncHandler(async (req, res) => {
     throw new Error(GENERAL_MESSAGES.INVALID_REQUEST);
   }
 
-  const personToBeFollowed = await Person.query().findOne({ uuid });
+  const personToBeFollowed = await PersonsModel.query().findOne({ uuid });
 
   if (!personToBeFollowed) {
     res.status(404);
@@ -28,7 +28,7 @@ const followPerson = asyncHandler(async (req, res) => {
     throw new Error(GENERAL_MESSAGES.INVALID_REQUEST);
   }
 
-  const followRecord = await Following.query().insert({
+  const followRecord = await FollowingsModel.query().insert({
     follower_id: req.user.id,
     followed_id: personToBeFollowed.id,
   });

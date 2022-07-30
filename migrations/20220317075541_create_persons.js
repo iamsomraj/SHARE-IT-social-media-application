@@ -6,8 +6,9 @@ exports.up = function (knex) {
       table.string("name");
       table.string("email");
       table.string("password");
-      table.string("createdAt");
-      table.string("updatedAt");
+      table.string("created_at");
+      table.string("updated_at");
+      table.boolean("is_deleted").defaultTo(false);
     }),
   ]);
 };

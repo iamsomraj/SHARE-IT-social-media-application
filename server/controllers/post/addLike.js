@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
-const Like = require("../../models/Like.js");
-const Person = require("../../models/Person.js");
-const Post = require("../../models/Post.js");
+const PostLikesModel = require("../../models/PostLikesModel.js");
+const PostsModel = require("../../models/PostsModel.js");
 const { GENERAL_MESSAGES } = require("../../utils/constants/messages.js");
 
 /**
@@ -11,7 +10,7 @@ const { GENERAL_MESSAGES } = require("../../utils/constants/messages.js");
  */
 const addLike = asyncHandler(async (req, res) => {
   const uuid = req.params.uuid;
-  const post = await Post.query().findOne({ uuid });
+  const post = await PostsModel.query().findOne({ uuid });
 
   if (!post) {
     res.status(404);
@@ -23,9 +22,9 @@ const addLike = asyncHandler(async (req, res) => {
     throw new Error(GENERAL_MESSAGES.INVALID_REQUEST);
   }
 
-  const likeRecord = await Like.query().insert({
-    master_id: post.id,
-    owner_id: req.user.id,
+  const likeRecord = await PostLikesModel.query().insert({
+    post_id: post.id,
+    created_by: req.user.id,
   });
 
   if (likeRecord) {

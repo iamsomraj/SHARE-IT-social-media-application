@@ -3,11 +3,11 @@ exports.up = function (knex) {
     knex.schema.createTable("followings", (table) => {
       table.increments("id").primary();
       table.integer("follower_id").references("persons.id");
-      table.integer("followed_id").references("persons.id");
-      table.string("createdAt");
-      table.string("updatedAt");
-      table.integer("createdBy").references("persons.id");
-      table.integer("updatedBy").references("persons.id");
+      table.integer("following_id").references("persons.id");
+      table.string("created_at");
+      table.string("updated_at");
+      table.integer("created_by").references("persons.id");
+      table.integer("updated_by").references("persons.id");
     }),
   ]);
 };

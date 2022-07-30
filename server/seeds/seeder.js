@@ -19,6 +19,19 @@ async function main() {
   const insertedPersons = await PersonsModel.query().insert(person_data);
   /* END: PERSON MODEL HANDLING */
 
+  /* BEGIN: FOLLOWINGS MODEL HANDLING */
+  /* INSERT FOLLOWINGS RECORDS */
+  const followings = [
+    { follower_id: insertedPersons[0].id, followed_id: insertedPersons[1].id },
+    { follower_id: insertedPersons[0].id, followed_id: insertedPersons[2].id },
+    { follower_id: insertedPersons[1].id, followed_id: insertedPersons[2].id },
+    { follower_id: insertedPersons[1].id, followed_id: insertedPersons[0].id },
+    { follower_id: insertedPersons[2].id, followed_id: insertedPersons[0].id },
+    { follower_id: insertedPersons[2].id, followed_id: insertedPersons[1].id },
+  ];
+  const insertedFollowings = await FollowingsModel.query().insert(followings);
+  /* END: FOLLOWINGS MODEL HANDLING */
+
   /* BEGIN: POSTS MODEL HANDLING */
   /* INSERT POST RECORDS */
   const post_data = [

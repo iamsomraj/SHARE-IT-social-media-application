@@ -197,7 +197,7 @@ async function main() {
 
 main()
   .then(() => {
-    console.log("Database seeded successfully!".white.bgGreen.underline.bold);
+    console.log("Database seeded successfully!".green.bgWhite.underline.bold);
     knex.destroy();
     process.exit(0);
   })

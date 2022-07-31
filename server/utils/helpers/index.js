@@ -20,9 +20,11 @@ const validateHash = (password, hashedPassword) => {
 };
 
 const generateToken = (id) => {
-  return jsonwebtoken.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
+  const data = { id };
+  const token = jsonwebtoken.sign(data, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRATION_DURATION,
   });
+  return token;
 };
 
 module.exports = {

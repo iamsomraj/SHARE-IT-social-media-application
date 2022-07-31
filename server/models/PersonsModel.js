@@ -108,13 +108,29 @@ class PersonsModel extends Model {
     };
   }
 
+  /**
+   * @description fetches details of a person
+   * @param {string} email
+   */
   static async getPersonDetailsByEmail(email) {
     let personRecord = await PersonsModel.query()
-      .select("persons.id", "persons.uuid", "persons.name", "persons.email", "persons.created_at", "persons.updated_at")
       .findOne({
         email,
       })
       .withGraphFetched("[person_followers, person_followings, person_posts.[post_likes.creator, post_stats]]");
+    delete personRecord.password;
+    return personRecord;
+  }
+
+  /**
+   * @description checks if a person exists with the given email
+   * @param {string} email
+   */
+  static async checkIfPersonExists(email) {
+    let personRecord = await PersonsModel.query().findOne({
+      email,
+      is_deleted: false,
+    });
     return personRecord;
   }
 }

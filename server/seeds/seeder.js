@@ -5,6 +5,7 @@ const PersonsModel = require("../models/PersonsModel.js");
 const PostStatsModel = require("../models/PostStatsModel.js");
 const PostsModel = require("../models/PostsModel.js");
 const { person_data } = require("../utils/data/dummy-data.js");
+const _ = require("colors");
 
 async function main() {
   /* DELETE ALL THE DATA THAT IS PRESENT IN DATABASE */
@@ -196,7 +197,7 @@ async function main() {
 
 main()
   .then(() => {
-    console.log("Database seeded successfully!");
+    console.log("Database seeded successfully!".white.bgGreen.underline.bold);
     knex.destroy();
     process.exit(0);
   })

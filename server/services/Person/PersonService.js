@@ -75,7 +75,6 @@ class PersonService extends RootService {
       email,
       is_deleted: false,
     });
-    console.log("🚀 ~ file: PersonService.js ~ line 78 ~ PersonService ~ doesUserExist ~ doesUserExist", doesUserExist);
 
     /* CHECKING IF PERSON RECORD EXISTS OR NOT */
     if (doesUserExist) {

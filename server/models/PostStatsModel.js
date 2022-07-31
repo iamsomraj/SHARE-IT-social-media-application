@@ -5,15 +5,6 @@ class PostStatsModel extends Model {
     return "public.post_stats";
   }
 
-  $beforeInsert() {
-    this.created_at = new Date().toISOString();
-    this.uuid = randomUUID();
-  }
-
-  $beforeUpdate() {
-    this.updated_at = new Date().toISOString();
-  }
-
   static get idColumn() {
     return "id";
   }

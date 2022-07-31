@@ -9,7 +9,9 @@ const PERSON_SUCCESS_MESSAGES = Object.freeze({
 const PERSON_ERROR_MESSAGES = Object.freeze({
   LOGIN_FAILURE: "Login failed!",
   PROVIDE_EMAIL_AND_PASSWORD: "Please, provide Email and Password!",
+  PROVIDE_NAME_EMAIL_AND_PASSWORD: "Please, provide Name, Email and Password!",
   USER_NOT_FOUND: "User not found!",
+  USER_ALREADY_EXISTS: "User already exists!",
   REGISTER_FAILURE: "Registration failed!",
   FOLLOW_FAILURE: "Follow failed!",
   LIKE_FAILURE: "Like failed!",

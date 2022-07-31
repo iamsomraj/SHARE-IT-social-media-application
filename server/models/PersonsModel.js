@@ -107,6 +107,16 @@ class PersonsModel extends Model {
       },
     };
   }
+
+  static async getPersonDetailsByEmail(email) {
+    let personRecord = await PersonsModel.query()
+      .select("persons.id", "persons.uuid", "persons.name", "persons.email", "persons.created_at", "persons.updated_at")
+      .findOne({
+        email,
+      })
+      .withGraphFetched("[person_followers, person_followings, person_posts.[post_likes.creator, post_stats]]");
+    return personRecord;
+  }
 }
 
 module.exports = PersonsModel;

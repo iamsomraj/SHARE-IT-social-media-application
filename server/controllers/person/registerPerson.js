@@ -1,64 +1,24 @@
 const asyncHandler = require("express-async-handler");
-const PostLikesModel = require("../../models/PostLikesModel.js");
-const PersonsModel = require("../../models/PersonsModel.js");
-const { generateToken, hash } = require("../../utils/helpers/index.js");
+const PersonService = require("../../services/Person/PersonService.js");
+const HTTP_CODES = require("../../utils/constants/http-codes.js");
+const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js");
 
 /**
  * @access public
  * @description registers one person
  * @route POST /api/v1/persons/
+ * @access public
  */
 const registerPerson = asyncHandler(async (req, res) => {
+  const personService = new PersonService();
   const { name, email, password } = req.body;
+  const result = await personService.registerPerson(name, email, password);
 
-  if (!email || !name || !password) {
-    res.status(400);
-    throw new Error("User data is invalid");
-  }
-
-  const doesUserExist = await PersonsModel.query().findOne({
-    email,
+  res.status(HTTP_CODES.CREATED).json({
+    state: true,
+    data: result,
+    message: PERSON_SUCCESS_MESSAGES.REGISTER_SUCCESS,
   });
-
-  /**
-   * when email id is already taken
-   */
-  if (doesUserExist) {
-    res.status(400);
-    throw new Error("User already exists");
-  }
-
-  const user = await PersonsModel.query().insert({
-    name,
-    email,
-    password: hash(password),
-  });
-
-  const posts = await PersonsModel.relatedQuery("posts").for(user.id).orderBy("created_at", "DESC");
-  const followers = await PersonsModel.relatedQuery("followers").for(user.id);
-  const followings = await PersonsModel.relatedQuery("followings").for(user.id);
-
-  for (let post of posts) {
-    const likesOnPost = await PostLikesModel.query().where("post_id", "=", post.id);
-    post.likesOnPost = likesOnPost;
-    post.owner = { uuid: user.uuid, id: user.id, name: user.name, email: user.email };
-  }
-
-  if (registerPerson) {
-    res.status(201).json({
-      id: user.id,
-      uuid: user.uuid,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user.id),
-      posts,
-      followers,
-      followings,
-    });
-  } else {
-    res.status(400);
-    throw new Error("Something went wrong in User Creation");
-  }
 });
 
 module.exports = registerPerson;

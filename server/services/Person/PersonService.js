@@ -14,8 +14,8 @@ class PersonService extends RootService {
 
   /**
    * @description LOGS IN A PERSON
-   * @param {string} email
-   * @param {string} password
+   * @param {string} email - person's email
+   * @param {string} password - person's password
    * @route POST /api/v1/persons/auth
    * @access public
    */
@@ -53,9 +53,9 @@ class PersonService extends RootService {
 
   /**
    * @description REGISTERS A PERSON
-   * @param {string} name
-   * @param {string} email
-   * @param {string} password
+   * @param {string} name - person's name
+   * @param {string} email - person's email
+   * @param {string} password - person's password
    * @route POST /api/v1/persons/
    * @access public
    */
@@ -101,10 +101,10 @@ class PersonService extends RootService {
   }
 
   /**
-   * @description fetches list of people to show in the explore page
-   * @param {{ id }} user
-   * @param {number} page
-   * @param {number} limit
+   * @description FETCHES LIST OF PEOPLE AVAILABLE IN THE PLATFORM
+   * @param {{ id }} user - user's id
+   * @param {number} page - page number
+   * @param {number} limit - number of records per page
    * @route GET /api/v1/persons/people
    * @access private
    */

@@ -49,11 +49,16 @@ Following steps are required to run the application:
 
 To run this project, you will need to add the following environment variables to your .env file
 
-- `NODE_ENV` : production or development
+- `NODE_ENV` : For Node environment ( production / development / test )
 - `PORT` : port for express server
 - `DATABASE_URL` : URI for Postgres connection
 - `JWT_SECRET` : For User tokens
 - `SALT` : For Hashing Passwords
+- `JWT_EXPIRATION_DURATION` : For User token expiration duration
+
+- `DEV_API` : For development API
+- `PROD_API` : For production API
+- `NODE_ENV` : For Node environment ( production / development / test )
 
 Create these environment variables, save them in Coding Pillow Editor root folder. File name can be `.env`.
 
@@ -65,6 +70,7 @@ DATABASE_URL = postgres://{USERNAME}:@{HOSTNAME}:{DATABASE_PORT}/{DATABASE}
 NODE_ENV = development
 SALT = {YOUR_SALT}
 JWT_SECRET = {YOUR_SECRET}
+JWT_EXPIRATION_DURATION = '100d'
 ```
 
 

@@ -14,8 +14,8 @@ class RootError extends Error {
 class RootService {
   /**
    * @description HELPER FUNCTION TO RAISE AND THROW ERROR
-   * @param {*} status
-   * @param {*} message
+   * @param {number} status
+   * @param {string} message
    */
   raiseError(status, message) {
     throw new RootError(status, message);

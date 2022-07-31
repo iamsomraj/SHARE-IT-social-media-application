@@ -27,7 +27,7 @@ class PersonService extends RootService {
     /* END: VALIDATIONS */
 
     /* BEGIN: DATABASE VALIDATIONS */
-    let doesPersonExist = await PersonsModel.checkIfPersonExists(email);
+    let doesPersonExist = await PersonsModel.checkIfPersonExistsByEmail(email);
 
     /* CHECKING IF PERSON RECORD EXISTS OR NOT */
     if (!doesPersonExist) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
@@ -67,7 +67,7 @@ class PersonService extends RootService {
     /* END: VALIDATIONS */
 
     /* BEGIN: DATABASE VALIDATIONS */
-    const doesUserExist = await PersonsModel.checkIfPersonExists(email);
+    const doesUserExist = await PersonsModel.checkIfPersonExistsByEmail(email);
 
     /* CHECKING IF PERSON RECORD EXISTS OR NOT */
     if (doesUserExist) {
@@ -110,7 +110,7 @@ class PersonService extends RootService {
    */
   async getPeople(user, page = 1, limit = 10) {
     if (!user || !user.id) {
-      this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.PROVIDE_USER_ID);
+      this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_USER_DETAILS);
     }
 
     const result = await PersonsModel.query().select("uuid", "id", "name", "email").where("id", "!=", user.id).page(page, limit);
@@ -118,6 +118,33 @@ class PersonService extends RootService {
     if (!result) {
       this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.NO_PEOPLE_FOUND);
     }
+
+    return result;
+  }
+
+  /**
+   * @description FETCHES DETAILS OF THE LOGGED IN USER
+   * @param {{ id, email }} user - user's id, email
+   * @route GET /api/v1/persons/
+   * @access private
+   */
+  async getUserData(user) {
+    if (!user || !user.id || !user.email) {
+      this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_USER_DETAILS);
+    }
+
+    /* BEGIN: PERSON DETAILS FETCHING */
+    const personRecord = await PersonsModel.getPersonDetailsByEmail(email);
+    /* END: PERSON DETAILS FETCHING */
+
+    /* BEGIN: TOKEN GENERATION */
+    const token = generateToken(personRecord.id);
+    /* END: TOKEN GENERATION */
+
+    const result = {
+      ...personRecord,
+      token,
+    };
 
     return result;
   }

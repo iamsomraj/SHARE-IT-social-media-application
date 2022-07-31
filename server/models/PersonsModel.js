@@ -124,11 +124,23 @@ class PersonsModel extends Model {
 
   /**
    * @description checks if a person exists with the given email
-   * @param {string} email
+   * @param {string} email - person's email
    */
-  static async checkIfPersonExists(email) {
+  static async checkIfPersonExistsByEmail(email) {
     let personRecord = await PersonsModel.query().findOne({
       email,
+      is_deleted: false,
+    });
+    return personRecord;
+  }
+
+  /**
+   * @description checks if a person exists with the given id
+   * @param {number} id - person's id
+   */
+  static async checkIfPersonExistsById(id) {
+    let personRecord = await PersonsModel.query().findOne({
+      id,
       is_deleted: false,
     });
     return personRecord;

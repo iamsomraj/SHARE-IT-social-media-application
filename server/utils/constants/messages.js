@@ -1,6 +1,7 @@
 const PERSON_SUCCESS_MESSAGES = Object.freeze({
   LOGIN_SUCCESS: "Login successful!",
   FETCH_PEOPLE_SUCCESS: "People fetched successfully!",
+  FETCH_USER_DATA_SUCCESS: "User data fetched successfully!",
   REGISTER_SUCCESS: "Registration successful!",
   FOLLOW_SUCCESS: "Follow successful!",
   LIKE_SUCCESS: "Like successful!",
@@ -12,6 +13,7 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
   PROVIDE_EMAIL_AND_PASSWORD: "Please, provide Email and Password!",
   PROVIDE_NAME_EMAIL_AND_PASSWORD: "Please, provide Name, Email and Password!",
   PROVIDE_USER_ID: "Please, provide User ID!",
+  INVALID_USER_DETAILS: "Invalid User details!",
   USER_NOT_FOUND: "User not found!",
   USER_ALREADY_EXISTS: "User already exists!",
   REGISTER_FAILURE: "Registration failed!",

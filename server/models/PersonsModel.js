@@ -145,6 +145,18 @@ class PersonsModel extends Model {
     });
     return personRecord;
   }
+
+  /**
+   * @description checks if a person exists with the given uuid
+   * @param {string} uuid - person's uuid
+   */
+  static async checkIfPersonExistsByUUID(uuid) {
+    let personRecord = await PersonsModel.query().findOne({
+      uuid,
+      is_deleted: false,
+    });
+    return personRecord;
+  }
 }
 
 module.exports = PersonsModel;

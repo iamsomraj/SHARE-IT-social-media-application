@@ -3,6 +3,7 @@ const PERSON_SUCCESS_MESSAGES = Object.freeze({
   FETCH_PEOPLE_SUCCESS: "People fetched successfully!",
   FETCH_USER_DATA_SUCCESS: "User data fetched successfully!",
   REGISTER_SUCCESS: "Registration successful!",
+  FETCH_PERSON_PROFILE_SUCCESS: "Person profile fetched successfully!",
   FOLLOW_SUCCESS: "Follow successful!",
   LIKE_SUCCESS: "Like successful!",
   POST_SUCCESS: "Post successful!",

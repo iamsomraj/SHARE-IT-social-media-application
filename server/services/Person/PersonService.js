@@ -21,9 +21,7 @@ class PersonService extends RootService {
    */
   async loginPerson(email, password) {
     /* BEGIN: VALIDATIONS */
-    if (!email || !password) {
-      this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.PROVIDE_EMAIL_AND_PASSWORD);
-    }
+    if (!email || !password) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.PROVIDE_EMAIL_AND_PASSWORD);
     /* END: VALIDATIONS */
 
     /* BEGIN: DATABASE VALIDATIONS */
@@ -61,18 +59,14 @@ class PersonService extends RootService {
    */
   async registerPerson(name, email, password) {
     /* BEGIN: VALIDATIONS */
-    if (!email || !name || !password) {
-      this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.PROVIDE_NAME_EMAIL_AND_PASSWORD);
-    }
+    if (!email || !name || !password) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.PROVIDE_NAME_EMAIL_AND_PASSWORD);
     /* END: VALIDATIONS */
 
     /* BEGIN: DATABASE VALIDATIONS */
     const doesUserExist = await PersonsModel.checkIfPersonExistsByEmail(email);
 
     /* CHECKING IF PERSON RECORD EXISTS OR NOT */
-    if (doesUserExist) {
-      this.raiseError(HTTP_CODES.CONFLICT, PERSON_ERROR_MESSAGES.USER_ALREADY_EXISTS);
-    }
+    if (doesUserExist) this.raiseError(HTTP_CODES.CONFLICT, PERSON_ERROR_MESSAGES.USER_ALREADY_EXISTS);
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: PERSON DETAILS INSERTION */
@@ -109,11 +103,13 @@ class PersonService extends RootService {
    * @access private
    */
   async getPeople(user, page = 1, limit = 10) {
-    if (!user || !user.id) {
-      this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_USER_DETAILS);
-    }
+    /* BEGIN: VALIDATIONS */
+    if (!user || !user.id) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_USER_DETAILS);
+    /* END: VALIDATIONS */
 
+    /* BEGIN: PEOPLE DETAILS FETCHING */
     const result = await PersonsModel.query().select("uuid", "id", "name", "email").where("id", "!=", user.id).page(page, limit);
+    /* END: PEOPLE DETAILS FETCHING */
 
     if (!result) {
       this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.NO_PEOPLE_FOUND);
@@ -129,9 +125,9 @@ class PersonService extends RootService {
    * @access private
    */
   async getUserData(user) {
-    if (!user || !user.id || !user.email) {
-      this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_USER_DETAILS);
-    }
+    /* BEGIN: VALIDATIONS */
+    if (!user || !user.id || !user.email) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_USER_DETAILS);
+    /* END: VALIDATIONS */
 
     /* BEGIN: PERSON DETAILS FETCHING */
     const personRecord = await PersonsModel.getPersonDetailsByEmail(email);
@@ -144,6 +140,33 @@ class PersonService extends RootService {
     const result = {
       ...personRecord,
       token,
+    };
+
+    return result;
+  }
+
+  /**
+   * @description FETCHES DETAILS OF THE PERSON WITH THE GIVEN UUID
+   * @param {string} uuid - user's uuid
+   * @route GET /api/v1/persons/:uuid
+   * @access private
+   */
+  async getPersonProfile(uuid) {
+    /* BEGIN: VALIDATIONS */
+    if (!uuid) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_USER_DETAILS);
+    /* END: VALIDATIONS */
+
+    /* BEGIN: DATABASE VALIDATIONS */
+    const person = await PersonsModel.checkIfPersonExistsByUUID(uuid);
+    if (!person) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+    /* END: DATABASE VALIDATIONS */
+
+    /* BEGIN: PERSON DETAILS FETCHING */
+    const personRecord = await PersonsModel.getPersonDetailsByEmail(person.email);
+    /* END: PERSON DETAILS FETCHING */
+
+    const result = {
+      ...personRecord,
     };
 
     return result;

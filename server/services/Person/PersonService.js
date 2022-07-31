@@ -37,6 +37,8 @@ class PersonService extends RootService {
     let personRecord = await PersonsModel.getPersonDetailsByEmail(email);
     /* END: PERSON DETAILS FETCHING */
 
+    if (!personRecord) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+
     /* BEGIN: TOKEN GENERATION */
     const token = generateToken(personRecord.id);
     /* END: TOKEN GENERATION */
@@ -70,17 +72,20 @@ class PersonService extends RootService {
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: PERSON DETAILS INSERTION */
-    await PersonsModel.query().insert({
+    const insertedPerson = await PersonsModel.query().insert({
       name,
       email,
       password: hash(password),
       is_deleted: false,
     });
+    if (!insertedPerson) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.REGISTER_PERSON_FAILURE);
     /* END: PERSON DETAILS INSERTION */
 
     /* BEGIN: PERSON DETAILS FETCHING */
     const registeredPerson = await PersonsModel.getPersonDetailsByEmail(email);
     /* END: PERSON DETAILS FETCHING */
+
+    if (!registeredPerson) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
 
     /* BEGIN: TOKEN GENERATION */
     const token = generateToken(registeredPerson.id);
@@ -111,9 +116,7 @@ class PersonService extends RootService {
     const result = await PersonsModel.query().select("uuid", "id", "name", "email").where("id", "!=", user.id).page(page, limit);
     /* END: PEOPLE DETAILS FETCHING */
 
-    if (!result) {
-      this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.NO_PEOPLE_FOUND);
-    }
+    if (!result) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.NO_PEOPLE_FOUND);
 
     return result;
   }
@@ -132,6 +135,8 @@ class PersonService extends RootService {
     /* BEGIN: PERSON DETAILS FETCHING */
     const personRecord = await PersonsModel.getPersonDetailsByEmail(email);
     /* END: PERSON DETAILS FETCHING */
+
+    if (!personRecord) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.FETCH_USER_DATA_FAILURE);
 
     /* BEGIN: TOKEN GENERATION */
     const token = generateToken(personRecord.id);
@@ -170,6 +175,36 @@ class PersonService extends RootService {
     };
 
     return result;
+  }
+
+  /**
+   * @description FOLLOWS A PERSON
+   * @param {{ uuid, id, email }} user - logged in user's uuid, id, email
+   * @param {string} uuid - person's uuid to be followed
+   * @route POST /api/v1/persons/follow/:uuid
+   * @access private
+   */
+  async followPerson(user, uuid) {
+    /* BEGIN: VALIDATIONS */
+    if (!user || !user.id || !user.email) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_USER_DETAILS);
+    if (!uuid) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.PROVIDE_USER_DETAILS);
+    /* END: VALIDATIONS */
+
+    /* BEGIN: DATABASE VALIDATIONS */
+    const personToBeFollowed = await PersonsModel.checkIfPersonExistsByUUID(uuid);
+    if (!personToBeFollowed) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+    /* END: DATABASE VALIDATIONS */
+
+    const followRecord = await FollowingsModel.query().insert({
+      follower_id: user.id,
+      followed_id: personToBeFollowed.id,
+      created_by: user.id,
+      updated_by: user.id,
+    });
+
+    if (!followRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FOLLOWING_FAILURE);
+
+    return followRecord;
   }
 }
 

@@ -5,6 +5,7 @@ const HTTP_CODES = require("../../utils/constants/http-codes");
 const { PERSON_ERROR_MESSAGES, GENERAL_MESSAGES } = require("../../utils/constants/messages");
 const FollowingsModel = require("../../models/FollowingsModel");
 const PostsModel = require("../../models/PostsModel");
+const PostStatsModel = require("../../models/PostStatsModel");
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL POST RELATED CONTROLLERS
@@ -42,6 +43,26 @@ class PostService extends RootService {
       created_by: user.id,
       updated_by: user.id,
     });
+
+    /* CHECKING IF POST STAT RECORD FOR THE GIVEN POST EXISTS OR NOT */
+    const postStatRecord = await PostStatsModel.query().findOne({ post_id: postRecord.id });
+
+    if (!postStatRecord) {
+      /* CREATING POST STAT RECORD */
+      await PostStatsModel.query().insert({
+        post_id: postRecord.id,
+        like_count: 1,
+        comment_count: 0,
+        created_by: user.id,
+        updated_by: user.id,
+      });
+    } else {
+      /* UPDATING POST STAT RECORD */
+      await PostStatsModel.query().patchAndFetchById(postStatRecord.id, {
+        like_count: postStatRecord.like_count + 1,
+        updated_by: user.id,
+      });
+    }
     /* END: DATABASE OPERATIONS */
 
     if (!likeRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
@@ -62,8 +83,17 @@ class PostService extends RootService {
     /* END: VALIDATIONS */
 
     /* BEGIN: DATABASE OPERATIONS */
+    /* CREATING POST RECORD */
     const postRecord = await PostsModel.query().insert({
       content,
+      created_by: user.id,
+      updated_by: user.id,
+    });
+    /* CREATING POST STAT RECORD */
+    await PostStatsModel.query().insert({
+      post_id: postRecord.id,
+      like_count: 0,
+      comment_count: 0,
       created_by: user.id,
       updated_by: user.id,
     });

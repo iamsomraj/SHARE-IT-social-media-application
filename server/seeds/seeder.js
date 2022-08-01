@@ -157,7 +157,7 @@ async function main() {
     },
     {
       post_id: insertedPosts[1].id,
-      like_count: 0,
+      like_count: 2,
       comment_count: 0,
     },
     {

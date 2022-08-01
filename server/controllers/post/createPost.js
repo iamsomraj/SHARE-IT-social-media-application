@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const PostLikesModel = require("../../models/PostLikesModel.js");
 const PersonsModel = require("../../models/PersonsModel.js");
 const PostsModel = require("../../models/PostsModel.js");
+const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js");
 
 /**
  * @access private
@@ -10,27 +11,16 @@ const PostsModel = require("../../models/PostsModel.js");
  */
 const createPost = asyncHandler(async (req, res) => {
   const { content } = req.body;
-  const created_by = req.user.id;
+  const { user } = req;
 
-  if (!content) {
-    res.status(400);
-    throw new Error("PostsModel data is invalid!");
-  }
+  const postService = new PostService();
+  const result = await postService.createPost(user, content);
 
-  const post = await PostsModel.query().insert({
-    content,
-    created_by,
+  res.status(HTTP_CODES.CREATED).json({
+    state: true,
+    data: result,
+    message: PERSON_SUCCESS_MESSAGES.POST_SUCCESS,
   });
-
-  if (post) {
-    res.status(201);
-    res.json({
-      post,
-    });
-  } else {
-    res.status(400);
-    throw new Error("Something went wrong in Post Creation");
-  }
 });
 
 module.exports = createPost;

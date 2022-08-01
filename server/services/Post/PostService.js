@@ -14,9 +14,9 @@ class PostService extends RootService {
 
   /**
    * @description ADDS ONE LIKE FOR ONE POST
-   * @route POST /api/v1/posts/:uuid
    * @param {{ id }} user - logged in user
    * @param {string} uuid - post's uuid
+   * @route POST /api/v1/posts/:uuid
    * @access private
    */
   async addLike(user, uuid) {
@@ -45,6 +45,31 @@ class PostService extends RootService {
     if (!likeRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
 
     return likeRecord;
+  }
+
+  /**
+   * @description CREATES A POST
+   * @param {{ id }} user - logged in user
+   * @param {string} content - post's content
+   * @route POST /api/v1/posts/create
+   * @access private
+   */
+  async createPost(user, content) {
+    /* BEGIN: VALIDATIONS */
+    if (!content) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
+    /* END: VALIDATIONS */
+
+    /* BEGIN: DATABASE OPERATIONS */
+    const postRecord = await PostsModel.query().insert({
+      content,
+      created_by: user.id,
+      updated_by: user.id,
+    });
+    /* END: DATABASE OPERATIONS */
+
+    if (!postRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
+
+    return postRecord;
   }
 }
 

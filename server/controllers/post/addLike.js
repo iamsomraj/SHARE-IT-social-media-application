@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
-const PostLikesModel = require("../../models/PostLikesModel.js");
-const PostsModel = require("../../models/PostsModel.js");
-const { GENERAL_MESSAGES } = require("../../utils/constants/messages.js");
+const PostService = require("../../services/Post/PostService.js");
+const HTTP_CODES = require("../../utils/constants/http-codes.js");
+const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js");
 
 /**
  * @access private
@@ -9,32 +9,16 @@ const { GENERAL_MESSAGES } = require("../../utils/constants/messages.js");
  * @route POST /api/v1/posts/:uuid
  */
 const addLike = asyncHandler(async (req, res) => {
-  const uuid = req.params.uuid;
-  const post = await PostsModel.query().findOne({ uuid });
+  const { uuid } = req.params;
+  const { user } = req;
+  const postService = new PostService();
+  const result = await postService.addLike(user, uuid);
 
-  if (!post) {
-    res.status(404);
-    throw new Error("Post not found!");
-  }
-
-  if (!req || !req.user) {
-    res.status(400);
-    throw new Error(GENERAL_MESSAGES.INVALID_REQUEST);
-  }
-
-  const likeRecord = await PostLikesModel.query().insert({
-    post_id: post.id,
-    created_by: req.user.id,
+  res.status(HTTP_CODES.CREATED).json({
+    state: true,
+    data: result,
+    message: PERSON_SUCCESS_MESSAGES.LIKE_SUCCESS,
   });
-
-  if (likeRecord) {
-    res.json({
-      likeRecord,
-    });
-  } else {
-    res.status(400);
-    throw new Error("Something went wrong during Like operation");
-  }
 });
 
 module.exports = addLike;

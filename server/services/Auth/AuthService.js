@@ -51,7 +51,7 @@ class AuthService extends RootService {
    */
   async getUserFromToken(req) {
     const decoded = this.verifyTokenAndReturnDecoded(req);
-    const result = await PersonsModel.getPersonDetailsById(decoded.id);
+    const result = await PersonsModel.checkIfPersonExistsById(decoded.id);
     if (!result) {
       this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
     }

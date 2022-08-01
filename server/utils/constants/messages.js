@@ -37,7 +37,10 @@ const AUTH_ERROR_MESSAGES = Object.freeze({
 
 const GENERAL_MESSAGES = Object.freeze({
   INVALID_REQUEST: "Request is invalid!",
+  POST_NOT_FOUND: "Post not found!",
   SOMETHING_WENT_WRONG: "Something went wrong!",
+  PROVIDE_POST_DETAILS: "Please, provide post details!",
+  ALREADY_LIKED_POST: "You already liked this post!",
 });
 
 module.exports = {

@@ -131,6 +131,7 @@ class PersonsModel extends Model {
       email,
       is_deleted: false,
     });
+    delete personRecord.password;
     return personRecord;
   }
 
@@ -143,6 +144,7 @@ class PersonsModel extends Model {
       id,
       is_deleted: false,
     });
+    delete personRecord.password;
     return personRecord;
   }
 
@@ -155,6 +157,7 @@ class PersonsModel extends Model {
       uuid,
       is_deleted: false,
     });
+    delete personRecord.password;
     return personRecord;
   }
 }

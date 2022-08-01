@@ -1,0 +1,14 @@
+<template>
+  <div>
+    <nuxt />
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'GuestLayout'
+  }
+</script>
+
+<style scoped>
+</style>

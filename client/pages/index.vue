@@ -1,12 +1,13 @@
 <template>
-  <div class="flex justify-center items-center h-96">
-    <LoginForm />
+  <div class="flex justify-center items-center min-w-screen min-h-screen">
+    <login-form />
   </div>
 </template>
 
 <script>
 export default {
   name: 'HomePage',
+  layout: 'guest',
   computed: {
     user() {
       return this.$store.getters['auth/user'];

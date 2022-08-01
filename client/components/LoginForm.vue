@@ -1,45 +1,68 @@
 <template>
-  <div>
-    <form class="space-y-4" @submit.prevent="onSubmit">
-      <div>
+  <!-- BEGIN: LOGIN FORM COMPONENT -->
+  <div class="w-full sm:w-1/2 md:w-1/4 h-full">
+    
+    <!-- BEGIN: LOGIN FORM -->
+    <form
+      class="flex flex-col justify-center items-center space-y-4"
+      @submit.prevent="onSubmit"
+    >
+
+      <!-- BEGIN: LOGIN FORM MESSAGE -->
+      <toast :message="message" :variant="'error'" />
+      <!-- END: LOGIN FORM MESSAGE -->
+
+      <!-- BEGIN: LOGIN FORM EMAIL -->
+      <div class="w-full">
         <input
-          class="px-4 py-3 outline-none border-2 border-gray-200 rounded"
+          class="w-full px-4 py-3 outline-none border-2 border-gray-200 rounded"
           placeholder="Email"
           type="email"
           v-model="email"
         />
       </div>
-      <div>
+      <!-- END: LOGIN FORM EMAIL -->
+
+      <!-- BEGIN: LOGIN FORM PASSWORD -->
+      <div class="w-full">
         <input
-          class="px-4 py-3 outline-none border-2 border-gray-200 rounded"
+          class="w-full px-4 py-3 outline-none border-2 border-gray-200 rounded"
           placeholder="Password"
           type="password"
           v-model="password"
         />
       </div>
-      <div class="flex justify-evenly items-center text-white space-x-4">
-        <button class="bg-red-400 w-full p-2 font-bold rounded">Login</button>
+      <!-- END: LOGIN FORM PASSWORD -->
+
+      <!-- BEGIN: LOGIN FORM SUBMIT -->
+      <div class="w-full flex justify-center items-center text-white space-x-4">
+        <button class="flex-grow bg-red-400 w-full p-2 font-bold rounded">
+          Login
+        </button>
         <NuxtLink
           to="/register"
-          class="bg-blue-400 w-full p-2 font-bold rounded text-center"
+          class="flex-grow bg-blue-400 w-full p-2 font-bold rounded text-center"
         >
           Register
         </NuxtLink>
       </div>
+      <!-- END: LOGIN FORM SUBMIT -->
+
     </form>
-    <Footer />
+    <!-- END: LOGIN FORM -->
+
   </div>
+  <!-- END: LOGIN FORM COMPONENT -->
 </template>
 
 <script>
-import { userLogin } from '../helpers/';
-
 export default {
   name: 'LoginForm',
   data() {
     return {
       email: '',
       password: '',
+      message: '',
     };
   },
   computed: {
@@ -49,20 +72,16 @@ export default {
   },
   methods: {
     async onSubmit() {
-      const formData = {
+      const loginFormData = {
         email: this.email,
         password: this.password,
       };
-      const loggedInUser = await userLogin(formData);
-      /**
-       * Logging in the user in the vuex state
-       */
-      this.$store.commit('auth/setUser', loggedInUser);
-      this.$store.commit('auth/setToken', loggedInUser?.token || null);
-      /**
-       * navigating to profile page
-       */
-      this.$router.push(`profile/${loggedInUser.uuid}`);
+      const res = await this.$store.dispatch('auth/login', loginFormData);
+      if (res.state) {
+        this.$router.push(`profile/${loggedInUser.uuid}`);
+      } else {
+        this.message = res.message;
+      }
     },
   },
 };

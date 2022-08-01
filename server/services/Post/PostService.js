@@ -1,5 +1,3 @@
-const PersonsModel = require("../../models/PersonsModel");
-const { generateToken, validateHash, hash } = require("../../utils/helpers");
 const RootService = require("../Root/RootService");
 const HTTP_CODES = require("../../utils/constants/http-codes");
 const { PERSON_ERROR_MESSAGES, GENERAL_MESSAGES } = require("../../utils/constants/messages");

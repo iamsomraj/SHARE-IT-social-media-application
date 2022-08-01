@@ -1,8 +1,6 @@
 const asyncHandler = require("express-async-handler");
-const PostLikesModel = require("../../models/PostLikesModel.js");
-const PersonsModel = require("../../models/PersonsModel.js");
-const PostsModel = require("../../models/PostsModel.js");
 const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js");
+const PostService = require("../../services/Post/PostService.js");
 
 /**
  * @access private

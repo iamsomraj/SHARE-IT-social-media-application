@@ -21,7 +21,6 @@ export const actions = {
         password,
       });
       const { data, state, message } = responseData;
-      const response = { data, state, message };
       if (state) {
         commit('setUser', data);
         commit('setToken', data.token);
@@ -29,14 +28,13 @@ export const actions = {
         commit('setUser', null);
         commit('setToken', null);
       }
-      return response;
+      return { data, state, message };
     } catch (error) {
       const { data: responseData } = error?.response;
       const { data, state, message } = responseData;
-      const response = { data, state, message };
       commit('setUser', null);
       commit('setToken', null);
-      return response;
+      return { data, state, message };
     }
   },
 };

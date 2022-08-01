@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const PersonService = require("../../services/Person/PersonService");
+const HTTP_CODES = require("../../utils/constants/http-codes");
+const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages");
 
 /**
  * @description FETCHES DETAILS OF THE PERSON WITH THE GIVEN UUID

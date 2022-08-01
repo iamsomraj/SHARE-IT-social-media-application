@@ -1,7 +1,7 @@
 <template>
   <!-- BEGIN: LOGIN FORM COMPONENT -->
   <div class="w-full sm:w-1/2 md:w-1/4 h-full">
-    
+
     <!-- BEGIN: LOGIN FORM -->
     <form
       class="flex flex-col justify-center items-center space-y-4"
@@ -78,7 +78,8 @@ export default {
       };
       const res = await this.$store.dispatch('auth/login', loginFormData);
       if (res.state) {
-        this.$router.push(`profile/${loggedInUser.uuid}`);
+        /* REDIRECTING TO THE PROFILE OF THE LOGGED IN USER */
+        this.$router.push(`profile/${this.user.uuid}`);
       } else {
         this.message = res.message;
       }

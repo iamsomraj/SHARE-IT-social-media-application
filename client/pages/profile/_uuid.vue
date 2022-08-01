@@ -5,12 +5,12 @@
         :uuid="profile.uuid"
         :id="profile.id"
         :name="profile.name"
-        :numberOfPosts="profile.posts.length"
-        :numberOfFollowers="profile.followers.length"
-        :numberOfFollowings="profile.followings.length"
+        :numberOfPosts="profile.person_posts.length"
+        :numberOfFollowers="profile.person_followers.length"
+        :numberOfFollowings="profile.person_followings.length"
       />
       <ProfileBody
-        :posts="profile.posts"
+        :posts="profile.person_posts"
         :name="profile.name"
         @onPostCreate="onPostCreate"
         @onPostLike="onPostLike"
@@ -48,8 +48,10 @@ export default {
   async fetch() {
     /* BEGIN: FETCHING PROFILE DETAIL */
     const uuid = this.$router.currentRoute.params.uuid; // GETTING UUID FROM URL
-    const fetchedProfile = await getUserProfile(uuid, this.token);
-    this.$store.commit('profile/setProfile', fetchedProfile);
+    await this.$store.dispatch('profile/getUserProfile', {
+      uuid,
+      token: this.token,
+    });
     /* END: FETCHING PROFILE DETAIL */
   },
   methods: {

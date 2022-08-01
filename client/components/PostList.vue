@@ -8,11 +8,11 @@
       <PostListItem
         :id="post.id"
         :uuid="post.uuid"
-        :ownerName="post.owner.name"
-        :ownerId="post.owner.id"
-        :ownerUUID="post.owner.uuid"
+        :ownerName="post.creator.name"
+        :ownerId="post.creator.id"
+        :ownerUUID="post.creator.uuid"
         :content="post.content"
-        :numberOfLikes="post.likesOnPost.length"
+        :numberOfLikes="post.post_likes.length"
         :date="(post.updated_at ? post.updated_at : post.created_at).slice(0, 10)"
         @onPostLike="onPostLike"
       />

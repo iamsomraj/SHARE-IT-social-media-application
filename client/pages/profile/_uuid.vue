@@ -1,6 +1,11 @@
 <template>
+  <!-- BEGIN: PROFILE COMPONENT -->
   <div>
+
+    <!-- BEGIN: PROFILE COMPONENT MAIN SECTION -->
     <div v-if="profile">
+
+      <!-- BEGIN: PROFILE HEADER  -->
       <ProfileHeader
         :uuid="profile.uuid"
         :id="profile.id"
@@ -9,6 +14,9 @@
         :numberOfFollowers="profile.person_followers.length"
         :numberOfFollowings="profile.person_followings.length"
       />
+      <!-- END: PROFILE HEADER  -->
+
+      <!-- BEGIN: PROFILE BODY  -->
       <ProfileBody
         :posts="profile.person_posts"
         :name="profile.name"
@@ -16,8 +24,13 @@
         @onPostLike="onPostLike"
         @onUserFollow="onUserFollow"
       />
+      <!-- END: PROFILE BODY  -->
+
     </div>
+    <!-- END: PROFILE COMPONENT MAIN SECTION -->
+
   </div>
+  <!-- END: PROFILE COMPONENT -->
 </template>
 
 <script>

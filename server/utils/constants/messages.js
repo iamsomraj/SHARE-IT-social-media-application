@@ -7,6 +7,7 @@ const PERSON_SUCCESS_MESSAGES = Object.freeze({
   FOLLOW_SUCCESS: "Follow successful!",
   LIKE_SUCCESS: "Like successful!",
   POST_SUCCESS: "Post successful!",
+  PERSON_FEED_SUCCESS: "Person feed fetched successfully!",
 });
 
 const PERSON_ERROR_MESSAGES = Object.freeze({
@@ -25,6 +26,7 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
   POST_FAILURE: "Post failed!",
   NO_PEOPLE_FOUND: "No people found!",
   WRONG_CREDENTIALS: "Wrong Credentials!",
+  POST_FEED_FAILURE: "Post feed failed!",
 });
 
 const AUTH_ERROR_MESSAGES = Object.freeze({

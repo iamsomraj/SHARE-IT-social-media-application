@@ -3,6 +3,8 @@ const { generateToken, validateHash, hash } = require("../../utils/helpers");
 const RootService = require("../Root/RootService");
 const HTTP_CODES = require("../../utils/constants/http-codes");
 const { PERSON_ERROR_MESSAGES, GENERAL_MESSAGES } = require("../../utils/constants/messages");
+const FollowingsModel = require("../../models/FollowingsModel");
+const PostsModel = require("../../models/PostsModel");
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL POST RELATED CONTROLLERS
@@ -70,6 +72,24 @@ class PostService extends RootService {
     if (!postRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
 
     return postRecord;
+  }
+
+  async getPostFeed(user) {
+    /* BEGIN: FETCH FOLLOWINGS OF PERSON */
+    const followingRecords = await FollowingsModel.query().where("follower_id", user.id);
+    /* END: FETCH FOLLOWINGS OF PERSON */
+
+    if (!followingRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FEED_FAILURE);
+
+    const followingIds = followingRecords.map((record) => record.followed_id);
+
+    /* BEGIN: FETCH POSTS OF FOLLOWINGS */
+    const postRecords = await PostsModel.query().withGraphFetched("[post_stats, post_likes]").whereIn("created_by", followingIds).orderBy("created_at", "desc");
+    /* END: FETCH POSTS OF FOLLOWINGS */
+
+    if (!postRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FEED_FAILURE);
+
+    return postRecords;
   }
 }
 

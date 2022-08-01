@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
-const PostLikesModel = require("../../models/PostLikesModel.js");
-const PersonsModel = require("../../models/PersonsModel.js");
-const PostsModel = require("../../models/PostsModel.js");
+const PostService = require("../../services/Post/PostService");
+const HTTP_CODES = require("../../utils/constants/http-codes");
+const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages");
 
 /**
  * @access private
@@ -9,34 +9,14 @@ const PostsModel = require("../../models/PostsModel.js");
  * @route GET /api/v1/posts/feed
  */
 const getPostFeed = asyncHandler(async (req, res) => {
-  const followingRecords = await PersonsModel.relatedQuery("followers").for(req.user.id);
-  const followingRecordIdList = followingRecords.map((person) => person.followed_id);
+  const { user } = req;
+  const postService = new PostService();
+  const result = await postService.getPostFeed(user);
 
-  let posts = [];
-  for (let follower_id of followingRecordIdList) {
-    const postRecords = await PostsModel.query().where("created_by", "=", follower_id).orderBy("created_at", "DESC");
-    posts.push(...postRecords);
-  }
-
-  for (let post of posts) {
-    const likesOnPost = await PostLikesModel.query().where("post_id", "=", post.id);
-    const personRecord = await PersonsModel.query().findOne({ id: post.created_by });
-    post.likesOnPost = likesOnPost;
-    post.owner = {
-      uuid: personRecord.uuid,
-      id: personRecord.id,
-      name: personRecord.name,
-      email: personRecord.email,
-    };
-  }
-
-  /**
-   * Sorting latest posts based on created date
-   */
-  posts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-
-  res.json({
-    posts,
+  res.status(HTTP_CODES.OK).json({
+    state: true,
+    data: result,
+    message: PERSON_SUCCESS_MESSAGES.PERSON_FEED_SUCCESS,
   });
 });
 

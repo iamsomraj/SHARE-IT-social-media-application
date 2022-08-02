@@ -3,8 +3,8 @@
   <div
     v-if="message"
     :title="message"
-    :class="`${background}  ${border}  ${textColor}`"
-    class="p-3 rounded-full text-center text-xs font-bold max-w-xs break-words"
+    :class="`${background} ${border} ${textColor}`"
+    class="p-3 rounded-xl text-center text-xs font-bold max-w-xs break-words"
   >
     {{ message }}
   </div>
@@ -30,10 +30,10 @@ export default {
   computed: {
     border() {
       const variants = {
-        error: 'border-red-500',
-        success: 'border-green-500',
-        info: 'border-blue-500',
-        warning: 'border-yellow-500',
+        error: 'border border-red-500',
+        success: 'border border-green-500',
+        info: 'border border-blue-500',
+        warning: 'border border-yellow-500',
       };
       return variants[this.variant];
     },

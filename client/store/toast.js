@@ -1,6 +1,6 @@
-export const state = {
+export const state = () => ({
   toasts: [],
-};
+});
 
 export const getters = {
   toasts: (state) => state.toasts,

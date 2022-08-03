@@ -10,7 +10,7 @@
       <div
         :title="toast.message"
         :class="`${background(toast.variant)} ${textColor(toast.variant)}`"
-        class="my-2 w-48 break-words rounded-lg px-4 py-2 text-center text-xs font-bold shadow-sm"
+        class="my-2 w-64 break-words rounded-lg px-4 py-2 text-center text-xs font-bold shadow-sm"
       >
         <div>
           {{ toast.message }}

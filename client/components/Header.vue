@@ -2,25 +2,25 @@
   <header class="flex items-center justify-between py-4 px-5">
     <NuxtLink
       to="/"
-      class="px-3 py-2 rounded font-extrabold tracking-tighter bg-blue-100 text-blue-400"
+      class="rounded bg-blue-100 px-3 py-2 font-extrabold tracking-tighter text-blue-400"
       >SHARE IT</NuxtLink
     >
     <div v-if="!isLoggedIn" class="flex items-center space-x-4 font-bold">
       <NuxtLink to="/register">Register</NuxtLink>
-      <NuxtLink to="/" class="text-white bg-red-400 px-3 py-2 rounded"
+      <NuxtLink to="/" class="rounded bg-red-400 px-3 py-2 text-white"
         >Login</NuxtLink
       >
     </div>
     <div v-else class="flex items-center space-x-4 font-bold">
       <div
         @click="redirectToFeed"
-        class="text-green-500 cursor-pointer tracking-tight text-2xl font-bold"
+        class="cursor-pointer text-2xl font-bold tracking-tight text-green-500"
       >
         yourfeed
       </div>
       <button
         @click="onLogout"
-        class="text-white font-bold bg-red-400 px-3 py-2 rounded"
+        class="rounded bg-red-400 px-3 py-2 font-bold text-white"
       >
         Logout
       </button>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { MESSAGES } from '../util/index.js';
 export default {
   name: 'Header',
   computed: {
@@ -45,6 +46,7 @@ export default {
       this.$store.commit('auth/setToken', null);
       this.$store.commit('profile/setProfile', null);
       this.$router.push('/');
+      this.$store.dispatch('toast/success', MESSAGES.LOGOUT_SUCCESS);
     },
     redirectToFeed() {
       this.$router.push('/feed');

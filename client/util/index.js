@@ -17,3 +17,7 @@ export const BASE_URL =
 export const LOGIN_URL = `${BASE_URL}/persons/auth`;
 export const REGISTER_URL = `${BASE_URL}/persons/register`;
 export const GET_USER_PROFILE_URL = `${BASE_URL}/persons`;
+
+export const MESSAGES = Object.freeze({
+  LOGOUT_SUCCESS: 'You have been logged out successfully!',
+});

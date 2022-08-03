@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Header />
     <Toast />
+    <Header />
     <Nuxt />
   </div>
 </template>

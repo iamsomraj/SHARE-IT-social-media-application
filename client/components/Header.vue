@@ -1,17 +1,19 @@
 <template>
-  <header class="flex items-center justify-between py-4 px-5">
+  <header class="flex items-center justify-between p-4">
     <NuxtLink
       to="/"
-      class="rounded bg-blue-100 px-3 py-2 font-extrabold tracking-tighter text-blue-400"
-      >SHARE IT</NuxtLink
+      class="flex items-center justify-center space-x-2 rounded px-3 py-2 text-2xl font-extrabold tracking-tighter"
     >
+      <span class="text-blue-400">SHARE</span>
+      <span class="text-yellow-400">IT</span>
+    </NuxtLink>
     <div v-if="!isLoggedIn" class="flex items-center space-x-4 font-bold">
       <NuxtLink to="/register">Register</NuxtLink>
-      <NuxtLink to="/" class="rounded bg-red-400 px-3 py-2 text-white"
+      <NuxtLink to="/" class="rounded bg-yellow-400 px-3 py-2 text-white"
         >Login</NuxtLink
       >
     </div>
-    <div v-else class="flex items-center space-x-4 font-bold">
+    <div v-else class="flex justify-between items-center space-x-4 font-bold">
       <div
         @click="redirectToFeed"
         class="cursor-pointer text-2xl font-bold tracking-tight text-green-500"
@@ -20,7 +22,7 @@
       </div>
       <button
         @click="onLogout"
-        class="rounded bg-red-400 px-3 py-2 font-bold text-white"
+        class="rounded bg-yellow-400 px-3 py-2 font-bold text-white"
       >
         Logout
       </button>

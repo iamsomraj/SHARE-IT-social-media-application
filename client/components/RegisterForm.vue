@@ -25,7 +25,7 @@
         />
       </div>
       <div class="flex justify-evenly items-center text-white space-x-4">
-        <button class="bg-red-400 w-full p-2 font-bold rounded">
+        <button class="bg-yellow-400 w-full p-2 font-bold rounded">
           Register
         </button>
         <NuxtLink

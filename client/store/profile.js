@@ -19,15 +19,7 @@ export const actions = {
           ...getHeaders(token),
         }
       );
-      console.log(
-        '🚀 ~ file: profile.js ~ line 16 ~ getUserProfile ~ data',
-        responseData
-      );
       const { data, state, message } = responseData;
-      console.log(
-        '🚀 ~ file: profile.js ~ line 22 ~ getUserProfile ~ data',
-        data
-      );
       if (state) {
         commit('setProfile', data);
       } else {

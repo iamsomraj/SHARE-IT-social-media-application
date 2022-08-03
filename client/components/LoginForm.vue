@@ -1,21 +1,15 @@
 <template>
   <!-- BEGIN: LOGIN FORM COMPONENT -->
-  <div class="w-full sm:w-1/2 md:w-1/4 h-full">
-
+  <div class="h-full w-full sm:w-1/2 md:w-1/4">
     <!-- BEGIN: LOGIN FORM -->
     <form
-      class="flex flex-col justify-center items-center space-y-4"
+      class="flex flex-col items-center justify-center space-y-4"
       @submit.prevent="onSubmit"
     >
-
-      <!-- BEGIN: LOGIN FORM MESSAGE -->
-      <toast :message="message" :variant="'error'" />
-      <!-- END: LOGIN FORM MESSAGE -->
-
       <!-- BEGIN: LOGIN FORM EMAIL -->
       <div class="w-full">
         <input
-          class="w-full px-4 py-3 outline-none border-2 border-gray-200 rounded"
+          class="outline-none w-full rounded border-2 border-gray-200 px-4 py-3"
           placeholder="Email"
           type="email"
           v-model="email"
@@ -26,7 +20,7 @@
       <!-- BEGIN: LOGIN FORM PASSWORD -->
       <div class="w-full">
         <input
-          class="w-full px-4 py-3 outline-none border-2 border-gray-200 rounded"
+          class="outline-none w-full rounded border-2 border-gray-200 px-4 py-3"
           placeholder="Password"
           type="password"
           v-model="password"
@@ -35,22 +29,20 @@
       <!-- END: LOGIN FORM PASSWORD -->
 
       <!-- BEGIN: LOGIN FORM SUBMIT -->
-      <div class="w-full flex justify-center items-center text-white space-x-4">
-        <button class="flex-grow bg-red-400 w-full p-2 font-bold rounded">
+      <div class="flex w-full items-center justify-center space-x-4 text-white">
+        <button class="w-full flex-grow rounded bg-red-400 p-2 font-bold">
           Login
         </button>
         <NuxtLink
           to="/register"
-          class="flex-grow bg-blue-400 w-full p-2 font-bold rounded text-center"
+          class="w-full flex-grow rounded bg-blue-400 p-2 text-center font-bold"
         >
           Register
         </NuxtLink>
       </div>
       <!-- END: LOGIN FORM SUBMIT -->
-
     </form>
     <!-- END: LOGIN FORM -->
-
   </div>
   <!-- END: LOGIN FORM COMPONENT -->
 </template>
@@ -62,7 +54,6 @@ export default {
     return {
       email: '',
       password: '',
-      message: '',
     };
   },
   computed: {
@@ -80,8 +71,9 @@ export default {
       if (res.state) {
         /* REDIRECTING TO THE PROFILE OF THE LOGGED IN USER */
         this.$router.push(`profile/${this.user.uuid}`);
+        this.$store.dispatch('toast/success', res.message);
       } else {
-        this.message = res.message;
+        this.$store.dispatch('toast/error', res.message);
       }
     },
   },

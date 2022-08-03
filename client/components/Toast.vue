@@ -1,65 +1,60 @@
 <template>
-  <!-- BEGIN: TOAST COMPONENT -->
+  <!-- BEGIN: TOAST COMPONENT ROOT ELEMENT -->
   <div
-    v-if="message"
-    :title="message"
-    :class="`${background} ${border} ${textColor}`"
-    class="p-3 rounded-xl text-center text-xs font-bold max-w-xs break-words"
+    v-if="toasts.length > 0"
+    class="fixed m-5 flex w-full flex-col items-center justify-center"
   >
-    {{ message }}
+    <!-- BEGIN: TOAST LIST -->
+    <div v-for="(toast, index) in toasts" :key="toast.id">
+      <!-- BEGIN: TOAST ITEM -->
+      <div
+        :title="toast.message"
+        :class="`${background(toast.variant)} ${textColor(toast.variant)}`"
+        class="my-2 w-48 break-words rounded-lg px-4 py-2 text-center text-xs font-bold shadow-sm"
+      >
+        <div>
+          {{ toast.message }}
+        </div>
+      </div>
+      <!-- END: TOAST ITEM -->
+    </div>
+    <!-- END: TOAST LIST -->
   </div>
-  <!-- END: TOAST COMPONENT -->
+  <!-- BEGIN: TOAST COMPONENT ROOT ELEMENT -->
 </template>
 
 <script>
 export default {
-  name: 'Error',
-  props: {
-    variant: {
-      type: String,
-      default: 'error',
-      validator(value) {
-        return ['error', 'success', 'info', 'warning'].includes(value);
-      },
-    },
-    message: {
-      type: String,
-      required: true,
+  name: 'ToastComponent',
+  computed: {
+    toasts() {
+      return this.$store.getters['toast/toasts'];
     },
   },
-  computed: {
-    border() {
-      const variants = {
-        error: 'border border-red-500',
-        success: 'border border-green-500',
-        info: 'border border-blue-500',
-        warning: 'border border-yellow-500',
-      };
-      return variants[this.variant];
-    },
-    background() {
+  methods: {
+    background(variant) {
       const variants = {
         error: 'bg-red-100',
         success: 'bg-green-100',
         info: 'bg-blue-100',
         warning: 'bg-yellow-100',
       };
-      return variants[this.variant];
+      return variants[variant];
     },
-    textColor() {
+    textColor(variant) {
       const variants = {
         error: 'text-red-500',
         success: 'text-green-500',
         info: 'text-blue-500',
         warning: 'text-yellow-500',
       };
-      return variants[this.variant];
+      return variants[variant];
     },
-    toastMessage() {
-      if (this.message.length < 60) {
-        return this.message;
+    toastMessage(message) {
+      if (message.length < 60) {
+        return message;
       } else {
-        return this.message.substring(0, 60) + '...';
+        return message.substring(0, 60) + '...';
       }
     },
   },

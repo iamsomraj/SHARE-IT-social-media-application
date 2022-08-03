@@ -1,14 +1,17 @@
 <template>
   <div>
     <Header />
+    <Toast />
     <Nuxt />
   </div>
 </template>
 
 <script>
+import Toast from '../components/Toast.vue';
   export default {
-    name: 'DefaultLayout'
-  }
+    name: "DefaultLayout",
+    components: { Toast }
+}
 </script>
 
 <style scoped>

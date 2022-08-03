@@ -5,7 +5,7 @@
     class="fixed m-5 flex w-full flex-col items-center justify-center"
   >
     <!-- BEGIN: TOAST LIST -->
-    <div v-for="(toast, index) in toasts" :key="toast.id">
+    <div v-for="toast in toasts" :key="toast.id">
       <!-- BEGIN: TOAST ITEM -->
       <div
         :title="toast.message"

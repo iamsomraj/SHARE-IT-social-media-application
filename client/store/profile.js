@@ -1,5 +1,5 @@
-import { getHeaders, GET_USER_PROFILE_URL } from '../util';
 import axios from 'axios';
+import { getHeaders, GET_PERSON_URL } from '../util/constants';
 
 export const state = () => ({
   profile: null,
@@ -14,7 +14,7 @@ export const actions = {
   async getUserProfile({ commit }, { uuid, token }) {
     try {
       const { data: responseData } = await axios.get(
-        `${GET_USER_PROFILE_URL}/${uuid}`,
+        `${GET_PERSON_URL}/${uuid}`,
         {
           ...getHeaders(token),
         }

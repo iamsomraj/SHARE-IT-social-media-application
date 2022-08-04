@@ -1,4 +1,4 @@
-import { LOGIN_URL } from '../util';
+import { LOGIN_URL, REGISTER_URL } from '../util/constants';
 import axios from 'axios';
 
 export const state = () => ({
@@ -17,6 +17,31 @@ export const actions = {
   async login({ commit }, { email, password }) {
     try {
       const { data: responseData } = await axios.post(LOGIN_URL, {
+        email,
+        password,
+      });
+      const { data, state, message } = responseData;
+      if (state) {
+        commit('setUser', data);
+        commit('setToken', data.token);
+      } else {
+        commit('setUser', null);
+        commit('setToken', null);
+      }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
+      commit('setUser', null);
+      commit('setToken', null);
+      return { data, state, message };
+    }
+  },
+  /* USER REGISTER */
+  async register({ commit }, { name, email, password }) {
+    try {
+      const { data: responseData } = await axios.post(REGISTER_URL, {
+        name,
         email,
         password,
       });

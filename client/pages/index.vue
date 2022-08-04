@@ -1,10 +1,11 @@
 <template>
-  <div class="flex justify-center items-center min-w-screen min-h-screen">
+  <div class="min-w-screen flex min-h-screen items-center justify-center">
     <login-form />
   </div>
 </template>
 
 <script>
+import LoginForm from '../components/user-forms/LoginForm.vue';
 export default {
   name: 'HomePage',
   layout: 'guest',
@@ -21,5 +22,6 @@ export default {
       this.$router.push('/feed');
     }
   },
+  components: { LoginForm },
 };
 </script>

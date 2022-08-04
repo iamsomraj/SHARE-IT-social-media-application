@@ -13,7 +13,7 @@
         >Login</NuxtLink
       >
     </div>
-    <div v-else class="flex justify-between items-center space-x-4 font-bold">
+    <div v-else class="flex items-center justify-between space-x-4 font-bold">
       <div
         @click="redirectToFeed"
         class="cursor-pointer text-2xl font-bold tracking-tight text-green-500"
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { MESSAGES } from '../util/index.js';
+import { MESSAGES } from '../../util/constants.js';
 export default {
   name: 'Header',
   computed: {

@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <div
-      class="inline rounded-lg bg-gray-400 px-2 py-1 cursor-pointer text-xs text-white font-extrabold"
+      class="inline cursor-pointer rounded-lg bg-gray-400 px-2 py-1 text-xs font-extrabold text-white"
       @click="$router.push(`/profile/${ownerUUID}`)"
     >
       @{{ ownerName }}
@@ -9,13 +9,13 @@
     <div>
       {{ content }}
     </div>
-    <div class="text-xs flex justify-evenly items-center space-x-2">
+    <div class="flex items-center justify-evenly space-x-2 text-xs">
       <div
-        class="flex justify-center items-center space-x-1 cursor-pointer"
+        class="flex cursor-pointer items-center justify-center space-x-1"
         @click="onPostLike(uuid)"
       >
         <div>{{ numberOfLikes }}</div>
-        <Heart :red="numberOfLikes === 0 ? 'none' : 'red'" />
+        <heart-icon :fill="numberOfLikes === 0 ? 'none' : 'red'"></heart-icon>
       </div>
       <div>
         {{ date }}
@@ -25,8 +25,10 @@
 </template>
 
 <script>
+import HeartIcon from './assets/HeartIcon.vue';
 export default {
   name: 'PostListItem',
+  components: { HeartIcon },
   props: [
     'uuid',
     'ownerName',

@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import RegisterForm from '../../components/user-forms/RegisterForm.vue';
 export default {
   name: 'RegisterPage',
   layout: 'guest',
@@ -21,6 +22,7 @@ export default {
       this.$router.push('/feed');
     }
   },
+  components: { RegisterForm },
 };
 </script>
 

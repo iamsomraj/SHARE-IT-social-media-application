@@ -15,7 +15,7 @@
         @click="onPostLike(uuid)"
       >
         <div>{{ numberOfLikes }}</div>
-        <heart-icon :fill="numberOfLikes === 0 ? 'none' : 'red'"></heart-icon>
+        <heart-icon class="text-gray-400"></heart-icon>
       </div>
       <div>
         {{ date }}

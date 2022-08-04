@@ -1,7 +1,7 @@
 <template>
   <!-- BEGIN: LOGIN FORM COMPONENT -->
   <div
-    class="mx-4 p-4 flex h-full w-full flex-col items-center justify-center space-y-4 sm:w-1/2 md:w-1/4 md:flex-row md:space-x-4 md:divide-x"
+    class="mx-4 flex h-full w-full flex-col items-center justify-center space-y-4 p-4 md:w-1/2 md:flex-row md:space-x-4 md:divide-x"
   >
     <div
       class="flex w-full flex-col items-center justify-center space-y-2 text-center text-4xl font-extrabold tracking-tighter md:flex md:flex-row md:space-y-0 md:space-x-2"
@@ -11,8 +11,7 @@
     </div>
     <!-- BEGIN: LOGIN FORM -->
     <form
-      class="p-4 flex w-full flex-col items-center justify-center space-y-4"
-      @submit.prevent="onSubmit"
+      class="flex w-full flex-col items-center justify-center space-y-4 p-4"
     >
       <!-- BEGIN: LOGIN FORM EMAIL -->
       <div class="w-full">
@@ -37,16 +36,15 @@
       <!-- END: LOGIN FORM PASSWORD -->
 
       <!-- BEGIN: LOGIN FORM SUBMIT -->
-      <div class="flex w-full items-center justify-center space-x-4 text-white">
-        <button class="w-full flex-grow rounded bg-yellow-400 p-2 font-bold">
-          Login
-        </button>
-        <NuxtLink
-          to="/register"
-          class="w-full flex-grow rounded bg-blue-400 p-2 text-center font-bold"
-        >
-          Register
-        </NuxtLink>
+      <div
+        class="flex w-full flex-col items-center justify-center space-y-2 text-white"
+      >
+        <secondary-button @onClick="onSubmit" type="submit" class="flex-grow">
+          <template #default>Login</template>
+        </secondary-button>
+        <primary-button @onClick="$router.push('/register')" class="flex-grow">
+          <template #default>Register</template>
+        </primary-button>
       </div>
       <!-- END: LOGIN FORM SUBMIT -->
     </form>
@@ -57,8 +55,14 @@
 
 <script>
 import { MESSAGES } from '../util/index.js';
+import SecondaryButton from './UI/SecondaryButton.vue';
+import PrimaryButton from './UI/PrimaryButton.vue';
 export default {
   name: 'LoginForm',
+  components: {
+    SecondaryButton,
+    PrimaryButton,
+  },
   data() {
     return {
       email: '',

@@ -2,7 +2,7 @@
   <!-- BEGIN: TOAST COMPONENT ROOT ELEMENT -->
   <div
     v-if="toasts.length > 0"
-    class="fixed m-5 flex w-full flex-col items-center justify-center"
+    class="fixed mt-2 flex w-full flex-col items-center justify-center"
   >
     <!-- BEGIN: TOAST LIST -->
     <div v-for="toast in toasts" :key="toast.id">

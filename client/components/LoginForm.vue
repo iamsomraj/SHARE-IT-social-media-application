@@ -15,23 +15,13 @@
     >
       <!-- BEGIN: LOGIN FORM EMAIL -->
       <div class="w-full">
-        <input
-          class="outline-none w-full rounded border-2 border-gray-200 px-4 py-3"
-          placeholder="Email"
-          type="email"
-          v-model="email"
-        />
+        <text-input placeholder="Email" type="email" v-model="email" />
       </div>
       <!-- END: LOGIN FORM EMAIL -->
 
       <!-- BEGIN: LOGIN FORM PASSWORD -->
       <div class="w-full">
-        <input
-          class="outline-none w-full rounded border-2 border-gray-200 px-4 py-3"
-          placeholder="Password"
-          type="password"
-          v-model="password"
-        />
+        <text-input placeholder="Password" type="password" v-model="password" />
       </div>
       <!-- END: LOGIN FORM PASSWORD -->
 
@@ -57,11 +47,13 @@
 import { MESSAGES } from '../util/index.js';
 import SecondaryButton from './UI/SecondaryButton.vue';
 import PrimaryButton from './UI/PrimaryButton.vue';
+import TextInput from './UI/TextInput.vue';
 export default {
   name: 'LoginForm',
   components: {
     SecondaryButton,
     PrimaryButton,
+    TextInput,
   },
   data() {
     return {

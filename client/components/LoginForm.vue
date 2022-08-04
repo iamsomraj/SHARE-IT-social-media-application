@@ -3,12 +3,10 @@
   <div
     class="mx-4 flex h-full w-full flex-col items-center justify-center space-y-4 p-4 md:w-1/2 md:flex-row md:space-x-4 md:divide-x"
   >
-    <div
-      class="flex w-full flex-col items-center justify-center space-y-2 text-center text-4xl font-extrabold tracking-tighter md:flex md:flex-row md:space-y-0 md:space-x-2"
-    >
-      <div class="text-blue-400">SHARE</div>
-      <div class="text-yellow-400">IT</div>
-    </div>
+    <!-- BEGIN: FORM LOGO -->
+    <form-logo />
+    <!-- END: FORM LOGO -->
+
     <!-- BEGIN: LOGIN FORM -->
     <form
       class="flex w-full flex-col items-center justify-center space-y-4 p-4"
@@ -48,12 +46,14 @@ import { MESSAGES } from '../util/index.js';
 import SecondaryButton from './UI/SecondaryButton.vue';
 import PrimaryButton from './UI/PrimaryButton.vue';
 import TextInput from './UI/TextInput.vue';
+import FormLogo from './FormLogo.vue';
 export default {
   name: 'LoginForm',
   components: {
     SecondaryButton,
     PrimaryButton,
     TextInput,
+    FormLogo,
   },
   data() {
     return {

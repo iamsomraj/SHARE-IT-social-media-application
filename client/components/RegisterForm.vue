@@ -1,49 +1,64 @@
 <template>
-  <div>
-    <form class="space-y-4" @submit="onRegister">
-      <div>
-        <input
-          class="px-4 py-3 outline-none border-2 border-gray-200 rounded"
-          placeholder="Username"
-          v-model="name"
-        />
+  <!-- BEGIN: REGISTER FORM COMPONENT -->
+  <div
+    class="mx-4 flex h-full w-full flex-col items-center justify-center space-y-4 p-4 md:w-1/2 md:flex-row md:space-x-4 md:divide-x"
+  >
+    <!-- BEGIN: FORM LOGO -->
+    <form-logo />
+    <!-- END: FORM LOGO -->
+
+    <!-- BEGIN: REGISTER FORM -->
+    <div class="flex w-full flex-col items-center justify-center space-y-4 p-4">
+      <!-- BEGIN: REGISTER FORM NAME -->
+      <div class="w-full">
+        <text-input placeholder="Name" type="text" v-model="name" />
       </div>
-      <div>
-        <input
-          class="px-4 py-3 outline-none border-2 border-gray-200 rounded"
-          placeholder="Email"
-          type="email"
-          v-model="email"
-        />
+      <!-- END: REGISTER FORM NAME -->
+
+      <!-- BEGIN: REGISTER FORM EMAIL -->
+      <div class="w-full">
+        <text-input placeholder="Email" type="email" v-model="email" />
       </div>
-      <div>
-        <input
-          class="px-4 py-3 outline-none border-2 border-gray-200 rounded"
-          placeholder="Password"
-          type="password"
-          v-model="password"
-        />
+      <!-- END: REGISTER FORM EMAIL -->
+
+      <!-- BEGIN: REGISTER FORM PASSWORD -->
+      <div class="w-full">
+        <text-input placeholder="Password" type="password" v-model="password" />
       </div>
-      <div class="flex justify-evenly items-center text-white space-x-4">
-        <button class="bg-yellow-400 w-full p-2 font-bold rounded">
-          Register
-        </button>
-        <NuxtLink
-          to="/"
-          class="bg-blue-400 w-full p-2 font-bold rounded text-center"
-        >
-          Login
-        </NuxtLink>
+      <!-- END: REGISTER FORM PASSWORD -->
+
+      <!-- BEGIN: REGISTER FORM SUBMIT -->
+      <div
+        class="flex w-full flex-col items-center justify-center space-y-2 text-white"
+      >
+        <secondary-button @onClick="onSubmit" type="submit" class="flex-grow">
+          <template #default>Register</template>
+        </secondary-button>
+        <primary-button @onClick="$router.push('/')" class="flex-grow">
+          <template #default>Login</template>
+        </primary-button>
       </div>
-    </form>
-    <Footer />
+      <!-- END: REGISTER FORM SUBMIT -->
+    </div>
+    <!-- END: REGISTER FORM -->
   </div>
+  <!-- END: REGISTER FORM COMPONENT -->
 </template>
 
 <script>
-import { userRegister } from '../helpers';
+import { MESSAGES } from '../util/index.js';
+import SecondaryButton from './UI/SecondaryButton.vue';
+import PrimaryButton from './UI/PrimaryButton.vue';
+import TextInput from './UI/TextInput.vue';
+import FormLogo from './FormLogo.vue';
 export default {
-  name: 'RegisterForm',
+  name: 'LoginForm',
+  components: {
+    SecondaryButton,
+    PrimaryButton,
+    TextInput,
+    FormLogo,
+  },
   data() {
     return {
       name: '',
@@ -51,21 +66,26 @@ export default {
       password: '',
     };
   },
+  computed: {
+    user() {
+      return this.$store.getters['auth/user'];
+    },
+  },
   methods: {
-    async onRegister(e) {
-      e.preventDefault();
-      const formData = {
+    async onSubmit() {
+      const registerFormData = {
         name: this.name,
         email: this.email,
         password: this.password,
       };
-      const registeredUser = await userRegister(formData);
-      this.$store.commit('auth/setUser', registeredUser);
-      this.$store.commit('auth/setToken', registeredUser.token);
-      /**
-       * navigating to profile page
-       */
-      this.$router.push(`profile/${registeredUser.uuid}`);
+      const res = await this.$store.dispatch('auth/register', registerFormData);
+      if (res.state) {
+        /* REDIRECTING TO THE PROFILE OF THE LOGGED IN USER */
+        this.$router.push(`profile/${this.user.uuid}`);
+        this.$store.dispatch('toast/success', MESSAGES.LOGIN_SUCCESS);
+      } else {
+        this.$store.dispatch('toast/error', res.message);
+      }
     },
   },
 };

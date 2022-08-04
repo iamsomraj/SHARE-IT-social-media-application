@@ -8,9 +8,7 @@
     <!-- END: FORM LOGO -->
 
     <!-- BEGIN: LOGIN FORM -->
-    <form
-      class="flex w-full flex-col items-center justify-center space-y-4 p-4"
-    >
+    <div class="flex w-full flex-col items-center justify-center space-y-4 p-4">
       <!-- BEGIN: LOGIN FORM EMAIL -->
       <div class="w-full">
         <text-input placeholder="Email" type="email" v-model="email" />
@@ -35,7 +33,7 @@
         </primary-button>
       </div>
       <!-- END: LOGIN FORM SUBMIT -->
-    </form>
+    </div>
     <!-- END: LOGIN FORM -->
   </div>
   <!-- END: LOGIN FORM COMPONENT -->

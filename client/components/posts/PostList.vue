@@ -1,5 +1,5 @@
 <template>
-  <div class="my-4 flex flex-col items-center space-y-2">
+  <div class="my-2 flex flex-col items-center space-y-2">
     <post-list-item
       v-for="post in posts"
       :key="post.id"

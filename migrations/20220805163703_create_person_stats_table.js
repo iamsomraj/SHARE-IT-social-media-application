@@ -3,6 +3,7 @@ exports.up = function (knex) {
     knex.schema.createTable("person_stats", (table) => {
       table.increments("id").primary();
       table.integer("person_id").references("persons.id");
+      table.integer("post_count").defaultTo(0);
       table.integer("follower_count").defaultTo(0);
       table.integer("following_count").defaultTo(0);
     }),

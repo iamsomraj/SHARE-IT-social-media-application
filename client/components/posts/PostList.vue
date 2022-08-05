@@ -3,7 +3,7 @@
     <div
       v-for="post in posts"
       :key="post.id"
-      class="w-full border-t border-x px-6 py-3 md:w-2/3"
+      class="w-full border px-6 py-3 md:w-2/3"
     >
       <post-list-item
         :id="post.id"

@@ -1,18 +1,10 @@
 <template>
   <div class="w-full">
-    <PostCreator v-if="user.id === profile.id" @onPostCreate="onPostCreate" />
-    <UserFollower
-      v-if="user.id !== profile.id"
-      @onUserFollow="onUserFollow"
-      :doesUserFollow="doesUserFollow"
-    />
     <PostList :posts="posts" @onPostLike="onPostLike" />
   </div>
 </template>
 
 <script>
-import UserFollower from '../persons/UserFollower.vue';
-import PostCreator from './../posts/PostCreator.vue';
 import PostList from './../posts/PostList.vue';
 
 export default {
@@ -41,7 +33,7 @@ export default {
       this.$emit('onUserFollow', this.profile.uuid);
     },
   },
-  components: { PostCreator, UserFollower, PostList },
+  components: { PostList },
 };
 </script>
 

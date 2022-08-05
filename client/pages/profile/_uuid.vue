@@ -1,37 +1,85 @@
 <template>
-  <!-- BEGIN: PROFILE COMPONENT -->
-  <div class="w-full">
-    <!-- BEGIN: PROFILE COMPONENT MAIN SECTION -->
-    <div v-if="profile" class="w-full flex flex-col justify-center items-center space-y-2">
-      <!-- BEGIN: PROFILE HEADER  -->
-      <profile-header
-        :uuid="profile.uuid"
-        :id="profile.id"
-        :name="profile.name"
-        :numberOfPosts="profile.person_posts.length"
-        :numberOfFollowers="profile.person_followers.length"
-        :numberOfFollowings="profile.person_followings.length"
-      />
-      <!-- END: PROFILE HEADER  -->
+  <div v-if="isLoggedInUserProfile">
+    <!-- BEGIN: CURRENT LOGGED IN USER PROFILE COMPONENT -->
+    <div class="w-full">
+      <!-- BEGIN: CURRENT LOGGED IN USER PROFILE COMPONENT MAIN SECTION -->
+      <div
+        v-if="user"
+        class="flex w-full flex-col items-center justify-center space-y-2"
+      >
+        <!-- BEGIN: CURRENT LOGGED IN USER PROFILE HEADER  -->
+        <profile-header
+          :uuid="user.uuid"
+          :id="user.id"
+          :name="user.name"
+          :numberOfPosts="user.person_posts.length"
+          :numberOfFollowers="user.person_stats.follower_count"
+          :numberOfFollowings="user.person_stats.following_count"
+        />
+        <!-- END: CURRENT LOGGED IN USER PROFILE HEADER  -->
 
-      <!-- BEGIN: PROFILE BODY  -->
-      <profile-body
-        :posts="profile.person_posts"
-        :name="profile.name"
-        @onPostCreate="onPostCreate"
-        @onPostLike="onPostLike"
-        @onUserFollow="onUserFollow"
-      />
-      <!-- END: PROFILE BODY  -->
+        <!-- BEGIN: POST CREATOR -->
+        <post-creator />
+        <!-- END: POST CREATOR -->
+
+        <!-- BEGIN: CURRENT LOGGED IN USER PROFILE BODY  -->
+        <profile-body
+          :posts="user.person_posts"
+          :name="user.name"
+          @onPostCreate="onPostCreate"
+          @onPostLike="onPostLike"
+          @onUserFollow="onUserFollow"
+        />
+        <!-- END: CURRENT LOGGED IN USER PROFILE BODY  -->
+      </div>
+      <!-- END: CURRENT LOGGED IN USER PROFILE COMPONENT MAIN SECTION -->
     </div>
-    <!-- END: PROFILE COMPONENT MAIN SECTION -->
+    <!-- END: CURRENT LOGGED IN USER PROFILE COMPONENT -->
   </div>
-  <!-- END: PROFILE COMPONENT -->
+  <div v-else>
+    <!-- BEGIN: PROFILE COMPONENT -->
+    <div class="w-full">
+      <!-- BEGIN: PROFILE COMPONENT MAIN SECTION -->
+      <div
+        v-if="profile"
+        class="flex w-full flex-col items-center justify-center space-y-2"
+      >
+        <!-- BEGIN: PROFILE HEADER  -->
+        <profile-header
+          :uuid="profile.uuid"
+          :id="profile.id"
+          :name="profile.name"
+          :numberOfPosts="profile.person_posts.length"
+          :numberOfFollowers="profile.person_followers.length"
+          :numberOfFollowings="profile.person_followings.length"
+        />
+        <!-- END: PROFILE HEADER  -->
+
+        <!-- BEGIN: PERSON FOLLOWER -->
+        <user-follower />
+        <!-- BEGIN: PERSON FOLLOWER -->
+
+        <!-- BEGIN: PROFILE BODY  -->
+        <profile-body
+          :posts="profile.person_posts"
+          :name="profile.name"
+          @onPostCreate="onPostCreate"
+          @onPostLike="onPostLike"
+          @onUserFollow="onUserFollow"
+        />
+        <!-- END: PROFILE BODY  -->
+      </div>
+      <!-- END: PROFILE COMPONENT MAIN SECTION -->
+    </div>
+    <!-- END: PROFILE COMPONENT -->
+  </div>
 </template>
 
 <script>
 import ProfileBody from '../../components/persons/ProfileBody.vue';
 import ProfileHeader from '../../components/persons/ProfileHeader.vue';
+import UserFollower from '../../components/persons/UserFollower.vue';
+import PostCreator from '../../components/posts/PostCreator.vue';
 import {
   addLikeToPost,
   createPost,
@@ -55,6 +103,9 @@ export default {
     },
     isLoggedIn() {
       return this.$store.getters['auth/isLoggedIn'];
+    },
+    isLoggedInUserProfile() {
+      return this.$store.getters['auth/uuid'] === this.$route.params.uuid;
     },
   },
   async fetch() {
@@ -92,7 +143,7 @@ export default {
       this.$store.commit('auth/setToken', fetchedUser?.token || null);
     },
   },
-  components: { ProfileBody, ProfileHeader },
+  components: { ProfileBody, ProfileHeader, PostCreator, UserFollower },
 };
 </script>
 

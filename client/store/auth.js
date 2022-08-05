@@ -1,15 +1,40 @@
-import { LOGIN_URL, REGISTER_URL } from '../util/constants';
+import {
+  CREATE_POST_URL,
+  getHeaders,
+  LOGIN_URL,
+  REGISTER_URL,
+} from '../util/constants';
 import axios from 'axios';
 
 export const state = () => ({
-  user: null,
+  user: {
+    id: '',
+    uuid: '',
+    name: '',
+    email: '',
+    person_followers: [],
+    person_followings: [],
+    person_stats: {
+      id: '',
+      person_id: '',
+      follower_count: 0,
+      following_count: 0,
+    },
+    person_posts: [],
+  },
   token: null,
 });
 
 export const getters = {
   user: (state) => state.user,
+  uuid: (state) => state.user.uuid,
   token: (state) => state.token,
-  isLoggedIn: (state) => state.token && state.user,
+  posts: (state) => state.user.person_posts,
+  followers: (state) => state.user.person_followers,
+  followings: (state) => state.user.person_followings,
+  isLoggedIn: (state) => state?.token && state?.user?.id && state?.user?.uuid,
+  follower_count: (state) => state.user.person_stats.follower_count,
+  following_count: (state) => state.user.person_stats.following_count,
 };
 
 export const actions = {
@@ -62,6 +87,34 @@ export const actions = {
       return { data, state, message };
     }
   },
+  /* USER POST CREATION */
+  async createPost({ commit, state }, { content }) {
+    const token = state?.token || '';
+    try {
+      const payload = {
+        content,
+      };
+      const { data: responseData } = await axios.post(
+        CREATE_POST_URL,
+        payload,
+        {
+          ...getHeaders(token),
+        }
+      );
+      const { data, state, message } = responseData;
+      if (state) {
+        commit('addPost', data);
+      } else {
+        commit('addPost', null);
+      }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
+      commit('addPost', null);
+      return { data, state, message };
+    }
+  },
 };
 
 export const mutations = {
@@ -70,5 +123,29 @@ export const mutations = {
   },
   setToken(state, token) {
     state.token = token;
+  },
+  addPost(state, post) {
+    state.user.person_posts.push(post);
+  },
+  clear(state) {
+    state.user = {
+      id: '',
+      uuid: '',
+      name: '',
+      email: '',
+      created_at: '',
+      updated_at: '',
+      is_deleted: false,
+      person_followers: [],
+      person_followings: [],
+      person_stats: {
+        id: '',
+        person_id: '',
+        follower_count: '',
+        following_count: '',
+      },
+      person_posts: [],
+    };
+    state.token = null;
   },
 };

@@ -33,4 +33,8 @@ export const MESSAGES = Object.freeze({
   LOGIN_SUCCESS: 'You have successfully logged in!',
   REGISTER_SUCCESS: 'You have successfully registered!',
   LOGOUT_SUCCESS: 'You have been logged out successfully!',
+  POST_CREATE_SUCCESS: 'Your post has been created successfully!',
+  POST_LIKE_SUCCESS: 'You have liked this post!',
+  POST_UNLIKE_SUCCESS: 'You have unliked this post!',
+  POST_CREATE_FAILURE: 'There was an error creating your post!',
 });

@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { MESSAGES } from '../../util/constants';
 import PostInput from '../user-interfaces/PostInput.vue';
 import SecondaryButton from '../user-interfaces/SecondaryButton.vue';
 export default {
@@ -20,22 +21,16 @@ export default {
       postInput: '',
     };
   },
-  computed: {
-    token() {
-      return this.$store.getters['auth/token'];
-    },
-  },
   methods: {
     async onPostCreate() {
-      const res = await this.$store.dispatch('post/create', {
+      const res = await this.$store.dispatch('auth/createPost', {
         content: this.postInput,
-        token: this.token,
       });
       if (res.state) {
         this.postInput = '';
-        this.$store.dispatch('toast/success', 'Post created successfully');
+        this.$store.dispatch('toast/success', MESSAGES.POST_CREATE_SUCCESS);
       } else {
-        this.$store.dispatch('toast/error', 'Post creation failed');
+        this.$store.dispatch('toast/error', MESSAGES.POST_CREATE_FAILURE);
       }
     },
   },

@@ -24,12 +24,12 @@ async function main() {
   /* BEGIN: FOLLOWINGS MODEL HANDLING */
   /* INSERT FOLLOWINGS RECORDS */
   const followings = [
-    { follower_id: insertedPersons[0].id, followed_id: insertedPersons[1].id },
-    { follower_id: insertedPersons[0].id, followed_id: insertedPersons[2].id },
-    { follower_id: insertedPersons[1].id, followed_id: insertedPersons[2].id },
-    { follower_id: insertedPersons[1].id, followed_id: insertedPersons[0].id },
-    { follower_id: insertedPersons[2].id, followed_id: insertedPersons[0].id },
-    { follower_id: insertedPersons[2].id, followed_id: insertedPersons[1].id },
+    { follower_id: insertedPersons[0].id, followed_id: insertedPersons[1].id, created_by: insertedPersons[0].id, updated_by: insertedPersons[0].id },
+    { follower_id: insertedPersons[0].id, followed_id: insertedPersons[2].id, created_by: insertedPersons[0].id, updated_by: insertedPersons[0].id },
+    { follower_id: insertedPersons[1].id, followed_id: insertedPersons[2].id, created_by: insertedPersons[1].id, updated_by: insertedPersons[1].id },
+    { follower_id: insertedPersons[1].id, followed_id: insertedPersons[0].id, created_by: insertedPersons[1].id, updated_by: insertedPersons[1].id },
+    { follower_id: insertedPersons[2].id, followed_id: insertedPersons[0].id, created_by: insertedPersons[2].id, updated_by: insertedPersons[2].id },
+    { follower_id: insertedPersons[2].id, followed_id: insertedPersons[1].id, created_by: insertedPersons[2].id, updated_by: insertedPersons[2].id },
   ];
   const insertedFollowings = await FollowingsModel.query().insert(followings);
   /* END: FOLLOWINGS MODEL HANDLING */

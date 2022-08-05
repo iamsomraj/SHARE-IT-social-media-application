@@ -8,10 +8,10 @@
       <span class="text-yellow-400">IT</span>
     </NuxtLink>
     <div v-if="!isLoggedIn" class="flex items-center space-x-4 font-bold">
-      <NuxtLink to="/register">Register</NuxtLink>
-      <NuxtLink to="/" class="rounded bg-yellow-400 px-3 py-2 text-white"
-        >Login</NuxtLink
-      >
+      <NuxtLink to="/register"> Register </NuxtLink>
+      <NuxtLink to="/" class="rounded bg-yellow-400 px-3 py-2 text-white">
+        Login
+      </NuxtLink>
     </div>
     <div v-else class="flex items-center justify-between space-x-4 font-bold">
       <div
@@ -20,18 +20,16 @@
       >
         yourfeed
       </div>
-      <button
-        @click="onLogout"
-        class="rounded bg-yellow-400 px-3 py-2 font-bold text-white"
-      >
-        Logout
-      </button>
+      <tertiary-button @onClick="onLogout" class="px-3">
+        <template #default> Logout </template>
+      </tertiary-button>
     </div>
   </header>
 </template>
 
 <script>
 import { MESSAGES } from '../../util/constants.js';
+import TertiaryButton from '../user-interfaces/TertiaryButton.vue';
 
 export default {
   name: 'Header',
@@ -45,8 +43,7 @@ export default {
   },
   methods: {
     onLogout() {
-      this.$store.commit('auth/setUser', null);
-      this.$store.commit('auth/setToken', null);
+      this.$store.commit('auth/clear');
       this.$store.commit('profile/setProfile', null);
       this.$router.push('/');
       this.$store.dispatch('toast/success', MESSAGES.LOGOUT_SUCCESS);
@@ -55,6 +52,7 @@ export default {
       this.$router.push('/feed');
     },
   },
+  components: { TertiaryButton },
 };
 </script>
 

@@ -1,9 +1,9 @@
 <template>
-  <div class="m-4 flex flex-col items-center space-y-2">
+  <div class="my-4 flex flex-col items-center">
     <div
       v-for="post in posts"
       :key="post.id"
-      class="w-full rounded border px-6 py-3 md:w-2/3"
+      class="w-full border-t border-x px-6 py-3 md:w-2/3"
     >
       <post-list-item
         :id="post.id"

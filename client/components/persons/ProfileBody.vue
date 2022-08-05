@@ -1,5 +1,5 @@
 <template>
-  <div class="my-2">
+  <div class="w-full">
     <PostCreator v-if="user.id === profile.id" @onPostCreate="onPostCreate" />
     <UserFollower
       v-if="user.id !== profile.id"

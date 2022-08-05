@@ -1,8 +1,8 @@
 <template>
   <!-- BEGIN: PROFILE COMPONENT -->
-  <div>
+  <div class="w-full">
     <!-- BEGIN: PROFILE COMPONENT MAIN SECTION -->
-    <div v-if="profile">
+    <div v-if="profile" class="w-full flex flex-col justify-center items-center space-y-2">
       <!-- BEGIN: PROFILE HEADER  -->
       <profile-header
         :uuid="profile.uuid"

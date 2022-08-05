@@ -1,27 +1,19 @@
 <template>
-  <div class="flex items-center justify-evenly space-x-2 text-sm">
-    <div
-      class="cursor-pointer text-xl font-extrabold text-gray-500"
-      @click="$router.push(`/profile/${uuid}`)"
-    >
-      {{ name }}
-    </div>
-    <div class="px-1 py-2 text-center">
-      <div>{{ numberOfPosts }}</div>
-      <div>Posts</div>
-    </div>
-    <div class="px-1 py-2 text-center">
-      <div>{{ numberOfFollowers }}</div>
-      <div>Followers</div>
-    </div>
-    <div class="px-1 py-2 text-center">
-      <div>{{ numberOfFollowings }}</div>
-      <div>Followings</div>
-    </div>
+  <div
+    class="flex w-full items-center justify-center space-x-2 text-sm md:w-2/3"
+  >
+    <profile-picture :uuid="uuid" :name="name"></profile-picture>
+    <profile-stats
+      :numberOfPosts="numberOfPosts"
+      :numberOfFollowers="numberOfFollowers"
+      :numberOfFollowings="numberOfFollowings"
+    ></profile-stats>
   </div>
 </template>
 
 <script>
+import ProfilePicture from './ProfilePicture.vue';
+import ProfileStats from './ProfileStats.vue';
 export default {
   name: 'ProfileHeader',
   props: [
@@ -32,6 +24,12 @@ export default {
     'numberOfFollowers',
     'numberOfFollowings',
   ],
+  computed: {
+    initialLetterOfName() {
+      return this.name.charAt(0);
+    },
+  },
+  components: { ProfilePicture, ProfileStats },
 };
 </script>
 

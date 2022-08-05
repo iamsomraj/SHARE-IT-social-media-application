@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import PostListItem from './PostListItem';
+import PostListItem from './PostListItem.vue';
 
 export default {
   name: 'PostList',

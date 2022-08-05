@@ -51,14 +51,11 @@ class PostService extends RootService {
         post_id: postRecord.id,
         like_count: 1,
         comment_count: 0,
-        created_by: user.id,
-        updated_by: user.id,
       });
     } else {
       /* UPDATING POST STAT RECORD */
       await PostStatsModel.query().patchAndFetchById(postStatRecord.id, {
         like_count: postStatRecord.like_count + 1,
-        updated_by: user.id,
       });
     }
     /* END: DATABASE OPERATIONS */
@@ -92,8 +89,6 @@ class PostService extends RootService {
       post_id: postRecord.id,
       like_count: 0,
       comment_count: 0,
-      created_by: user.id,
-      updated_by: user.id,
     });
     /* END: DATABASE OPERATIONS */
 

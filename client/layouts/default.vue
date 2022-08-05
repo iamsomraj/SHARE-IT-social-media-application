@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import Toast from '../components/user-interface/Toast.vue';
-import Header from '../components/layout/Header.vue';
+import Toast from '../components/user-interfaces/Toast.vue';
+import Header from '../components/layouts/Header.vue';
 
 export default {
   name: 'DefaultLayout',

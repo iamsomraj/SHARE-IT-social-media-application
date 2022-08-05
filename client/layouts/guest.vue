@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Toast from '../components/user-interface/Toast.vue';
+import Toast from '../components/user-interfaces/Toast.vue';
 export default {
   name: 'GuestLayout',
   components: { Toast },

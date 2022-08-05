@@ -40,7 +40,7 @@ export default {
     },
     onEnter(event) {
       event.preventDefault();
-      this.$emit('enter', event.target.value);
+      this.$emit('onEnter', event.target.value);
     },
   },
 };

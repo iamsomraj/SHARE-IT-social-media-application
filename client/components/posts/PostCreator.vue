@@ -20,10 +20,23 @@ export default {
       postInput: '',
     };
   },
+  computed: {
+    token() {
+      return this.$store.getters['auth/token'];
+    },
+  },
   methods: {
-    onPostCreate() {
-      this.$emit('onPostCreate', this.postInput);
-      this.postInput = '';
+    async onPostCreate() {
+      const res = await this.$store.dispatch('post/create', {
+        content: this.postInput,
+        token: this.token,
+      });
+      if (res.state) {
+        this.postInput = '';
+        this.$store.dispatch('toast/success', 'Post created successfully');
+      } else {
+        this.$store.dispatch('toast/error', 'Post creation failed');
+      }
     },
   },
   components: { PostInput, SecondaryButton },

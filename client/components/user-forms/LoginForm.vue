@@ -49,9 +49,9 @@
 <script>
 import { MESSAGES } from '../../util/constants.js';
 import FormLogo from '../assets/FormLogo.vue';
-import PrimaryButton from './../user-interface/PrimaryButton.vue';
-import SecondaryButton from './../user-interface/SecondaryButton.vue';
-import TextInput from './../user-interface/TextInput.vue';
+import PrimaryButton from './../user-interfaces/PrimaryButton.vue';
+import SecondaryButton from './../user-interfaces/SecondaryButton.vue';
+import TextInput from './../user-interfaces/TextInput.vue';
 
 export default {
   name: 'LoginForm',

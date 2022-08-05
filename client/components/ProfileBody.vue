@@ -11,6 +11,10 @@
 </template>
 
 <script>
+import PostCreator from './posts/PostCreator.vue';
+import PostList from './posts/PostList.vue';
+import UserFollower from './UserFollower.vue';
+
 export default {
   name: 'ProfileBody',
   props: ['posts', 'name'],
@@ -37,6 +41,7 @@ export default {
       this.$emit('onUserFollow', this.profile.uuid);
     },
   },
+  components: { PostCreator, UserFollower, PostList },
 };
 </script>
 

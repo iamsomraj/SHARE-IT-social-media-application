@@ -1,12 +1,10 @@
 <template>
   <!-- BEGIN: PROFILE COMPONENT -->
   <div>
-
     <!-- BEGIN: PROFILE COMPONENT MAIN SECTION -->
     <div v-if="profile">
-
       <!-- BEGIN: PROFILE HEADER  -->
-      <ProfileHeader
+      <profile-header
         :uuid="profile.uuid"
         :id="profile.id"
         :name="profile.name"
@@ -17,7 +15,7 @@
       <!-- END: PROFILE HEADER  -->
 
       <!-- BEGIN: PROFILE BODY  -->
-      <ProfileBody
+      <profile-body
         :posts="profile.person_posts"
         :name="profile.name"
         @onPostCreate="onPostCreate"
@@ -25,15 +23,15 @@
         @onUserFollow="onUserFollow"
       />
       <!-- END: PROFILE BODY  -->
-
     </div>
     <!-- END: PROFILE COMPONENT MAIN SECTION -->
-
   </div>
   <!-- END: PROFILE COMPONENT -->
 </template>
 
 <script>
+import ProfileBody from '../../components/ProfileBody.vue';
+import ProfileHeader from '../../components/ProfileHeader.vue';
 import {
   addLikeToPost,
   createPost,
@@ -41,6 +39,7 @@ import {
   getUserData,
   getUserProfile,
 } from '../../helpers';
+
 export default {
   name: 'ProfileIdPage',
   middleware: 'authenticated',
@@ -93,6 +92,7 @@ export default {
       this.$store.commit('auth/setToken', fetchedUser?.token || null);
     },
   },
+  components: { ProfileBody, ProfileHeader },
 };
 </script>
 

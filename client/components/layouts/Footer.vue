@@ -1,5 +1,5 @@
 <template>
-  <footer class="text-center w-full py-2 text-gray-400 text-xs font-bold">
+  <footer class="w-full py-2 text-center text-xs font-bold text-gray-400">
     <div>
       <span class="font-normal">Created by </span
       ><a
@@ -16,7 +16,7 @@
 <script>
 export default {
   name: 'Footer',
-}
+};
 </script>
 
 <style scoped></style>

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import HeartIcon from './assets/HeartIcon.vue';
+import HeartIcon from './../assets/HeartIcon.vue';
 export default {
   name: 'PostListItem',
   components: { HeartIcon },

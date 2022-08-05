@@ -32,6 +32,7 @@
 
 <script>
 import { MESSAGES } from '../../util/constants.js';
+
 export default {
   name: 'Header',
   computed: {

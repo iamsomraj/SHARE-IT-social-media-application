@@ -62,6 +62,9 @@ class PersonService extends RootService {
   async registerPerson(name, email, password) {
     /* BEGIN: VALIDATIONS */
     if (!email || !name || !password) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.PROVIDE_NAME_EMAIL_AND_PASSWORD);
+    
+    /* CHECK IF NAME OR EMAIL OR PASSWORD HAS LESS THAN 4 CHARACTERS */
+    if (name.length < 4 || email.length < 4 || password.length < 4) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_NAME_EMAIL_OR_PASSWORD);
     /* END: VALIDATIONS */
 
     /* BEGIN: DATABASE VALIDATIONS */

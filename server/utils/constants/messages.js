@@ -14,6 +14,7 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
   LOGIN_FAILURE: "Login failed!",
   PROVIDE_EMAIL_AND_PASSWORD: "Please, provide Email and Password!",
   PROVIDE_NAME_EMAIL_AND_PASSWORD: "Please, provide Name, Email and Password!",
+  INVALID_NAME_EMAIL_OR_PASSWORD: "Name, Email or Password has less than 4 characters!",
   PROVIDE_USER_DETAILS: "Please, provide User details!",
   INVALID_USER_DETAILS: "Invalid User details!",
   USER_NOT_FOUND: "User not found!",

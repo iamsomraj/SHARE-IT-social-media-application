@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import FormLogo from '../assets/FormLogo.vue';
 import { MESSAGES } from '../../util/constants.js';
+import FormLogo from '../assets/FormLogo.vue';
 import PrimaryButton from './../user-interface/PrimaryButton.vue';
 import SecondaryButton from './../user-interface/SecondaryButton.vue';
 import TextInput from './../user-interface/TextInput.vue';

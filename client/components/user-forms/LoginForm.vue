@@ -32,7 +32,10 @@
         >
           <template #default>Login</template>
         </primary-button>
-        <secondary-button @onClick="$router.push('/register')" class="flex-grow">
+        <secondary-button
+          @onClick="$router.push('/register')"
+          class="flex-grow"
+        >
           <template #default>Register</template>
         </secondary-button>
       </div>
@@ -44,8 +47,8 @@
 </template>
 
 <script>
-import FormLogo from '../assets/FormLogo.vue';
 import { MESSAGES } from '../../util/constants.js';
+import FormLogo from '../assets/FormLogo.vue';
 import PrimaryButton from './../user-interface/PrimaryButton.vue';
 import SecondaryButton from './../user-interface/SecondaryButton.vue';
 import TextInput from './../user-interface/TextInput.vue';

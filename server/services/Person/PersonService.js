@@ -3,6 +3,7 @@ const { generateToken, validateHash, hash } = require("../../utils/helpers");
 const RootService = require("../Root/RootService");
 const HTTP_CODES = require("../../utils/constants/http-codes");
 const { PERSON_ERROR_MESSAGES } = require("../../utils/constants/messages");
+const PersonStatsModel = require("../../models/PersonStatsModel");
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL PERSON RELATED CONTROLLERS
@@ -62,7 +63,7 @@ class PersonService extends RootService {
   async registerPerson(name, email, password) {
     /* BEGIN: VALIDATIONS */
     if (!email || !name || !password) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.PROVIDE_NAME_EMAIL_AND_PASSWORD);
-    
+
     /* CHECK IF NAME OR EMAIL OR PASSWORD HAS LESS THAN 4 CHARACTERS */
     if (name.length < 4 || email.length < 4 || password.length < 4) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_NAME_EMAIL_OR_PASSWORD);
     /* END: VALIDATIONS */
@@ -89,6 +90,15 @@ class PersonService extends RootService {
     /* END: PERSON DETAILS FETCHING */
 
     if (!registeredPerson) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+
+    /* BEGIN: INSERT PERSON STATS RECORD */
+    const insertedStats = await PersonsModel.query().insert({
+      person_id: registeredPerson.id,
+      following_count: 0,
+      followers_count: 0,
+    });
+    if (!insertedStats) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.REGISTER_PERSON_FAILURE);
+    /* END: INSERT PERSON STATS RECORD */
 
     /* BEGIN: TOKEN GENERATION */
     const token = generateToken(registeredPerson.id);
@@ -198,14 +208,21 @@ class PersonService extends RootService {
     if (!personToBeFollowed) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
     /* END: DATABASE VALIDATIONS */
 
+    /* BEGIN: FOLLOW DETAILS INSERT */
     const followRecord = await FollowingsModel.query().insert({
       follower_id: user.id,
       followed_id: personToBeFollowed.id,
       created_by: user.id,
       updated_by: user.id,
     });
-
     if (!followRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FOLLOWING_FAILURE);
+    /* END: FOLLOW DETAILS INSERT */
+
+    /* BEGIN: PERSON STATS UPDATION */
+    const personToBeFollowedStatsRecord = await PersonStatsModel.query().where("person_id", personToBeFollowed.id).increment("follower_count", 1);
+    const personFollowingStatsRecord = await PersonStatsModel.query().where("person_id", user.id).increment("following_count", 1);
+    if (!personToBeFollowedStatsRecord || !personFollowingStatsRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UPDATE_PERSON_STATS_FAILURE);
+    /* END: PERSON STATS UPDATION */
 
     return followRecord;
   }

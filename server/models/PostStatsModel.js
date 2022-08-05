@@ -13,11 +13,11 @@ class PostStatsModel extends Model {
     return "post_id";
   }
 
-  static get createdAtColumn() {
+  static get likeCountColumn() {
     return "like_count";
   }
 
-  static get updatedAtColumn() {
+  static get commentCountColumn() {
     return "comment_count";
   }
 

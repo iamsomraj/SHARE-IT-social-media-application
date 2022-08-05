@@ -6,6 +6,7 @@ const PostStatsModel = require("../models/PostStatsModel.js");
 const PostsModel = require("../models/PostsModel.js");
 const { person_data } = require("../utils/data/dummy-data.js");
 const _ = require("colors");
+const PersonStatsModel = require("../models/PersonStatsModel.js");
 
 async function main() {
   /* DELETE ALL THE DATA THAT IS PRESENT IN DATABASE */
@@ -32,6 +33,16 @@ async function main() {
   ];
   const insertedFollowings = await FollowingsModel.query().insert(followings);
   /* END: FOLLOWINGS MODEL HANDLING */
+
+  /* BEGIN: PERSON STATS MODEL HANDLING */
+  /* INSERT PERSON STATS RECORDS */
+  const personStats = [
+    { person_id: insertedPersons[0].id, follower_count: 2, following_count: 2 },
+    { person_id: insertedPersons[1].id, follower_count: 2, following_count: 2 },
+    { person_id: insertedPersons[2].id, follower_count: 2, following_count: 2 },
+  ];
+  const insertedPersonStats = await PersonStatsModel.query().insert(personStats);
+  /* END: PERSON STATS MODEL HANDLING */
 
   /* BEGIN: POSTS MODEL HANDLING */
   /* INSERT POST RECORDS */

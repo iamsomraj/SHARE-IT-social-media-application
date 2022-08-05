@@ -25,6 +25,7 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
   FETCH_USER_DATA_FAILURE: "Fetching user data failed!",
   REGISTER_USER_FAILURE: "Registration failed!",
   POST_FAILURE: "Post failed!",
+  UPDATE_PERSON_STATS_FAILURE: "Updating person stats failed!",
   NO_PEOPLE_FOUND: "No people found!",
   WRONG_CREDENTIALS: "Wrong Credentials!",
   POST_FEED_FAILURE: "Post feed failed!",

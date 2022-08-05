@@ -64,6 +64,8 @@ class PersonsModel extends Model {
     const FollowingsModel = require("./FollowingsModel.js");
     const PostsModel = require("./PostsModel.js");
     const PostLikesModel = require("./PostLikesModel.js");
+    const PersonStatsModel = require("./PersonStatsModel.js");
+
     return {
       person_followers: {
         relation: Model.HasManyRelation,
@@ -97,6 +99,14 @@ class PersonsModel extends Model {
           to: "public.post_likes.created_by",
         },
       },
+      person_stats: {
+        relation: Model.HasOneRelation,
+        modelClass: PersonStatsModel,
+        join: {
+          from: "public.persons.id",
+          to: "public.person_stats.person_id",
+        },
+      },
     };
   }
 
@@ -117,7 +127,7 @@ class PersonsModel extends Model {
       .findOne({
         email,
       })
-      .withGraphFetched("[person_followers, person_followings, person_posts.[post_likes.creator, post_stats, creator]]");
+      .withGraphFetched("[person_followers, person_followings, person_stats, person_posts.[post_likes.creator, post_stats, creator]]");
     delete personRecord.password;
     return personRecord;
   }

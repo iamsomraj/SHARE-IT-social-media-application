@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ProfileHeader
+    <profile-header
       v-if="user"
       :uuid="user.uuid"
       :id="user.id"
@@ -9,19 +9,21 @@
       :numberOfFollowings="user.followers.length"
       :numberOfFollowers="user.followings.length"
     />
-    <div class="flex justify-center m-4">
+    <div class="m-4 flex justify-center">
       <NuxtLink
         to="/people"
-        class="block w-full md:w-2/3 bg-yellow-500 p-2 text-center cursor-pointer text-2xl md:text-xl text-yellow-50 font-bold rounded"
+        class="block w-full cursor-pointer rounded bg-yellow-500 p-2 text-center text-2xl font-bold text-yellow-50 md:w-2/3 md:text-xl"
         >Explore</NuxtLink
       >
     </div>
-    <PostList v-if="posts" :posts="posts" @onPostLike="onPostLike" />
+    <post-list v-if="posts" :posts="posts" @onPostLike="onPostLike" />
   </div>
 </template>
 
 <script>
-import { getUserFeed, addLikeToPost } from '../../helpers';
+import PostList from '../../components/posts/PostList.vue';
+import { addLikeToPost, getUserFeed } from '../../helpers';
+import ProfileHeader from '../../components/persons/ProfileHeader.vue';
 export default {
   name: 'FeedPage',
   middleware: 'authenticated',
@@ -49,6 +51,7 @@ export default {
       this.posts = data.posts;
     },
   },
+  components: { PostList, ProfileHeader },
 };
 </script>
 

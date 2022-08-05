@@ -1,7 +1,7 @@
 <template>
-  <div class="flex justify-evenly items-center text-sm space-x-2">
+  <div class="flex items-center justify-evenly space-x-2 text-sm">
     <div
-      class="text-xl text-gray-500 font-extrabold cursor-pointer"
+      class="cursor-pointer text-xl font-extrabold text-gray-500"
       @click="$router.push(`/profile/${uuid}`)"
     >
       {{ name }}

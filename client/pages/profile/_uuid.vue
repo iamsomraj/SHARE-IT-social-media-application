@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import ProfileBody from '../../components/ProfileBody.vue';
-import ProfileHeader from '../../components/ProfileHeader.vue';
+import ProfileBody from '../../components/persons/ProfileBody.vue';
+import ProfileHeader from '../../components/persons/ProfileHeader.vue';
 import {
   addLikeToPost,
   createPost,

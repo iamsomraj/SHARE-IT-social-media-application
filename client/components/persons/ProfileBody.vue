@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import PostCreator from './posts/PostCreator.vue';
-import PostList from './posts/PostList.vue';
-import UserFollower from './UserFollower.vue';
+import UserFollower from '../persons/UserFollower.vue';
+import PostCreator from './../posts/PostCreator.vue';
+import PostList from './../posts/PostList.vue';
 
 export default {
   name: 'ProfileBody',

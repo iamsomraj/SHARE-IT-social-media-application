@@ -29,8 +29,20 @@
     <!-- END: POST LIST ITEM HEADER -->
 
     <!-- BEGIN: POST LIST ITEM CONTENT -->
-    <div class="px-6">
-      {{ content }}
+    <div class="flex flex-col items-start justify-center space-y-4 px-6">
+      <!-- BEGIN: POST CONTENT -->
+      <div class="break-words text-2xl">
+        {{ content }}
+      </div>
+      <!-- END: POST CONTENT -->
+
+      <!-- BEGIN: NUMBER OF LIKES -->
+      <div class="text-sm">
+        {{
+          numberOfLikes > 1 ? `${numberOfLikes} Likes` : `${numberOfLikes} Like`
+        }}
+      </div>
+      <!-- END: NUMBER OF LIKES -->
     </div>
     <!-- END: POST LIST ITEM CONTENT -->
 
@@ -43,10 +55,6 @@
         class="flex cursor-pointer items-center justify-center space-x-4"
         @click="onPostLike(uuid)"
       >
-        <!-- BEGIN: NUMBER OF LIKES -->
-        <div>{{ numberOfLikes }}</div>
-        <!-- END: NUMBER OF LIKES -->
-
         <!-- BEGIN: LIKE ICON -->
         <heart-icon class="text-gray-400"></heart-icon>
         <!-- END: LIKE ICON -->

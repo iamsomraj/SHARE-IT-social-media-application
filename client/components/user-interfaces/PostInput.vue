@@ -1,4 +1,5 @@
 <template>
+  <!-- BEGIN: POST INPUT -->
   <div class="w-full">
     <!-- BEGIN: POST TEXT INPUT -->
     <input
@@ -20,6 +21,7 @@
     </div>
     <!-- END: CHARACTERS LEFT FROM LIMIT -->
   </div>
+  <!-- END: POST INPUT -->
 </template>
 
 <script>

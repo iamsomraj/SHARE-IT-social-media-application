@@ -23,7 +23,7 @@
 
       <!-- BEGIN: LOGIN FORM SUBMIT -->
       <div class="w-full space-y-2">
-        <secondary-button
+        <primary-button
           @onClick="onSubmit"
           type="submit"
           class="flex-grow"
@@ -31,10 +31,10 @@
           :disabled="disabled"
         >
           <template #default>Login</template>
-        </secondary-button>
-        <primary-button @onClick="$router.push('/register')" class="flex-grow">
-          <template #default>Register</template>
         </primary-button>
+        <secondary-button @onClick="$router.push('/register')" class="flex-grow">
+          <template #default>Register</template>
+        </secondary-button>
       </div>
       <!-- END: LOGIN FORM SUBMIT -->
     </div>

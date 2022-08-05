@@ -29,7 +29,7 @@
 
       <!-- BEGIN: REGISTER FORM SUBMIT -->
       <div class="w-full space-y-2">
-        <secondary-button
+        <primary-button
           @onClick="onSubmit"
           type="submit"
           class="flex-grow"
@@ -37,10 +37,10 @@
           :disabled="disabled"
         >
           <template #default>Register</template>
-        </secondary-button>
-        <primary-button @onClick="$router.push('/')" class="flex-grow">
-          <template #default>Login</template>
         </primary-button>
+        <secondary-button @onClick="$router.push('/')" class="flex-grow">
+          <template #default>Login</template>
+        </secondary-button>
       </div>
       <!-- END: REGISTER FORM SUBMIT -->
     </div>

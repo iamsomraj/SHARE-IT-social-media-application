@@ -18,24 +18,24 @@
 <script>
 import LoaderIcon from '../assets/LoaderIcon.vue';
 export default {
-    name: "PrimaryButton",
-    props: {
-        loading: {
-            type: Boolean,
-            default: false,
-        },
-        disabled: {
-            type: Boolean,
-            default: false,
-        },
+  name: 'PrimaryButton',
+  props: {
+    loading: {
+      type: Boolean,
+      default: false,
     },
-    emits: ["onClick"],
-    methods: {
-        onClick(event) {
-            event.preventDefault();
-            this.$emit("onClick");
-        },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
-    components: { LoaderIcon }
+  },
+  emits: ['onClick'],
+  methods: {
+    onClick(event) {
+      event.preventDefault();
+      this.$emit('onClick');
+    },
+  },
+  components: { LoaderIcon },
 };
 </script>

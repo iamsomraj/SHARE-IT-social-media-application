@@ -2,7 +2,7 @@
   <!-- BEGIN: TOAST COMPONENT ROOT ELEMENT -->
   <div
     v-if="toasts.length > 0"
-    class="fixed mt-2 flex w-full flex-col items-center justify-center"
+    class="fixed px-2 flex w-full flex-col items-end justify-end"
   >
     <!-- BEGIN: TOAST LIST -->
     <div v-for="toast in toasts" :key="toast.id">
@@ -10,9 +10,9 @@
       <div
         :title="toast.message"
         :class="`${background(toast.variant)} ${textColor(toast.variant)}`"
-        class="my-2 w-64 break-words rounded-lg px-4 py-2 text-center text-xs font-bold shadow-sm"
+        class="mt-2 w-64 break-words rounded-lg px-4 py-5 text-left text-xs font-bold shadow-sm"
       >
-        <div>
+        <div class="line-clamp-2">
           {{ toast.message }}
         </div>
       </div>
@@ -49,13 +49,6 @@ export default {
         warning: 'text-yellow-500',
       };
       return variants[variant];
-    },
-    toastMessage(message) {
-      if (message.length < 60) {
-        return message;
-      } else {
-        return message.substring(0, 60) + '...';
-      }
     },
   },
 };

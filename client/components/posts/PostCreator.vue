@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full items-center justify-center py-4">
-    <div class="flex w-2/3 justify-center space-x-2">
+    <div class="mx-6 flex w-full justify-center space-x-2 md:mx-0 md:w-1/2">
       <post-input
         placeholder="Speak your mind"
         v-model="postInput"

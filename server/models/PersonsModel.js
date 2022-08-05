@@ -127,7 +127,7 @@ class PersonsModel extends Model {
       .findOne({
         email,
       })
-      .withGraphFetched("[person_followers, person_followings, person_stats, person_posts.[post_likes.creator, post_stats, creator]]");
+      .withGraphFetched("[person_followers, person_followings, person_stats, person_posts.[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]]");
     delete personRecord.password;
     return personRecord;
   }

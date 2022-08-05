@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-around items-center m-4 py-6 w-full md:w-2/3 border rounded"
+    class="flex justify-around items-center m-4 py-6 w-full md:w-1/2 border rounded"
   >
     <div>
       <div

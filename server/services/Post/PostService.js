@@ -41,28 +41,16 @@ class PostService extends RootService {
       created_by: user.id,
       updated_by: user.id,
     });
-
-    /* CHECKING IF POST STAT RECORD FOR THE GIVEN POST EXISTS OR NOT */
-    const postStatRecord = await PostStatsModel.query().findOne({ post_id: postRecord.id });
-
-    if (!postStatRecord) {
-      /* CREATING POST STAT RECORD */
-      await PostStatsModel.query().insert({
-        post_id: postRecord.id,
-        like_count: 1,
-        comment_count: 0,
-      });
-    } else {
-      /* UPDATING POST STAT RECORD */
-      await PostStatsModel.query().patchAndFetchById(postStatRecord.id, {
-        like_count: postStatRecord.like_count + 1,
-      });
-    }
-    /* END: DATABASE OPERATIONS */
-
     if (!likeRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
 
-    return likeRecord;
+    const postStatRecord = await PersonStatsModel.query().where("post_id", postRecord.id).increment("like_count", 1);
+    if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
+
+    const result = await PostsModel.getPostDetails(postRecord.uuid);
+    if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
+    /* END: DATABASE OPERATIONS */
+
+    return result;
   }
 
   /**
@@ -84,17 +72,21 @@ class PostService extends RootService {
       created_by: user.id,
       updated_by: user.id,
     });
+    if (!postRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
     /* CREATING POST STAT RECORD */
-    await PostStatsModel.query().insert({
+    const postStatRecord = await PostStatsModel.query().insert({
       post_id: postRecord.id,
       like_count: 0,
       comment_count: 0,
     });
+    if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
     /* END: DATABASE OPERATIONS */
 
-    if (!postRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
+    const result = await PostsModel.getPostDetails(postRecord.uuid);
+    if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
+    /* END: DATABASE OPERATIONS */
 
-    return postRecord;
+    return result;
   }
 
   async getPostFeed(user) {

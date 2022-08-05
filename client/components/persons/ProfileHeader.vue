@@ -1,8 +1,12 @@
 <template>
   <div
-    class="flex w-full items-center justify-center space-x-2 text-sm md:w-2/3"
+    class="flex w-full items-center justify-center space-x-2 text-sm md:w-1/2"
   >
-    <profile-picture :uuid="uuid" :name="name"></profile-picture>
+    <profile-picture
+      :uuid="uuid"
+      :name="name"
+      class="h-16 w-16 text-8xl"
+    ></profile-picture>
     <profile-stats
       :numberOfPosts="numberOfPosts"
       :numberOfFollowers="numberOfFollowers"

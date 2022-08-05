@@ -12,7 +12,7 @@
     <div class="m-4 flex justify-center">
       <NuxtLink
         to="/people"
-        class="block w-full cursor-pointer rounded bg-yellow-500 p-2 text-center text-2xl font-bold text-yellow-50 md:w-2/3 md:text-xl"
+        class="block w-full cursor-pointer rounded bg-yellow-500 p-2 text-center text-2xl font-bold text-yellow-50 md:w-1/2 md:text-xl"
         >Explore</NuxtLink
       >
     </div>

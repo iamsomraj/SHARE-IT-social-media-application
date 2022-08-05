@@ -100,6 +100,20 @@ class PostsModel extends Model {
       },
     };
   }
+
+  /**
+   * @description fetches details of a post with the given uuid
+   * @param {string} uuid
+   */
+  static async getPostDetails(uuid) {
+    let postRecord = await PostsModel.query()
+      .findOne({
+        uuid,
+      })
+      .withGraphFetched("[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]");
+    delete postRecord.password;
+    return postRecord;
+  }
 }
 
 module.exports = PostsModel;

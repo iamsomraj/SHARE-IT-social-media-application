@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex h-16 w-16 rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-blue-400 text-center text-8xl font-extrabold capitalize text-white shadow-inner transition-all duration-300 hover:scale-110"
+    class="flex rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-blue-400 text-center font-extrabold capitalize text-white shadow-inner transition-all duration-300 hover:scale-110"
     @click="$router.push(`/profile/${uuid}`)"
   >
     {{ initialLetterOfName }}

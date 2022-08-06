@@ -1,10 +1,10 @@
 <template>
   <div class="w-full">
-    <post-like
+    <post-list
       :posts="posts"
       @onPostLike="onPostLike"
       @onPostUnlike="onPostUnlike"
-    ></post-like>
+    ></post-list>
   </div>
 </template>
 

@@ -3,8 +3,10 @@
   <div class="w-full">
     <!-- BEGIN: POST TEXT INPUT -->
     <textarea
-      class="w-full resize-none break-words rounded border-b-2 border-gray-200 py-3 text-2xl outline-none focus:border-blue-200"
-      :placeholder="placeholder"
+      :disabled="loading"
+      class="w-full resize-none break-words rounded border-b-2 border-gray-200 py-3 text-2xl outline-none placeholder:text-gray-200 focus:border-blue-200 disabled:bg-white"
+      :class="{ 'cursor-not-allowed': loading }"
+      :placeholder="inputPlaceholder"
       :maxlength="maxlength"
       autocomplete="off"
       :type="type"
@@ -40,6 +42,10 @@ export default {
       type: String,
       default: '',
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['change', 'input'],
   data() {
@@ -50,6 +56,9 @@ export default {
   computed: {
     charactersLeft() {
       return this.maxLength - this.value.length;
+    },
+    inputPlaceholder() {
+      return this.loading ? 'Posting...' : this.placeholder;
     },
   },
 

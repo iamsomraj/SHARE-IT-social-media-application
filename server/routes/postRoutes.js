@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.route("/create").post(protect, createPost);
 router.route("/feed").get(protect, getPostFeed);
-router.route("/:uuid").post(protect, addLike);
+router.route("/like/:uuid").post(protect, addLike);
 
 module.exports = router;

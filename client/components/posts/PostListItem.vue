@@ -62,7 +62,9 @@
         @click="onPostLike(uuid)"
       >
         <!-- BEGIN: LIKE ICON -->
-        <heart-icon class="fill-transparent stroke-gray-400 hover:fill-gray-400"></heart-icon>
+        <heart-icon
+          class="fill-transparent stroke-gray-400 hover:fill-gray-400"
+        ></heart-icon>
         <!-- END: LIKE ICON -->
       </div>
       <!-- END: NUMBER OF LIKES AND LIKE ICON -->
@@ -74,6 +76,7 @@
 <script>
 import HeartIcon from './../assets/HeartIcon.vue';
 import ProfilePicture from '../persons/ProfilePicture.vue';
+import { MESSAGES } from '../../util/constants';
 export default {
   name: 'PostListItem',
   props: [
@@ -86,9 +89,17 @@ export default {
     'time',
   ],
   methods: {
-    onPostLike(uuid) {
-      this.$emit('onPostLike', uuid);
+    async onPostLike(uuid) {
+      this.loading = true;
+      const res = await this.$store.dispatch('auth/likePost', uuid);
+      this.loading = false;
+      if (res.state) {
+        this.$store.dispatch('toast/success', MESSAGES.POST_LIKE_SUCCESS);
+      } else {
+        this.$store.dispatch('toast/error', MESSAGES.POST_LIKE_FAILURE);
+      }
     },
+    onPostUnlike(uuid) {},
   },
   components: { ProfilePicture, HeartIcon },
 };

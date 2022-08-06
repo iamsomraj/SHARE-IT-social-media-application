@@ -1,4 +1,5 @@
 import {
+  ADD_LIKE_URL,
   CREATE_POST_URL,
   getHeaders,
   LOGIN_URL,
@@ -107,14 +108,34 @@ export const actions = {
       if (state) {
         commit('addPost', data);
         commit('incrementPostCount');
-      } else {
-        commit('addPost', null);
       }
       return { data, state, message };
     } catch (error) {
       const { data: responseData } = error?.response;
       const { data, state, message } = responseData;
-      commit('addPost', null);
+      return { data, state, message };
+    }
+  },
+  /* USER POST LIKE */
+  async likePost({ commit, state }, uuid) {
+    const token = state?.token || '';
+    try {
+      const { data: responseData } = await axios.post(
+        `${ADD_LIKE_URL}/${uuid}`,
+        null,
+        {
+          ...getHeaders(token),
+        }
+      );
+      const { data, state, message } = responseData;
+      console.log('🚀 ~ file: auth.js ~ line 131 ~ likePost ~ data', data);
+      if (state) {
+        commit('updatePost', data);
+      }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
       return { data, state, message };
     }
   },
@@ -129,6 +150,15 @@ export const mutations = {
   },
   addPost(state, post) {
     state.user.person_posts.push(post);
+  },
+  updatePost(state, post) {
+    state.user.person_posts = state.user.person_posts.map((postItem) => {
+      if (Number(postItem?.id) === Number(post?.id)) {
+        return { ...post };
+      } else {
+        return postItem;
+      }
+    });
   },
   incrementPostCount(state) {
     state.user.person_stats.post_count = state.user.person_stats.post_count + 1;

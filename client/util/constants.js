@@ -27,7 +27,7 @@ export const GET_PERSON_URL = `${PERSON_URL}`;
 
 export const CREATE_POST_URL = `${POST_URL}/create`;
 export const GET_POST_FEED_URL = `${POST_URL}/feed`;
-export const ADD_LIKE_URL = `${POST_URL}/`;
+export const ADD_LIKE_URL = `${POST_URL}/like`;
 
 export const MESSAGES = Object.freeze({
   LOGIN_SUCCESS: 'You have successfully logged in!',
@@ -35,6 +35,8 @@ export const MESSAGES = Object.freeze({
   LOGOUT_SUCCESS: 'You have been logged out successfully!',
   POST_CREATE_SUCCESS: 'Your post has been created successfully!',
   POST_LIKE_SUCCESS: 'You have liked this post!',
+  POST_LIKE_FAILURE: 'There was an error liking this post!',
   POST_UNLIKE_SUCCESS: 'You have unliked this post!',
+  POST_UNLIKE_FAILURE: 'There was an error unliking this post!',
   POST_CREATE_FAILURE: 'There was an error creating your post!',
 });

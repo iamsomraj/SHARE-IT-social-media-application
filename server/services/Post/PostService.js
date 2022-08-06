@@ -5,6 +5,7 @@ const FollowingsModel = require("../../models/FollowingsModel");
 const PostsModel = require("../../models/PostsModel");
 const PostStatsModel = require("../../models/PostStatsModel");
 const PersonStatsModel = require("../../models/PersonStatsModel");
+const PostLikesModel = require("../../models/PostLikesModel");
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL POST RELATED CONTROLLERS
@@ -44,7 +45,7 @@ class PostService extends RootService {
     });
     if (!likeRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
 
-    const postStatRecord = await PersonStatsModel.query().where("post_id", postRecord.id).increment("like_count", 1);
+    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).increment("like_count", 1);
     if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);

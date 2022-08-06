@@ -11,7 +11,6 @@
       :content="post.content"
       :numberOfLikes="post.post_stats.like_count"
       :time="time(post.updated_at, post.created_at)"
-      @onPostLike="onPostLike"
     ></post-list-item>
   </div>
 </template>
@@ -25,9 +24,6 @@ export default {
   components: { PostListItem },
   props: ['posts'],
   methods: {
-    onPostLike(uuid) {
-      this.$emit('onPostLike', uuid);
-    },
     time(updated_at, created_at) {
       return getTime(updated_at ? updated_at : created_at);
     },

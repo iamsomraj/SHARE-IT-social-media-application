@@ -6,7 +6,7 @@ const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js")
 /**
  * @access private
  * @description adds one like for one post
- * @route POST /api/v1/posts/:uuid
+ * @route POST /api/v1/posts/like/:uuid
  */
 const addLike = asyncHandler(async (req, res) => {
   const { uuid } = req.params;

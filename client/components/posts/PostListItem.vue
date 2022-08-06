@@ -43,7 +43,7 @@
       <!-- END: POST CONTENT -->
 
       <!-- BEGIN: NUMBER OF LIKES -->
-      <div class="cursor-pointer text-sm hover:underline underline-offset-4">
+      <div class="cursor-pointer text-sm underline-offset-4 hover:underline">
         {{
           numberOfLikes > 1 ? `${numberOfLikes} Likes` : `${numberOfLikes} Like`
         }}
@@ -62,7 +62,7 @@
         @click="onPostLike(uuid)"
       >
         <!-- BEGIN: LIKE ICON -->
-        <heart-icon class="text-gray-400"></heart-icon>
+        <heart-icon class="fill-transparent stroke-gray-400 hover:fill-gray-400"></heart-icon>
         <!-- END: LIKE ICON -->
       </div>
       <!-- END: NUMBER OF LIKES AND LIKE ICON -->

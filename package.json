@@ -6,7 +6,7 @@
   "scripts": {
     "setup": "npm run migrate-latest && npm install && npm install --prefix client",
     "start": "node server/server",
-    "data-import": "node server/seeds/seeder",
+    "data-import": "npm run migrate-rollback && npm run migrate-latest && node server/seeds/seeder",
     "server": "npm run data-import && nodemon server/server",
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\" ",

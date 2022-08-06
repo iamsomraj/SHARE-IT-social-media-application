@@ -103,11 +103,12 @@ export const mutations = {
     state.profile = profile;
   },
   updatePost(state, post) {
-    const index = state.profile.person_posts.findIndex(
-      (p) => p.uuid === post.uuid
-    );
-    if (index !== -1) {
-      state.profile.person_posts[index] = post;
-    }
+    state.profile.person_posts = state.profile.person_posts.map((postItem) => {
+      if (Number(postItem?.id) === Number(post?.id)) {
+        return { ...post };
+      } else {
+        return postItem;
+      }
+    });
   },
 };

@@ -1,10 +1,10 @@
-import {
-  GET_POST_FEED_URL,
-  ADD_LIKE_URL,
-  REMOVE_LIKE_URL,
-  getHeaders,
-} from '../util/constants';
 import axios from 'axios';
+import {
+  ADD_LIKE_URL,
+  getHeaders,
+  GET_POST_FEED_URL,
+  REMOVE_LIKE_URL,
+} from '../util/constants';
 
 export const state = () => ({
   posts: [],
@@ -16,7 +16,7 @@ export const getters = {
 
 export const actions = {
   /* FETCH POSTS FOR FEED */
-  async posts({ commit, state }, token) {
+  async posts({ commit }, token) {
     try {
       const { data: responseData } = await axios.get(`${GET_POST_FEED_URL}`, {
         ...getHeaders(token),
@@ -81,9 +81,12 @@ export const mutations = {
     state.posts = posts;
   },
   updatePost(state, post) {
-    const index = state.posts.findIndex((p) => p.uuid === post.uuid);
-    if (index !== -1) {
-      state.posts[index] = post;
-    }
+    state.posts = state.posts.map((postItem) => {
+      if (Number(postItem?.id) === Number(post?.id)) {
+        return { ...post };
+      } else {
+        return postItem;
+      }
+    });
   },
 };

@@ -24,7 +24,12 @@
         <!-- END: POST CREATOR -->
 
         <!-- BEGIN: CURRENT LOGGED IN USER PROFILE BODY  -->
-        <profile-body :posts="user.person_posts" :name="user.name" />
+        <profile-body
+          :posts="user.person_posts"
+          :name="user.name"
+          @onPostLike="onPostLike"
+          @onPostUnlike="onPostUnlike"
+        />
         <!-- END: CURRENT LOGGED IN USER PROFILE BODY  -->
       </div>
       <!-- END: CURRENT LOGGED IN USER PROFILE COMPONENT MAIN SECTION -->

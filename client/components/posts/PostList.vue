@@ -12,6 +12,8 @@
       :content="post.content"
       :numberOfLikes="post.post_stats.like_count"
       :time="time(post.updated_at, post.created_at)"
+      @onPostLike="onPostLike"
+      @onPostUnlike="onPostUnlike"
     ></post-list-item>
   </div>
 </template>
@@ -27,6 +29,12 @@ export default {
   methods: {
     time(updated_at, created_at) {
       return getTime(updated_at ? updated_at : created_at);
+    },
+    onPostLike(uuid) {
+      this.$emit('onPostLike', uuid);
+    },
+    onPostUnlike(uuid) {
+      this.$emit('onPostUnlike', uuid);
     },
   },
 };

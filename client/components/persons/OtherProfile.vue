@@ -24,7 +24,12 @@
         <!-- BEGIN: PERSON FOLLOWER -->
 
         <!-- BEGIN: PROFILE BODY  -->
-        <profile-body :posts="profile.person_posts" :name="profile.name" />
+        <profile-body
+          :posts="profile.person_posts"
+          :name="profile.name"
+          @onPostLike="onPostLike"
+          @onPostUnlike="onPostUnlike"
+        />
         <!-- END: PROFILE BODY  -->
       </div>
       <!-- END: PROFILE COMPONENT MAIN SECTION -->

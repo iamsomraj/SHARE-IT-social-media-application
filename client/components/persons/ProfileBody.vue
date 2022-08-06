@@ -1,6 +1,10 @@
 <template>
   <div class="w-full">
-    <PostList :posts="posts" @onPostLike="onPostLike" />
+    <post-like
+      :posts="posts"
+      @onPostLike="onPostLike"
+      @onPostUnlike="onPostUnlike"
+    ></post-like>
   </div>
 </template>
 
@@ -23,8 +27,11 @@ export default {
     },
   },
   methods: {
-    onPostLike(id) {
-      this.$emit('onPostLike', id);
+    onPostLike(uuid) {
+      this.$emit('onPostLike', uuid);
+    },
+    onPostUnlike(uuid) {
+      this.$emit('onPostUnlike', uuid);
     },
     onUserFollow() {
       this.$emit('onUserFollow', this.profile.uuid);

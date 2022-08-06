@@ -111,6 +111,7 @@ export default {
   },
   methods: {
     async onPostLike(uuid) {
+      this.$emit('onPostLike', uuid);
       this.loading = true;
       const res = await this.$store.dispatch('auth/likePost', uuid);
       this.loading = false;
@@ -121,6 +122,7 @@ export default {
       }
     },
     async onPostUnlike(uuid) {
+      this.$emit('onPostUnlike', uuid);
       this.loading = true;
       const res = await this.$store.dispatch('auth/unlikePost', uuid);
       this.loading = false;

@@ -13,7 +13,13 @@
       :numberOfFollowings="user.person_stats.following_count"
       :numberOfFollowers="user.person_stats.follower_count"
     />
-    <post-list class="w-full" v-if="posts" :posts="posts" />
+    <post-list
+      class="w-full"
+      v-if="posts"
+      :posts="posts"
+      @onPostLike="onPostLike"
+      @onPostUnlike="onPostUnlike"
+    />
   </div>
 </template>
 
@@ -34,6 +40,13 @@ export default {
   async fetch() {
     await this.$store.dispatch('auth/feed');
   },
+  methods: {
+    onPostLike(uuid) {
+    },
+    onPostUnlike(uuid) {
+    },
+  },
+  }
   components: { PostList, ProfileHeader },
 };
 </script>

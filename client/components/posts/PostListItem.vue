@@ -15,7 +15,10 @@
       <!-- BEGIN: POST OWNER NAME AND TIME -->
       <div class="flex flex-col items-start justify-center font-bold">
         <!-- BEGIN: POST OWNER NAME -->
-        <div @click="$router.push(`/profile/${ownerUUID}`)">
+        <div
+          @click="$router.push(`/profile/${ownerUUID}`)"
+          class="cursor-pointer hover:underline"
+        >
           {{ ownerName }}
         </div>
         <!-- END: POST OWNER NAME -->
@@ -31,13 +34,16 @@
     <!-- BEGIN: POST LIST ITEM CONTENT -->
     <div class="flex flex-col items-start justify-center space-y-4 px-6">
       <!-- BEGIN: POST CONTENT -->
-      <div class="break-words text-2xl">
+      <div
+        class="cursor-pointer break-words text-2xl hover:underline"
+        @click="$router.push(`/post/${uuid}`)"
+      >
         {{ content }}
       </div>
       <!-- END: POST CONTENT -->
 
       <!-- BEGIN: NUMBER OF LIKES -->
-      <div class="text-sm">
+      <div class="cursor-pointer text-sm hover:underline underline-offset-4">
         {{
           numberOfLikes > 1 ? `${numberOfLikes} Likes` : `${numberOfLikes} Like`
         }}

@@ -2,8 +2,8 @@
   <!-- BEGIN: POST INPUT -->
   <div class="w-full">
     <!-- BEGIN: POST TEXT INPUT -->
-    <input
-      class="w-full rounded border-b-2 border-gray-200 py-3 outline-none focus:border-blue-200"
+    <textarea
+      class="w-full resize-none break-words rounded border-b-2 border-gray-200 py-3 text-2xl outline-none focus:border-blue-200"
       :placeholder="placeholder"
       :maxlength="maxlength"
       autocomplete="off"

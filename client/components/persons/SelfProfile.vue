@@ -23,13 +23,7 @@
         <!-- END: POST CREATOR -->
 
         <!-- BEGIN: CURRENT LOGGED IN USER PROFILE BODY  -->
-        <profile-body
-          :posts="user.person_posts"
-          :name="user.name"
-          @onPostCreate="onPostCreate"
-          @onPostLike="onPostLike"
-          @onUserFollow="onUserFollow"
-        />
+        <profile-body :posts="user.person_posts" :name="user.name" />
         <!-- END: CURRENT LOGGED IN USER PROFILE BODY  -->
       </div>
       <!-- END: CURRENT LOGGED IN USER PROFILE COMPONENT MAIN SECTION -->

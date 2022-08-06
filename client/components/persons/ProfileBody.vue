@@ -23,9 +23,6 @@ export default {
     },
   },
   methods: {
-    onPostCreate(postInput) {
-      this.$emit('onPostCreate', postInput);
-    },
     onPostLike(id) {
       this.$emit('onPostLike', id);
     },

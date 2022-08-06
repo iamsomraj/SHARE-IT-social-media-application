@@ -181,12 +181,8 @@ class PersonService extends RootService {
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: PERSON DETAILS FETCHING */
-    const personRecord = await PersonsModel.getPersonDetailsByEmail(person.email);
+    const result = await PersonsModel.getPersonDetailsByEmail(person.email);
     /* END: PERSON DETAILS FETCHING */
-
-    const result = {
-      ...personRecord,
-    };
 
     return result;
   }

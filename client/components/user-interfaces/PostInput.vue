@@ -7,7 +7,7 @@
       class="w-full resize-none break-words rounded border-b-2 border-gray-200 py-3 text-2xl outline-none placeholder:text-gray-200 focus:border-blue-200 disabled:bg-white"
       :class="{ 'cursor-not-allowed': loading }"
       :placeholder="inputPlaceholder"
-      :maxlength="maxlength"
+      :maxlength="postLengthLimit"
       autocomplete="off"
       :type="type"
       :value="value"
@@ -50,12 +50,12 @@ export default {
   emits: ['change', 'input'],
   data() {
     return {
-      maxLength: 160,
+      postLengthLimit: 160,
     };
   },
   computed: {
     charactersLeft() {
-      return this.maxLength - this.value.length;
+      return this.postLengthLimit - this.value.length;
     },
     inputPlaceholder() {
       return this.loading ? 'Posting...' : this.placeholder;

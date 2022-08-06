@@ -2,7 +2,22 @@ import axios from 'axios';
 import { getHeaders, GET_PERSON_URL } from '../util/constants';
 
 export const state = () => ({
-  profile: null,
+  profile: {
+    id: '',
+    uuid: '',
+    name: '',
+    email: '',
+    person_followers: [],
+    person_followings: [],
+    person_stats: {
+      id: '',
+      person_id: '',
+      post_count: 0,
+      follower_count: 0,
+      following_count: 0,
+    },
+    person_posts: [],
+  },
 });
 
 export const getters = {

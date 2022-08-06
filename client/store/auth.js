@@ -17,6 +17,7 @@ export const state = () => ({
     person_stats: {
       id: '',
       person_id: '',
+      post_count: 0,
       follower_count: 0,
       following_count: 0,
     },
@@ -26,13 +27,14 @@ export const state = () => ({
 });
 
 export const getters = {
+  isLoggedIn: (state) => state?.token && state?.user?.id && state?.user?.uuid,
   user: (state) => state.user,
   uuid: (state) => state.user.uuid,
   token: (state) => state.token,
   posts: (state) => state.user.person_posts,
   followers: (state) => state.user.person_followers,
   followings: (state) => state.user.person_followings,
-  isLoggedIn: (state) => state?.token && state?.user?.id && state?.user?.uuid,
+  post_count: (state) => state.user.person_stats.post_count,
   follower_count: (state) => state.user.person_stats.follower_count,
   following_count: (state) => state.user.person_stats.following_count,
 };
@@ -104,6 +106,7 @@ export const actions = {
       const { data, state, message } = responseData;
       if (state) {
         commit('addPost', data);
+        commit('incrementPostCount');
       } else {
         commit('addPost', null);
       }
@@ -126,6 +129,9 @@ export const mutations = {
   },
   addPost(state, post) {
     state.user.person_posts.push(post);
+  },
+  incrementPostCount(state) {
+    state.user.person_stats.post_count = state.user.person_stats.post_count + 1;
   },
   clear(state) {
     state.user = {

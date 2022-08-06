@@ -13,6 +13,10 @@ class PersonStatsModel extends Model {
     return "person_id";
   }
 
+  static get postCountColumn() {
+    return "post_count";
+  }
+
   static get followerCountColumn() {
     return "follower_count";
   }
@@ -28,6 +32,7 @@ class PersonStatsModel extends Model {
       properties: {
         id: { type: "integer" },
         person_id: { type: "integer" },
+        post_count: { type: "integer" },
         follower_count: { type: "integer" },
         following_count: { type: "integer" },
       },

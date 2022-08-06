@@ -4,6 +4,7 @@ const { PERSON_ERROR_MESSAGES, GENERAL_MESSAGES } = require("../../utils/constan
 const FollowingsModel = require("../../models/FollowingsModel");
 const PostsModel = require("../../models/PostsModel");
 const PostStatsModel = require("../../models/PostStatsModel");
+const PersonStatsModel = require("../../models/PersonStatsModel");
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL POST RELATED CONTROLLERS
@@ -80,6 +81,10 @@ class PostService extends RootService {
       comment_count: 0,
     });
     if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
+
+    /* UPDATING PERSON STAT RECORD */
+    const creatorPersonStatRecord = await PersonStatsModel.query().where("person_id", user.id).increment("post_count", 1);
+    if (!creatorPersonStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
     /* END: DATABASE OPERATIONS */
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);

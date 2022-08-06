@@ -1,5 +1,9 @@
 module.exports = {
-  purge: [],
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,vue}',
+    './components/**/*.{js,ts,jsx,tsx,vue}',
+    './layouts/**/*.{js,ts,jsx,tsx,vue}',
+  ],
   darkMode: 'class',
   theme: {
     extend: {},

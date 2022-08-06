@@ -92,8 +92,9 @@ class PersonService extends RootService {
     if (!registeredPerson) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
 
     /* BEGIN: INSERT PERSON STATS RECORD */
-    const insertedStats = await PersonsModel.query().insert({
+    const insertedStatRecord = await PersonStatsModel.query().insert({
       person_id: registeredPerson.id,
+      post_count: 0,
       following_count: 0,
       followers_count: 0,
     });

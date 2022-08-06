@@ -37,9 +37,9 @@ async function main() {
   /* BEGIN: PERSON STATS MODEL HANDLING */
   /* INSERT PERSON STATS RECORDS */
   const personStats = [
-    { person_id: insertedPersons[0].id, follower_count: 2, following_count: 2 },
-    { person_id: insertedPersons[1].id, follower_count: 2, following_count: 2 },
-    { person_id: insertedPersons[2].id, follower_count: 2, following_count: 2 },
+    { person_id: insertedPersons[0].id, follower_count: 2, following_count: 2, post_count: 3 },
+    { person_id: insertedPersons[1].id, follower_count: 2, following_count: 2, post_count: 3 },
+    { person_id: insertedPersons[2].id, follower_count: 2, following_count: 2, post_count: 2 },
   ];
   const insertedPersonStats = await PersonStatsModel.query().insert(personStats);
   /* END: PERSON STATS MODEL HANDLING */
@@ -213,6 +213,6 @@ main()
     process.exit(0);
   })
   .catch((err) => {
-    console.error(err);
+    console.log(err.message.red.underline.bold);
     return knex.destroy();
   });

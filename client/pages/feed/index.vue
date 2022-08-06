@@ -41,12 +41,9 @@ export default {
     await this.$store.dispatch('auth/feed');
   },
   methods: {
-    onPostLike(uuid) {
-    },
-    onPostUnlike(uuid) {
-    },
+    onPostLike(uuid) {},
+    onPostUnlike(uuid) {},
   },
-  }
   components: { PostList, ProfileHeader },
 };
 </script>

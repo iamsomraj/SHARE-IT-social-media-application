@@ -60,6 +60,10 @@ export default {
       return this.$store.getters['auth/uuid'] === this.$route.params.uuid;
     },
   },
+  methods: {
+    onPostLike(uuid) {},
+    onPostUnlike(uuid) {},
+  },
   components: { ProfileBody, ProfileHeader, PostCreator },
 };
 </script>

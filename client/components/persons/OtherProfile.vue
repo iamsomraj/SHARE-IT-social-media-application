@@ -66,6 +66,10 @@ export default {
     });
     /* END: FETCHING PROFILE DETAIL */
   },
+  methods: {
+    onPostLike(uuid) {},
+    onPostUnlike(uuid) {},
+  },
   components: {
     ProfileBody,
     ProfileHeader,

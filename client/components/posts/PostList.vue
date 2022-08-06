@@ -8,6 +8,7 @@
       :ownerName="post.creator.name"
       :ownerId="post.creator.id"
       :ownerUUID="post.creator.uuid"
+      :postLikes="post.post_likes"
       :content="post.content"
       :numberOfLikes="post.post_stats.like_count"
       :time="time(post.updated_at, post.created_at)"

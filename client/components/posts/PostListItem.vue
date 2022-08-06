@@ -56,18 +56,28 @@
     <div
       class="flex w-full items-center justify-start space-x-2 border-t px-6 py-2 text-xs"
     >
-      <!-- BEGIN: NUMBER OF LIKES AND LIKE ICON -->
+      <!-- BEGIN: LIKE ICON -->
       <div
+        v-if="!isLiked"
         class="flex cursor-pointer items-center justify-center space-x-4"
         @click="onPostLike(uuid)"
       >
-        <!-- BEGIN: LIKE ICON -->
         <heart-icon
           class="fill-transparent stroke-gray-400 hover:fill-gray-400"
         ></heart-icon>
-        <!-- END: LIKE ICON -->
       </div>
-      <!-- END: NUMBER OF LIKES AND LIKE ICON -->
+      <!-- END: LIKE ICON -->
+      <!-- BEGIN: LIKE ICON -->
+      <div
+        v-else
+        class="flex cursor-pointer items-center justify-center space-x-4"
+        @click="onPostUnlike(uuid)"
+      >
+        <heart-icon
+          class="fill-yellow-400 stroke-yellow-400 hover:fill-yellow-200 hover:stroke-yellow-200"
+        ></heart-icon>
+      </div>
+      <!-- END: LIKE ICON -->
     </div>
     <!-- END: POST LIST ITEM BOTTOM -->
   </div>
@@ -87,7 +97,18 @@ export default {
     'content',
     'numberOfLikes',
     'time',
+    'postLikes',
   ],
+  computed: {
+    loggedInUserUUID() {
+      return this.$store.getters['auth/uuid'];
+    },
+    isLiked() {
+      return this.postLikes?.some(
+        (likeRecord) => likeRecord?.creator?.uuid === this.loggedInUserUUID
+      );
+    },
+  },
   methods: {
     async onPostLike(uuid) {
       this.loading = true;

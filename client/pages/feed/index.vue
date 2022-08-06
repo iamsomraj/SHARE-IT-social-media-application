@@ -43,7 +43,7 @@ export default {
     },
   },
   async fetch() {
-    await this.$store.dispatch('feed/posts');
+    await this.$store.dispatch('feed/posts', this.token);
   },
   methods: {
     async onPostLike(uuid) {

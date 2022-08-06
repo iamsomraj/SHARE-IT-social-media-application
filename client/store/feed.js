@@ -2,7 +2,9 @@ import {
   GET_POST_FEED_URL,
   ADD_LIKE_URL,
   REMOVE_LIKE_URL,
+  getHeaders,
 } from '../util/constants';
+import axios from 'axios';
 
 export const state = () => ({
   posts: [],

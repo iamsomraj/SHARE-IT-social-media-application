@@ -36,7 +36,7 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
 const AUTH_ERROR_MESSAGES = Object.freeze({
   NO_AUTHORIZATION_HEADER: "No Authorization Header provided!",
   INVALID_TOKEN_FORMAT: "Invalid token format!",
-  INVALID_TOKEN: "Invalid token!",
+  INVALID_TOKEN: "No token found!",
   PROVIDE_TOKEN: "Please, provide token!",
   VERIFY_TOKEN_FAILURE: "Token verification failed!",
 });

@@ -1,55 +1,37 @@
 <template>
-  <div>
+  <div
+    v-if="user"
+    class="flex w-full flex-col items-center justify-center space-y-6"
+  >
     <profile-header
       v-if="user"
       :uuid="user.uuid"
       :id="user.id"
       :name="user.name"
-      :numberOfPosts="user.posts.length"
-      :numberOfFollowings="user.followers.length"
-      :numberOfFollowers="user.followings.length"
+      :numberOfPosts="user.person_stats.post_count"
+      :numberOfFollowings="user.person_stats.following_count"
+      :numberOfFollowers="user.person_stats.follower_count"
     />
-    <div class="m-4 flex justify-center">
-      <NuxtLink
-        to="/people"
-        class="block w-full cursor-pointer rounded bg-yellow-500 p-2 text-center text-2xl font-bold text-yellow-50 md:w-1/2 md:text-xl"
-        >Explore</NuxtLink
-      >
-    </div>
-    <post-list v-if="posts" :posts="posts" @onPostLike="onPostLike" />
+    <post-list class="w-full" v-if="posts" :posts="posts" />
   </div>
 </template>
 
 <script>
-import PostList from '../../components/posts/PostList.vue';
-import { addLikeToPost, getUserFeed } from '../../helpers';
 import ProfileHeader from '../../components/persons/ProfileHeader.vue';
+import PostList from '../../components/posts/PostList.vue';
 export default {
   name: 'FeedPage',
   middleware: 'authenticated',
-  data() {
-    return {
-      posts: [],
-    };
-  },
   computed: {
     user() {
       return this.$store.getters['auth/user'];
     },
-    token() {
-      return this.$store.getters['auth/token'];
+    posts() {
+      return this.$store.getters['auth/feed_posts'];
     },
   },
   async fetch() {
-    const data = await getUserFeed(this.token);
-    this.posts = data.posts;
-  },
-  methods: {
-    async onPostLike(uuid) {
-      await addLikeToPost(uuid, this.token);
-      const data = await getUserFeed(this.token);
-      this.posts = data.posts;
-    },
+    await this.$store.dispatch('auth/feed');
   },
   components: { PostList, ProfileHeader },
 };

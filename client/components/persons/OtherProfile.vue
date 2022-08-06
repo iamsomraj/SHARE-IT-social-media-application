@@ -25,7 +25,7 @@
 
         <!-- BEGIN: PROFILE BODY  -->
         <profile-body
-          :posts="profile.person_posts"
+          :posts="person_posts"
           :name="profile.name"
           @onPostLike="onPostLike"
           @onPostUnlike="onPostUnlike"
@@ -47,6 +47,9 @@ export default {
   name: 'OtherProfile',
   middleware: 'authenticated',
   computed: {
+    person_posts() {
+      return this.$store.getters['profile/posts'];
+    },
     profile() {
       return this.$store.getters['profile/profile'];
     },
@@ -69,7 +72,11 @@ export default {
   methods: {
     async onPostLike(uuid) {
       this.loading = true;
-      const res = await this.$store.dispatch('auth/likePost', uuid);
+      const payload = {
+        postUUID: uuid,
+        token: this.token,
+      };
+      const res = await this.$store.dispatch('profile/likePost', payload);
       this.loading = false;
       if (res.state) {
         this.$store.dispatch('toast/success', MESSAGES.POST_LIKE_SUCCESS);
@@ -79,7 +86,11 @@ export default {
     },
     async onPostUnlike(uuid) {
       this.loading = true;
-      const res = await this.$store.dispatch('auth/unlikePost', uuid);
+      const payload = {
+        postUUID: uuid,
+        token: this.token,
+      };
+      const res = await this.$store.dispatch('profile/unlikePost', payload);
       this.loading = false;
       if (res.state) {
         this.$store.dispatch('toast/success', MESSAGES.POST_UNLIKE_SUCCESS);

@@ -1,60 +1,36 @@
-import axios from 'axios';
 import {
+  GET_POST_FEED_URL,
   ADD_LIKE_URL,
-  getHeaders,
-  GET_PERSON_URL,
   REMOVE_LIKE_URL,
 } from '../util/constants';
 
 export const state = () => ({
-  profile: {
-    id: '',
-    uuid: '',
-    name: '',
-    email: '',
-    person_followers: [],
-    person_followings: [],
-    person_stats: {
-      id: '',
-      person_id: '',
-      post_count: 0,
-      follower_count: 0,
-      following_count: 0,
-    },
-    person_posts: [],
-  },
+  posts: [],
 });
 
 export const getters = {
-  profile: (state) => state.profile,
-  posts: (state) => state.profile.person_posts,
+  posts: (state) => state.posts,
 };
 
 export const actions = {
-  /* GET USER PROFILE */
-  async getUserProfile({ commit }, { uuid, token }) {
+  /* FETCH POSTS FOR FEED */
+  async posts({ commit, state }, token) {
     try {
-      const { data: responseData } = await axios.get(
-        `${GET_PERSON_URL}/${uuid}`,
-        {
-          ...getHeaders(token),
-        }
-      );
+      const { data: responseData } = await axios.get(`${GET_POST_FEED_URL}`, {
+        ...getHeaders(token),
+      });
       const { data, state, message } = responseData;
       if (state) {
-        commit('setProfile', data);
-      } else {
-        commit('setProfile', null);
+        commit('setPosts', data);
       }
       return { data, state, message };
     } catch (error) {
       const { data: responseData } = error?.response;
       const { data, state, message } = responseData;
-      commit('setProfile', null);
       return { data, state, message };
     }
   },
-  /* LIKE OTHER USER POST */
+  /* LIKE FEED POST */
   async likePost({ commit }, { postUUID, token }) {
     try {
       const { data: responseData } = await axios.post(
@@ -75,7 +51,7 @@ export const actions = {
       return { data, state, message };
     }
   },
-  /* UNLIKE OTHER USER POST */
+  /* UNLIKE FEED POST */
   async unlikePost({ commit }, { postUUID, token }) {
     try {
       const { data: responseData } = await axios.post(
@@ -99,15 +75,13 @@ export const actions = {
 };
 
 export const mutations = {
-  setProfile(state, profile) {
-    state.profile = profile;
+  setPosts(state, posts) {
+    state.posts = posts;
   },
   updatePost(state, post) {
-    const index = state.profile.person_posts.findIndex(
-      (p) => p.uuid === post.uuid
-    );
+    const index = state.posts.findIndex((p) => p.uuid === post.uuid);
     if (index !== -1) {
-      state.profile.person_posts[index] = post;
+      state.posts[index] = post;
     }
   },
 };

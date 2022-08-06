@@ -42,6 +42,7 @@
 import ProfileBody from '../../components/persons/ProfileBody.vue';
 import ProfileHeader from '../../components/persons/ProfileHeader.vue';
 import PostCreator from '../../components/posts/PostCreator.vue';
+import { MESSAGES } from '../../util/constants';
 
 export default {
   name: 'SelfProfile',

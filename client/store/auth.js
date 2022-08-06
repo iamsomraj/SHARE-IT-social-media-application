@@ -26,7 +26,6 @@ export const state = () => ({
     },
     person_posts: [],
   },
-  feed_posts: [],
   token: null,
 });
 
@@ -41,7 +40,6 @@ export const getters = {
   post_count: (state) => state.user.person_stats.post_count,
   follower_count: (state) => state.user.person_stats.follower_count,
   following_count: (state) => state.user.person_stats.following_count,
-  feed_posts: (state) => state.feed_posts,
 };
 
 export const actions = {
@@ -164,25 +162,6 @@ export const actions = {
       return { data, state, message };
     }
   },
-  /* USER FEED */
-  async feed({ commit, state }) {
-    const token = state?.token || '';
-    try {
-      const { data: responseData } = await axios.get(`${GET_POST_FEED_URL}`, {
-        ...getHeaders(token),
-      });
-      const { data, state, message } = responseData;
-      console.log("🚀 ~ file: auth.js ~ line 175 ~ feed ~ data", data);
-      if (state) {
-        commit('setFeedPosts', data);
-      }
-      return { data, state, message };
-    } catch (error) {
-      const { data: responseData } = error?.response;
-      const { data, state, message } = responseData;
-      return { data, state, message };
-    }
-  },
 };
 
 export const mutations = {
@@ -206,9 +185,6 @@ export const mutations = {
   },
   incrementPostCount(state) {
     state.user.person_stats.post_count = state.user.person_stats.post_count + 1;
-  },
-  setFeedPosts(state, posts) {
-    state.feed_posts = posts;
   },
   clear(state) {
     state.user = {

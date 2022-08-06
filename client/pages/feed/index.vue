@@ -26,6 +26,8 @@
 <script>
 import ProfileHeader from '../../components/persons/ProfileHeader.vue';
 import PostList from '../../components/posts/PostList.vue';
+import { MESSAGES } from '../../util/constants';
+
 export default {
   name: 'FeedPage',
   middleware: 'authenticated',
@@ -33,17 +35,24 @@ export default {
     user() {
       return this.$store.getters['auth/user'];
     },
+    token() {
+      return this.$store.getters['auth/token'];
+    },
     posts() {
-      return this.$store.getters['auth/feed_posts'];
+      return this.$store.getters['feed/posts'];
     },
   },
   async fetch() {
-    await this.$store.dispatch('auth/feed');
+    await this.$store.dispatch('feed/posts');
   },
   methods: {
     async onPostLike(uuid) {
       this.loading = true;
-      const res = await this.$store.dispatch('auth/likePost', uuid);
+      const payload = {
+        postUUID: uuid,
+        token: this.token,
+      };
+      const res = await this.$store.dispatch('feed/likePost', payload);
       this.loading = false;
       if (res.state) {
         this.$store.dispatch('toast/success', MESSAGES.POST_LIKE_SUCCESS);
@@ -53,7 +62,11 @@ export default {
     },
     async onPostUnlike(uuid) {
       this.loading = true;
-      const res = await this.$store.dispatch('auth/unlikePost', uuid);
+      const payload = {
+        postUUID: uuid,
+        token: this.token,
+      };
+      const res = await this.$store.dispatch('feed/unlikePost', payload);
       this.loading = false;
       if (res.state) {
         this.$store.dispatch('toast/success', MESSAGES.POST_UNLIKE_SUCCESS);

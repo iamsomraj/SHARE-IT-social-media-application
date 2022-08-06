@@ -16,10 +16,10 @@ class PostService extends RootService {
   }
 
   /**
-   * @description ADDS ONE LIKE FOR ONE POST
+   * @description ADDS LIKE ON POST
    * @param {{ id }} user - logged in user
    * @param {string} uuid - post's uuid
-   * @route POST /api/v1/posts/:uuid
+   * @route POST /api/v1/posts/like/:uuid
    * @access private
    */
   async addLike(user, uuid) {
@@ -38,6 +38,7 @@ class PostService extends RootService {
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: DATABASE OPERATIONS */
+    /* INSERT POST LIKE RECORD */
     const likeRecord = await PostLikesModel.query().insert({
       post_id: postRecord.id,
       created_by: user.id,
@@ -45,11 +46,50 @@ class PostService extends RootService {
     });
     if (!likeRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
 
+    /* UPDATE POST STAT RECORD */
     const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).increment("like_count", 1);
     if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
     if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
+    /* END: DATABASE OPERATIONS */
+
+    return result;
+  }
+
+  /**
+   * @description REMOVES LIKE ON POST
+   * @param {{ id }} user - logged in user
+   * @param {string} uuid - post's uuid
+   * @route POST /api/v1/posts/unlike/:uuid
+   * @access private
+   */
+  async removeLike(user, uuid) {
+    /* BEGIN: VALIDATIONS */
+    if (!uuid) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
+    /* END: VALIDATIONS */
+
+    /* BEGIN: DATABASE VALIDATIONS */
+    /* CHECKING IF POST RECORD EXISTS OR NOT */
+    const postRecord = await PostsModel.query().findOne({ uuid, is_deleted: false });
+    if (!postRecord) this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
+
+    /* CHECKING IF POST LIKE RECORD FOR THE GIVEN USER EXISTS OR NOT */
+    const postLikeRecord = await PostLikesModel.query().findOne({ post_id: postRecord.id, created_by: user.id });
+    if (!postLikeRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.NOT_LIKED_YET);
+    /* END: DATABASE VALIDATIONS */
+
+    /* BEGIN: DATABASE OPERATIONS */
+    /* DELETE POST LIKE RECORD */
+    const likeRecord = await PostLikesModel.query().deleteById(postLikeRecord.id);
+    if (!likeRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNLIKE_FAILURE);
+
+    /* UPDATE POST STAT RECORD */
+    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).decrement("like_count", 1);
+    if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNLIKE_FAILURE);
+
+    const result = await PostsModel.getPostDetails(postRecord.uuid);
+    if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNLIKE_FAILURE);
     /* END: DATABASE OPERATIONS */
 
     return result;

@@ -6,6 +6,7 @@ const PERSON_SUCCESS_MESSAGES = Object.freeze({
   FETCH_PERSON_PROFILE_SUCCESS: "Person profile fetched successfully!",
   FOLLOW_SUCCESS: "Follow successful!",
   LIKE_SUCCESS: "Like successful!",
+  UNLIKE_SUCCESS: "Unlike successful!",
   POST_SUCCESS: "Post successful!",
   PERSON_FEED_SUCCESS: "Person feed fetched successfully!",
 });
@@ -22,6 +23,7 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
   REGISTER_FAILURE: "Registration failed!",
   FOLLOWING_FAILURE: "Following failed!",
   LIKE_FAILURE: "Like failed!",
+  UNLIKE_FAILURE: "Unlike failed!",
   FETCH_USER_DATA_FAILURE: "Fetching user data failed!",
   REGISTER_USER_FAILURE: "Registration failed!",
   POST_FAILURE: "Post failed!",
@@ -45,6 +47,7 @@ const GENERAL_MESSAGES = Object.freeze({
   SOMETHING_WENT_WRONG: "Something went wrong!",
   PROVIDE_POST_DETAILS: "Please, provide post details!",
   ALREADY_LIKED_POST: "You already liked this post!",
+  NOT_LIKED_YET: "You have not liked this post yet!",
 });
 
 module.exports = {

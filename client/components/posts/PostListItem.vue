@@ -120,7 +120,16 @@ export default {
         this.$store.dispatch('toast/error', MESSAGES.POST_LIKE_FAILURE);
       }
     },
-    onPostUnlike(uuid) {},
+    async onPostUnlike(uuid) {
+      this.loading = true;
+      const res = await this.$store.dispatch('auth/unlikePost', uuid);
+      this.loading = false;
+      if (res.state) {
+        this.$store.dispatch('toast/success', MESSAGES.POST_UNLIKE_SUCCESS);
+      } else {
+        this.$store.dispatch('toast/error', MESSAGES.POST_UNLIKE_FAILURE);
+      }
+    },
   },
   components: { ProfilePicture, HeartIcon },
 };

@@ -4,6 +4,7 @@ import {
   getHeaders,
   LOGIN_URL,
   REGISTER_URL,
+  REMOVE_LIKE_URL,
 } from '../util/constants';
 import axios from 'axios';
 
@@ -128,7 +129,28 @@ export const actions = {
         }
       );
       const { data, state, message } = responseData;
-      console.log('🚀 ~ file: auth.js ~ line 131 ~ likePost ~ data', data);
+      if (state) {
+        commit('updatePost', data);
+      }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
+      return { data, state, message };
+    }
+  },
+  /* USER POST UNLIKE */
+  async unlikePost({ commit, state }, uuid) {
+    const token = state?.token || '';
+    try {
+      const { data: responseData } = await axios.post(
+        `${REMOVE_LIKE_URL}/${uuid}`,
+        null,
+        {
+          ...getHeaders(token),
+        }
+      );
+      const { data, state, message } = responseData;
       if (state) {
         commit('updatePost', data);
       }

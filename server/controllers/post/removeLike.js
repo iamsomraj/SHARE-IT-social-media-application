@@ -5,20 +5,20 @@ const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js")
 
 /**
  * @access private
- * @description adds like for post
- * @route POST /api/v1/posts/like/:uuid
+ * @description removes like for post
+ * @route POST /api/v1/posts/unlike/:uuid
  */
-const addLike = asyncHandler(async (req, res) => {
+const removeLike = asyncHandler(async (req, res) => {
   const { uuid } = req.params;
   const { user } = req;
   const postService = new PostService();
-  const result = await postService.addLike(user, uuid);
+  const result = await postService.removeLike(user, uuid);
 
-  res.status(HTTP_CODES.CREATED).json({
+  res.status(HTTP_CODES.OK).json({
     state: true,
     data: result,
-    message: PERSON_SUCCESS_MESSAGES.LIKE_SUCCESS,
+    message: PERSON_SUCCESS_MESSAGES.UNLIKE_SUCCESS,
   });
 });
 
-module.exports = addLike;
+module.exports = removeLike;

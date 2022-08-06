@@ -28,6 +28,7 @@ export const GET_PERSON_URL = `${PERSON_URL}`;
 export const CREATE_POST_URL = `${POST_URL}/create`;
 export const GET_POST_FEED_URL = `${POST_URL}/feed`;
 export const ADD_LIKE_URL = `${POST_URL}/like`;
+export const REMOVE_LIKE_URL = `${POST_URL}/unlike`;
 
 export const MESSAGES = Object.freeze({
   LOGIN_SUCCESS: 'You have successfully logged in!',

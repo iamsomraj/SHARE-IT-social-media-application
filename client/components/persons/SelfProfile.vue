@@ -12,6 +12,7 @@
           :uuid="user.uuid"
           :id="user.id"
           :name="user.name"
+          :email="user.email"
           :numberOfPosts="user.person_stats.post_count"
           :numberOfFollowers="user.person_stats.follower_count"
           :numberOfFollowings="user.person_stats.following_count"

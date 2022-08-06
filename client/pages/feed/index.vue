@@ -41,8 +41,26 @@ export default {
     await this.$store.dispatch('auth/feed');
   },
   methods: {
-    onPostLike(uuid) {},
-    onPostUnlike(uuid) {},
+    async onPostLike(uuid) {
+      this.loading = true;
+      const res = await this.$store.dispatch('auth/likePost', uuid);
+      this.loading = false;
+      if (res.state) {
+        this.$store.dispatch('toast/success', MESSAGES.POST_LIKE_SUCCESS);
+      } else {
+        this.$store.dispatch('toast/error', MESSAGES.POST_LIKE_FAILURE);
+      }
+    },
+    async onPostUnlike(uuid) {
+      this.loading = true;
+      const res = await this.$store.dispatch('auth/unlikePost', uuid);
+      this.loading = false;
+      if (res.state) {
+        this.$store.dispatch('toast/success', MESSAGES.POST_UNLIKE_SUCCESS);
+      } else {
+        this.$store.dispatch('toast/error', MESSAGES.POST_UNLIKE_FAILURE);
+      }
+    },
   },
   components: { PostList, ProfileHeader },
 };

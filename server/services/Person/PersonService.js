@@ -77,7 +77,7 @@ class PersonService extends RootService {
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: PERSON DETAILS INSERTION */
-    const insertedPerson = await PersonsModel.query().insert({
+    const insertedPerson = await PersonsModel.query().insertAndFetch({
       name,
       email,
       password: hash(password),
@@ -86,21 +86,20 @@ class PersonService extends RootService {
     if (!insertedPerson) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.REGISTER_PERSON_FAILURE);
     /* END: PERSON DETAILS INSERTION */
 
-    /* BEGIN: PERSON DETAILS FETCHING */
-    const registeredPerson = await PersonsModel.getPersonDetailsByEmail(email);
-    /* END: PERSON DETAILS FETCHING */
-
-    if (!registeredPerson) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
-
     /* BEGIN: INSERT PERSON STATS RECORD */
     const insertedStatRecord = await PersonStatsModel.query().insert({
-      person_id: registeredPerson.id,
+      person_id: insertedPerson.id,
       post_count: 0,
       following_count: 0,
       follower_count: 0,
     });
     if (!insertedStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.REGISTER_PERSON_FAILURE);
     /* END: INSERT PERSON STATS RECORD */
+
+    /* BEGIN: PERSON DETAILS FETCHING */
+    const registeredPerson = await PersonsModel.getPersonDetailsByEmail(email);
+    /* END: PERSON DETAILS FETCHING */
+    if (!registeredPerson) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
 
     /* BEGIN: TOKEN GENERATION */
     const token = generateToken(registeredPerson.id);

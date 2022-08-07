@@ -3,7 +3,7 @@
     class="flex w-full flex-col items-start justify-center space-y-4 md:w-1/2"
   >
     <!-- BEGIN: SEARCH INPUT -->
-    <div class="w-full px-6">
+    <div class="w-full px-6 md:px-0">
       <input
         type="text"
         class="w-full rounded-xl bg-slate-100 px-4 py-4 text-xl text-slate-600 placeholder:text-slate-400 focus:outline-none"
@@ -25,6 +25,14 @@
       :person="person"
     >
     </person-item>
+    <div
+      v-else-if="people.length === 0 && search.length > 3"
+      class="flex w-full items-center justify-center"
+    >
+      <div class="text-center text-xl font-bold text-slate-600">
+        No results found.
+      </div>
+    </div>
     <!-- END: SEARCH RESULTS -->
   </div>
 </template>
@@ -34,7 +42,6 @@ import axios from 'axios';
 import { getHeaders, MESSAGES, SEARCH_PEOPLE_URL } from '../../util/constants';
 import LoaderIcon from '../assets/LoaderIcon.vue';
 import PersonItem from './PersonItem.vue';
-import { debounce } from './../../util/helpers.js';
 
 export default {
   name: 'SearchPeople',
@@ -57,8 +64,7 @@ export default {
         this.people = [];
         return;
       }
-
-      debounce(this.searchPeople(this.search), 2000);
+      this.searchPeople(this.search);
     },
     async searchPeople(value) {
       try {

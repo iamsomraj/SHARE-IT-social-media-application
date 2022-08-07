@@ -270,12 +270,14 @@ class PersonService extends RootService {
    * @param {string} searchQuery - search query
    */
   async search(user, searchQuery) {
+    const search = searchQuery.toLowerCase();
+
     /* BEGIN: DATABASE OPERATIONS */
     const personResults = await PersonsModel.query()
       .select("id", "uuid", "name", "email", "created_at", "updated_at")
       .where((builder) => {
-        builder.where("name", "like", `%${searchQuery}%`);
-        builder.orWhere("email", "like", `%${searchQuery}%`);
+        builder.whereRaw(`LOWER(name) LIKE ?`, [`%${search}%`]);
+        builder.orWhereRaw(`LOWER(email) LIKE ?`, [`%${search}%`]);
       })
       .andWhere("id", "!=", user.id);
     /* END: DATABASE OPERATIONS */

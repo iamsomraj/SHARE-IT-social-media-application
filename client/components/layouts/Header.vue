@@ -25,6 +25,11 @@
             class="h-6 w-6 cursor-pointer fill-slate-300 hover:fill-blue-400 active:fill-blue-400"
           />
         </div>
+        <div @click="redirectToSearch">
+          <search-icon
+            class="h-6 w-6 cursor-pointer fill-slate-300 hover:fill-blue-400 active:fill-blue-400"
+          />
+        </div>
         <div @click="redirectToProfile">
           <ProfilePicture
             :uuid="user.uuid"
@@ -47,6 +52,7 @@
 import { MESSAGES } from '../../util/constants.js';
 import FeedIcon from '../assets/FeedIcon.vue';
 import LogoutIcon from '../assets/LogoutIcon.vue';
+import SearchIcon from '../assets/SearchIcon.vue';
 import UserIcon from '../assets/UserIcon.vue';
 import ProfilePicture from '../persons/ProfilePicture.vue';
 import TertiaryButton from '../user-interfaces/TertiaryButton.vue';
@@ -74,6 +80,9 @@ export default {
     redirectToProfile() {
       this.$router.push(`/profile/${this.user.uuid}`);
     },
+    redirectToSearch() {
+      this.$router.push('/search');
+    },
   },
   components: {
     TertiaryButton,
@@ -81,6 +90,7 @@ export default {
     LogoutIcon,
     UserIcon,
     ProfilePicture,
+    SearchIcon,
   },
 };
 </script>

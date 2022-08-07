@@ -1,5 +1,5 @@
 const express = require("express");
-const { getPersonProfile, registerPerson, loginPerson, followPerson, getPeople, getUserData, unfollowPerson } = require("../controllers/person/index.js");
+const { getPersonProfile, registerPerson, loginPerson, followPerson, getPeople, getUserData, unfollowPerson, search } = require("../controllers/person/index.js");
 const protect = require("../middlewares/authMiddleware.js");
 const router = express.Router();
 
@@ -9,5 +9,6 @@ router.route("/follow/:uuid").post(protect, followPerson);
 router.route("/unfollow/:uuid").post(protect, unfollowPerson);
 router.route("/people").get(protect, getPeople);
 router.route("/:uuid").get(protect, getPersonProfile);
+router.route("/search/:searchQuery").get(protect, search);
 
 module.exports = router;

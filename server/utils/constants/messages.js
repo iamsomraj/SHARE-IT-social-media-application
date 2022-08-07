@@ -5,6 +5,7 @@ const PERSON_SUCCESS_MESSAGES = Object.freeze({
   REGISTER_SUCCESS: "Registration successful!",
   FETCH_PERSON_PROFILE_SUCCESS: "Person profile fetched successfully!",
   FOLLOW_SUCCESS: "Follow successful!",
+  SEARCH_SUCCESS: "Search successful!",
   UNFOLLOW_SUCCESS: "Unfollow successful!",
   LIKE_SUCCESS: "Like successful!",
   UNLIKE_SUCCESS: "Unlike successful!",
@@ -14,6 +15,7 @@ const PERSON_SUCCESS_MESSAGES = Object.freeze({
 
 const PERSON_ERROR_MESSAGES = Object.freeze({
   LOGIN_FAILURE: "Login failed!",
+  PROVIDE_SEARCH_QUERY: "Provide search query!",
   PROVIDE_EMAIL_AND_PASSWORD: "Please, provide Email and Password!",
   PROVIDE_NAME_EMAIL_AND_PASSWORD: "Please, provide Name, Email and Password!",
   INVALID_NAME_EMAIL_OR_PASSWORD: "Name, Email or Password has less than 4 characters!",
@@ -23,6 +25,7 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
   USER_ALREADY_EXISTS: "User already exists!",
   REGISTER_FAILURE: "Registration failed!",
   FOLLOWING_FAILURE: "Following failed!",
+  SEARCH_FAILURE: "Search failed due to an issue!",
   UNFOLLOWING_FAILURE: "Unfollowing failed!",
   LIKE_FAILURE: "Like failed!",
   UNLIKE_FAILURE: "Unlike failed!",

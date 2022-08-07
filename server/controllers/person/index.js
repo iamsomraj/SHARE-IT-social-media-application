@@ -5,6 +5,7 @@ const followPerson = require("./followPerson.js");
 const unfollowPerson = require("./unfollowPerson.js");
 const getPeople = require("./getPeople.js");
 const getUserData = require("./getUserData.js");
+const search = require("./search.js");
 
 module.exports = {
   registerPerson,
@@ -14,4 +15,5 @@ module.exports = {
   unfollowPerson,
   getPeople,
   getUserData,
+  search,
 };

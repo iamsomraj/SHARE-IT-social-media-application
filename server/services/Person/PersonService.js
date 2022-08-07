@@ -97,9 +97,9 @@ class PersonService extends RootService {
       person_id: registeredPerson.id,
       post_count: 0,
       following_count: 0,
-      followers_count: 0,
+      follower_count: 0,
     });
-    if (!insertedStats) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.REGISTER_PERSON_FAILURE);
+    if (!insertedStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.REGISTER_PERSON_FAILURE);
     /* END: INSERT PERSON STATS RECORD */
 
     /* BEGIN: TOKEN GENERATION */

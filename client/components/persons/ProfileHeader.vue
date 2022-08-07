@@ -16,6 +16,7 @@
         :name="name"
         :email="email"
       ></profile-detail>
+      <user-follower class="col-span-8"/>
     </div>
   </div>
 </template>
@@ -24,6 +25,7 @@
 import ProfileDetail from './ProfileDetail.vue';
 import ProfileStats from './ProfileStats.vue';
 import ProfilePicture from './ProfilePicture.vue';
+import UserFollower from './UserFollower.vue';
 export default {
   name: 'ProfileHeader',
   props: [
@@ -40,7 +42,7 @@ export default {
       return this.name.charAt(0);
     },
   },
-  components: { ProfilePicture, ProfileStats, ProfileDetail },
+  components: { ProfilePicture, ProfileStats, ProfileDetail, UserFollower },
 };
 </script>
 

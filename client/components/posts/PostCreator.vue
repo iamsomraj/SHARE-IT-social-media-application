@@ -13,7 +13,7 @@
 
 <script>
 import { MESSAGES } from '../../util/constants';
-import PostInput from '../user-interfaces/PostInput.vue';
+import PostInput from '../posts/PostInput.vue';
 import SecondaryButton from '../user-interfaces/SecondaryButton.vue';
 export default {
   name: 'PostCreator',

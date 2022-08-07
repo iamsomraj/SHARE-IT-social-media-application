@@ -1,6 +1,6 @@
 <template>
   <!-- BEGIN: CURRENT LOGGED IN USER PROFILE COMPONENT -->
-  <div class="mt-8 w-full">
+  <div class="w-full">
     <!-- BEGIN: CURRENT LOGGED IN USER PROFILE COMPONENT MAIN SECTION -->
     <div
       v-if="user"

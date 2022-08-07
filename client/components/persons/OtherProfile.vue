@@ -1,6 +1,6 @@
 <template>
   <!-- BEGIN: PROFILE COMPONENT -->
-  <div class="mt-8 w-full">
+  <div class="w-full">
     <!-- BEGIN: PROFILE COMPONENT MAIN SECTION -->
     <div
       v-if="profile"

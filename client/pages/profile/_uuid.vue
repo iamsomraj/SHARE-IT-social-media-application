@@ -1,6 +1,8 @@
 <template>
-  <self-profile v-if="isLoggedInUserProfile"></self-profile>
-  <other-profile v-else></other-profile>
+  <div class="mt-4 mb-16 w-full md:my-6">
+    <self-profile v-if="isLoggedInUserProfile"></self-profile>
+    <other-profile v-else></other-profile>
+  </div>
 </template>
 
 <script>

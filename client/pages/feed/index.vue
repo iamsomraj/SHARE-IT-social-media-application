@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="user"
-    class="mt-8 flex w-full flex-col items-center justify-center space-y-6"
+    class="mt-4 mb-16 md:my-6 flex w-full flex-col items-center justify-center space-y-6"
   >
     <post-list
       class="w-full"

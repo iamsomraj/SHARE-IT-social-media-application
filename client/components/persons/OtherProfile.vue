@@ -18,10 +18,6 @@
       />
       <!-- END: PROFILE HEADER  -->
 
-      <!-- BEGIN: PERSON FOLLOWER -->
-      <user-follower />
-      <!-- BEGIN: PERSON FOLLOWER -->
-
       <!-- BEGIN: PROFILE BODY  -->
       <profile-body
         :posts="person_posts"
@@ -39,7 +35,6 @@
 <script>
 import ProfileBody from '../../components/persons/ProfileBody.vue';
 import ProfileHeader from '../../components/persons/ProfileHeader.vue';
-import UserFollower from '../../components/persons/UserFollower.vue';
 import { MESSAGES } from '../../util/constants';
 
 export default {
@@ -101,7 +96,6 @@ export default {
   components: {
     ProfileBody,
     ProfileHeader,
-    UserFollower,
   },
 };
 </script>

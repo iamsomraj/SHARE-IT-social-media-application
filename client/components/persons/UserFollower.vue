@@ -1,33 +1,39 @@
 <template>
-  <div class="flex justify-center items-center">
-    <div class="mb-4 mx-4 space-y-4 w-full md:w-1/2 border">
-      <button
-        v-if="!doesUserFollow"
-        class="bg-green-400 w-full p-2 cursor-pointer text-green-50 font-bold rounded"
-        @click="onUserFollow"
-      >
-        Follow
-      </button>
-      <button
-        v-else
-        class="bg-purple-400 w-full p-2 cursor-not-allowed text-green-50 font-bold rounded"
-        disabled
-      >
-        Followed
-      </button>
-    </div>
+  <div class="flex items-center justify-center">
+    <primary-button v-if="!doesUserFollow" @click="onUserFollow">
+      Follow
+    </primary-button>
+    <secondary-button v-else>Followed</secondary-button>
   </div>
 </template>
 
 <script>
+import PrimaryButton from '../user-interfaces/PrimaryButton.vue';
+import SecondaryButton from '../user-interfaces/SecondaryButton.vue';
 export default {
   name: 'UserFollower',
-  props: ['doesUserFollow'],
+  computed: {
+    profile() {
+      return this.$store.getters['profile/profile'];
+    },
+    user() {
+      return this.$store.getters['auth/user'];
+    },
+    followers() {
+      return this.$store.getters['auth/followers'];
+    },
+    doesUserFollow() {
+      return this.followers.some(
+        (person) => person.followed_id === this.profile.id
+      );
+    },
+  },
   methods: {
     onUserFollow() {
       this.$emit('onUserFollow');
     },
   },
+  components: { PrimaryButton, SecondaryButton },
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full flex-col items-center justify-start">
-    <div class="grid w-full grid-cols-12 px-6 md:w-1/2 gap-y-4">
+    <div class="grid w-full grid-cols-12 gap-y-4 px-6 md:w-1/2">
       <profile-picture
         :uuid="uuid"
         :name="name"
@@ -16,7 +16,8 @@
         :name="name"
         :email="email"
       ></profile-detail>
-      <user-follower class="col-span-8"/>
+      <div v-if="!isSelf" class="col-span-2 md:hidden"></div>
+      <user-follower v-if="!isSelf" class="col-span-6 md:col-span-8" />
     </div>
   </div>
 </template>
@@ -40,6 +41,9 @@ export default {
   computed: {
     initialLetterOfName() {
       return this.name.charAt(0);
+    },
+    isSelf() {
+      return this.uuid === this.$store.getters['auth/uuid'];
     },
   },
   components: { ProfilePicture, ProfileStats, ProfileDetail, UserFollower },

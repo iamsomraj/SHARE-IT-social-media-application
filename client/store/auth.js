@@ -1,13 +1,14 @@
+import axios from 'axios';
 import {
   ADD_LIKE_URL,
   CREATE_POST_URL,
+  FOLLOW_URL,
   getHeaders,
-  GET_POST_FEED_URL,
   LOGIN_URL,
   REGISTER_URL,
   REMOVE_LIKE_URL,
+  UNFOLLOW_URL,
 } from '../util/constants';
-import axios from 'axios';
 
 export const state = () => ({
   user: {
@@ -162,6 +163,50 @@ export const actions = {
       return { data, state, message };
     }
   },
+  /* USER FOLLOW */
+  async follow({ commit, state }, uuid) {
+    const token = state?.token || '';
+    try {
+      const { data: responseData } = await axios.post(
+        `${FOLLOW_URL}/${uuid}`,
+        null,
+        {
+          ...getHeaders(token),
+        }
+      );
+      const { data, state, message } = responseData;
+      if (state) {
+        commit('updateUser', data);
+      }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
+      return { data, state, message };
+    }
+  },
+  /* USER UNFOLLOW */
+  async unfollow({ commit, state }, uuid) {
+    const token = state?.token || '';
+    try {
+      const { data: responseData } = await axios.post(
+        `${UNFOLLOW_URL}/${uuid}`,
+        null,
+        {
+          ...getHeaders(token),
+        }
+      );
+      const { data, state, message } = responseData;
+      if (state) {
+        commit('updateUser', data);
+      }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
+      return { data, state, message };
+    }
+  },
 };
 
 export const mutations = {
@@ -185,6 +230,9 @@ export const mutations = {
   },
   incrementPostCount(state) {
     state.user.person_stats.post_count = state.user.person_stats.post_count + 1;
+  },
+  updateUser(state, user) {
+    state.user = { ...user };
   },
   clear(state) {
     state.user = {

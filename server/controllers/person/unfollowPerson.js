@@ -4,15 +4,15 @@ const HTTP_CODES = require("../../utils/constants/http-codes.js");
 const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js");
 
 /**
- * @description FOLLOWS A PERSON
- * @route POST /api/v1/persons/follow/:uuid
+ * @description UNFOLLOWS A PERSON
+ * @route POST /api/v1/persons/unfollow/:uuid
  * @access private
  */
-const followPerson = asyncHandler(async (req, res) => {
+const unfollowPerson = asyncHandler(async (req, res) => {
   const { uuid } = req.params;
   const { user } = req;
   const personService = new PersonService();
-  const result = await personService.followPerson(user, uuid);
+  const result = await personService.unfollowPerson(user, uuid);
 
   res.status(HTTP_CODES.OK).json({
     state: true,
@@ -21,4 +21,4 @@ const followPerson = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = followPerson;
+module.exports = unfollowPerson;

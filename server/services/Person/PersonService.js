@@ -221,7 +221,46 @@ class PersonService extends RootService {
     if (!personToBeFollowedStatsRecord || !personFollowingStatsRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UPDATE_PERSON_STATS_FAILURE);
     /* END: PERSON STATS UPDATION */
 
-    return followRecord;
+    /* FETCH PERSON DETAILS */
+    const result = await PersonsModel.getPersonDetailsByEmail(user.email);
+    if (!result) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+
+    return result;
+  }
+
+  /**
+   * @description UNFOLLOWS A PERSON
+   * @param {{ uuid, id, email }} user - logged in user's uuid, id, email
+   * @param {string} uuid - person's uuid to be unfollowed
+   * @route POST /api/v1/persons/unfollow/:uuid
+   * @access private
+   */
+  async unfollowPerson(user, uuid) {
+    /* BEGIN: VALIDATIONS */
+    if (!user || !user.id || !user.email) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.INVALID_USER_DETAILS);
+    if (!uuid) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.PROVIDE_USER_DETAILS);
+    /* END: VALIDATIONS */
+
+    /* BEGIN: DATABASE VALIDATIONS */
+    const personToBeUnfollowed = await PersonsModel.checkIfPersonExistsByUUID(uuid);
+    if (!personToBeUnfollowed) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+    /* END: DATABASE VALIDATIONS */
+
+    /* BEGIN: FOLLOW DETAILS DELETE */
+    await FollowingsModel.query().delete().where("follower_id", user.id).andWhere("followed_id", personToBeUnfollowed.id);
+    /* END: FOLLOW DETAILS DELETE */
+
+    /* BEGIN: PERSON STATS UPDATION */
+    const personToBeUnfollowedStatsRecord = await PersonStatsModel.query().where("person_id", personToBeUnfollowed.id).decrement("follower_count", 1);
+    const personUnfollowingStatsRecord = await PersonStatsModel.query().where("person_id", user.id).decrement("following_count", 1);
+    if (!personToBeUnfollowedStatsRecord || !personUnfollowingStatsRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UPDATE_PERSON_STATS_FAILURE);
+    /* END: PERSON STATS UPDATION */
+
+    /* FETCH PERSON DETAILS */
+    const result = await PersonsModel.getPersonDetailsByEmail(user.email);
+    if (!result) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+
+    return result;
   }
 }
 

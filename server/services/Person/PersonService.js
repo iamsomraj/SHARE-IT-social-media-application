@@ -4,6 +4,7 @@ const RootService = require("../Root/RootService");
 const HTTP_CODES = require("../../utils/constants/http-codes");
 const { PERSON_ERROR_MESSAGES } = require("../../utils/constants/messages");
 const PersonStatsModel = require("../../models/PersonStatsModel");
+const FollowingsModel = require("../../models/FollowingsModel");
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL PERSON RELATED CONTROLLERS

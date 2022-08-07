@@ -175,8 +175,9 @@ export const actions = {
         }
       );
       const { data, state, message } = responseData;
+      console.log('🚀 ~ file: auth.js ~ line 178 ~ follow ~ data', data);
       if (state) {
-        commit('updateUser', data);
+        commit('setUser', data);
       }
       return { data, state, message };
     } catch (error) {
@@ -197,8 +198,9 @@ export const actions = {
         }
       );
       const { data, state, message } = responseData;
+      console.log('🚀 ~ file: auth.js ~ line 200 ~ unfollow ~ data', data);
       if (state) {
-        commit('updateUser', data);
+        commit('setUser', data);
       }
       return { data, state, message };
     } catch (error) {
@@ -230,9 +232,6 @@ export const mutations = {
   },
   incrementPostCount(state) {
     state.user.person_stats.post_count = state.user.person_stats.post_count + 1;
-  },
-  updateUser(state, user) {
-    state.user = { ...user };
   },
   clear(state) {
     state.user = {

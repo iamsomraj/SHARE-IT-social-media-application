@@ -31,6 +31,9 @@ export default {
     user() {
       return this.$store.getters['auth/user'];
     },
+    token() {
+      return this.$store.getters['auth/token'];
+    },
     followers() {
       return this.$store.getters['auth/followers'];
     },
@@ -50,7 +53,10 @@ export default {
       this.loading = false;
       if (res.state) {
         this.$store.dispatch('toast/success', MESSAGES.PERSON_FOLLOW_SUCCESS);
-        this.$store.dispatch('profile/getUserProfile', this.profile.uuid);
+        await this.$store.dispatch('profile/getUserProfile', {
+          uuid: this.profile.uuid,
+          token: this.token,
+        });
       } else {
         this.$store.dispatch('toast/error', MESSAGES.PERSON_FOLLOW_FAILURE);
       }
@@ -64,7 +70,10 @@ export default {
       this.loading = false;
       if (res.state) {
         this.$store.dispatch('toast/success', MESSAGES.PERSON_UNFOLLOW_SUCCESS);
-        this.$store.dispatch('profile/getUserProfile', this.profile.uuid);
+        await this.$store.dispatch('profile/getUserProfile', {
+          uuid: this.profile.uuid,
+          token: this.token,
+        });
       } else {
         this.$store.dispatch('toast/error', MESSAGES.PERSON_UNFOLLOW_FAILURE);
       }

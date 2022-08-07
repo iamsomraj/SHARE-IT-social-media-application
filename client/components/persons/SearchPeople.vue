@@ -3,13 +3,16 @@
     class="flex w-full flex-col items-start justify-center space-y-4 md:w-1/2"
   >
     <!-- BEGIN: SEARCH INPUT -->
-    <div class="w-full px-6 md:px-0">
+    <div class="relative w-full px-6 md:px-0">
       <input
-        type="text"
-        class="w-full rounded-xl bg-slate-100 p-2 text-sm text-slate-600 placeholder:text-slate-400 focus:outline-none"
-        placeholder="Search for people.."
+        ref="searchInput"
+        type="search"
+        class="w-full rounded-xl bg-slate-100 p-2 pl-8 text-sm text-slate-600 placeholder:text-slate-400 focus:outline-blue-400"
         :value="search"
         @input="findPeople"
+      />
+      <search-icon
+        class="absolute top-2.5 left-8 h-4 w-4 stroke-slate-600 md:left-2"
       />
     </div>
     <!-- END: SEARCH INPUT -->
@@ -41,6 +44,7 @@
 import axios from 'axios';
 import { getHeaders, MESSAGES, SEARCH_PEOPLE_URL } from '../../util/constants';
 import LoaderIcon from '../assets/LoaderIcon.vue';
+import SearchIcon from '../assets/SearchIcon.vue';
 import PersonItem from './PersonItem.vue';
 
 export default {
@@ -51,6 +55,9 @@ export default {
       people: [],
       loading: false,
     };
+  },
+  mounted() {
+    this.$refs.searchInput.focus();
   },
   computed: {
     token() {
@@ -64,36 +71,22 @@ export default {
         this.people = [];
         return;
       }
+
       this.searchPeople(this.search);
     },
     async searchPeople(value) {
-      try {
-        this.loading = true;
-        const { data: responseData } = await axios.post(
-          SEARCH_PEOPLE_URL,
-          {
-            searchQuery: value,
-          },
-          {
-            ...getHeaders(this.token),
-          }
-        );
-        this.loading = false;
-        const { data, state } = responseData;
-        if (state) {
-          this.people = data;
-        } else {
-          this.$store.dispatch('toast/error', MESSAGES.SEARCH_FAILURE);
-          this.search = '';
-          this.people = [];
-        }
-      } catch (error) {
+      this.loading = true;
+      const { data, state } = await this.$store.dispatch('auth/search', value);
+      this.loading = false;
+      if (state) {
+        this.people = data;
+      } else {
         this.$store.dispatch('toast/error', MESSAGES.SEARCH_FAILURE);
         this.search = '';
         this.people = [];
       }
     },
   },
-  components: { LoaderIcon, PersonItem },
+  components: { LoaderIcon, PersonItem, SearchIcon },
 };
 </script>

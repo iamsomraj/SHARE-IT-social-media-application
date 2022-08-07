@@ -7,6 +7,7 @@ import {
   LOGIN_URL,
   REGISTER_URL,
   REMOVE_LIKE_URL,
+  SEARCH_PEOPLE_URL,
   UNFOLLOW_URL,
 } from '../util/constants';
 
@@ -200,6 +201,27 @@ export const actions = {
       if (state) {
         commit('setUser', data);
       }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
+      return { data, state, message };
+    }
+  },
+  /* USER SEARCH */
+  async search({ state }, query) {
+    const token = state?.token || '';
+    try {
+      const { data: responseData } = await axios.post(
+        `${SEARCH_PEOPLE_URL}`,
+        {
+          searchQuery: query,
+        },
+        {
+          ...getHeaders(token),
+        }
+      );
+      const { data, state, message } = responseData;
       return { data, state, message };
     } catch (error) {
       const { data: responseData } = error?.response;

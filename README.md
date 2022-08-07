@@ -7,8 +7,11 @@ SHARE-IT-social-media-application is a full-stack application, where users can r
 - User Register and Login
 - Create Post
 - Like Post
+- Unlike Post
 - Follow User
+- Unfollow User
 - User Feed
+- Search Users
 
 ## Screenshots
 
@@ -32,6 +35,9 @@ SHARE-IT-social-media-application is a full-stack application, where users can r
 
 - Followed
   <img src="/assets/Followed.png" alt="Followed" />
+
+- Like
+  <img src="/assets/Like.png" alt="Like" />
 
 ## Run This Application
 

@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex w-full flex-col items-start justify-center space-y-4 md:w-1/2"
+    class="flex w-full flex-col items-start justify-center space-y-4 px-6 md:w-1/2"
   >
     <!-- BEGIN: SEARCH INPUT -->
-    <div class="relative w-full px-6">
+    <div class="relative w-full">
       <input
         ref="searchInput"
         type="search"
@@ -11,7 +11,7 @@
         :value="search"
         @input="findPeople"
       />
-      <search-icon class="absolute top-2.5 left-9 h-4 w-4 stroke-slate-600" />
+      <search-icon class="absolute top-2.5 left-4 h-4 w-4 stroke-slate-600" />
     </div>
     <!-- END: SEARCH INPUT -->
 

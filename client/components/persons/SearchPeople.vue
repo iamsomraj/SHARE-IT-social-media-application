@@ -3,17 +3,15 @@
     class="flex w-full flex-col items-start justify-center space-y-4 md:w-1/2"
   >
     <!-- BEGIN: SEARCH INPUT -->
-    <div class="relative w-full px-6 md:px-0">
+    <div class="relative w-full px-6">
       <input
         ref="searchInput"
         type="search"
-        class="w-full rounded-xl bg-slate-100 p-2 pl-8 text-sm text-slate-600 placeholder:text-slate-400 focus:outline-blue-400"
+        class="w-full rounded-xl bg-slate-100 p-2 pl-9 text-sm text-slate-600 placeholder:text-slate-400 focus:outline-blue-400"
         :value="search"
         @input="findPeople"
       />
-      <search-icon
-        class="absolute top-2.5 left-8 h-4 w-4 stroke-slate-600 md:left-2"
-      />
+      <search-icon class="absolute top-2.5 left-9 h-4 w-4 stroke-slate-600" />
     </div>
     <!-- END: SEARCH INPUT -->
 

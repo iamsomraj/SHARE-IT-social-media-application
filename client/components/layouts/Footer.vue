@@ -1,5 +1,5 @@
 <template>
-  <footer class="w-full py-2 text-center text-xs font-bold text-gray-400">
+  <footer class="w-full py-2 text-center text-xs font-bold text-slate-400">
     <div>
       <span class="font-normal">Created by </span
       ><a

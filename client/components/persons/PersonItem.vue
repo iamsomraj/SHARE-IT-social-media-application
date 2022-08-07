@@ -4,12 +4,12 @@
   >
     <div>
       <div
-        class="text-purple-500 text-xl font-extrabold cursor-pointer"
+        class="text-purple-400 text-xl font-extrabold cursor-pointer"
         @click="$router.push(`/profile/${person.uuid}`)"
       >
         @{{ person.name }}
       </div>
-      <div class="text-gray-500 text-sm">{{ person.email }}</div>
+      <div class="text-slate-400 text-sm">{{ person.email }}</div>
     </div>
     <button
       class="px-4 py-3 rounded-lg cursor-pointer shadow bg-pink-400 text-pink-100 font-bold"

@@ -1,16 +1,16 @@
 <template>
-  <div class="flex flex-grow items-center justify-evenly">
-    <div class="px-1 py-2 text-center">
+  <div class="col-span-8 flex items-center justify-between">
+    <div class="px-1 py-2 text-center text-slate-600">
       <div>{{ numberOfPosts }}</div>
-      <div>Posts</div>
+      <div class="text-xs text-slate-400">Posts</div>
     </div>
-    <div class="px-1 py-2 text-center">
+    <div class="px-1 py-2 text-center text-slate-600">
       <div>{{ numberOfFollowers }}</div>
-      <div>Followers</div>
+      <div class="text-xs text-slate-400">Followers</div>
     </div>
     <div class="px-1 py-2 text-center">
       <div>{{ numberOfFollowings }}</div>
-      <div>Followings</div>
+      <div class="text-xs text-slate-400">Followings</div>
     </div>
   </div>
 </template>

@@ -17,14 +17,14 @@
         <!-- BEGIN: POST OWNER NAME -->
         <div
           @click="$router.push(`/profile/${ownerUUID}`)"
-          class="cursor-pointer hover:underline"
+          class="cursor-pointer text-slate-600 hover:underline"
         >
           {{ ownerName }}
         </div>
         <!-- END: POST OWNER NAME -->
 
         <!-- BEGIN: POST TIME -->
-        <div class="text-xs font-light">{{ time }}</div>
+        <div class="text-xs font-light text-slate-400">{{ time }}</div>
         <!-- END: POST TIME -->
       </div>
       <!-- END: POST OWNER NAME AND TIME -->
@@ -35,7 +35,7 @@
     <div class="flex flex-col items-start justify-center space-y-4 px-6">
       <!-- BEGIN: POST CONTENT -->
       <div
-        class="cursor-pointer break-words text-2xl hover:underline"
+        class="cursor-pointer break-words text-2xl text-slate-600 hover:underline"
         @click="$router.push(`/post/${uuid}`)"
       >
         {{ content }}
@@ -43,7 +43,9 @@
       <!-- END: POST CONTENT -->
 
       <!-- BEGIN: NUMBER OF LIKES -->
-      <div class="cursor-pointer text-sm underline-offset-4 hover:underline">
+      <div
+        class="cursor-pointer text-sm text-slate-400 underline-offset-4 hover:underline"
+      >
         {{
           numberOfLikes > 1 ? `${numberOfLikes} Likes` : `${numberOfLikes} Like`
         }}
@@ -63,7 +65,7 @@
         @click="onPostLike(uuid)"
       >
         <heart-icon
-          class="fill-transparent stroke-gray-400 hover:fill-gray-400"
+          class="fill-transparent stroke-slate-400 hover:fill-slate-400"
         ></heart-icon>
       </div>
       <!-- END: LIKE ICON -->

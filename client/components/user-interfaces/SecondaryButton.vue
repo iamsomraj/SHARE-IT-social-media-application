@@ -1,7 +1,7 @@
 <template>
   <button
     :disabled="disabled"
-    class="w-full rounded border bg-white py-2 font-bold text-gray-500 transition-all duration-300 hover:bg-gray-200"
+    class="w-full rounded border bg-white py-2 font-bold text-slate-600 transition-all duration-300 hover:bg-slate-200"
     :class="{ 'cursor-not-allowed opacity-50': loading || disabled }"
     @click="onClick"
   >

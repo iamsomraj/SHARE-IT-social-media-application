@@ -66,5 +66,3 @@ export default {
   components: { TertiaryButton, FeedIcon, LogoutIcon },
 };
 </script>
-
-<style lang="scss" scoped></style>

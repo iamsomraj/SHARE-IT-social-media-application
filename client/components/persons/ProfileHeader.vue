@@ -1,12 +1,10 @@
 <template>
   <div class="flex w-full flex-col items-center justify-start">
-    <div
-      class="flex w-full items-center justify-evenly space-x-0 px-6 text-sm md:w-1/2 md:space-x-2 md:px-0"
-    >
+    <div class="grid w-full grid-cols-12 px-6 md:w-1/2">
       <profile-picture
         :uuid="uuid"
         :name="name"
-        class="flex-shrink-0˝ h-16 w-16 text-8xl"
+        class="col-span-4 h-16 w-16 text-8xl"
       ></profile-picture>
       <profile-stats
         :numberOfPosts="numberOfPosts"

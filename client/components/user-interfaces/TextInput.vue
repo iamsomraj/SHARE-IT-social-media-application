@@ -1,6 +1,6 @@
 <template>
   <input
-    class="outline-none w-full rounded border-2 border-gray-200 px-4 py-3 focus:border-blue-200"
+    class="w-full rounded border-2 border-slate-200 px-4 py-3 text-slate-600 outline-none focus:border-blue-200"
     :placeholder="placeholder"
     autocomplete="off"
     :type="type"

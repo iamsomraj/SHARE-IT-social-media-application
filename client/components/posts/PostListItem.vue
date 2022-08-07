@@ -65,7 +65,7 @@
         @click="onPostLike(uuid)"
       >
         <heart-icon
-          class="fill-transparent stroke-slate-400 hover:fill-slate-400"
+          class="fill-transparent stroke-slate-400 hover:fill-slate-400 active:fill-slate-400"
         ></heart-icon>
       </div>
       <!-- END: LIKE ICON -->
@@ -76,7 +76,7 @@
         @click="onPostUnlike(uuid)"
       >
         <heart-icon
-          class="fill-red-400 stroke-red-400 hover:fill-red-200 hover:stroke-red-200"
+          class="fill-red-400 stroke-red-400 hover:fill-red-200 hover:stroke-red-200 active:stroke-red-200"
         ></heart-icon>
       </div>
       <!-- END: LIKE ICON -->

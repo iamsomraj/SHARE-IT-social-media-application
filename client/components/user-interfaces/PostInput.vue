@@ -1,10 +1,10 @@
 <template>
   <!-- BEGIN: POST INPUT -->
-  <div class="w-full">
+  <div class="w-full px-0 md:px-6">
     <!-- BEGIN: POST TEXT INPUT -->
     <textarea
       :disabled="loading"
-      class="w-full resize-none break-words rounded border-b-2 border-slate-200 py-3 text-2xl text-slate-600 outline-none placeholder:text-slate-200 focus:border-blue-200 disabled:bg-white"
+      class="w-full resize-none break-words rounded border-b-2 border-slate-200 text-2xl text-slate-600 outline-none placeholder:text-slate-200 focus:border-blue-200 disabled:bg-white"
       :class="{ 'cursor-not-allowed': loading }"
       :placeholder="inputPlaceholder"
       :maxlength="postLengthLimit"

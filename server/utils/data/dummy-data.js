@@ -1,10 +1,9 @@
 const { hash } = require("../helpers/index.js");
 
 const person_data = [
-  { name: "John Doe", email: "johndoe@example.com", password: hash("1234"), created_at: new Date().toISOString(), updated_at: new Date().toISOString(), is_deleted: false },
-  { name: "Jane Doe", email: "janedoe@example.com", password: hash("1234"), created_at: new Date().toISOString(), updated_at: new Date().toISOString(), is_deleted: false },
-  { name: "James Doe", email: "jamesdoe@example.com", password: hash("1234"), created_at: new Date().toISOString(), updated_at: new Date().toISOString(), is_deleted: false },
-  { name: "Adele Doe", email: "adeledoe@example.com", password: hash("1234"), created_at: new Date().toISOString(), updated_at: new Date().toISOString(), is_deleted: false },
+  { name: "Somraj Mukherjee", email: "somraj@example.com", password: hash("1234"), created_at: new Date().toISOString(), updated_at: new Date().toISOString(), is_deleted: false },
+  { name: "Rohan Dutta", email: "rohan@example.com", password: hash("1234"), created_at: new Date().toISOString(), updated_at: new Date().toISOString(), is_deleted: false },
+  { name: "Souradip Ganguly", email: "soura@example.com", password: hash("1234"), created_at: new Date().toISOString(), updated_at: new Date().toISOString(), is_deleted: false },
 ];
 
 const data = { person_data };

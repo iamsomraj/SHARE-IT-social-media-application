@@ -1,7 +1,11 @@
 <template>
   <div
-    class="flex rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-blue-400 text-center font-extrabold capitalize text-white shadow-inner transition-all duration-300 hover:scale-110"
+    class="flex rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full border text-center font-extrabold capitalize text-white shadow-inner transition-all duration-300 hover:scale-110"
     @click="$router.push(`/profile/${uuid}`)"
+    :class="{
+      'bg-blue-400': isSelf,
+      'bg-yellow-400': !isSelf,
+    }"
   >
     {{ initialLetterOfName }}
   </div>
@@ -14,6 +18,9 @@ export default {
   computed: {
     initialLetterOfName() {
       return this.name.charAt(0);
+    },
+    isSelf() {
+      return this.$store.getters['auth/uuid'] === this.uuid;
     },
   },
 };

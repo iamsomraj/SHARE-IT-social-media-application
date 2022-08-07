@@ -54,7 +54,7 @@
     </div>
     <!-- END: POST LIST ITEM CONTENT -->
 
-    <!-- BEGIN: POST LIST ITEM BOTTOM -->
+    <!-- BEGIN: POST LIST ITEM FOOTER -->
     <div
       class="flex w-full items-center justify-start space-x-2 border-t px-6 py-2 text-xs"
     >
@@ -76,12 +76,12 @@
         @click="onPostUnlike(uuid)"
       >
         <heart-icon
-          class="fill-yellow-400 stroke-yellow-400 hover:fill-yellow-200 hover:stroke-yellow-200"
+          class="fill-red-400 stroke-red-400 hover:fill-red-200 hover:stroke-red-200"
         ></heart-icon>
       </div>
       <!-- END: LIKE ICON -->
     </div>
-    <!-- END: POST LIST ITEM BOTTOM -->
+    <!-- END: POST LIST ITEM FOOTER -->
   </div>
 </template>
 

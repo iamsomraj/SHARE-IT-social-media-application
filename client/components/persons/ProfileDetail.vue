@@ -1,5 +1,5 @@
 <template>
-  <div class="my-2 flex flex-col items-start justify-center space-y-2">
+  <div class="flex flex-col items-start justify-center space-y-2">
     <div class="text-left text-xl font-extrabold capitalize text-slate-600">
       {{ name }}
     </div>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'ProfileName',
+  name: 'ProfileDetail',
   props: ['name', 'email'],
 };
 </script>

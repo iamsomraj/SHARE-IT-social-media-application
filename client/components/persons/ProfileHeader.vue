@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full flex-col items-center justify-start">
-    <div class="grid w-full grid-cols-12 px-6 md:w-1/2">
+    <div class="grid w-full grid-cols-12 px-6 md:w-1/2 gap-y-4">
       <profile-picture
         :uuid="uuid"
         :name="name"
@@ -11,19 +11,19 @@
         :numberOfFollowers="numberOfFollowers"
         :numberOfFollowings="numberOfFollowings"
       ></profile-stats>
-    </div>
-    <div
-      class="flex w-full items-center justify-start space-x-0 px-6 text-sm md:w-1/2 md:space-x-2 md:px-0"
-    >
-      <profile-name :name="name" :email="email"></profile-name>
+      <profile-detail
+        class="col-span-4"
+        :name="name"
+        :email="email"
+      ></profile-detail>
     </div>
   </div>
 </template>
 
 <script>
-import ProfilePicture from './ProfilePicture.vue';
+import ProfileDetail from './ProfileDetail.vue';
 import ProfileStats from './ProfileStats.vue';
-import ProfileName from './ProfileName.vue';
+import ProfilePicture from './ProfilePicture.vue';
 export default {
   name: 'ProfileHeader',
   props: [
@@ -40,7 +40,7 @@ export default {
       return this.name.charAt(0);
     },
   },
-  components: { ProfilePicture, ProfileStats, ProfileName },
+  components: { ProfilePicture, ProfileStats, ProfileDetail },
 };
 </script>
 

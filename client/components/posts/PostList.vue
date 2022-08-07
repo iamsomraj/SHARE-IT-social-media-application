@@ -1,5 +1,5 @@
 <template>
-  <div class="my-2 flex flex-col items-center space-y-2">
+  <div class="my-2 flex flex-col items-center space-y-2 px-0 md:px-12">
     <post-list-item
       v-for="post in posts"
       :key="post.id"
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import PostListItem from './PostListItem.vue';
 import { getTime } from '../../util/helpers';
+import PostListItem from './PostListItem.vue';
 
 export default {
   name: 'PostList',

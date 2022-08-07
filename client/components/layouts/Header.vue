@@ -1,6 +1,6 @@
 <template>
   <header
-    class="sticky top-0 z-10 flex w-full items-center justify-center bg-white px-6 py-2 shadow"
+    class="sticky top-0 z-10 flex w-full items-center justify-center bg-white px-12 py-2 shadow"
   >
     <div class="flex w-full items-center justify-between md:w-1/2">
       <NuxtLink
@@ -25,6 +25,16 @@
             class="h-6 w-6 cursor-pointer fill-slate-300 hover:fill-blue-400"
           />
         </div>
+        <div @click="redirectToProfile">
+          <!-- <user-icon
+            class="h-6 w-6 cursor-pointer fill-slate-300 hover:fill-blue-400"
+          /> -->
+          <ProfilePicture
+            :uuid="user.uuid"
+            :name="user.name"
+            class="h-6 w-6 text-4xl"
+          />
+        </div>
         <div @click="onLogout">
           <logout-icon
             class="h-6 w-6 cursor-pointer stroke-slate-300 hover:stroke-blue-400"
@@ -40,7 +50,9 @@
 import { MESSAGES } from '../../util/constants.js';
 import FeedIcon from '../assets/FeedIcon.vue';
 import LogoutIcon from '../assets/LogoutIcon.vue';
+import UserIcon from '../assets/UserIcon.vue';
 import TertiaryButton from '../user-interfaces/TertiaryButton.vue';
+import ProfilePicture from '../persons/ProfilePicture.vue';
 
 export default {
   name: 'Header',
@@ -62,7 +74,16 @@ export default {
     redirectToFeed() {
       this.$router.push('/feed');
     },
+    redirectToProfile() {
+      this.$router.push(`/profile/${this.user.uuid}`);
+    },
   },
-  components: { TertiaryButton, FeedIcon, LogoutIcon },
+  components: {
+    TertiaryButton,
+    FeedIcon,
+    LogoutIcon,
+    UserIcon,
+    ProfilePicture,
+  },
 };
 </script>

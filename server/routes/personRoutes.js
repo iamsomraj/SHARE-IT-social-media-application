@@ -9,6 +9,6 @@ router.route("/follow/:uuid").post(protect, followPerson);
 router.route("/unfollow/:uuid").post(protect, unfollowPerson);
 router.route("/people").get(protect, getPeople);
 router.route("/:uuid").get(protect, getPersonProfile);
-router.route("/search/:searchQuery").get(protect, search);
+router.route("/search/").post(protect, search);
 
 module.exports = router;

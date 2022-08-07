@@ -270,15 +270,13 @@ class PersonService extends RootService {
    * @param {string} searchQuery - search query
    */
   async search(user, searchQuery) {
-    /* BEGIN: VALIDATIONS */
-    if (!searchQuery) this.raiseError(HTTP_CODES.BAD_REQUEST, PERSON_ERROR_MESSAGES.PROVIDE_SEARCH_QUERY);
-    /* END: VALIDATIONS */
-
     /* BEGIN: DATABASE OPERATIONS */
     const personResults = await PersonsModel.query()
       .select("id", "uuid", "name", "email", "created_at", "updated_at")
-      .where("email", "like", "%" + searchQuery + "%")
-      .orWhere("name", "like", "%" + searchQuery + "%")
+      .where((builder) => {
+        builder.where("name", "like", `%${searchQuery}%`);
+        builder.orWhere("email", "like", `%${searchQuery}%`);
+      })
       .andWhere("id", "!=", user.id);
     /* END: DATABASE OPERATIONS */
     if (!personResults) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.SEARCH_FAILURE);

@@ -23,8 +23,8 @@ export const REGISTER_URL = `${PERSON_URL}/`;
 export const LOGIN_URL = `${PERSON_URL}/auth`;
 export const FOLLOW_URL = `${PERSON_URL}/follow`;
 export const UNFOLLOW_URL = `${PERSON_URL}/unfollow`;
-export const GET_PEOPLE_URL = `${PERSON_URL}/people`;
-export const GET_PERSON_URL = `${PERSON_URL}`;
+export const GET_USER_PROFILE_URL = `${PERSON_URL}`;
+export const SEARCH_PEOPLE_URL = `${PERSON_URL}/search`;
 
 export const CREATE_POST_URL = `${POST_URL}/create`;
 export const GET_POST_FEED_URL = `${POST_URL}/feed`;
@@ -45,4 +45,6 @@ export const MESSAGES = Object.freeze({
   PERSON_FOLLOW_FAILURE: 'There was an error following this person!',
   PERSON_UNFOLLOW_SUCCESS: 'You have unfollowed this person!',
   PERSON_UNFOLLOW_FAILURE: 'There was an error unfollowing this person!',
+  SEARCH_SUCCESS: 'Search results found!',
+  SEARCH_FAILURE: 'There was an error searching!',
 });

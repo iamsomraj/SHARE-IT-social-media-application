@@ -5,11 +5,11 @@ const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js")
 
 /**
  * @description GETS THE LIST OF PEOPLE FOR WHICH SEARCH QUERY IS MATCHED
- * @route GET /api/v1/persons/search/:searchQuery
+ * @route POST /api/v1/persons/search
  * @access private
  */
 const search = asyncHandler(async (req, res) => {
-  const { searchQuery } = req.params;
+  const { searchQuery } = req.body;
   const { user } = req;
   const personService = new PersonService();
   const result = await personService.search(user, searchQuery);

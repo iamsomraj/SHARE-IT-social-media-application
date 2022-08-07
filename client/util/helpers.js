@@ -22,3 +22,13 @@ export const getTime = (time) => {
     return years > 1 ? `${years} years ago` : 'a year ago';
   }
 };
+
+export const debounce = (func, delay) => {
+  let debounceTimer;
+  return function () {
+    const context = this;
+    const args = arguments;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => func.apply(context, args), delay);
+  };
+};

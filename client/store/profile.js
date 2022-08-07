@@ -2,7 +2,7 @@ import axios from 'axios';
 import {
   ADD_LIKE_URL,
   getHeaders,
-  GET_PERSON_URL,
+  GET_USER_PROFILE_URL,
   REMOVE_LIKE_URL,
 } from '../util/constants';
 
@@ -35,7 +35,7 @@ export const actions = {
   async getUserProfile({ commit }, { uuid, token }) {
     try {
       const { data: responseData } = await axios.get(
-        `${GET_PERSON_URL}/${uuid}`,
+        `${GET_USER_PROFILE_URL}/${uuid}`,
         {
           ...getHeaders(token),
         }

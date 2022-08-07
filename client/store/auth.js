@@ -175,7 +175,6 @@ export const actions = {
         }
       );
       const { data, state, message } = responseData;
-      console.log('🚀 ~ file: auth.js ~ line 178 ~ follow ~ data', data);
       if (state) {
         commit('setUser', data);
       }
@@ -198,7 +197,6 @@ export const actions = {
         }
       );
       const { data, state, message } = responseData;
-      console.log('🚀 ~ file: auth.js ~ line 200 ~ unfollow ~ data', data);
       if (state) {
         commit('setUser', data);
       }

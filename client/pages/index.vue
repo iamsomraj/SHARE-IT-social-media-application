@@ -16,9 +16,12 @@ export default {
     token() {
       return this.$store.getters['auth/token'];
     },
+    isLoggedIn() {
+      return this.$store.getters['auth/isLoggedIn'];
+    },
   },
   fetch() {
-    if (this.user && this.token) {
+    if (this.isLoggedIn) {
       this.$router.push('/feed');
     }
   },

@@ -6,7 +6,7 @@
     <div class="w-full px-6 md:px-0">
       <input
         type="text"
-        class="w-full rounded-xl bg-slate-100 px-4 py-4 text-xl text-slate-600 placeholder:text-slate-400 focus:outline-none"
+        class="w-full rounded-xl bg-slate-100 p-2 text-sm text-slate-600 placeholder:text-slate-400 focus:outline-none"
         placeholder="Search for people.."
         :value="search"
         @input="findPeople"

@@ -15,21 +15,23 @@ SHARE-IT-social-media-application is a full-stack application, where users can r
 - Login
   <img src="/assets/Login.png" alt="Login" />
 
-- Explore
-  <img src="/assets/Explore.png" alt="Explore" />
+- Register
+  <img src="/assets/Register.png" alt="Register" />
+
+- Profile
+  <img src="/assets/Profile.png" alt="Profile" />
+
+- Search
+  <img src="/assets/Search.png" alt="Search" />
 
 - Feed
   <img src="/assets/Feed.png" alt="Feed" />
 
-- Profile
-  <img src="/assets/Profile.png" alt="Profile" />
-  
+- Follow
+  <img src="/assets/Follow.png" alt="Follow" />
+
 - Followed
   <img src="/assets/Followed.png" alt="Followed" />
-
-## Walkthrough Video
-
-[Video](https://youtu.be/OsheRzgu9s4)
 
 ## Run This Application
 
@@ -72,7 +74,6 @@ SALT = {YOUR_SALT}
 JWT_SECRET = {YOUR_SECRET}
 JWT_EXPIRATION_DURATION = '100d'
 ```
-
 
 - `.env` file for client (client/.env) -
 

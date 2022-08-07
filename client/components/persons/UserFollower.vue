@@ -46,10 +46,7 @@ export default {
   methods: {
     async onUserFollow() {
       this.loading = true;
-      const res = await this.this.$store.dispatch(
-        'auth/follow',
-        this.profile.uuid
-      );
+      const res = await this.$store.dispatch('auth/follow', this.profile.uuid);
       this.loading = false;
       if (res.state) {
         this.$store.dispatch('toast/success', MESSAGES.PERSON_FOLLOW_SUCCESS);
@@ -82,5 +79,3 @@ export default {
   components: { PrimaryButton, SecondaryButton },
 };
 </script>
-
-<style lang="scss" scoped></style>

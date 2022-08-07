@@ -1,34 +1,45 @@
 <template>
-  <header class="flex items-center justify-between p-4">
-    <NuxtLink
-      to="/"
-      class="flex items-center justify-center space-x-2 rounded px-3 py-2 text-2xl font-extrabold tracking-tighter"
-    >
-      <span class="text-blue-400">SHARE</span>
-      <span class="text-yellow-400">IT</span>
-    </NuxtLink>
-    <div v-if="!isLoggedIn" class="flex items-center space-x-4 font-bold">
-      <NuxtLink to="/register"> Register </NuxtLink>
-      <NuxtLink to="/" class="rounded bg-yellow-400 px-3 py-2 text-white">
-        Login
-      </NuxtLink>
-    </div>
-    <div v-else class="flex items-center justify-between space-x-4 font-bold">
-      <div
-        @click="redirectToFeed"
-        class="cursor-pointer text-2xl font-bold tracking-tight text-green-500"
+  <header
+    class="sticky top-0 z-10 flex w-full items-center justify-center bg-white px-6 py-2 shadow"
+  >
+    <div class="flex w-full items-center justify-between md:w-1/2">
+      <NuxtLink
+        to="/"
+        class="flex items-center justify-center space-x-2 rounded text-2xl font-extrabold tracking-tighter"
       >
-        yourfeed
+        <span class="text-blue-400">SHARE</span>
+        <span class="text-yellow-400">IT</span>
+      </NuxtLink>
+      <div
+        v-if="!isLoggedIn"
+        class="flex items-center justify-between space-x-4 font-bold"
+      >
+        <NuxtLink to="/register"> Register </NuxtLink>
+        <NuxtLink to="/" class="rounded bg-yellow-400 px-3 py-2 text-white">
+          Login
+        </NuxtLink>
       </div>
-      <tertiary-button @onClick="onLogout" class="px-3">
-        <template #default> Logout </template>
-      </tertiary-button>
+      <div v-else class="flex items-center justify-between space-x-4 font-bold">
+        <div @click="redirectToFeed">
+          <feed-icon
+            class="h-6 w-6 cursor-pointer fill-slate-300 hover:fill-blue-400"
+          />
+        </div>
+        <div @click="onLogout">
+          <logout-icon
+            class="h-6 w-6 cursor-pointer stroke-slate-300 hover:stroke-blue-400"
+          >
+          </logout-icon>
+        </div>
+      </div>
     </div>
   </header>
 </template>
 
 <script>
 import { MESSAGES } from '../../util/constants.js';
+import FeedIcon from '../assets/FeedIcon.vue';
+import LogoutIcon from '../assets/LogoutIcon.vue';
 import TertiaryButton from '../user-interfaces/TertiaryButton.vue';
 
 export default {
@@ -52,7 +63,7 @@ export default {
       this.$router.push('/feed');
     },
   },
-  components: { TertiaryButton },
+  components: { TertiaryButton, FeedIcon, LogoutIcon },
 };
 </script>
 

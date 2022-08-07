@@ -1,15 +1,13 @@
 <template>
   <div class="flex w-full flex-col items-center justify-start">
     <div
-      class="flex w-full items-center justify-between space-x-0 px-6 text-sm md:w-1/2 md:space-x-2 md:px-0"
+      class="flex w-full items-center justify-evenly space-x-0 px-6 text-sm md:w-1/2 md:space-x-2 md:px-0"
     >
-      <div>
-        <profile-picture
-          :uuid="uuid"
-          :name="name"
-          class="h-16 w-16 text-8xl"
-        ></profile-picture>
-      </div>
+      <profile-picture
+        :uuid="uuid"
+        :name="name"
+        class="flex-shrink-0˝ h-16 w-16 text-8xl"
+      ></profile-picture>
       <profile-stats
         :numberOfPosts="numberOfPosts"
         :numberOfFollowers="numberOfFollowers"

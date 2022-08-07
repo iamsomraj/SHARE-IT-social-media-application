@@ -1,18 +1,8 @@
 <template>
   <div
     v-if="user"
-    class="flex w-full flex-col items-center justify-center space-y-6"
+    class="mt-8 flex w-full flex-col items-center justify-center space-y-6"
   >
-    <profile-header
-      v-if="user"
-      :uuid="user.uuid"
-      :id="user.id"
-      :name="user.name"
-      :email="user.email"
-      :numberOfPosts="user.person_stats.post_count"
-      :numberOfFollowings="user.person_stats.following_count"
-      :numberOfFollowers="user.person_stats.follower_count"
-    />
     <post-list
       class="w-full"
       v-if="posts"
@@ -24,7 +14,6 @@
 </template>
 
 <script>
-import ProfileHeader from '../../components/persons/ProfileHeader.vue';
 import PostList from '../../components/posts/PostList.vue';
 import { MESSAGES } from '../../util/constants';
 
@@ -75,7 +64,7 @@ export default {
       }
     },
   },
-  components: { PostList, ProfileHeader },
+  components: { PostList },
 };
 </script>
 

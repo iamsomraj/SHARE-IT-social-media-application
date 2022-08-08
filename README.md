@@ -18,14 +18,26 @@ SHARE-IT-social-media-application is a full-stack application, where users can r
 - Login
   <img src="/assets/Login.png" alt="Login" />
 
+- Login in Mobile
+  <img src="/assets/LoginMobile.png" alt="LoginMobile" />
+
 - Register
   <img src="/assets/Register.png" alt="Register" />
+
+- Register in Mobile
+  <img src="/assets/RegisterMobile.png" alt="RegisterMobile" />
 
 - Profile
   <img src="/assets/Profile.png" alt="Profile" />
 
+- Profile in Mobile
+  <img src="/assets/ProfileMobile.png" alt="ProfileMobile" />
+
 - Search
   <img src="/assets/Search.png" alt="Search" />
+
+- Search in Mobile
+  <img src="/assets/SearchMobile.png" alt="SearchMobile" />
 
 - Feed
   <img src="/assets/Feed.png" alt="Feed" />
@@ -38,6 +50,9 @@ SHARE-IT-social-media-application is a full-stack application, where users can r
 
 - Like
   <img src="/assets/Like.png" alt="Like" />
+
+- Like in Mobile
+  <img src="/assets/LikeMobile.png" alt="LikeMobile" />
 
 ## Run This Application
 

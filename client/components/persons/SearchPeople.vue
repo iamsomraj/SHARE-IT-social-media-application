@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { getHeaders, MESSAGES, SEARCH_PEOPLE_URL } from '../../util/constants';
+import { MESSAGES } from '../../util/constants';
 import LoaderIcon from '../assets/LoaderIcon.vue';
 import SearchIcon from '../assets/SearchIcon.vue';
 import PersonItem from './PersonItem.vue';

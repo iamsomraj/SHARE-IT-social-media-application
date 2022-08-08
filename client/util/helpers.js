@@ -22,3 +22,11 @@ export const getTime = (time) => {
     return years > 1 ? `${years} years ago` : 'a year ago';
   }
 };
+
+export const getHeaders = (token) => {
+  return {
+    headers: {
+      Authorization: `Bearer ${token ? token : ''}`,
+    },
+  };
+};

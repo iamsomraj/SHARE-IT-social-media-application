@@ -1,10 +1,10 @@
 import axios from 'axios';
 import {
   ADD_LIKE_URL,
-  getHeaders,
   GET_USER_PROFILE_URL,
   REMOVE_LIKE_URL,
 } from '../util/constants';
+import { getHeaders } from '../util/helpers';
 
 export const state = () => ({
   profile: {

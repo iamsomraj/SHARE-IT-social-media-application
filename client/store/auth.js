@@ -3,13 +3,13 @@ import {
   ADD_LIKE_URL,
   CREATE_POST_URL,
   FOLLOW_URL,
-  getHeaders,
   LOGIN_URL,
   REGISTER_URL,
   REMOVE_LIKE_URL,
   SEARCH_PEOPLE_URL,
   UNFOLLOW_URL,
 } from '../util/constants';
+import { getHeaders } from '../util/helpers';
 
 export const state = () => ({
   user: {

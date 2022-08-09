@@ -1,7 +1,7 @@
 # SHARE-IT-social-media-application
 
 SHARE-IT-social-media-application is a full-stack application, where users can register and login in the portal. Users can also create and like posts. There is also a feed where users can see posts from followed users.
-
+  
 ## Features
 
 - User Register and Login

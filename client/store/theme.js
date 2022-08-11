@@ -8,7 +8,7 @@ export const isOperatingSystemHasDarkMode = () => {
 };
 
 export const state = () => ({
-  theme: '',
+  theme: 'dark',
 });
 
 export const getters = {
@@ -25,13 +25,15 @@ export const actions = {
         isOperatingSystemHasDarkMode())
     ) {
       commit('setTheme', THEMES.DARK);
+      localStorage.setItem(LOCAL_STORAGE_THEME_KEY, THEMES.DARK);
       document.documentElement.classList.add(THEMES.DARK);
     } else {
       commit('setTheme', THEMES.LIGHT);
+      localStorage.setItem(LOCAL_STORAGE_THEME_KEY, THEMES.LIGHT);
       document.documentElement.classList.remove(THEMES.DARK);
     }
   },
-  setTheme({ commit }) {
+  toggleTheme({ commit }) {
     // if set via local storage previously
     if (localStorage.getItem(LOCAL_STORAGE_THEME_KEY)) {
       if (localStorage.getItem(LOCAL_STORAGE_THEME_KEY) === THEMES.LIGHT) {
@@ -39,6 +41,7 @@ export const actions = {
         document.documentElement.classList.add(THEMES.DARK);
         localStorage.setItem(LOCAL_STORAGE_THEME_KEY, THEMES.DARK);
       } else {
+        commit('setTheme', THEMES.LIGHT);
         document.documentElement.classList.remove(THEMES.DARK);
         localStorage.setItem(LOCAL_STORAGE_THEME_KEY, THEMES.LIGHT);
       }

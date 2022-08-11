@@ -1,14 +1,12 @@
 <template>
-  <div>
+  <div @click="toggleTheme">
     <moon-icon
       class="h-6 w-6 cursor-pointer fill-slate-300 transition-all duration-500 hover:fill-blue-400 active:fill-blue-400"
       :class="{ hidden: !isDarkMode }"
-      @click="changeTheme('light')"
     ></moon-icon>
     <sun-icon
       class="h-6 w-6 cursor-pointer stroke-slate-300 transition-all duration-500 hover:stroke-blue-400 active:stroke-blue-400"
       :class="{ hidden: isDarkMode }"
-      @click="changeTheme('dark')"
     ></sun-icon>
   </div>
 </template>
@@ -18,10 +16,18 @@ import MoonIcon from '../assets/MoonIcon.vue';
 import SunIcon from '../assets/SunIcon.vue';
 export default {
   name: 'ThemeButton',
-  data() {
-    return {
-      isDarkMode: true,
-    };
+  computed: {
+    theme() {
+      return this.$store.getters['theme/theme'];
+    },
+    isDarkMode() {
+      return this.$store.getters['theme/isDarkTheme'];
+    },
+  },
+  methods: {
+    toggleTheme() {
+      this.$store.dispatch('theme/toggleTheme');
+    },
   },
   components: { MoonIcon, SunIcon },
 };

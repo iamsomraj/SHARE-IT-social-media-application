@@ -3,6 +3,9 @@ export const THEMES = Object.freeze({
   DARK: 'dark',
   LIGHT: 'light',
 });
+export const isOperatingSystemHasDarkMode = () => {
+  return window.matchMedia(`(prefers-color-scheme: ${THEMES.DARK})`).matches;
+};
 
 export const state = () => ({
   theme: '',
@@ -19,7 +22,7 @@ export const actions = {
     if (
       localStorage.getItem(LOCAL_STORAGE_THEME_KEY) === THEMES.DARK ||
       (!(LOCAL_STORAGE_THEME_KEY in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
+        isOperatingSystemHasDarkMode())
     ) {
       document.documentElement.classList.add(THEMES.DARK);
     } else {
@@ -36,7 +39,7 @@ export const actions = {
     if (
       localStorage.getItem(LOCAL_STORAGE_THEME_KEY) === THEMES.DARK ||
       (!(LOCAL_STORAGE_THEME_KEY in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
+        isOperatingSystemHasDarkMode())
     ) {
       themeToggleLightIcon.classList.remove('hidden');
     } else {

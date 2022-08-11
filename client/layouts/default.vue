@@ -13,6 +13,9 @@ import Toast from '../components/user-interfaces/Toast.vue';
 export default {
   name: 'DefaultLayout',
   components: { Toast, Header },
+  mounted() {
+    this.$store.dispatch('theme/handleTheme');
+  },
 };
 </script>
 

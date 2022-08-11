@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Header from '../components/layouts/Header.vue';
+import Header from '../components/app-layouts/Header.vue';
 import Toast from '../components/user-interfaces/Toast.vue';
 
 export default {

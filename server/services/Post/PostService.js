@@ -151,8 +151,10 @@ class PostService extends RootService {
         buider.orWhereIn("created_by", followingIds);
         buider.orWhere("created_by", user.id);
       })
-      .orderBy("created_at", "desc")
-      .orderBy("created_at", "desc");
+      .orderBy([
+        { column: "created_at", order: "desc", nulls: "last" },
+        { column: "updated_at", order: "desc", nulls: "last" },
+      ]);
     /* END: FETCH POSTS OF FOLLOWINGS */
 
     if (!postRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FEED_FAILURE);

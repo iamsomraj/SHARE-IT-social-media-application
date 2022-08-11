@@ -1,6 +1,6 @@
 <template>
   <header
-    class="fixed bottom-0 z-10 flex w-full items-center justify-center border bg-white px-6 py-2 shadow-2xl md:sticky md:top-0 md:px-12 md:shadow"
+    class="fixed bottom-0 z-10 flex w-full items-center justify-center border bg-white px-6 py-4 shadow-2xl md:sticky md:top-0 md:py-2 md:px-12 md:shadow"
   >
     <div class="flex w-full items-center justify-between md:w-1/2">
       <NuxtLink
@@ -19,7 +19,10 @@
           Login
         </NuxtLink>
       </div>
-      <div v-else class="flex items-center justify-between space-x-4 font-bold">
+      <div
+        v-else
+        class="flex items-center justify-between space-x-2 font-bold md:space-x-4"
+      >
         <div @click="redirectToFeed">
           <feed-icon
             class="h-6 w-6 cursor-pointer fill-slate-300 hover:fill-blue-400 active:fill-blue-400"

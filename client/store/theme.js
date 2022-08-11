@@ -52,19 +52,19 @@ export const actions = {
 
       // if set via local storage previously
       if (localStorage.getItem(LOCAL_STORAGE_THEME_KEY)) {
-        if (localStorage.getItem(LOCAL_STORAGE_THEME_KEY) === 'light') {
+        if (localStorage.getItem(LOCAL_STORAGE_THEME_KEY) === THEMES.LIGHT) {
           document.documentElement.classList.add(THEMES.DARK);
           localStorage.setItem(LOCAL_STORAGE_THEME_KEY, THEMES.DARK);
         } else {
           document.documentElement.classList.remove(THEMES.DARK);
-          localStorage.setItem(LOCAL_STORAGE_THEME_KEY, 'light');
+          localStorage.setItem(LOCAL_STORAGE_THEME_KEY, THEMES.LIGHT);
         }
 
         // if NOT set via local storage previously
       } else {
         if (document.documentElement.classList.contains(THEMES.DARK)) {
           document.documentElement.classList.remove(THEMES.DARK);
-          localStorage.setItem(LOCAL_STORAGE_THEME_KEY, 'light');
+          localStorage.setItem(LOCAL_STORAGE_THEME_KEY, THEMES.LIGHT);
         } else {
           document.documentElement.classList.add(THEMES.DARK);
           localStorage.setItem(LOCAL_STORAGE_THEME_KEY, THEMES.DARK);

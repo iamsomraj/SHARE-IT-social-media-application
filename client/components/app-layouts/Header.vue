@@ -42,6 +42,7 @@
             class="h-6 w-6 text-4xl"
           />
         </div>
+        <theme-button />
         <div @click="onLogout">
           <logout-icon
             class="h-6 w-6 cursor-pointer stroke-slate-300 hover:stroke-blue-400 active:stroke-blue-400"
@@ -61,6 +62,7 @@ import SearchIcon from '../assets/SearchIcon.vue';
 import UserIcon from '../assets/UserIcon.vue';
 import ProfilePicture from '../persons/ProfilePicture.vue';
 import TertiaryButton from '../user-interfaces/TertiaryButton.vue';
+import ThemeButton from '../user-interfaces/ThemeButton.vue';
 
 export default {
   name: 'Header',
@@ -107,6 +109,7 @@ export default {
     UserIcon,
     ProfilePicture,
     SearchIcon,
+    ThemeButton,
   },
 };
 </script>

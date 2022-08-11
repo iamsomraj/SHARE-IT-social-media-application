@@ -40,3 +40,10 @@ export const MESSAGES = Object.freeze({
   SEARCH_SUCCESS: 'Search results found!',
   SEARCH_FAILURE: 'There was an error searching!',
 });
+
+/* ROUTES */
+export const ROUTES = Object.freeze({
+  FEED: 'feed',
+  PROFILE: 'profile',
+  SEARCH: 'search',
+});

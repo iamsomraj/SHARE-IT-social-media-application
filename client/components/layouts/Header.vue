@@ -23,11 +23,13 @@
         <div @click="redirectToFeed">
           <feed-icon
             class="h-6 w-6 cursor-pointer fill-slate-300 hover:fill-blue-400 active:fill-blue-400"
+            :class="{ 'fill-blue-400': isActiveRoute(ROUTES.FEED) }"
           />
         </div>
         <div @click="redirectToSearch">
           <search-icon
             class="h-6 w-6 cursor-pointer fill-slate-300 hover:fill-blue-400 active:fill-blue-400"
+            :class="{ 'fill-blue-400': isActiveRoute(ROUTES.SEARCH) }"
           />
         </div>
         <div @click="redirectToProfile">
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-import { MESSAGES } from '../../util/constants.js';
+import { MESSAGES, ROUTES } from '../../util/constants.js';
 import FeedIcon from '../assets/FeedIcon.vue';
 import LogoutIcon from '../assets/LogoutIcon.vue';
 import SearchIcon from '../assets/SearchIcon.vue';
@@ -59,12 +61,20 @@ import TertiaryButton from '../user-interfaces/TertiaryButton.vue';
 
 export default {
   name: 'Header',
+  data() {
+    return {
+      ROUTES,
+    };
+  },
   computed: {
     isLoggedIn() {
       return this.$store.getters['auth/isLoggedIn'];
     },
     user() {
       return this.$store.getters['auth/user'];
+    },
+    routeName() {
+      return this.$route.name;
     },
   },
   methods: {
@@ -82,6 +92,9 @@ export default {
     },
     redirectToSearch() {
       this.$router.push('/search');
+    },
+    isActiveRoute(routeName) {
+      return this.routeName === routeName;
     },
   },
   components: {

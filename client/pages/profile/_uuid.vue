@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 mb-16 w-full md:my-6">
+  <div class="w-full pt-4 pb-16 dark:bg-slate-800 md:py-8">
     <self-profile v-if="isLoggedInUserProfile"></self-profile>
     <other-profile v-else></other-profile>
   </div>

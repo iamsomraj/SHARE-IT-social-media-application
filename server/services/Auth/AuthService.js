@@ -69,7 +69,7 @@ class AuthService extends RootService {
     if (!uuid || !token) {
       this.raiseError(HTTP_CODES.BAD_REQUEST, AUTH_ERROR_MESSAGES.INVALID_TOKEN);
     }
-    const result = await PersonsModel.checkIfPersonExistsById(id);
+    const result = await PersonsModel.checkIfPersonExistsByUUID(uuid);
     if (!result) {
       this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
     }

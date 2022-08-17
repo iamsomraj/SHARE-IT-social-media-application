@@ -25,18 +25,18 @@
       >
         <div @click="redirectToFeed">
           <feed-icon
-            class="h-6 w-6 cursor-pointer fill-slate-300 hover:fill-blue-400 active:fill-blue-400 dark:fill-slate-600 dark:stroke-slate-600 dark:hover:fill-blue-400 dark:hover:stroke-blue-400 dark:active:fill-blue-400 dark:active:stroke-blue-400"
+            class="h-6 w-6 cursor-pointer fill-slate-300 stroke-slate-300 hover:fill-blue-400 hover:stroke-blue-400 active:fill-blue-400 active:stroke-blue-400 dark:fill-slate-600 dark:stroke-slate-600 dark:hover:fill-blue-400 dark:hover:stroke-blue-400 dark:active:fill-blue-400 dark:active:stroke-blue-400"
             :class="{
-              'fill-blue-400 dark:fill-blue-400 dark:stroke-blue-400':
+              'fill-blue-400 stroke-blue-400 dark:fill-blue-400 dark:stroke-blue-400':
                 isActiveRoute(ROUTES.FEED),
             }"
           />
         </div>
         <div @click="redirectToSearch">
           <search-icon
-            class="h-6 w-6 cursor-pointer fill-slate-300 hover:fill-blue-400 active:fill-blue-400 dark:fill-slate-600 dark:stroke-slate-600 dark:hover:fill-blue-400 dark:hover:stroke-blue-400 dark:active:fill-blue-400 dark:active:stroke-blue-400"
+            class="h-6 w-6 cursor-pointer fill-slate-300 stroke-slate-300 hover:fill-blue-400 hover:stroke-blue-400 active:fill-blue-400 active:stroke-blue-400 dark:fill-slate-600 dark:stroke-slate-600 dark:hover:fill-blue-400 dark:hover:stroke-blue-400 dark:active:fill-blue-400 dark:active:stroke-blue-400"
             :class="{
-              'fill-blue-400 dark:fill-blue-400 dark:stroke-blue-400':
+              'fill-blue-400 stroke-blue-400 dark:fill-blue-400 dark:stroke-blue-400':
                 isActiveRoute(ROUTES.SEARCH),
             }"
           />

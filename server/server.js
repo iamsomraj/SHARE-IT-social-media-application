@@ -5,6 +5,7 @@ const _ = require("colors");
 
 const personRoutes = require("./routes/personRoutes.js");
 const postRoutes = require("./routes/postRoutes.js");
+const authRoutes = require("./routes/authRoutes.js");
 const { pageNotFound, errorHandler } = require("./middlewares/error.js");
 const ENVIRONMENT = require("./utils/constants/environments.js");
 
@@ -15,6 +16,7 @@ if (!ENVIRONMENT.IS_PRODUCTION) app.use(cors());
 app.use(express.json());
 app.use("/api/v1/persons", personRoutes);
 app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 app.use(pageNotFound);
 app.use(errorHandler);

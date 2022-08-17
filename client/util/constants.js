@@ -10,6 +10,10 @@ export const BASE_URL =
 const PERSON_URL = `${BASE_URL}/persons`;
 /* BASE URL FOR POST ROUTES */
 const POST_URL = `${BASE_URL}/posts`;
+/* BASE URL FOR AUTH ROUTES */
+const AUTH_URL = `${BASE_URL}/auth`;
+
+export const AUTHORIZE_USER_URL = `${AUTH_URL}/`;
 
 export const REGISTER_URL = `${PERSON_URL}/`;
 export const LOGIN_URL = `${PERSON_URL}/auth`;

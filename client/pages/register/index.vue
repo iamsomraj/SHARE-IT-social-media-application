@@ -24,8 +24,8 @@ export default {
       this.$router.push('/feed');
     }
   },
-  mounted() {
-    this.$store.dispatch('auth/checkAuth');
+  async mounted() {
+    await this.$store.dispatch('auth/checkAuth');
     if (this.isLoggedIn) {
       this.$router.push('/feed');
     }

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   ADD_LIKE_URL,
+  AUTHORIZE_USER_URL,
   CREATE_POST_URL,
   FOLLOW_URL,
   LOCAL_STORAGE_KEYS,
@@ -48,11 +49,25 @@ export const getters = {
 export const actions = {
   /* CHECK AUTH FROM STORAGE */
   async checkAuth({ commit }) {
-    const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN));
-    const user = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.USER));
-    if (token && user) {
-      commit('setToken', token);
-      commit('setUser', user);
+    try {
+      const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN));
+      const user = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.USER));
+      if (token && user && user.uuid) {
+        const payload = { token: token, uuid: user.uuid };
+        const { data: responseData } = await axios.post(
+          AUTHORIZE_USER_URL,
+          payload
+        );
+        const { state } = responseData;
+        if (state) {
+          commit('setUser', user);
+          commit('setToken', token);
+        } else {
+          commit('clear');
+        }
+      }
+    } catch (error) {
+      commit('clear');
     }
   },
   /* USER LOGIN */
@@ -67,15 +82,13 @@ export const actions = {
         commit('setUser', data);
         commit('setToken', data.token);
       } else {
-        commit('setUser', null);
-        commit('setToken', null);
+        commit('clear');
       }
       return { data, state, message };
     } catch (error) {
       const { data: responseData } = error?.response;
       const { data, state, message } = responseData;
-      commit('setUser', null);
-      commit('setToken', null);
+      commit('clear');
       return { data, state, message };
     }
   },
@@ -92,15 +105,13 @@ export const actions = {
         commit('setUser', data);
         commit('setToken', data.token);
       } else {
-        commit('setUser', null);
-        commit('setToken', null);
+        commit('clear');
       }
       return { data, state, message };
     } catch (error) {
       const { data: responseData } = error?.response;
       const { data, state, message } = responseData;
-      commit('setUser', null);
-      commit('setToken', null);
+      commit('clear');
       return { data, state, message };
     }
   },

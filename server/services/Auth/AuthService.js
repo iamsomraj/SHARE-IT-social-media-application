@@ -57,6 +57,27 @@ class AuthService extends RootService {
     }
     return result;
   }
+
+  /**
+   * @description AUTHORIZES THE USER WITH GIVEN CREDENTIALS
+   * @param {string} uuid
+   * @param {string} token
+   * @route POST /api/v1/auth
+   * @access public
+   */
+  async authorize(uuid, token) {
+    if (!uuid || !token) {
+      this.raiseError(HTTP_CODES.BAD_REQUEST, AUTH_ERROR_MESSAGES.INVALID_TOKEN);
+    }
+    const result = await PersonsModel.checkIfPersonExistsById(id);
+    if (!result) {
+      this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+    }
+    if (result.uuid !== uuid) {
+      this.raiseError(HTTP_CODES.BAD_REQUEST, AUTH_ERROR_MESSAGES.UUID_MISMATCH);
+    }
+    return;
+  }
 }
 
 module.exports = AuthService;

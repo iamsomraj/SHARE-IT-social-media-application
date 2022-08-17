@@ -32,7 +32,9 @@
       v-else-if="people.length === 0 && search.length > 3"
       class="flex w-full items-center justify-center"
     >
-      <div class="text-center text-xl font-bold text-slate-600">
+      <div
+        class="text-center text-xl font-bold text-slate-600 dark:text-slate-200"
+      >
         No results found.
       </div>
     </div>

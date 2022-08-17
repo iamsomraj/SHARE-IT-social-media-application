@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-full flex-col items-start justify-center space-y-4 rounded-xl border transition-all duration-300 dark:border-slate-600 md:w-1/2"
+    class="flex w-full flex-col items-start justify-center space-y-4 border-t border-b transition-all duration-300 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border"
   >
     <!-- BEGIN: POST LIST ITEM HEADER -->
     <div class="flex items-center justify-start space-x-4 px-6 pt-2">

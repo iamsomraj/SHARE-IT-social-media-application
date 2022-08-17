@@ -1,7 +1,7 @@
 <template>
   <!-- BEGIN: LOGIN FORM COMPONENT -->
   <div
-    class="mx-4 flex h-full w-full flex-col items-center justify-center space-y-4 p-4 md:w-1/2 md:flex-row md:space-x-4 md:divide-x"
+    class="mx-4 flex h-full w-full flex-col items-center justify-center space-y-4 p-4 md:w-1/2 md:flex-row md:space-x-4 md:divide-x md:dark:divide-slate-600"
   >
     <!-- BEGIN: FORM LOGO -->
     <form-logo />

@@ -1,5 +1,7 @@
 <template>
-  <div class="min-w-screen flex min-h-screen items-center justify-center">
+  <div
+    class="min-w-screen flex min-h-screen items-center justify-center dark:bg-slate-800"
+  >
     <login-form />
   </div>
 </template>

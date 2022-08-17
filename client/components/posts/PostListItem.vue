@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-full flex-col items-start justify-center space-y-4 rounded-xl border md:w-1/2"
+    class="flex w-full flex-col items-start justify-center space-y-4 rounded-xl border dark:border-slate-600 md:w-1/2"
   >
     <!-- BEGIN: POST LIST ITEM HEADER -->
     <div class="flex items-center justify-start space-x-4 px-6 pt-2">
@@ -17,7 +17,7 @@
         <!-- BEGIN: POST OWNER NAME -->
         <div
           @click="$router.push(`/profile/${ownerUUID}`)"
-          class="cursor-pointer text-slate-600 hover:underline"
+          class="cursor-pointer text-slate-600 hover:underline dark:text-slate-200"
         >
           {{ ownerName }}
         </div>
@@ -35,7 +35,7 @@
     <div class="flex flex-col items-start justify-center space-y-4 px-6">
       <!-- BEGIN: POST CONTENT -->
       <div
-        class="cursor-pointer break-words text-2xl text-slate-600 hover:underline"
+        class="cursor-pointer break-words text-2xl text-slate-600 hover:underline dark:text-slate-200"
         @click="$router.push(`/post/${uuid}`)"
       >
         {{ content }}
@@ -56,7 +56,7 @@
 
     <!-- BEGIN: POST LIST ITEM FOOTER -->
     <div
-      class="flex w-full items-center justify-start space-x-2 border-t px-6 py-2 text-xs"
+      class="flex w-full items-center justify-start space-x-2 border-t px-6 py-2 text-xs dark:border-t-slate-600"
     >
       <!-- BEGIN: LIKE ICON -->
       <div

@@ -39,7 +39,6 @@ import { MESSAGES } from '../../util/constants';
 
 export default {
   name: 'OtherProfile',
-  middleware: 'authenticated',
   computed: {
     person_posts() {
       return this.$store.getters['profile/posts'];

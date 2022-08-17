@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-screen flex min-h-screen items-center justify-center dark:bg-slate-800"
+    class="flex min-h-screen w-screen items-center justify-center dark:bg-slate-800"
   >
     <register-form />
   </div>
@@ -21,6 +21,12 @@ export default {
   },
   fetch() {
     if (this.user && this.token) {
+      this.$router.push('/feed');
+    }
+  },
+  mounted() {
+    this.$store.dispatch('auth/checkAuth');
+    if (this.isLoggedIn) {
       this.$router.push('/feed');
     }
   },

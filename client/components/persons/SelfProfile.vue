@@ -44,7 +44,6 @@ import { MESSAGES } from '../../util/constants';
 
 export default {
   name: 'SelfProfile',
-  middleware: 'authenticated',
   data() {
     return {
       loading: false,

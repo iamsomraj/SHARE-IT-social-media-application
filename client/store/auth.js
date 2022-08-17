@@ -46,6 +46,15 @@ export const getters = {
 };
 
 export const actions = {
+  /* CHECK AUTH FROM STORAGE */
+  async checkAuth({ commit }) {
+    const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN));
+    const user = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.USER));
+    if (token && user) {
+      commit('setToken', token);
+      commit('setUser', user);
+    }
+  },
   /* USER LOGIN */
   async login({ commit }, { email, password }) {
     try {
@@ -239,7 +248,7 @@ export const mutations = {
   },
   setToken(state, token) {
     state.token = token;
-    localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, token);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, JSON.stringify(token));
   },
   addPost(state, post) {
     state.user.person_posts.push(post);

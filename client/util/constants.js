@@ -51,5 +51,6 @@ export const ROUTES = Object.freeze({
 /* LOCAL STORAGE KEYS */
 export const LOCAL_STORAGE_KEYS = Object.freeze({
   TOKEN: 'auth-token',
+  USER: 'auth-user',
   THEME: 'color-theme',
 });

@@ -3,6 +3,7 @@ import {
   ADD_LIKE_URL,
   CREATE_POST_URL,
   FOLLOW_URL,
+  LOCAL_STORAGE_KEYS,
   LOGIN_URL,
   REGISTER_URL,
   REMOVE_LIKE_URL,
@@ -234,9 +235,11 @@ export const actions = {
 export const mutations = {
   setUser(state, user) {
     state.user = user;
+    localStorage.setItem(LOCAL_STORAGE_KEYS.USER, JSON.stringify(user));
   },
   setToken(state, token) {
     state.token = token;
+    localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, token);
   },
   addPost(state, post) {
     state.user.person_posts.push(post);
@@ -254,7 +257,7 @@ export const mutations = {
     state.user.person_stats.post_count = state.user.person_stats.post_count + 1;
   },
   clear(state) {
-    state.user = {
+    const blankUser = {
       id: '',
       uuid: '',
       name: '',
@@ -272,6 +275,9 @@ export const mutations = {
       },
       person_posts: [],
     };
+    state.user = blankUser;
     state.token = null;
+    localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, '');
+    localStorage.setItem(LOCAL_STORAGE_KEYS.USER, JSON.stringify(blankUser));
   },
 };

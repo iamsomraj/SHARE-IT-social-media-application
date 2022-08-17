@@ -47,3 +47,9 @@ export const ROUTES = Object.freeze({
   PROFILE: 'profile',
   SEARCH: 'search',
 });
+
+/* LOCAL STORAGE KEYS */
+export const LOCAL_STORAGE_KEYS = Object.freeze({
+  TOKEN: 'auth-token',
+  THEME: 'color-theme',
+});

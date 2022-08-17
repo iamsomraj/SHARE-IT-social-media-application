@@ -7,7 +7,7 @@
       <input
         ref="searchInput"
         type="search"
-        class="w-full rounded-xl bg-white p-2 pl-9 text-sm text-slate-600 placeholder:text-slate-400 focus:outline-blue-400 dark:bg-slate-800"
+        class="w-full rounded-xl bg-white p-2 pl-9 text-sm text-slate-600 placeholder:text-slate-400 focus:outline-blue-400 dark:bg-slate-800 dark:text-slate-200"
         :value="search"
         @input="findPeople"
       />

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="user"
-    class="flex w-full flex-col items-center justify-center space-y-6 pt-4 pb-16 dark:bg-slate-800 md:py-6"
+    class="flex min-h-screen w-full flex-col items-center justify-start space-y-6 pt-4 pb-16 dark:bg-slate-800 md:py-6"
   >
     <post-list
       class="w-full"

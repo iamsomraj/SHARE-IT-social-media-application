@@ -1,11 +1,12 @@
 <template>
-  <div class="mt-4 mb-16 w-full md:my-6 flex justify-center items-center">
+  <div
+    class="flex min-h-screen w-screen items-start justify-center pt-4 pb-16 dark:bg-slate-800 md:py-6"
+  >
     <search-people />
   </div>
 </template>
 
 <script>
-import { getPeople } from '../../helpers';
 import SearchPeople from '../../components/persons/SearchPeople.vue';
 export default {
   name: 'SearchPage',

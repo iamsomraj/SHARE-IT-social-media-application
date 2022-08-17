@@ -7,11 +7,13 @@
       <input
         ref="searchInput"
         type="search"
-        class="w-full rounded-xl bg-slate-100 p-2 pl-9 text-sm text-slate-600 placeholder:text-slate-400 focus:outline-blue-400"
+        class="w-full rounded-xl bg-white p-2 pl-9 text-sm text-slate-600 placeholder:text-slate-400 focus:outline-blue-400 dark:bg-slate-800"
         :value="search"
         @input="findPeople"
       />
-      <search-icon class="absolute top-2.5 left-4 h-4 w-4 stroke-slate-600" />
+      <search-icon
+        class="absolute top-2.5 left-4 h-4 w-4 fill-slate-600 stroke-slate-600 dark:fill-slate-200 dark:stroke-slate-200"
+      />
     </div>
     <!-- END: SEARCH INPUT -->
 

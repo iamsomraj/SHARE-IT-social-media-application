@@ -4,7 +4,7 @@
     <!-- BEGIN: POST TEXT INPUT -->
     <textarea
       :disabled="loading"
-      class="w-full resize-none break-words rounded border-b-2 border-slate-200 text-2xl text-slate-600 outline-none placeholder:text-slate-200 focus:border-blue-200 disabled:bg-white"
+      class="w-full resize-none break-words rounded border-b-2 border-slate-200 text-2xl text-slate-600 outline-none placeholder:text-slate-200 focus:border-blue-200 disabled:bg-white dark:border-b-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:disabled:bg-slate-800"
       :class="{ 'cursor-not-allowed': loading }"
       :placeholder="inputPlaceholder"
       :maxlength="postLengthLimit"
@@ -18,7 +18,9 @@
     <!-- END: POST TEXT INPUT -->
 
     <!-- BEGIN: CHARACTERS LEFT FROM LIMIT -->
-    <div class="my-2 w-full text-right text-xs text-slate-200">
+    <div
+      class="my-2 w-full text-right text-xs text-slate-200 dark:text-slate-600"
+    >
       {{ charactersLeft }}
     </div>
     <!-- END: CHARACTERS LEFT FROM LIMIT -->

@@ -1,13 +1,17 @@
 <template>
   <div
-    class="flex min-h-screen w-screen items-center justify-center dark:bg-slate-800"
+    class="relative flex min-h-screen w-screen items-center justify-center dark:bg-slate-800"
   >
+    <theme-button
+      class="absolute top-4 right-4 rounded-xl border-2 p-2 dark:border-slate-600"
+    />
     <register-form />
   </div>
 </template>
 
 <script>
 import RegisterForm from '../../components/user-forms/RegisterForm.vue';
+import ThemeButton from '../../components/user-interfaces/ThemeButton.vue';
 export default {
   name: 'RegisterPage',
   layout: 'guest',
@@ -30,7 +34,7 @@ export default {
       this.$router.push('/feed');
     }
   },
-  components: { RegisterForm },
+  components: { RegisterForm, ThemeButton },
 };
 </script>
 

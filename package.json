@@ -1,6 +1,6 @@
 {
-  "name": "fake-server",
-  "version": "1.0.0",
+  "name": "share-it-social-media-application",
+  "version": "2.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {

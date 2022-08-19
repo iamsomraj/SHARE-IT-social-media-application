@@ -46,6 +46,15 @@
 
       <!-- BEGIN: NUMBER OF LIKES -->
       <div
+        v-if="this.numberOfLikes === 0"
+        @click="onPostLike(uuid)"
+        class="cursor-pointer break-words text-base text-slate-400 underline-offset-4 line-clamp-1 hover:text-red-200 hover:underline"
+      >
+        {{ likeText }}
+      </div>
+      <div
+        v-else
+        @click="onPostUnlike(uuid)"
         class="cursor-pointer break-words text-base text-slate-400 underline-offset-4 line-clamp-1 hover:underline"
       >
         {{ likeText }}

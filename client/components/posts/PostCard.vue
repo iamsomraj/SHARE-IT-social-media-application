@@ -111,6 +111,8 @@ export default {
         return `${names} and ${this.postLikes.length - 2} ${
           this.postLikes.length - 2 > 1 ? 'others' : 'other'
         } liked this`;
+      } else if (this.postLikes.length === 0) {
+        return 'Be the first to like this';
       } else {
         return `${names} liked this`;
       }

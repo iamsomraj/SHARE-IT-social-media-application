@@ -44,11 +44,18 @@
 
       <!-- BEGIN: NUMBER OF LIKES -->
       <div
+        v-if="this.numberOfLikes === 0"
+        class="cursor-pointer text-sm text-slate-400 underline-offset-4 hover:text-red-200 hover:underline"
+        @click="onPostLike(uuid)"
+      >
+        {{ likeText }}
+      </div>
+      <div
+        v-else
+        @click="$router.push(`/post/${uuid}`)"
         class="cursor-pointer text-sm text-slate-400 underline-offset-4 hover:underline"
       >
-        {{
-          numberOfLikes > 1 ? `${numberOfLikes} Likes` : `${numberOfLikes} Like`
-        }}
+        {{ likeText }}
       </div>
       <!-- END: NUMBER OF LIKES -->
     </div>
@@ -86,9 +93,8 @@
 </template>
 
 <script>
-import HeartIcon from './../assets/HeartIcon.vue';
 import ProfilePicture from '../persons/ProfilePicture.vue';
-import { MESSAGES } from '../../util/constants';
+import HeartIcon from './../assets/HeartIcon.vue';
 export default {
   name: 'PostListItem',
   props: [
@@ -102,6 +108,13 @@ export default {
     'postLikes',
   ],
   computed: {
+    likeText() {
+      return this.numberOfLikes == 0
+        ? 'Be the first to like this post'
+        : this.numberOfLikes > 1
+        ? `${this.numberOfLikes} likes`
+        : `${this.numberOfLikes} like`;
+    },
     loggedInUserUUID() {
       return this.$store.getters['auth/uuid'];
     },

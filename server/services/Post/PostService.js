@@ -161,6 +161,32 @@ class PostService extends RootService {
 
     return postRecords;
   }
+
+  /**
+   * @description FETCHES A POST WITH THE GIVEN UUID OF THE POST
+   * @param {string} uuid - post's UUID
+   * @route POST /api/v1/posts/:uuid
+   * @access private
+   */
+  async fetchPost(uuid) {
+    /* BEGIN: VALIDATIONS */
+    if (!uuid) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
+    /* END: VALIDATIONS */
+
+    /* BEGIN: DATABASE OPERATIONS */
+    /* FETCHING POST RECORD */
+    const postRecord = await PostsModel.query().findOne({
+      uuid,
+      is_deleted: false,
+    });
+    if (!postRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, GENERAL_MESSAGES.POST_NOT_FOUND);
+
+    const result = await PostsModel.getPostDetails(postRecord.uuid);
+    if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
+    /* END: DATABASE OPERATIONS */
+
+    return result;
+  }
 }
 
 module.exports = PostService;

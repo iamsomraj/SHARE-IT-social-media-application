@@ -22,6 +22,7 @@
 
 <script>
 import PostCard from '../../components/posts/PostCard.vue';
+import { MESSAGES } from '../../util/constants';
 import { getTime } from '../../util/helpers';
 export default {
   name: 'PostPage',
@@ -32,10 +33,7 @@ export default {
     };
   },
   async fetch() {
-    this.loading = true;
-    const payload = { uuid: this.uuid, token: this.token };
-    await this.$store.dispatch('post/fetchPost', payload);
-    this.loading = false;
+    await this.fetchPost();
   },
   computed: {
     token() {
@@ -49,11 +47,39 @@ export default {
     },
   },
   methods: {
-    onPostLike(uuid) {
-      this.$emit('onPostLike', uuid);
+    async fetchPost() {
+      this.loading = true;
+      const payload = { uuid: this.uuid, token: this.token };
+      await this.$store.dispatch('post/fetchPost', payload);
+      this.loading = false;
     },
-    onPostUnlike(uuid) {
-      this.$emit('onPostUnlike', uuid);
+    async onPostLike(uuid) {
+      this.loading = true;
+      const payload = {
+        postUUID: uuid,
+        token: this.token,
+      };
+      const res = await this.$store.dispatch('post/likePost', payload);
+      this.loading = false;
+      if (res.state) {
+        this.$store.dispatch('toast/success', MESSAGES.POST_LIKE_SUCCESS);
+      } else {
+        this.$store.dispatch('toast/error', MESSAGES.POST_LIKE_FAILURE);
+      }
+    },
+    async onPostUnlike(uuid) {
+      this.loading = true;
+      const payload = {
+        postUUID: uuid,
+        token: this.token,
+      };
+      const res = await this.$store.dispatch('post/unlikePost', payload);
+      this.loading = false;
+      if (res.state) {
+        this.$store.dispatch('toast/success', MESSAGES.POST_UNLIKE_SUCCESS);
+      } else {
+        this.$store.dispatch('toast/error', MESSAGES.POST_UNLIKE_FAILURE);
+      }
     },
     time(updated_at, created_at) {
       return getTime(updated_at ? updated_at : created_at);

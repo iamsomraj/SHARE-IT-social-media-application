@@ -1,7 +1,7 @@
 # SHARE-IT-social-media-application
 
 SHARE-IT-social-media-application is a full-stack application, where users can register and login in the portal. Users can also create and like posts. There is also a feed where users can see posts from followed users.
-  
+
 ## Features
 
 - User Register and Login
@@ -12,52 +12,6 @@ SHARE-IT-social-media-application is a full-stack application, where users can r
 - Unfollow User
 - User Feed
 - Search Users
-
-## Screenshots
-
-- Login
-  <img src="/assets/Login.png" alt="Login" />
-
-- Login in Mobile
-  <div></div>
-  <img src="/assets/LoginMobile.png" alt="LoginMobile" width="270" height="480" />
-
-- Register
-  <img src="/assets/Register.png" alt="Register" />
-
-- Register in Mobile
-  <div></div>
-  <img src="/assets/RegisterMobile.png" alt="RegisterMobile" width="270" height="480" />
-
-- Profile
-  <img src="/assets/Profile.png" alt="Profile" />
-
-- Profile in Mobile
-  <div></div>
-  <img src="/assets/ProfileMobile.png" alt="ProfileMobile" width="270" height="480" />
-
-- Search
-  <img src="/assets/Search.png" alt="Search" />
-
-- Search in Mobile
-  <div></div>
-  <img src="/assets/SearchMobile.png" alt="SearchMobile" width="270" height="480" />
-
-- Feed
-  <img src="/assets/Feed.png" alt="Feed" />
-
-- Follow
-  <img src="/assets/Follow.png" alt="Follow" />
-
-- Followed
-  <img src="/assets/Followed.png" alt="Followed" />
-
-- Like
-  <img src="/assets/Like.png" alt="Like" />
-
-- Like in Mobile
-  <div></div>
-  <img src="/assets/LikeMobile.png" alt="LikeMobile" width="270" height="480" />
 
 ## Run This Application
 

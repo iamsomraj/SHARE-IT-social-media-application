@@ -45,7 +45,7 @@
       <!-- BEGIN: NUMBER OF LIKES -->
       <div
         v-if="this.numberOfLikes === 0"
-        class="cursor-pointer text-sm text-slate-400 underline-offset-4 hover:text-red-200 hover:underline"
+        class="cursor-pointer text-sm text-slate-400 underline-offset-4 hover:text-red-400 hover:underline dark:hover:text-red-200"
         @click="onPostLike(uuid)"
       >
         {{ likeText }}

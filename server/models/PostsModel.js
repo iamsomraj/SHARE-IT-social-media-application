@@ -50,7 +50,7 @@ class PostsModel extends Model {
       properties: {
         id: { type: "integer" },
         uuid: { type: "string" },
-        content: { type: "string", minLength: 1, maxLength: 255 },
+        content: { type: "string", minLength: 1, maxLength: 500 },
         created_at: { type: "string" },
         updated_at: { type: "string" },
         created_by: { type: "integer" },

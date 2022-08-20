@@ -39,7 +39,7 @@ async function main() {
   const personStats = [
     { person_id: insertedPersons[0].id, follower_count: 2, following_count: 2, post_count: 3 },
     { person_id: insertedPersons[1].id, follower_count: 2, following_count: 2, post_count: 3 },
-    { person_id: insertedPersons[2].id, follower_count: 2, following_count: 2, post_count: 2 },
+    { person_id: insertedPersons[2].id, follower_count: 2, following_count: 2, post_count: 3 },
   ];
   const insertedPersonStats = await PersonStatsModel.query().insert(personStats);
   /* END: PERSON STATS MODEL HANDLING */
@@ -48,8 +48,7 @@ async function main() {
   /* INSERT POST RECORDS */
   const post_data = [
     {
-      uuid: "post-1",
-      content: "This is the first post",
+      content: "Scissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard, lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: insertedPersons[0].id,
@@ -57,17 +56,7 @@ async function main() {
       is_deleted: false,
     },
     {
-      uuid: "post-2",
-      content: "This is the second post",
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      created_by: insertedPersons[1].id,
-      updated_by: insertedPersons[1].id,
-      is_deleted: false,
-    },
-    {
-      uuid: "post-3",
-      content: "This is the third post",
+      content: "For the record, it could kill us to meet new people. They could be murderers or the carriers of unusual pathogens. And I'm not insane, my mother had me tested",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: insertedPersons[0].id,
@@ -75,17 +64,7 @@ async function main() {
       is_deleted: false,
     },
     {
-      uuid: "post-4",
-      content: "This is the fourth post",
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      created_by: insertedPersons[1].id,
-      updated_by: insertedPersons[1].id,
-      is_deleted: false,
-    },
-    {
-      uuid: "post-5",
-      content: "This is the fifth post",
+      content: "Then it's settled. Amy's birthday present will be my genitals.",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: insertedPersons[0].id,
@@ -93,8 +72,7 @@ async function main() {
       is_deleted: false,
     },
     {
-      uuid: "post-6",
-      content: "This is the sixth post",
+      content: "Penny. We are made of particles that have existed since the moment the universe began. I like to think those atoms traveled fourteen billion years through time and space to create us, so that we could be together and make each other whole.",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: insertedPersons[1].id,
@@ -102,8 +80,23 @@ async function main() {
       is_deleted: false,
     },
     {
-      uuid: "post-7",
-      content: "This is the seventh post",
+      content: "People get things they don't deserve all the time. Like me with you.",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      created_by: insertedPersons[1].id,
+      updated_by: insertedPersons[1].id,
+      is_deleted: false,
+    },
+    {
+      content: "Penny, you don't want to get into it with Sheldon. The guy's one lab accident away from being a super villain.",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      created_by: insertedPersons[1].id,
+      updated_by: insertedPersons[1].id,
+      is_deleted: false,
+    },
+    {
+      content: "Yeah Sheldon, well your Ken can kiss my Barbie.",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: insertedPersons[2].id,
@@ -111,8 +104,15 @@ async function main() {
       is_deleted: false,
     },
     {
-      uuid: "post-8",
-      content: "This is the eighth post",
+      content: "All right, Howard Wolowitz, listen up! You sign anything she puts in front of you, because you are the luckiest man alive. If you let her go, there is no way you can find anyone else. Speaking on behalf of all women, it is not going to happen, we had a meeting.",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      created_by: insertedPersons[2].id,
+      updated_by: insertedPersons[2].id,
+      is_deleted: false,
+    },
+    {
+      content: "No, mom. It's the same guy I've been going out with for the past two years. Yeah, the scientist. Well, it's complicated. He works with lasers and atomic magnets. No, I did not see it coming. No, we have not set a date. No, I am not pregnant. Yeah, this is a first for our family.",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: insertedPersons[2].id,
@@ -198,6 +198,11 @@ async function main() {
     },
     {
       post_id: insertedPosts[7].id,
+      like_count: 0,
+      comment_count: 0,
+    },
+    {
+      post_id: insertedPosts[8].id,
       like_count: 0,
       comment_count: 0,
     },

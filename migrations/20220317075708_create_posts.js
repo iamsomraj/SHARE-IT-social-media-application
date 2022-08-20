@@ -3,7 +3,7 @@ exports.up = function (knex) {
     knex.schema.createTable("posts", (table) => {
       table.increments("id").primary();
       table.string("uuid");
-      table.string("content");
+      table.string("content", 500);
       table.string("created_at");
       table.string("updated_at");
       table.integer("created_by").references("persons.id");

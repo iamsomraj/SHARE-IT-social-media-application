@@ -37,7 +37,7 @@
     <div class="flex flex-col items-start justify-center space-y-4 px-6">
       <!-- BEGIN: POST CONTENT -->
       <div
-        class="cursor-pointer break-words text-2xl text-slate-600 transition-all duration-300 hover:underline dark:text-slate-200 md:text-4xl"
+        class="cursor-pointer break-words text-2xl text-slate-600 underline-offset-4 transition-all duration-300 hover:underline dark:text-slate-200 md:text-4xl"
         @click="$router.push(`/post/${uuid}`)"
       >
         {{ content }}
@@ -54,7 +54,6 @@
       </div>
       <div
         v-else
-        @click="onPostUnlike(uuid)"
         class="cursor-pointer break-words text-base text-slate-400 underline-offset-4 line-clamp-1 hover:underline"
       >
         {{ likeText }}

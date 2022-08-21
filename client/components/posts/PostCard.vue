@@ -113,16 +113,28 @@ export default {
     likeText() {
       const names = this.postLikes
         .slice(0, 2)
-        .map((post) => post.creator.name)
+        .map((post) => {
+          if (post.creator.uuid === this.loggedInUserUUID) {
+            return 'You';
+          } else {
+            return post.creator.name;
+          }
+        })
         .join(', ');
       if (this.postLikes.length > 2) {
         return `${names} and ${this.postLikes.length - 2} ${
           this.postLikes.length - 2 > 1 ? 'others' : 'other'
-        } liked this`;
+        } liked ${
+          this.loggedInUserUUID === this.ownerUUID ? 'your post' : 'this post'
+        }`;
       } else if (this.postLikes.length === 0) {
-        return 'Be the first to like this';
+        return `Be the first to like ${
+          this.loggedInUserUUID === this.ownerUUID ? 'your post' : 'this post'
+        }`;
       } else {
-        return `${names} liked this`;
+        return `${names} liked ${
+          this.loggedInUserUUID === this.ownerUUID ? 'your post' : 'this post'
+        }`;
       }
     },
     loggedInUserUUID() {

@@ -49,6 +49,15 @@ export default {
       loading: false,
     };
   },
+  async fetch() {
+    /* BEGIN: FETCHING PROFILE DETAIL */
+    const uuid = this.$router.currentRoute.params.uuid; // GETTING UUID FROM URL
+    await this.$store.dispatch('auth/getSelfProfile', {
+      uuid,
+      token: this.token,
+    });
+    /* END: FETCHING PROFILE DETAIL */
+  },
   computed: {
     user() {
       return this.$store.getters['auth/user'];

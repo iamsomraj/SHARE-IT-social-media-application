@@ -53,6 +53,17 @@ class PostLikesModel extends Model {
     };
   }
 
+  static get modifiers() {
+    return {
+      orderByLatest(builder) {
+        builder.orderBy([
+          { column: "created_at", order: "desc", nulls: "last" },
+          { column: "updated_at", order: "desc", nulls: "last" },
+        ]);
+      },
+    };
+  }
+
   static get relationMappings() {
     const PostsModel = require("./PostsModel.js");
     const PersonsModel = require("./PersonsModel.js");

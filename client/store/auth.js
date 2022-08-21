@@ -4,6 +4,7 @@ import {
   AUTHORIZE_USER_URL,
   CREATE_POST_URL,
   FOLLOW_URL,
+  GET_USER_PROFILE_URL,
   LOCAL_STORAGE_KEYS,
   LOGIN_URL,
   REGISTER_URL,
@@ -47,6 +48,29 @@ export const getters = {
 };
 
 export const actions = {
+  /* GET SELF PROFILE */
+  async getSelfProfile({ commit }, { uuid, token }) {
+    try {
+      const { data: responseData } = await axios.get(
+        `${GET_USER_PROFILE_URL}/${uuid}`,
+        {
+          ...getHeaders(token),
+        }
+      );
+      const { data, state, message } = responseData;
+      if (state) {
+        commit('setUser', data);
+      } else {
+        commit('clear');
+      }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
+      commit('clear');
+      return { data, state, message };
+    }
+  },
   /* CHECK AUTH FROM STORAGE */
   async checkAuth({ commit }) {
     try {

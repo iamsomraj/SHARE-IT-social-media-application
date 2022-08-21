@@ -115,6 +115,12 @@ class PersonsModel extends Model {
       defaultSelects(builder) {
         builder.select("id", "uuid", "name", "email", "created_at", "updated_at");
       },
+      orderByLatest(builder) {
+        builder.orderBy([
+          { column: "created_at", order: "desc", nulls: "last" },
+          { column: "updated_at", order: "desc", nulls: "last" },
+        ]);
+      },
     };
   }
 

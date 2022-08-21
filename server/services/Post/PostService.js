@@ -146,15 +146,12 @@ class PostService extends RootService {
 
     /* BEGIN: FETCH POSTS OF FOLLOWINGS */
     const postRecords = await PostsModel.query()
-      .withGraphFetched("[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]")
+      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
       .where((buider) => {
         buider.orWhereIn("created_by", followingIds);
         buider.orWhere("created_by", user.id);
       })
-      .orderBy([
-        { column: "created_at", order: "desc", nulls: "last" },
-        { column: "updated_at", order: "desc", nulls: "last" },
-      ]);
+      .modifiers("orderByLatest");
     /* END: FETCH POSTS OF FOLLOWINGS */
 
     if (!postRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FEED_FAILURE);

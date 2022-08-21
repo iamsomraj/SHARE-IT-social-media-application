@@ -118,11 +118,17 @@ export default {
       if (this.postLikes.length > 2) {
         return `${names} and ${this.postLikes.length - 2} ${
           this.postLikes.length - 2 > 1 ? 'others' : 'other'
-        } liked this`;
+        } liked ${
+          this.loggedInUserUUID === this.ownerUUID ? 'your post' : 'this post'
+        }`;
       } else if (this.postLikes.length === 0) {
-        return 'Be the first to like this';
+        return `Be the first to like ${
+          this.loggedInUserUUID === this.ownerUUID ? 'your post' : 'this post'
+        }`;
       } else {
-        return `${names} liked this`;
+        return `${names} liked ${
+          this.loggedInUserUUID === this.ownerUUID ? 'your post' : 'this post'
+        }`;
       }
     },
     loggedInUserUUID() {

@@ -60,6 +60,17 @@ class PostsModel extends Model {
     };
   }
 
+  static get modifiers() {
+    return {
+      orderByLatest(builder) {
+        builder.orderBy([
+          { column: "created_at", order: "desc", nulls: "last" },
+          { column: "updated_at", order: "desc", nulls: "last" },
+        ]);
+      },
+    };
+  }
+
   static get relationMappings() {
     const PersonsModel = require("./PersonsModel.js");
     const PostLikesModel = require("./PostLikesModel.js");
@@ -110,7 +121,7 @@ class PostsModel extends Model {
       .findOne({
         uuid,
       })
-      .withGraphFetched("[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]");
+      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]");
     delete postRecord.password;
     return postRecord;
   }

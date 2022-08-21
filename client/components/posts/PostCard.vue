@@ -122,7 +122,7 @@ export default {
             return post.creator.name;
           }
         })
-        .join(', ');
+        .join(this.postLikes.length === 2 ? ' and ' : ', ');
       if (this.postLikes.length > 2) {
         return `${names} and ${this.postLikes.length - 2} ${
           this.postLikes.length - 2 > 1 ? 'others' : 'other'

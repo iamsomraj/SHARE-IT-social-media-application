@@ -58,9 +58,7 @@ export default {
     onPostLike(uuid) {
       this.$emit('on-post-like', uuid);
     },
-    onPostUnlike(uuid) {
-      this.$emit('on-post-unlike', uuid);
-    },
   },
+  emits: ['onPostLike'],
 };
 </script>

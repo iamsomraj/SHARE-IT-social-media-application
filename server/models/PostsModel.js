@@ -75,6 +75,7 @@ class PostsModel extends Model {
     const PersonsModel = require("./PersonsModel.js");
     const PostLikesModel = require("./PostLikesModel.js");
     const PostStatsModel = require("./PostStatsModel.js");
+    const PersonPostFavouritesModel = require("./PersonPostFavouritesModel.js");
 
     return {
       post_stats: {
@@ -95,7 +96,7 @@ class PostsModel extends Model {
       },
       person_post_favourites: {
         relation: Model.HasManyRelation,
-        modelClass: PostLikesModel,
+        modelClass: PersonPostFavouritesModel,
         join: {
           from: "public.posts.id",
           to: "public.person_post_favourites.post_id",

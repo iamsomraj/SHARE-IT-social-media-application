@@ -62,7 +62,7 @@ class PersonPostFavouritesModel extends Model {
           to: "public.posts.id",
         },
       },
-      person: {
+      creator: {
         relation: Model.BelongsToOneRelation,
         modelClass: PersonsModel,
         join: {

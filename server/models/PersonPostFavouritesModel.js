@@ -66,7 +66,7 @@ class PersonPostFavouritesModel extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: PersonsModel,
         join: {
-          from: "public.person_post_favourites.created_by",
+          from: "public.person_post_favourites.person_id",
           to: "public.persons.id",
         },
       },

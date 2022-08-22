@@ -29,6 +29,7 @@
         @on-post-like="onPostLike"
         @on-post-unlike="onPostUnlike"
       ></post-card-footer>
+      <!-- END: FOOTER SECTION -->
     </div>
   </div>
 </template>

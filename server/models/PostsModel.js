@@ -93,6 +93,14 @@ class PostsModel extends Model {
           to: "public.post_likes.post_id",
         },
       },
+      person_post_favourites: {
+        relation: Model.HasManyRelation,
+        modelClass: PostLikesModel,
+        join: {
+          from: "public.posts.id",
+          to: "public.person_post_favourites.post_id",
+        },
+      },
       creator: {
         relation: Model.BelongsToOneRelation,
         modelClass: PersonsModel,
@@ -121,7 +129,7 @@ class PostsModel extends Model {
       .findOne({
         uuid,
       })
-      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]");
+      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), person_post_favourites(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]");
     delete postRecord.password;
     return postRecord;
   }

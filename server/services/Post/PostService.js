@@ -146,7 +146,7 @@ class PostService extends RootService {
 
     /* BEGIN: FETCH POSTS OF FOLLOWINGS */
     const postRecords = await PostsModel.query()
-      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
+      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), person_post_favourites(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
       .where((buider) => {
         buider.orWhereIn("created_by", followingIds);
         buider.orWhere("created_by", user.id);

@@ -7,6 +7,7 @@ const PostsModel = require("../models/PostsModel.js");
 const { person_data } = require("../utils/data/dummy-data.js");
 const _ = require("colors");
 const PersonStatsModel = require("../models/PersonStatsModel.js");
+const PersonPostFavouritesModel = require("../models/PersonPostFavouritesModel.js");
 
 async function main() {
   /* DELETE ALL THE DATA THAT IS PRESENT IN DATABASE */
@@ -209,6 +210,25 @@ async function main() {
   ];
   const insertedPostStats = await PostStatsModel.query().insert(stats_data);
   /* END: POST STATS MODEL HANDLING */
+
+  /* BEGIN: PERSON POST FAVORITES MODEL HANDLING */
+  /* INSERT PERSON POST FAVORITES RECORDS */
+  const person_post_favorites_data = [
+    {
+      person_id: insertedPersons[0].id,
+      post_id: insertedPosts[0].id,
+    },
+    {
+      person_id: insertedPersons[1].id,
+      post_id: insertedPosts[1].id,
+    },
+    {
+      person_id: insertedPersons[2].id,
+      post_id: insertedPosts[1].id,
+    },
+  ];
+  const insertedPersonPostFavorites = await PersonPostFavouritesModel.query().insert(person_post_favorites_data);
+  /* END: PERSON POST FAVORITES MODEL HANDLING */
 }
 
 main()

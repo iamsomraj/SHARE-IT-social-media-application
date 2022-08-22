@@ -31,7 +31,7 @@
     </div>
 
     <favourite-icon
-      class="h-6 w-6 stroke-slate-600 dark:stroke-slate-200"
+      class="h-6 w-6 stroke-slate-400 dark:stroke-slate-600"
     ></favourite-icon>
     <!-- 
     <favourite-icon

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import PostCard from '../../components/posts/PostCard.vue';
+import PostCard from '../../components/posts/post-card/PostCard.vue';
 import { MESSAGES } from '../../util/constants';
 import { getTime } from '../../util/helpers';
 export default {

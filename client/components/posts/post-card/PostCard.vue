@@ -3,42 +3,25 @@
     <div
       class="flex w-full flex-col items-start justify-center space-y-4 border-t border-b transition-all duration-300 dark:border-slate-600 md:rounded-xl md:border"
     >
-      <!-- BEGIN: HEADER -->
+      <!-- BEGIN: HEADER SECTION -->
       <post-card-header
         :ownerUUID="ownerUUID"
         :ownerName="ownerName"
         :time="time"
       ></post-card-header>
-      <!-- END: HEADER -->
+      <!-- END: HEADER SECTION -->
 
-      <!-- BEGIN: POST CARD CONTENT -->
-      <div class="flex flex-col items-start justify-center space-y-4 px-6">
-        <!-- BEGIN: POST CONTENT -->
-        <div
-          class="cursor-pointer break-words text-2xl text-slate-600 underline-offset-4 transition-all duration-300 hover:underline dark:text-slate-200 md:text-4xl"
-          @click="$router.push(`/post/${uuid}`)"
-        >
-          {{ content }}
-        </div>
-        <!-- END: POST CONTENT -->
-
-        <!-- BEGIN: NUMBER OF LIKES -->
-        <div
-          v-if="this.numberOfLikes === 0"
-          @click="onPostLike(uuid)"
-          class="cursor-pointer break-words text-base text-slate-400 underline-offset-4 line-clamp-1 hover:text-red-400 hover:underline dark:hover:text-red-200"
-        >
-          {{ likeText }}
-        </div>
-        <div
-          v-else
-          class="cursor-pointer break-words text-base text-slate-400 underline-offset-4 line-clamp-1 hover:underline"
-        >
-          {{ likeText }}
-        </div>
-        <!-- END: NUMBER OF LIKES -->
-      </div>
-      <!-- END: POST CARD CONTENT -->
+      <!-- BEGIN: BODY SECTION -->
+      <post-card-body
+        :uuid="uuid"
+        :content="content"
+        :numberOfLikes="numberOfLikes"
+        :isLiked="isLiked"
+        :likeText="likeText"
+        @on-post-like="onPostLike"
+        @on-post-unlike="onPostUnlike"
+      ></post-card-body>
+      <!-- END: BODY SECTION -->
 
       <!-- BEGIN: POST CARD FOOTER -->
       <div
@@ -76,6 +59,9 @@
 import ProfilePicture from '../../persons/ProfilePicture.vue';
 import HeartIcon from './../../assets/HeartIcon.vue';
 import PostCardHeader from './PostCardHeader.vue';
+import PostCardBody from './PostCardBody.vue';
+import PostCardFooter from './PostCardFooter.vue';
+
 export default {
   name: 'PostCard',
   props: [
@@ -134,7 +120,13 @@ export default {
       this.$emit('onPostUnlike', uuid);
     },
   },
-  components: { ProfilePicture, HeartIcon, PostCardHeader },
+  components: {
+    ProfilePicture,
+    HeartIcon,
+    PostCardHeader,
+    PostCardBody,
+    PostCardFooter,
+  },
 };
 </script>
 

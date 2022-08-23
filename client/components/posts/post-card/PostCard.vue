@@ -50,6 +50,7 @@ export default {
     'ownerUUID',
     'content',
     'numberOfLikes',
+    'numberOfFavourites',
     'time',
     'postLikes',
     'personPostFavourites',

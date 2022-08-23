@@ -159,58 +159,6 @@ async function main() {
   const insertedPostLikes = await PostLikesModel.query().insert(like_data);
   /* END: POST LIKES MODEL HANDLING */
 
-  /* BEGIN: POST STATS MODEL HANDLING */
-  /* INSERT POST STATS RECORDS */
-  const stats_data = [
-    {
-      post_id: insertedPosts[0].id,
-      like_count: 2,
-      comment_count: 0,
-    },
-    {
-      post_id: insertedPosts[1].id,
-      like_count: 2,
-      comment_count: 0,
-    },
-    {
-      post_id: insertedPosts[2].id,
-      like_count: 0,
-      comment_count: 0,
-    },
-    {
-      post_id: insertedPosts[3].id,
-      like_count: 0,
-      comment_count: 0,
-    },
-    {
-      post_id: insertedPosts[4].id,
-      like_count: 0,
-      comment_count: 0,
-    },
-    {
-      post_id: insertedPosts[5].id,
-      like_count: 0,
-      comment_count: 0,
-    },
-    {
-      post_id: insertedPosts[6].id,
-      like_count: 0,
-      comment_count: 0,
-    },
-    {
-      post_id: insertedPosts[7].id,
-      like_count: 0,
-      comment_count: 0,
-    },
-    {
-      post_id: insertedPosts[8].id,
-      like_count: 0,
-      comment_count: 0,
-    },
-  ];
-  const insertedPostStats = await PostStatsModel.query().insert(stats_data);
-  /* END: POST STATS MODEL HANDLING */
-
   /* BEGIN: PERSON POST FAVORITES MODEL HANDLING */
   /* INSERT PERSON POST FAVORITES RECORDS */
   const person_post_favorites_data = [
@@ -229,6 +177,67 @@ async function main() {
   ];
   const insertedPersonPostFavorites = await PersonPostFavouritesModel.query().insert(person_post_favorites_data);
   /* END: PERSON POST FAVORITES MODEL HANDLING */
+
+  /* BEGIN: POST STATS MODEL HANDLING */
+  /* INSERT POST STATS RECORDS */
+  const stats_data = [
+    {
+      post_id: insertedPosts[0].id,
+      like_count: 2,
+      comment_count: 0,
+      favourite_count: 1,
+    },
+    {
+      post_id: insertedPosts[1].id,
+      like_count: 2,
+      comment_count: 0,
+      favourite_count: 2,
+    },
+    {
+      post_id: insertedPosts[2].id,
+      like_count: 0,
+      comment_count: 0,
+      favourite_count: 0,
+    },
+    {
+      post_id: insertedPosts[3].id,
+      like_count: 0,
+      comment_count: 0,
+      favourite_count: 0,
+    },
+    {
+      post_id: insertedPosts[4].id,
+      like_count: 0,
+      comment_count: 0,
+      favourite_count: 0,
+    },
+    {
+      post_id: insertedPosts[5].id,
+      like_count: 0,
+      comment_count: 0,
+      favourite_count: 0,
+    },
+    {
+      post_id: insertedPosts[6].id,
+      like_count: 0,
+      comment_count: 0,
+      favourite_count: 0,
+    },
+    {
+      post_id: insertedPosts[7].id,
+      like_count: 0,
+      comment_count: 0,
+      favourite_count: 0,
+    },
+    {
+      post_id: insertedPosts[8].id,
+      like_count: 0,
+      comment_count: 0,
+      favourite_count: 0,
+    },
+  ];
+  const insertedPostStats = await PostStatsModel.query().insert(stats_data);
+  /* END: POST STATS MODEL HANDLING */
 }
 
 main()

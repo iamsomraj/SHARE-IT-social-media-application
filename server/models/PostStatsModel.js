@@ -21,6 +21,10 @@ class PostStatsModel extends Model {
     return "comment_count";
   }
 
+  static get favouriteCountColumn() {
+    return "favourite_count";
+  }
+
   static get jsonSchema() {
     return {
       type: "object",
@@ -30,6 +34,7 @@ class PostStatsModel extends Model {
         post_id: { type: "integer" },
         comment_count: { type: "integer" },
         like_count: { type: "integer" },
+        favourite_count: { type: "integer" },
       },
     };
   }

@@ -88,6 +88,10 @@ class PostService extends RootService {
     });
     if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FAVOURITE_FAILURE);
 
+    /* UPDATE POST STAT RECORD */
+    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).increment("favourite_count", 1);
+    if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FAVOURITE_FAILURE);
+
     const result = await PostsModel.getPostDetails(postRecord.uuid);
     if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FAVOURITE_FAILURE);
     /* END: DATABASE OPERATIONS */
@@ -121,6 +125,10 @@ class PostService extends RootService {
     /* DELETE PERSON POST FAVOURITE RECORD */
     const favouriteRecord = await PersonPostFavouritesModel.query().deleteById(personPostFavouriteRecord.id);
     if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);
+
+    /* UPDATE POST STAT RECORD */
+    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).decrement("favourite_count", 1);
+    if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
     if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);

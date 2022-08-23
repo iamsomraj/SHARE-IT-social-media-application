@@ -9,7 +9,7 @@
         class="flex w-full items-start justify-start space-x-2 border-t border-b px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border md:py-6 md:px-4"
       >
         <!-- BEGIN: SELF FAVOURITE POST ITEM -->
-        <div class="flex flex-col items-center justify-center space-y-2">
+        <div class="flex flex-col items-center justify-center space-y-2 py-2">
           <!-- CIRCLE SECTION -->
           <profile-picture
             :uuid="user.uuid"
@@ -37,7 +37,7 @@
           <div
             v-for="post in favouritePosts"
             :key="post.id"
-            class="flex flex-col items-center justify-center space-y-2"
+            class="flex flex-col items-center justify-center space-y-2 py-2"
           >
             <!-- CIRCLE SECTION -->
             <profile-picture

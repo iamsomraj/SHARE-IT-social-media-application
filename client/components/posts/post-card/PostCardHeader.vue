@@ -30,15 +30,17 @@
       <!-- END: POST OWNER NAME AND TIME -->
     </div>
 
-    <div v-if="!isPostFavourite" @click="markPostFavourite">
-      <favourite-icon
-        class="h-6 w-6 cursor-pointer stroke-slate-400 transition-all duration-300 hover:scale-125 hover:fill-slate-400 dark:stroke-slate-600 hover:dark:fill-slate-600"
-      ></favourite-icon>
-    </div>
-    <div v-else @click="markPostUnfavourite">
-      <favourite-icon
-        class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 transition-all duration-300 hover:scale-125 dark:fill-yellow-200 dark:stroke-yellow-200"
-      ></favourite-icon>
+    <div v-if="!isSelfPost">
+      <div v-if="!isPostFavourite" @click="markPostFavourite">
+        <favourite-icon
+          class="h-6 w-6 cursor-pointer stroke-slate-400 transition-all duration-300 hover:scale-125 hover:fill-slate-400 dark:stroke-slate-600 hover:dark:fill-slate-600"
+        ></favourite-icon>
+      </div>
+      <div v-else @click="markPostUnfavourite">
+        <favourite-icon
+          class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 transition-all duration-300 hover:scale-125 dark:fill-yellow-200 dark:stroke-yellow-200"
+        ></favourite-icon>
+      </div>
     </div>
   </div>
   <!-- END: POST CARD HEADER -->
@@ -75,6 +77,9 @@ export default {
     },
     token() {
       return this.$store.getters['auth/token'];
+    },
+    isSelfPost() {
+      return this.ownerUUID === this.$store.getters['auth/uuid'];
     },
     loggedInUserUUID() {
       return this.$store.getters['auth/uuid'];

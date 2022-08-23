@@ -1,11 +1,11 @@
 const express = require("express");
-const { addLike, createPost, getPostFeed, removeLike, fetchPost, addFavourite, removeFavourite } = require("../controllers/post/index.js");
+const { addLike, createPost, getFeedPosts, removeLike, fetchPost, addFavourite, removeFavourite } = require("../controllers/post/index.js");
 
 const protect = require("../middlewares/authMiddleware.js");
 const router = express.Router();
 
 router.route("/create").post(protect, createPost);
-router.route("/feed").get(protect, getPostFeed);
+router.route("/feed").get(protect, getFeedPosts);
 router.route("/like/:uuid").post(protect, addLike);
 router.route("/unlike/:uuid").post(protect, removeLike);
 router.route("/favourite/:post_uuid").post(protect, addFavourite);

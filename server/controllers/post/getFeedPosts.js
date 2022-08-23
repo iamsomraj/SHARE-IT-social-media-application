@@ -8,10 +8,10 @@ const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages");
  * @description gets all the post for the user
  * @route GET /api/v1/posts/feed
  */
-const getPostFeed = asyncHandler(async (req, res) => {
+const getFeedPosts = asyncHandler(async (req, res) => {
   const { user } = req;
   const postService = new PostService();
-  const result = await postService.getPostFeed(user);
+  const result = await postService.getFeedPosts(user);
 
   res.status(HTTP_CODES.OK).json({
     state: true,
@@ -20,4 +20,4 @@ const getPostFeed = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = getPostFeed;
+module.exports = getFeedPosts;

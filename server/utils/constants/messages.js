@@ -41,6 +41,7 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
   NO_PEOPLE_FOUND: "No people found!",
   WRONG_CREDENTIALS: "Wrong Credentials!",
   POST_FEED_FAILURE: "Post feed failed!",
+  POST_FAVOURITE_FAILURE: "Post favourite failed!",
 });
 
 const AUTH_SUCCESS_MESSAGES = Object.freeze({

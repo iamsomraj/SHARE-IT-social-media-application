@@ -215,7 +215,13 @@ class PostService extends RootService {
     return result;
   }
 
-  async getPostFeed(user) {
+  /**
+   * @description GET ALL THE POST FOR THE FEED
+   * @param {{ id }} user - logged in user
+   * @route GET /api/v1/posts/feed
+   * @access private
+   */
+  async getFeedPosts(user) {
     /* BEGIN: FETCH FOLLOWINGS OF PERSON */
     const followingRecords = await FollowingsModel.query().where("follower_id", user.id);
     /* END: FETCH FOLLOWINGS OF PERSON */
@@ -235,6 +241,34 @@ class PostService extends RootService {
     /* END: FETCH POSTS OF FOLLOWINGS */
 
     if (!postRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FEED_FAILURE);
+
+    return postRecords;
+  }
+
+  /**
+   * @description GET ALL THE FAVOURITE POSTS FOR THE PERSON
+   * @param {{ id }} user - logged in user
+   * @route GET /api/v1/posts/favourites
+   * @access private
+   */
+  async getFavouritePosts(user) {
+    /* BEGIN: FETCH PERSON POST FAVOURITE RECORDS FOR A PERSON */
+    const personPostFavouriteRecords = await PersonPostFavouritesModel.query().where("person_id", user.id);
+    /* END: FETCH PERSON POST FAVOURITE RECORDS FOR A PERSON */
+
+    if (!personPostFavouriteRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAVOURITE_FAILURE);
+
+    const postIds = personPostFavouriteRecords.map((record) => record.post_id);
+
+    /* BEGIN: FETCH POSTS OF FOLLOWINGS */
+    const postRecords = await PostsModel.query()
+      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), person_post_favourites(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
+      .whereIn("id", postIds)
+      .andWhere("is_deleted", false)
+      .modifiers("orderByLatest");
+    /* END: FETCH POSTS OF FOLLOWINGS */
+
+    if (!postRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAVOURITE_FAILURE);
 
     return postRecords;
   }

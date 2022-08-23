@@ -6,6 +6,7 @@ const PostsModel = require("../../models/PostsModel");
 const PostStatsModel = require("../../models/PostStatsModel");
 const PersonStatsModel = require("../../models/PersonStatsModel");
 const PostLikesModel = require("../../models/PostLikesModel");
+const PersonPostFavouritesModel = require("../../models/PersonPostFavouritesModel");
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL POST RELATED CONTROLLERS
@@ -52,6 +53,77 @@ class PostService extends RootService {
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
     if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
+    /* END: DATABASE OPERATIONS */
+
+    return result;
+  }
+
+  /**
+   * @description MARKS A POST AS FAVOURITE
+   * @param {{ id }} user - logged in user
+   * @param {string} post_uuid - post's uuid
+   * @route POST /api/v1/posts/favourite/:post_uuid
+   * @access private
+   */
+  async addFavourite(user, post_uuid) {
+    /* BEGIN: VALIDATIONS */
+    if (!post_uuid) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
+    /* END: VALIDATIONS */
+
+    /* BEGIN: DATABASE VALIDATIONS */
+    /* CHECKING IF POST RECORD EXISTS OR NOT */
+    const postRecord = await PostsModel.query().findOne({ uuid: post_uuid, is_deleted: false });
+    if (!postRecord) this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
+
+    /* CHECKING IF PERSON POST FAVOURITE RECORD FOR THE GIVEN USER EXISTS OR NOT */
+    const personPostFavouriteRecord = await PersonPostFavouritesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
+    if (personPostFavouriteRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.ALREADY_FAVOURITE_POST);
+    /* END: DATABASE VALIDATIONS */
+
+    /* BEGIN: DATABASE OPERATIONS */
+    /* INSERT PERSON POST FAVOURITE RECORD */
+    const favouriteRecord = await PersonPostFavouritesModel.query().insert({
+      post_id: postRecord.id,
+      person_id: user.id,
+    });
+    if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FAVOURITE_FAILURE);
+
+    const result = await PostsModel.getPostDetails(postRecord.uuid);
+    if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FAVOURITE_FAILURE);
+    /* END: DATABASE OPERATIONS */
+
+    return result;
+  }
+
+  /**
+   * @description REMOVES FAVOURITE MARK FROM A POST
+   * @param {{ id }} user - logged in user
+   * @param {string} post_uuid - post's uuid
+   * @route POST /api/v1/posts/unfavourite/:post_uuid
+   * @access private
+   */
+  async removeFavourite(user, post_uuid) {
+    /* BEGIN: VALIDATIONS */
+    if (!post_uuid) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
+    /* END: VALIDATIONS */
+
+    /* BEGIN: DATABASE VALIDATIONS */
+    /* CHECKING IF POST RECORD EXISTS OR NOT */
+    const postRecord = await PostsModel.query().findOne({ uuid: post_uuid, is_deleted: false });
+    if (!postRecord) this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
+
+    /* CHECKING IF PERSON POST FAVOURITE RECORD FOR THE GIVEN USER EXISTS OR NOT */
+    const personPostFavouriteRecord = await PersonPostFavouritesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
+    if (!personPostFavouriteRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.NOT_FAVOURITE_YET);
+    /* END: DATABASE VALIDATIONS */
+
+    /* BEGIN: DATABASE OPERATIONS */
+    /* DELETE PERSON POST FAVOURITE RECORD */
+    const favouriteRecord = await PersonPostFavouritesModel.query().deleteById(personPostFavouriteRecord.id);
+    if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);
+
+    const result = await PostsModel.getPostDetails(postRecord.uuid);
+    if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);
     /* END: DATABASE OPERATIONS */
 
     return result;

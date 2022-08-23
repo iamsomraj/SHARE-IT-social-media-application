@@ -6,7 +6,7 @@
     <!-- BEGIN: FAVOURITE POST SECTIONS -->
     <div class="flex w-full justify-center md:px-12">
       <div
-        class="flex w-full items-start justify-start space-x-2 border px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:py-6 md:px-4"
+        class="flex w-full items-start justify-start space-x-2 border-t border-b px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border md:py-6 md:px-4"
       >
         <!-- BEGIN: SELF FAVOURITE POST ITEM -->
         <div class="flex flex-col items-center justify-center space-y-2">
@@ -30,7 +30,9 @@
         <!-- VERTICAL LINE SECTION -->
         <div class="h-full border dark:border-slate-600"></div>
 
-        <div class="flex items-center justify-start space-x-2 overflow-x-auto">
+        <div
+          class="flex items-center justify-start space-x-2 overflow-x-auto overscroll-x-contain"
+        >
           <!-- BEGIN: FAVOURITE POST ITEM -->
           <div
             v-for="post in favouritePosts"

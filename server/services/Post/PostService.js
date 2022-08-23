@@ -246,7 +246,7 @@ class PostService extends RootService {
   }
 
   /**
-   * @description GET ALL THE FAVOURITE POSTS FOR THE PERSON
+   * @description GET ALL THE FAVOURITE POSTS FOR THE USER
    * @param {{ id }} user - logged in user
    * @route GET /api/v1/posts/favourites
    * @access private

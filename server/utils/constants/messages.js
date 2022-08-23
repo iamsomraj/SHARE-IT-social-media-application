@@ -14,6 +14,7 @@ const PERSON_SUCCESS_MESSAGES = Object.freeze({
   UNFAVOURITE_SUCCESS: "Unfavourite successful!",
   POST_SUCCESS: "Post successful!",
   PERSON_FEED_SUCCESS: "Person feed fetched successfully!",
+  PERSON_FAVOURTIE_SUCCESS: "Person favourite posts fetched successfully!",
 });
 
 const PERSON_ERROR_MESSAGES = Object.freeze({

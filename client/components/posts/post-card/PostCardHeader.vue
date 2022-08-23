@@ -32,7 +32,7 @@
 
     <favourite-icon
       v-if="!isPostFavourite"
-      class="h-6 w-6 cursor-pointer stroke-slate-400 dark:stroke-slate-600"
+      class="h-6 w-6 cursor-pointer stroke-slate-400 transition-all duration-300 hover:scale-125 hover:fill-slate-400 dark:stroke-slate-600 hover:dark:fill-slate-600"
       @click="markPostFavourite"
     ></favourite-icon>
     <favourite-icon

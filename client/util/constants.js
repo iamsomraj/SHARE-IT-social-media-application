@@ -46,6 +46,10 @@ export const MESSAGES = Object.freeze({
   PERSON_UNFOLLOW_FAILURE: 'There was an error unfollowing this person!',
   SEARCH_SUCCESS: 'Search results found!',
   SEARCH_FAILURE: 'There was an error searching!',
+  ADD_FAVOURITE_SUCCESS: 'You marked this post as favourite!',
+  ADD_FAVOURITE_FAILURE: 'Failed to mark this post as favourite!',
+  REMOVE_FAVOURITE_SUCCESS: 'Your favourite has been removed!',
+  REMOVE_FAVOURITE_FAILURE: 'Failed to remove favourite!',
 });
 
 /* ROUTES */

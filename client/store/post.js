@@ -91,10 +91,6 @@ export const actions = {
           ...getHeaders(token),
         }
       );
-      console.log(
-        '🚀 ~ file: post.js ~ line 87 ~ favouritePost ~ responseData',
-        responseData
-      );
       const { data, state, message } = responseData;
       if (state) {
         commit('setPost', data);
@@ -115,10 +111,6 @@ export const actions = {
         {
           ...getHeaders(token),
         }
-      );
-      console.log(
-        '🚀 ~ file: post.js ~ line 108 ~ unfavouritePost ~ responseData',
-        responseData
       );
       const { data, state, message } = responseData;
       if (state) {

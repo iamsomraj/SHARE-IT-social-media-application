@@ -47,6 +47,7 @@
 <script>
 import ProfilePicture from '../../persons/ProfilePicture.vue';
 import FavouriteIcon from '../../assets/FavouriteIcon.vue';
+import { MESSAGES } from '../../../util/constants';
 
 export default {
   name: 'PostCardHeader',
@@ -93,15 +94,9 @@ export default {
         token: this.token,
       });
       if (state) {
-        this.$store.dispatch(
-          'toast/success',
-          'You marked this post as favourite!'
-        );
+        this.$store.dispatch('toast/success', MESSAGES.ADD_FAVOURITE_SUCCESS);
       } else {
-        this.$store.dispatch(
-          'toast/error',
-          'Failed to mark this post as favourite!'
-        );
+        this.$store.dispatch('toast/error', MESSAGES.ADD_FAVOURITE_FAILURE);
       }
     },
     async markPostUnfavourite() {
@@ -112,10 +107,10 @@ export default {
       if (state) {
         this.$store.dispatch(
           'toast/success',
-          'Your favourite has been removed!'
+          MESSAGES.REMOVE_FAVOURITE_SUCCESS
         );
       } else {
-        this.$store.dispatch('toast/error', 'Failed to remove favourite!');
+        this.$store.dispatch('toast/error', MESSAGES.REMOVE_FAVOURITE_FAILURE);
       }
     },
   },

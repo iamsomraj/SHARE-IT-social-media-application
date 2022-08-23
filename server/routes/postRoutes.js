@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.route("/create").post(protect, createPost);
 router.route("/feed").get(protect, getFeedPosts);
-router.route("/favourites").post(protect, getFavouritePosts);
+router.route("/favourites").get(protect, getFavouritePosts);
 router.route("/like/:uuid").post(protect, addLike);
 router.route("/unlike/:uuid").post(protect, removeLike);
 router.route("/favourite/:post_uuid").post(protect, addFavourite);

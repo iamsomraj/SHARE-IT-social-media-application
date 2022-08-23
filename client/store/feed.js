@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   ADD_LIKE_URL,
+  GET_FAVOURITE_POSTS_URL,
   GET_POST_FEED_URL,
   REMOVE_LIKE_URL,
 } from '../util/constants';
@@ -8,10 +9,12 @@ import { getHeaders } from '../util/helpers';
 
 export const state = () => ({
   posts: [],
+  favouritePosts: [],
 });
 
 export const getters = {
   posts: (state) => state.posts,
+  favouritePosts: (state) => state.favouritePosts,
 };
 
 export const actions = {
@@ -24,6 +27,26 @@ export const actions = {
       const { data, state, message } = responseData;
       if (state) {
         commit('setPosts', data);
+      }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
+      return { data, state, message };
+    }
+  },
+  /* FETCH FAVOURITE POSTS */
+  async favouritePosts({ commit }, token) {
+    try {
+      const { data: responseData } = await axios.get(
+        `${GET_FAVOURITE_POSTS_URL}`,
+        {
+          ...getHeaders(token),
+        }
+      );
+      const { data, state, message } = responseData;
+      if (state) {
+        commit('setFavouritePosts', data);
       }
       return { data, state, message };
     } catch (error) {
@@ -77,6 +100,9 @@ export const actions = {
 };
 
 export const mutations = {
+  setFavouritePosts(state, posts) {
+    state.favouritePosts = posts;
+  },
   setPosts(state, posts) {
     state.posts = posts;
   },

@@ -30,9 +30,13 @@ export default {
     posts() {
       return this.$store.getters['feed/posts'];
     },
+    favouritePosts() {
+      return this.$store.getters['feed/favouritePosts'];
+    },
   },
   async fetch() {
     await this.$store.dispatch('feed/posts', this.token);
+    await this.$store.dispatch('feed/favouritePosts', this.token);
   },
   methods: {
     async onPostLike(uuid) {

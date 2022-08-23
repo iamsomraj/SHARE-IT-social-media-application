@@ -6,9 +6,9 @@
     <!-- BEGIN: FAVOURITE POST SECTIONS -->
     <div class="flex w-full justify-center md:px-12">
       <div
-        class="flex w-full items-start justify-start space-x-2 overflow-x-auto border px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:py-6 md:px-4"
+        class="flex w-full items-start justify-start space-x-2 border px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:py-6 md:px-4"
       >
-        <!-- BEGIN: FAVOURITE POST ITEM -->
+        <!-- BEGIN: SELF FAVOURITE POST ITEM -->
         <div class="flex flex-col items-center justify-center space-y-2">
           <!-- CIRCLE SECTION -->
           <profile-picture
@@ -25,30 +25,35 @@
             {{ user.name }}
           </div>
         </div>
-        <!-- END: FAVOURITE POST ITEM -->
+        <!-- END: SELF FAVOURITE POST ITEM -->
 
-        <!-- BEGIN: FAVOURITE POST ITEM -->
-        <div
-          v-for="post in favouritePosts"
-          :key="post.id"
-          class="flex flex-col items-center justify-center space-y-2"
-        >
-          <!-- CIRCLE SECTION -->
-          <profile-picture
-            :uuid="post.creator.uuid"
-            :name="post.creator.name"
-            class="h-12 w-12 text-7xl"
-          ></profile-picture>
+        <!-- VERTICAL LINE SECTION -->
+        <div class="h-full border dark:border-slate-600"></div>
 
-          <!-- NAME SECTION -->
+        <div class="flex items-center justify-start space-x-2 overflow-x-auto">
+          <!-- BEGIN: FAVOURITE POST ITEM -->
           <div
-            @click="$router.push(`/profile/${post.creator.uuid}`)"
-            class="w-20 cursor-pointer break-words text-center text-xs font-light text-slate-400 line-clamp-1 hover:underline"
+            v-for="post in favouritePosts"
+            :key="post.id"
+            class="flex flex-col items-center justify-center space-y-2"
           >
-            {{ post.creator.name }}
+            <!-- CIRCLE SECTION -->
+            <profile-picture
+              :uuid="post.creator.uuid"
+              :name="post.creator.name"
+              class="h-12 w-12 text-7xl"
+            ></profile-picture>
+
+            <!-- NAME SECTION -->
+            <div
+              @click="$router.push(`/profile/${post.creator.uuid}`)"
+              class="w-20 cursor-pointer break-words text-center text-xs font-light text-slate-400 line-clamp-1 hover:underline"
+            >
+              {{ post.creator.name }}
+            </div>
           </div>
+          <!-- END: FAVOURITE POST ITEM -->
         </div>
-        <!-- END: FAVOURITE POST ITEM -->
       </div>
     </div>
     <!-- END: FAVOURITE POST SECTIONS -->

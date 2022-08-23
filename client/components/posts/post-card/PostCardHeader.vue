@@ -37,7 +37,7 @@
     </div>
     <div v-else @click="markPostUnfavourite">
       <favourite-icon
-        class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 dark:fill-yellow-200 dark:stroke-yellow-200"
+        class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 transition-all duration-300 hover:scale-125 dark:fill-yellow-200 dark:stroke-yellow-200"
       ></favourite-icon>
     </div>
   </div>

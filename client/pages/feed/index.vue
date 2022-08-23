@@ -30,6 +30,8 @@
         <!-- VERTICAL LINE SECTION -->
         <div class="h-full border dark:border-slate-600"></div>
 
+        <FavouriteCard v-if="showCard" />
+
         <div
           class="flex items-center justify-start space-x-2 overflow-x-auto overscroll-x-contain"
         >
@@ -38,6 +40,7 @@
             v-for="post in favouritePosts"
             :key="post.id"
             class="flex flex-col items-center justify-center space-y-2 py-2"
+            @click="showCard = !showCard"
           >
             <!-- CIRCLE SECTION -->
             <profile-picture
@@ -74,10 +77,16 @@
 import PostList from '../../components/posts/PostList.vue';
 import { MESSAGES } from '../../util/constants';
 import ProfilePicture from '../../components/persons/ProfilePicture.vue';
+import FavouriteCard from '../../components/posts/FavouriteCard.vue';
 
 export default {
   name: 'FeedPage',
   middleware: 'authenticated',
+  data() {
+    return {
+      showCard: false,
+    };
+  },
   computed: {
     user() {
       return this.$store.getters['auth/user'];
@@ -126,7 +135,13 @@ export default {
       }
     },
   },
-  components: { PostList, ProfilePicture, ProfilePicture },
+  components: {
+    PostList,
+    ProfilePicture,
+    ProfilePicture,
+    FavouriteCard,
+    FavouriteCard,
+  },
 };
 </script>
 

@@ -27,6 +27,8 @@ export const GET_POST_FEED_URL = `${POST_URL}/feed`;
 export const ADD_LIKE_URL = `${POST_URL}/like`;
 export const REMOVE_LIKE_URL = `${POST_URL}/unlike`;
 export const FETCH_POST_URL = `${POST_URL}`;
+export const ADD_FAVOURITE_URL = `${POST_URL}/favourite`;
+export const REMOVE_FAVOURITE_URL = `${POST_URL}/unfavourite`;
 
 export const MESSAGES = Object.freeze({
   LOGIN_SUCCESS: 'You are now logged in!',

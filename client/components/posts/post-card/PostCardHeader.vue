@@ -31,12 +31,15 @@
     </div>
 
     <favourite-icon
-      class="h-6 w-6 stroke-slate-400 dark:stroke-slate-600"
+      v-if="!isPostFavourite"
+      class="h-6 w-6 cursor-pointer stroke-slate-400 dark:stroke-slate-600"
+      @click="markPostFavourite"
     ></favourite-icon>
-    <!-- 
     <favourite-icon
-      class="h-6 w-6 fill-yellow-200 stroke-yellow-200"
-    ></favourite-icon> -->
+      v-else
+      class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 dark:fill-yellow-200 dark:stroke-yellow-200"
+      @click="markPostUnfavourite"
+    ></favourite-icon>
   </div>
   <!-- END: POST CARD HEADER -->
 </template>
@@ -59,6 +62,60 @@ export default {
     time: {
       type: String,
       required: true,
+    },
+    personPostFavourites: {
+      type: Array,
+      required: true,
+    },
+  },
+  computed: {
+    token() {
+      return this.$store.getters['auth/token'];
+    },
+    loggedInUserUUID() {
+      return this.$store.getters['auth/uuid'];
+    },
+    isPostFavourite() {
+      const listOfPersonUUIDsWhoMarkedThisPostAsFavourite =
+        this.personPostFavourites.map((fav) => fav.creator.uuid);
+      return listOfPersonUUIDsWhoMarkedThisPostAsFavourite.includes(
+        this.loggedInUserUUID
+      );
+    },
+  },
+  methods: {
+    markPostFavourite() {
+      const { state } = this.$store.dispatch('posts/favouritePost', {
+        postUUID: this.uuid,
+        personUUID: this.loggedInUserUUID,
+        token: this.token,
+      });
+      if (state) {
+        this.$store.dispatch(
+          'toast/success',
+          'You marked this post as favourite!'
+        );
+      } else {
+        this.$store.dispatch(
+          'toast/error',
+          'Failed to mark this post as favourite!'
+        );
+      }
+    },
+    markPostUnfavourite() {
+      const { state } = this.$store.dispatch('posts/unfavouritePost', {
+        postUUID: this.uuid,
+        personUUID: this.loggedInUserUUID,
+        token: this.token,
+      });
+      if (state) {
+        this.$store.dispatch(
+          'toast/success',
+          'Your favourite has been removed!'
+        );
+      } else {
+        this.$store.dispatch('toast/error', 'Failed to remove favourite!');
+      }
     },
   },
   components: {

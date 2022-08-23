@@ -2,7 +2,8 @@ import axios from 'axios';
 import {
   ADD_LIKE_URL,
   FETCH_POST_URL,
-  REMOVE_LIKE_URL,
+  REMOVE_FAVOURITE_URL,
+  REMOVE_LIKE_URL
 } from '../util/constants';
 import { getHeaders } from '../util/helpers';
 
@@ -63,6 +64,48 @@ export const actions = {
     try {
       const { data: responseData } = await axios.post(
         `${REMOVE_LIKE_URL}/${postUUID}`,
+        {},
+        {
+          ...getHeaders(token),
+        }
+      );
+      const { data, state, message } = responseData;
+      if (state) {
+        commit('setPost', data);
+      }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
+      return { data, state, message };
+    }
+  },
+  /* MARK POST AS FAVOURITE */
+  async favouritePost({ commit }, { postUUID, personUUID, token }) {
+    try {
+      const { data: responseData } = await axios.post(
+        `${ADD_FAVOURITE_URL}/${postUUID}/${personUUID}`,
+        {},
+        {
+          ...getHeaders(token),
+        }
+      );
+      const { data, state, message } = responseData;
+      if (state) {
+        commit('setPost', data);
+      }
+      return { data, state, message };
+    } catch (error) {
+      const { data: responseData } = error?.response;
+      const { data, state, message } = responseData;
+      return { data, state, message };
+    }
+  },
+  /* UNMARK POST AS FAVOURITE */
+  async unfavouritePost({ commit }, { postUUID, personUUID, token }) {
+    try {
+      const { data: responseData } = await axios.post(
+        `${REMOVE_FAVOURITE_URL}/${postUUID}/${personUUID}`,
         {},
         {
           ...getHeaders(token),

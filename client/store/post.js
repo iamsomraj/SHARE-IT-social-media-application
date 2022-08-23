@@ -1,9 +1,10 @@
 import axios from 'axios';
 import {
+  ADD_FAVOURITE_URL,
   ADD_LIKE_URL,
   FETCH_POST_URL,
   REMOVE_FAVOURITE_URL,
-  REMOVE_LIKE_URL
+  REMOVE_LIKE_URL,
 } from '../util/constants';
 import { getHeaders } from '../util/helpers';
 
@@ -81,14 +82,18 @@ export const actions = {
     }
   },
   /* MARK POST AS FAVOURITE */
-  async favouritePost({ commit }, { postUUID, personUUID, token }) {
+  async favouritePost({ commit }, { postUUID, token }) {
     try {
       const { data: responseData } = await axios.post(
-        `${ADD_FAVOURITE_URL}/${postUUID}/${personUUID}`,
+        `${ADD_FAVOURITE_URL}/${postUUID}`,
         {},
         {
           ...getHeaders(token),
         }
+      );
+      console.log(
+        '🚀 ~ file: post.js ~ line 87 ~ favouritePost ~ responseData',
+        responseData
       );
       const { data, state, message } = responseData;
       if (state) {
@@ -102,14 +107,18 @@ export const actions = {
     }
   },
   /* UNMARK POST AS FAVOURITE */
-  async unfavouritePost({ commit }, { postUUID, personUUID, token }) {
+  async unfavouritePost({ commit }, { postUUID, token }) {
     try {
       const { data: responseData } = await axios.post(
-        `${REMOVE_FAVOURITE_URL}/${postUUID}/${personUUID}`,
+        `${REMOVE_FAVOURITE_URL}/${postUUID}`,
         {},
         {
           ...getHeaders(token),
         }
+      );
+      console.log(
+        '🚀 ~ file: post.js ~ line 108 ~ unfavouritePost ~ responseData',
+        responseData
       );
       const { data, state, message } = responseData;
       if (state) {

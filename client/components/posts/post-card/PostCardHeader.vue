@@ -30,16 +30,16 @@
       <!-- END: POST OWNER NAME AND TIME -->
     </div>
 
-    <favourite-icon
-      v-if="!isPostFavourite"
-      class="h-6 w-6 cursor-pointer stroke-slate-400 transition-all duration-300 hover:scale-125 hover:fill-slate-400 dark:stroke-slate-600 hover:dark:fill-slate-600"
-      @click="markPostFavourite"
-    ></favourite-icon>
-    <favourite-icon
-      v-else
-      class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 dark:fill-yellow-200 dark:stroke-yellow-200"
-      @click="markPostUnfavourite"
-    ></favourite-icon>
+    <div v-if="!isPostFavourite" @click="markPostFavourite">
+      <favourite-icon
+        class="h-6 w-6 cursor-pointer stroke-slate-400 transition-all duration-300 hover:scale-125 hover:fill-slate-400 dark:stroke-slate-600 hover:dark:fill-slate-600"
+      ></favourite-icon>
+    </div>
+    <div v-else @click="markPostUnfavourite">
+      <favourite-icon
+        class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 dark:fill-yellow-200 dark:stroke-yellow-200"
+      ></favourite-icon>
+    </div>
   </div>
   <!-- END: POST CARD HEADER -->
 </template>
@@ -69,6 +69,9 @@ export default {
     },
   },
   computed: {
+    postUUID: function () {
+      return this.$route.params.uuid;
+    },
     token() {
       return this.$store.getters['auth/token'];
     },
@@ -84,10 +87,9 @@ export default {
     },
   },
   methods: {
-    markPostFavourite() {
-      const { state } = this.$store.dispatch('posts/favouritePost', {
-        postUUID: this.uuid,
-        personUUID: this.loggedInUserUUID,
+    async markPostFavourite() {
+      const { state } = await this.$store.dispatch('post/favouritePost', {
+        postUUID: this.postUUID,
         token: this.token,
       });
       if (state) {
@@ -102,10 +104,9 @@ export default {
         );
       }
     },
-    markPostUnfavourite() {
-      const { state } = this.$store.dispatch('posts/unfavouritePost', {
-        postUUID: this.uuid,
-        personUUID: this.loggedInUserUUID,
+    async markPostUnfavourite() {
+      const { state } = await this.$store.dispatch('post/unfavouritePost', {
+        postUUID: this.postUUID,
         token: this.token,
       });
       if (state) {

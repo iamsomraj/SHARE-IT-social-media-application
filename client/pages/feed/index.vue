@@ -6,8 +6,27 @@
     <!-- BEGIN: FAVOURITE POST SECTIONS -->
     <div class="flex w-full justify-center md:px-12">
       <div
-        class="flex w-full items-start justify-start space-x-2 overflow-x-auto border px-4 py-6 dark:border-slate-600 md:w-1/2 md:rounded-xl"
+        class="flex w-full items-start justify-start space-x-2 overflow-x-auto border px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:py-6 md:px-4"
       >
+        <!-- BEGIN: FAVOURITE POST ITEM -->
+        <div class="flex flex-col items-center justify-center space-y-2">
+          <!-- CIRCLE SECTION -->
+          <profile-picture
+            :uuid="user.uuid"
+            :name="user.name"
+            class="h-12 w-12 text-7xl"
+          ></profile-picture>
+
+          <!-- NAME SECTION -->
+          <div
+            @click="$router.push(`/profile/${user.uuid}`)"
+            class="w-20 cursor-pointer break-words text-center text-xs font-light text-slate-400 line-clamp-1 hover:underline"
+          >
+            {{ user.name }}
+          </div>
+        </div>
+        <!-- END: FAVOURITE POST ITEM -->
+
         <!-- BEGIN: FAVOURITE POST ITEM -->
         <div
           v-for="post in favouritePosts"

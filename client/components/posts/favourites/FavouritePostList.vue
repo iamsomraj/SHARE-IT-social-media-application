@@ -28,11 +28,7 @@
       <!-- VERTICAL LINE SECTION -->
       <div class="h-full border dark:border-slate-600"></div>
 
-      <FavouriteCard
-        v-if="showCard"
-        :showCard="showCard"
-        @dismiss="showCard = !showCard"
-      />
+      <FavouriteCard v-if="showCard" @dismiss="showCard = !showCard" />
 
       <div
         class="flex items-center justify-start space-x-2 overflow-x-auto overscroll-x-contain"

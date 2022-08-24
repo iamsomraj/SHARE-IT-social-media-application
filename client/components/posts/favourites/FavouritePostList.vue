@@ -7,11 +7,11 @@
       <!-- BEGIN: SELF FAVOURITE POST ITEM -->
       <div class="flex flex-col items-center justify-center space-y-2 py-2">
         <!-- CIRCLE SECTION -->
-        <profile-picture
-          :uuid="user.uuid"
-          :name="user.name"
-          class="h-12 w-12 text-7xl"
-        ></profile-picture>
+        <div
+          class="flex h-12 w-12 rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-blue-400 text-center text-7xl font-extrabold capitalize text-white shadow-inner transition-all duration-300 hover:scale-110 dark:border-none"
+        >
+          {{ user.name[0] }}
+        </div>
 
         <!-- NAME SECTION -->
         <div
@@ -39,11 +39,11 @@
           @click="showCard = !showCard"
         >
           <!-- CIRCLE SECTION -->
-          <profile-picture
-            :uuid="post.creator.uuid"
-            :name="post.creator.name"
-            class="h-12 w-12 text-7xl"
-          ></profile-picture>
+          <div
+            class="flex h-12 w-12 rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-yellow-400 text-center text-7xl font-extrabold capitalize text-white shadow-inner transition-all duration-300 hover:scale-110 dark:border-none"
+          >
+            {{ post.creator.name[0] }}
+          </div>
 
           <!-- NAME SECTION -->
           <div
@@ -61,7 +61,6 @@
 </template>
 
 <script>
-import ProfilePicture from '../../persons/ProfilePicture.vue';
 import FavouriteCard from './FavouriteCard.vue';
 
 export default {
@@ -83,7 +82,6 @@ export default {
     },
   },
   components: {
-    ProfilePicture,
     FavouriteCard,
   },
 };

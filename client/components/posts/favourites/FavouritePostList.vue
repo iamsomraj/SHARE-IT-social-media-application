@@ -6,7 +6,7 @@
     >
       <!-- BEGIN: SELF FAVOURITE POST ITEM -->
       <div
-        class="flex flex-col items-center justify-center space-y-2 py-2 transition-all duration-300 hover:scale-110"
+        class="flex flex-col items-center justify-center space-y-2 py-2 transition-all duration-300 hover:scale-105"
       >
         <!-- CIRCLE SECTION -->
         <div
@@ -28,7 +28,11 @@
       <!-- VERTICAL LINE SECTION -->
       <div class="h-full border dark:border-slate-600"></div>
 
-      <FavouriteCard v-if="showCard" @dismiss="showCard = !showCard" />
+      <FavouriteCard
+        v-if="showCard"
+        :showCard="showCard"
+        @dismiss="showCard = !showCard"
+      />
 
       <div
         class="flex items-center justify-start space-x-2 overflow-x-auto overscroll-x-contain"
@@ -37,7 +41,7 @@
         <div
           v-for="post in favouritePosts"
           :key="post.id"
-          class="flex flex-col items-center justify-center space-y-2 py-2 transition-all duration-300 hover:scale-110"
+          class="flex flex-col items-center justify-center space-y-2 py-2 transition-all duration-300 hover:scale-105"
           @click="showCard = !showCard"
         >
           <!-- CIRCLE SECTION -->

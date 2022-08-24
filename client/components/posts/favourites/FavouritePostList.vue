@@ -5,10 +5,12 @@
       class="flex w-full items-start justify-start space-x-2 border-t border-b px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border md:py-6 md:px-4"
     >
       <!-- BEGIN: SELF FAVOURITE POST ITEM -->
-      <div class="flex flex-col items-center justify-center space-y-2 py-2">
+      <div
+        class="flex flex-col items-center justify-center space-y-2 py-2 transition-all duration-300 hover:scale-110"
+      >
         <!-- CIRCLE SECTION -->
         <div
-          class="flex h-12 w-12 rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-blue-400 text-center text-7xl font-extrabold capitalize text-white shadow-inner transition-all duration-300 hover:scale-110 dark:border-none"
+          class="flex h-12 w-12 rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-blue-400 text-center text-7xl font-extrabold capitalize text-white shadow-inner transition-all duration-300 dark:border-none"
         >
           {{ user.name[0] }}
         </div>
@@ -35,12 +37,12 @@
         <div
           v-for="post in favouritePosts"
           :key="post.id"
-          class="flex flex-col items-center justify-center space-y-2 py-2"
+          class="flex flex-col items-center justify-center space-y-2 py-2 transition-all duration-300 hover:scale-110"
           @click="showCard = !showCard"
         >
           <!-- CIRCLE SECTION -->
           <div
-            class="flex h-12 w-12 rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-yellow-400 text-center text-7xl font-extrabold capitalize text-white shadow-inner transition-all duration-300 hover:scale-110 dark:border-none"
+            class="flex h-12 w-12 rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-yellow-400 text-center text-7xl font-extrabold capitalize text-white shadow-inner transition-all duration-300 dark:border-none"
           >
             {{ post.creator.name[0] }}
           </div>

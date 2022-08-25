@@ -1,6 +1,16 @@
 <template>
   <!-- BEGIN: FAVOURITE POST SECTIONS -->
   <div class="flex w-full justify-center md:px-12">
+    <!-- BEGIN: FAVOURITE CARD -->
+    <FavouriteCard
+      v-if="showCard"
+      @dismiss="onCardClose"
+      :posts="favouritePosts"
+      :selectedId="selectedId"
+    />
+    <!-- END: FAVOURITE CARD -->
+
+    <!-- BEGIN: ROOT LIST SECTION -->
     <div
       class="flex w-full items-start justify-start space-x-2 border-t border-b px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border md:py-6 md:px-4"
     >
@@ -27,13 +37,7 @@
       <!-- VERTICAL LINE SECTION -->
       <div class="h-full border dark:border-slate-600"></div>
 
-      <FavouriteCard
-        v-if="showCard"
-        @dismiss="onCardClose"
-        :posts="favouritePosts"
-        :selectedId="selectedId"
-      />
-
+      <!-- BEGIN: OTHER FAVOURITE POST ITEMS SECTION -->
       <div
         class="flex items-center justify-start space-x-2 overflow-x-auto overscroll-x-contain"
       >
@@ -60,7 +64,9 @@
         </div>
         <!-- END: FAVOURITE POST ITEM -->
       </div>
+      <!-- END: OTHER FAVOURITE POST ITEMS SECTION -->
     </div>
+    <!-- END: ROOT LIST SECTION -->
   </div>
   <!-- END: FAVOURITE POST SECTIONS -->
 </template>

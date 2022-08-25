@@ -3,12 +3,14 @@
     class="fixed inset-0 z-20 flex max-h-screen w-screen items-center justify-center bg-white transition-all duration-300 dark:bg-slate-800 dark:text-slate-200"
   >
     <div
-      class="absolute top-8 right-8 cursor-pointer rounded-xl border-2 border-transparent hover:border-2 hover:border-slate-200 hover:shadow-md dark:hover:border-slate-600"
+      class="absolute top-8 right-8 cursor-pointer rounded-xl border-2 border-transparent bg-inherit hover:border-2 hover:border-slate-200 hover:shadow-md dark:hover:border-slate-600"
       @click="$emit('dismiss')"
     >
       <CrossIcon class="m-2 h-6 w-6 stroke-2" />
     </div>
-    {{ posts.find((post) => post.id === selectedId) }}
+    <div class="mt-10">
+      {{ posts.find((post) => post.id === selectedId) }}
+    </div>
   </div>
 </template>
 

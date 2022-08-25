@@ -52,10 +52,13 @@
             :name="postAuthor.name"
             class="h-8 w-8 text-5xl"
           ></profile-picture>
-          <div class="text-sm">
+          <div
+            @click="$router.push(`/profile/${postAuthor.uuid}`)"
+            class="break-words text-sm line-clamp-1 hover:cursor-pointer hover:underline hover:underline-offset-4"
+          >
             {{ postAuthor.name }}
           </div>
-          <div class="text-sm text-slate-400">
+          <div class="mx-2 text-sm text-slate-400">
             {{ time(selectedPost.updatedAt, selectedPost.created_at) }}
           </div>
         </div>

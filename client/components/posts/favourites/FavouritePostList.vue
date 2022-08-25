@@ -17,7 +17,6 @@
 
         <!-- NAME SECTION -->
         <div
-          @click="$router.push(`/profile/${user.uuid}`)"
           class="w-20 cursor-pointer break-words text-center text-xs font-light text-slate-400 line-clamp-1 hover:underline"
         >
           {{ user.name }}
@@ -28,7 +27,12 @@
       <!-- VERTICAL LINE SECTION -->
       <div class="h-full border dark:border-slate-600"></div>
 
-      <FavouriteCard v-if="showCard" @dismiss="showCard = !showCard" />
+      <FavouriteCard
+        v-if="showCard"
+        @dismiss="onCardClose"
+        :posts="favouritePosts"
+        :selectedId="selectedId"
+      />
 
       <div
         class="flex items-center justify-start space-x-2 overflow-x-auto overscroll-x-contain"
@@ -38,7 +42,7 @@
           v-for="post in favouritePosts"
           :key="post.id"
           class="flex flex-col items-center justify-center space-y-2 py-2 transition-all duration-300 hover:scale-105"
-          @click="showCard = !showCard"
+          @click="onPostClick(post.id)"
         >
           <!-- CIRCLE SECTION -->
           <div
@@ -49,7 +53,6 @@
 
           <!-- NAME SECTION -->
           <div
-            @click="$router.push(`/profile/${post.creator.uuid}`)"
             class="w-20 cursor-pointer break-words text-center text-xs font-light text-slate-400 line-clamp-1 hover:underline"
           >
             {{ post.creator.name }}
@@ -76,11 +79,22 @@ export default {
   data() {
     return {
       showCard: false,
+      selectedId: null,
     };
   },
   computed: {
     user() {
       return this.$store.getters['auth/user'];
+    },
+  },
+  methods: {
+    onPostClick(id) {
+      this.showCard = true;
+      this.selectedId = id;
+    },
+    onCardClose() {
+      this.showCard = false;
+      this.selectedId = null;
     },
   },
   components: {

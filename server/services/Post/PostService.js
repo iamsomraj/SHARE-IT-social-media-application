@@ -265,6 +265,7 @@ class PostService extends RootService {
       .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), person_post_favourites(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
       .whereIn("id", postIds)
       .andWhere("is_deleted", false)
+      .andWhereRaw("created_at::timestamptz >= NOW() - INTERVAL '1 DAY'")
       .modifiers("orderByLatest");
     /* END: FETCH POSTS OF FOLLOWINGS */
 

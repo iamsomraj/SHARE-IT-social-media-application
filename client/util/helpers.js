@@ -10,7 +10,22 @@ export const getTime = (time, short = false) => {
   let years = Math.floor(months / 12);
   if (short) {
     if (seconds < 60) {
-      return `${seconds} s`;
+      if (seconds < 10) {
+        return '10 s';
+      }
+      if (seconds < 20) {
+        return '20 s';
+      }
+      if (seconds < 30) {
+        return '30 s';
+      }
+      if (seconds < 40) {
+        return '40 s';
+      }
+      if (seconds < 50) {
+        return '50 s';
+      }
+      return `1 m`;
     } else if (minutes < 60) {
       return `${minutes} m`;
     } else if (hours < 24) {

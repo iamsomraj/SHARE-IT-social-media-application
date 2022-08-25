@@ -163,10 +163,6 @@ async function main() {
   /* INSERT PERSON POST FAVORITES RECORDS */
   const person_post_favorites_data = [
     {
-      person_id: insertedPersons[0].id,
-      post_id: insertedPosts[0].id,
-    },
-    {
       person_id: insertedPersons[1].id,
       post_id: insertedPosts[1].id,
     },
@@ -185,7 +181,7 @@ async function main() {
       post_id: insertedPosts[0].id,
       like_count: 2,
       comment_count: 0,
-      favourite_count: 1,
+      favourite_count: 0,
     },
     {
       post_id: insertedPosts[1].id,

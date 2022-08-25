@@ -13,7 +13,7 @@
           </div>
         </div>
         <div
-          class="cursor-pointer rounded-xl border-2 border-transparent bg-inherit hover:border-2 hover:border-slate-200 hover:shadow-md dark:hover:border-slate-600"
+          class="cursor-pointer rounded-xl border-2 border-transparent bg-inherit hover:border-2 hover:border-slate-200 dark:hover:border-slate-600"
           @click="$emit('dismiss')"
         >
           <CrossIcon class="m-2 h-6 w-6 stroke-2" />

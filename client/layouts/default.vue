@@ -18,7 +18,11 @@ export default {
     this.$store.dispatch('theme/handleTheme');
     setInterval(() => {
       const tokenFromStorage = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
-      if (!tokenFromStorage) {
+      if (
+        !tokenFromStorage &&
+        this.$route.path !== '/' &&
+        this.$route.path !== '/register'
+      ) {
         this.$router.push('/');
       }
     }, 1000);

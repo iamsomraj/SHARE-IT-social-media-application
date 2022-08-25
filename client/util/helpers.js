@@ -1,4 +1,4 @@
-export const getTime = (time) => {
+export const getTime = (time, short = false) => {
   const date = new Date(time);
   let now = new Date();
   let diff = now.getTime() - date.getTime();
@@ -8,6 +8,21 @@ export const getTime = (time) => {
   let days = Math.floor(hours / 24);
   let months = Math.floor(days / 30);
   let years = Math.floor(months / 12);
+  if (short) {
+    if (seconds < 60) {
+      return `${seconds} s`;
+    } else if (minutes < 60) {
+      return `${minutes} m`;
+    } else if (hours < 24) {
+      return `${hours} h`;
+    } else if (days < 30) {
+      return `${days} d`;
+    } else if (months < 12) {
+      return `${months} mo`;
+    } else {
+      return `${years} y`;
+    }
+  }
   if (seconds < 60) {
     return seconds > 1 ? `${seconds} seconds ago` : 'a few seconds ago';
   } else if (minutes < 60) {

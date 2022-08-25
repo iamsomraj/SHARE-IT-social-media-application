@@ -28,7 +28,7 @@
 
         <!-- NAME SECTION -->
         <div
-          class="w-20 cursor-pointer break-words text-center text-xs font-light text-slate-400 line-clamp-1 hover:underline"
+          class="w-20 cursor-pointer break-words text-center text-sm text-slate-400 line-clamp-1 hover:underline"
         >
           {{ user.name }}
         </div>
@@ -58,7 +58,7 @@
 
           <!-- NAME SECTION -->
           <div
-            class="w-20 cursor-pointer break-words text-center text-xs font-light text-slate-400 line-clamp-1 hover:underline"
+            class="text-xsF w-20 cursor-pointer break-words text-center text-sm text-slate-400 line-clamp-1 hover:underline"
           >
             {{ post.creator.name }}
           </div>

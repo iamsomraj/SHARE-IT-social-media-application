@@ -16,7 +16,8 @@
     >
       <!-- BEGIN: SELF FAVOURITE POST ITEM -->
       <div
-        class="flex flex-col items-center justify-center space-y-2 py-2 transition-all duration-300 hover:scale-105"
+        @click="$router.push(`/profile/${user.uuid}`)"
+        class="flex cursor-pointer flex-col items-center justify-center space-y-2 py-2 transition-all duration-300 hover:scale-105"
       >
         <!-- CIRCLE SECTION -->
         <div

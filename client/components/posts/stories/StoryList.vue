@@ -52,7 +52,7 @@
 import FavouriteCard from './FavouriteCard.vue';
 
 export default {
-  name: 'FavouritePostList',
+  name: 'StoryList',
   props: {
     favouritePosts: {
       type: Array,

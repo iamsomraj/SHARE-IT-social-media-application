@@ -3,7 +3,7 @@
     v-if="user"
     class="flex min-h-screen w-full flex-col items-center justify-start space-y-6 pt-4 pb-16 dark:bg-slate-800 md:py-6"
   >
-    <favourite-post-list :favouritePosts="favouritePosts" />
+    <story-list :storyPosts="storyPosts" />
     <post-list
       class="w-full"
       v-if="posts"
@@ -38,13 +38,13 @@ export default {
     posts() {
       return this.$store.getters['feed/posts'];
     },
-    favouritePosts() {
-      return this.$store.getters['feed/favouritePosts'];
+    storyPosts() {
+      return this.$store.getters['feed/storyPosts'];
     },
   },
   async fetch() {
     await this.$store.dispatch('feed/posts', this.token);
-    await this.$store.dispatch('feed/favouritePosts', this.token);
+    await this.$store.dispatch('feed/storyPosts', this.token);
   },
   methods: {
     async onPostLike(uuid) {

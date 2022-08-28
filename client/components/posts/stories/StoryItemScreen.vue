@@ -115,7 +115,7 @@ import ViewIcon from '../../assets/ViewIcon.vue';
 import ProfilePicture from '../../persons/ProfilePicture.vue';
 
 export default {
-  name: 'FavouriteCard',
+  name: 'StoryItemScreen',
   data() {
     return {
       loadingPercentage: 0,

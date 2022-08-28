@@ -2,12 +2,12 @@
   <!-- BEGIN: FAVOURITE POST SECTIONS -->
   <div class="flex w-full justify-center md:px-12">
     <!-- BEGIN: FAVOURITE CARD -->
-    <story-item-screen
+    <StoryItemScreen
       v-if="showCard"
       @dismiss="onCardClose"
       :posts="storyPosts"
       :selectedId="selectedId"
-    ></story-item-screen>
+    />
     <!-- END: FAVOURITE CARD -->
 
     <!-- BEGIN: ROOT LIST SECTION -->

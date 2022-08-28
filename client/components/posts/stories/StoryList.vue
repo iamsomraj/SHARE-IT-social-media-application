@@ -1,24 +1,24 @@
 <template>
-  <!-- BEGIN: FAVOURITE POST SECTIONS -->
+  <!-- BEGIN: STORY POST SECTIONS -->
   <div class="flex w-full justify-center md:px-12">
-    <!-- BEGIN: FAVOURITE CARD -->
+    <!-- BEGIN: STORY CARD -->
     <story-item-screen
       v-if="showCard"
       @dismiss="onCardClose"
       :posts="storyPosts"
       :selectedId="selectedId"
     ></story-item-screen>
-    <!-- END: FAVOURITE CARD -->
+    <!-- END: STORY CARD -->
 
     <!-- BEGIN: ROOT LIST SECTION -->
     <div
       class="flex w-full items-start justify-start space-x-2 border-t border-b px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border md:py-6 md:px-4"
     >
-      <!-- BEGIN: OTHER FAVOURITE POST ITEMS SECTION -->
+      <!-- BEGIN: OTHER STORY POST ITEMS SECTION -->
       <div
         class="flex items-center justify-start space-x-2 overflow-x-auto overscroll-x-contain scroll-smooth no-scrollbar"
       >
-        <!-- BEGIN: FAVOURITE POST ITEM -->
+        <!-- BEGIN: STORY POST ITEM -->
         <div
           v-for="post in storyPosts"
           :key="post.id"
@@ -39,13 +39,13 @@
             {{ post.creator.name }}
           </div>
         </div>
-        <!-- END: FAVOURITE POST ITEM -->
+        <!-- END: STORY POST ITEM -->
       </div>
-      <!-- END: OTHER FAVOURITE POST ITEMS SECTION -->
+      <!-- END: OTHER STORY POST ITEMS SECTION -->
     </div>
     <!-- END: ROOT LIST SECTION -->
   </div>
-  <!-- END: FAVOURITE POST SECTIONS -->
+  <!-- END: STORY POST SECTIONS -->
 </template>
 
 <script>

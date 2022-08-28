@@ -35,7 +35,7 @@ export const actions = {
       return { data, state, message };
     }
   },
-  /* FETCH FAVOURITE POSTS */
+  /* FETCH STORY POSTS */
   async storyPosts({ commit }, token) {
     try {
       const { data: responseData } = await axios.get(

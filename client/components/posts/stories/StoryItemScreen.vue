@@ -59,7 +59,9 @@
             {{ postAuthor.name }}
           </div>
           <div class="mx-2 text-sm text-slate-400">
-            {{ time(selectedPost.updatedAt, selectedPost.created_at) }}
+            {{
+              time(selectedFavouriteRecord.created_at, selectedPost.created_at)
+            }}
           </div>
         </div>
         <!-- END: HEADER SECTION -->
@@ -146,6 +148,11 @@ export default {
     },
     selectedPost() {
       return this.posts.find((post) => post.id === this.selectedId);
+    },
+    selectedFavouriteRecord() {
+      return this.selectedPost.person_post_favourites.find((record) => {
+        return record.creator.uuid === this.loggedInUserUUID;
+      });
     },
     postContent() {
       return this.selectedPost.content;

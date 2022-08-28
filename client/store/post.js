@@ -81,7 +81,7 @@ export const actions = {
       return { data, state, message };
     }
   },
-  /* MARK POST AS FAVOURITE */
+  /* MARK POST AS STORY */
   async favouritePost({ commit }, { postUUID, token }) {
     try {
       const { data: responseData } = await axios.post(
@@ -102,7 +102,7 @@ export const actions = {
       return { data, state, message };
     }
   },
-  /* UNMARK POST AS FAVOURITE */
+  /* UNMARK POST AS STORY */
   async unfavouritePost({ commit }, { postUUID, token }) {
     try {
       const { data: responseData } = await axios.post(

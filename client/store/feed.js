@@ -9,12 +9,12 @@ import { getHeaders } from '../util/helpers';
 
 export const state = () => ({
   posts: [],
-  favouritePosts: [],
+  storyPosts: [],
 });
 
 export const getters = {
   posts: (state) => state.posts,
-  favouritePosts: (state) => state.favouritePosts,
+  storyPosts: (state) => state.storyPosts,
 };
 
 export const actions = {
@@ -35,8 +35,8 @@ export const actions = {
       return { data, state, message };
     }
   },
-  /* FETCH FAVOURITE POSTS */
-  async favouritePosts({ commit }, token) {
+  /* FETCH STORY POSTS */
+  async storyPosts({ commit }, token) {
     try {
       const { data: responseData } = await axios.get(
         `${GET_FAVOURITE_POSTS_URL}`,
@@ -101,7 +101,7 @@ export const actions = {
 
 export const mutations = {
   setFavouritePosts(state, posts) {
-    state.favouritePosts = posts;
+    state.storyPosts = posts;
   },
   setPosts(state, posts) {
     state.posts = posts;

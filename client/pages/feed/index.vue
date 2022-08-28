@@ -18,7 +18,7 @@
 import PostList from '../../components/posts/PostList.vue';
 import { MESSAGES } from '../../util/constants';
 import ProfilePicture from '../../components/persons/ProfilePicture.vue';
-import FavouritePostList from '../../components/posts/favourites/FavouritePostList.vue';
+import FavouritePostList from '../../components/posts/stories/FavouritePostList.vue';
 
 export default {
   name: 'FeedPage',

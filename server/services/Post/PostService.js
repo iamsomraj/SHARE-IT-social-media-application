@@ -6,7 +6,7 @@ const PostsModel = require("../../models/PostsModel");
 const PostStatsModel = require("../../models/PostStatsModel");
 const PersonStatsModel = require("../../models/PersonStatsModel");
 const PostLikesModel = require("../../models/PostLikesModel");
-const PersonPostFavouritesModel = require("../../models/StoriesModel");
+const StoriesModel = require("../../models/StoriesModel");
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL POST RELATED CONTROLLERS
@@ -76,13 +76,13 @@ class PostService extends RootService {
     if (!postRecord) this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
 
     /* CHECKING IF PERSON POST FAVOURITE RECORD FOR THE GIVEN USER EXISTS OR NOT */
-    const personPostFavouriteRecord = await PersonPostFavouritesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
+    const personPostFavouriteRecord = await StoriesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
     if (personPostFavouriteRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.ALREADY_FAVOURITE_POST);
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: DATABASE OPERATIONS */
     /* INSERT PERSON POST FAVOURITE RECORD */
-    const favouriteRecord = await PersonPostFavouritesModel.query().insert({
+    const favouriteRecord = await StoriesModel.query().insert({
       post_id: postRecord.id,
       person_id: user.id,
     });
@@ -117,13 +117,13 @@ class PostService extends RootService {
     if (!postRecord) this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
 
     /* CHECKING IF PERSON POST FAVOURITE RECORD FOR THE GIVEN USER EXISTS OR NOT */
-    const personPostFavouriteRecord = await PersonPostFavouritesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
+    const personPostFavouriteRecord = await StoriesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
     if (!personPostFavouriteRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.NOT_FAVOURITE_YET);
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: DATABASE OPERATIONS */
     /* DELETE PERSON POST FAVOURITE RECORD */
-    const favouriteRecord = await PersonPostFavouritesModel.query().deleteById(personPostFavouriteRecord.id);
+    const favouriteRecord = await StoriesModel.query().deleteById(personPostFavouriteRecord.id);
     if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);
 
     /* UPDATE POST STAT RECORD */
@@ -253,7 +253,7 @@ class PostService extends RootService {
    */
   async getFavouritePosts(user) {
     /* BEGIN: FETCH PERSON POST FAVOURITE RECORDS FOR A PERSON */
-    const personPostFavouriteRecords = await PersonPostFavouritesModel.query().where("person_id", user.id);
+    const personPostFavouriteRecords = await StoriesModel.query().where("person_id", user.id);
     /* END: FETCH PERSON POST FAVOURITE RECORDS FOR A PERSON */
 
     if (!personPostFavouriteRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAVOURITE_FAILURE);

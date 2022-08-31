@@ -1,6 +1,6 @@
 const { Model } = require('objection');
 
-class PersonPostFavouritesModel extends Model {
+class StoriesModel extends Model {
   static get tableName() {
     return 'public.stories';
   }
@@ -74,4 +74,4 @@ class PersonPostFavouritesModel extends Model {
   }
 }
 
-module.exports = PersonPostFavouritesModel;
+module.exports = StoriesModel;

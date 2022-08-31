@@ -8,7 +8,7 @@
         :ownerUUID="ownerUUID"
         :ownerName="ownerName"
         :time="time"
-        :personPostFavourites="personPostFavourites"
+        :postStories="postStories"
       ></post-card-header>
       <!-- END: HEADER SECTION -->
 
@@ -53,7 +53,7 @@ export default {
     'numberOfFavourites',
     'time',
     'postLikes',
-    'personPostFavourites',
+    'postStories',
   ],
   computed: {
     likeText() {

@@ -5,7 +5,7 @@ exports.up = function (knex) {
       table.integer("post_id").references("posts.id");
       table.integer("like_count").defaultTo(0);
       table.integer("comment_count").defaultTo(0);
-      table.integer("favourite_count").defaultTo(0);
+      table.integer("story_count").defaultTo(0);
     }),
   ]);
 };

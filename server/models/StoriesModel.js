@@ -58,7 +58,7 @@ class StoriesModel extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: PostsModel,
         join: {
-          from: 'public.post_stories.post_id',
+          from: 'public.stories.post_id',
           to: 'public.posts.id',
         },
       },
@@ -66,7 +66,7 @@ class StoriesModel extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: PersonsModel,
         join: {
-          from: 'public.post_stories.person_id',
+          from: 'public.stories.person_id',
           to: 'public.persons.id',
         },
       },

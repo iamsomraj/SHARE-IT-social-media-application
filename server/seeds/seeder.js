@@ -1,13 +1,13 @@
-const knex = require("../config/db-config.js");
-const FollowingsModel = require("../models/FollowingsModel.js");
-const PostLikesModel = require("../models/PostLikesModel.js");
-const PersonsModel = require("../models/PersonsModel.js");
-const PostStatsModel = require("../models/PostStatsModel.js");
-const PostsModel = require("../models/PostsModel.js");
-const { person_data } = require("../utils/data/dummy-data.js");
-const _ = require("colors");
-const PersonStatsModel = require("../models/PersonStatsModel.js");
-const PersonPostFavouritesModel = require("../models/PersonPostFavouritesModel.js");
+const knex = require('../config/db-config.js');
+const FollowingsModel = require('../models/FollowingsModel.js');
+const PostLikesModel = require('../models/PostLikesModel.js');
+const PersonsModel = require('../models/PersonsModel.js');
+const PostStatsModel = require('../models/PostStatsModel.js');
+const PostsModel = require('../models/PostsModel.js');
+const { person_data } = require('../utils/data/dummy-data.js');
+const _ = require('colors');
+const PersonStatsModel = require('../models/PersonStatsModel.js');
+const StoriesModel = require('../models/StoriesModel.js');
 
 async function main() {
   /* DELETE ALL THE DATA THAT IS PRESENT IN DATABASE */
@@ -49,7 +49,7 @@ async function main() {
   /* INSERT POST RECORDS */
   const post_data = [
     {
-      content: "Scissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard, lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.",
+      content: 'Scissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard, lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: insertedPersons[0].id,
@@ -73,7 +73,7 @@ async function main() {
       is_deleted: false,
     },
     {
-      content: "Penny. We are made of particles that have existed since the moment the universe began. I like to think those atoms traveled fourteen billion years through time and space to create us, so that we could be together and make each other whole.",
+      content: 'Penny. We are made of particles that have existed since the moment the universe began. I like to think those atoms traveled fourteen billion years through time and space to create us, so that we could be together and make each other whole.',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: insertedPersons[1].id,
@@ -97,7 +97,7 @@ async function main() {
       is_deleted: false,
     },
     {
-      content: "Yeah Sheldon, well your Ken can kiss my Barbie.",
+      content: 'Yeah Sheldon, well your Ken can kiss my Barbie.',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: insertedPersons[2].id,
@@ -105,7 +105,7 @@ async function main() {
       is_deleted: false,
     },
     {
-      content: "All right, Howard Wolowitz, listen up! You sign anything she puts in front of you, because you are the luckiest man alive. If you let her go, there is no way you can find anyone else. Speaking on behalf of all women, it is not going to happen, we had a meeting.",
+      content: 'All right, Howard Wolowitz, listen up! You sign anything she puts in front of you, because you are the luckiest man alive. If you let her go, there is no way you can find anyone else. Speaking on behalf of all women, it is not going to happen, we had a meeting.',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: insertedPersons[2].id,
@@ -171,7 +171,7 @@ async function main() {
       post_id: insertedPosts[1].id,
     },
   ];
-  const insertedPersonPostFavorites = await PersonPostFavouritesModel.query().insert(person_post_favorites_data);
+  const insertedPersonPostFavorites = await StoriesModel.query().insert(person_post_favorites_data);
   /* END: PERSON POST FAVORITES MODEL HANDLING */
 
   /* BEGIN: POST STATS MODEL HANDLING */
@@ -238,7 +238,7 @@ async function main() {
 
 main()
   .then(() => {
-    console.log("Database seeded successfully!".green.bgWhite.underline.bold);
+    console.log('Database seeded successfully!'.green.bgWhite.underline.bold);
     knex.destroy();
     process.exit(0);
   })

@@ -83,7 +83,7 @@ export default {
       return this.posts.find((post) => post.id === this.selectedId);
     },
     selectedFavouriteRecord() {
-      return this.selectedPost.person_post_favourites.find((record) => {
+      return this.selectedPost.post_stories.find((record) => {
         return record.creator.uuid === this.loggedInUserUUID;
       });
     },

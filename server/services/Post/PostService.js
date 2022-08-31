@@ -6,7 +6,7 @@ const PostsModel = require("../../models/PostsModel");
 const PostStatsModel = require("../../models/PostStatsModel");
 const PersonStatsModel = require("../../models/PersonStatsModel");
 const PostLikesModel = require("../../models/PostLikesModel");
-const PersonPostFavouritesModel = require("../../models/PersonPostFavouritesModel");
+const PersonPostFavouritesModel = require("../../models/StoriesModel");
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL POST RELATED CONTROLLERS
@@ -232,7 +232,7 @@ class PostService extends RootService {
 
     /* BEGIN: FETCH POSTS OF FOLLOWINGS */
     const postRecords = await PostsModel.query()
-      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), person_post_favourites(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
+      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), post_stories(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
       .where((buider) => {
         buider.orWhereIn("created_by", followingIds);
         buider.orWhere("created_by", user.id);
@@ -262,7 +262,7 @@ class PostService extends RootService {
 
     /* BEGIN: FETCH POSTS OF FOLLOWINGS */
     const postRecords = await PostsModel.query()
-      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), person_post_favourites(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
+      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), post_stories(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
       .whereIn("id", postIds)
       .andWhere("is_deleted", false)
       .andWhereRaw("created_at::timestamptz >= NOW() - INTERVAL '1 DAY'")

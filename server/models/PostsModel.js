@@ -75,7 +75,7 @@ class PostsModel extends Model {
     const PersonsModel = require("./PersonsModel.js");
     const PostLikesModel = require("./PostLikesModel.js");
     const PostStatsModel = require("./PostStatsModel.js");
-    const PersonPostFavouritesModel = require("./PersonPostFavouritesModel.js");
+    const PersonPostFavouritesModel = require("./StoriesModel.js");
 
     return {
       post_stats: {
@@ -94,12 +94,12 @@ class PostsModel extends Model {
           to: "public.post_likes.post_id",
         },
       },
-      person_post_favourites: {
+      post_stories: {
         relation: Model.HasManyRelation,
         modelClass: PersonPostFavouritesModel,
         join: {
           from: "public.posts.id",
-          to: "public.person_post_favourites.post_id",
+          to: "public.stories.post_id",
         },
       },
       creator: {
@@ -130,7 +130,7 @@ class PostsModel extends Model {
       .findOne({
         uuid,
       })
-      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), person_post_favourites(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]");
+      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), post_stories(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]");
     delete postRecord.password;
     return postRecord;
   }

@@ -76,8 +76,8 @@ class PostService extends RootService {
     if (!postRecord) this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
 
     /* CHECKING IF PERSON POST FAVOURITE RECORD FOR THE GIVEN USER EXISTS OR NOT */
-    const personPostFavouriteRecord = await StoriesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
-    if (personPostFavouriteRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.ALREADY_FAVOURITE_POST);
+    const storyRecord = await StoriesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
+    if (storyRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.ALREADY_FAVOURITE_POST);
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: DATABASE OPERATIONS */
@@ -89,7 +89,7 @@ class PostService extends RootService {
     if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FAVOURITE_FAILURE);
 
     /* UPDATE POST STAT RECORD */
-    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).increment("favourite_count", 1);
+    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).increment("story_count", 1);
     if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FAVOURITE_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
@@ -117,17 +117,17 @@ class PostService extends RootService {
     if (!postRecord) this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
 
     /* CHECKING IF PERSON POST FAVOURITE RECORD FOR THE GIVEN USER EXISTS OR NOT */
-    const personPostFavouriteRecord = await StoriesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
-    if (!personPostFavouriteRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.NOT_FAVOURITE_YET);
+    const storyRecord = await StoriesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
+    if (!storyRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.NOT_FAVOURITE_YET);
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: DATABASE OPERATIONS */
     /* DELETE PERSON POST FAVOURITE RECORD */
-    const favouriteRecord = await StoriesModel.query().deleteById(personPostFavouriteRecord.id);
+    const favouriteRecord = await StoriesModel.query().deleteById(storyRecord.id);
     if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);
 
     /* UPDATE POST STAT RECORD */
-    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).decrement("favourite_count", 1);
+    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).decrement("story_count", 1);
     if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
@@ -248,17 +248,17 @@ class PostService extends RootService {
   /**
    * @description GET ALL THE FAVOURITE POSTS FOR THE USER
    * @param {{ id }} user - logged in user
-   * @route GET /api/v1/posts/favourites
+   * @route GET /api/v1/posts/stories
    * @access private
    */
   async getFavouritePosts(user) {
     /* BEGIN: FETCH PERSON POST FAVOURITE RECORDS FOR A PERSON */
-    const personPostFavouriteRecords = await StoriesModel.query().where("person_id", user.id);
+    const storyRecords = await StoriesModel.query().where("person_id", user.id);
     /* END: FETCH PERSON POST FAVOURITE RECORDS FOR A PERSON */
 
-    if (!personPostFavouriteRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAVOURITE_FAILURE);
+    if (!storyRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAVOURITE_FAILURE);
 
-    const postIds = personPostFavouriteRecords.map((record) => record.post_id);
+    const postIds = storyRecords.map((record) => record.post_id);
 
     /* BEGIN: FETCH POSTS OF FOLLOWINGS */
     const postRecords = await PostsModel.query()

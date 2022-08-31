@@ -75,7 +75,7 @@ export default {
       type: String,
       required: true,
     },
-    personPostFavourites: {
+    postStories: {
       type: Array,
       required: true,
     },
@@ -95,7 +95,7 @@ export default {
     },
     isPostFavourite() {
       const listOfPersonUUIDsWhoMarkedThisPostAsFavourite =
-        this.personPostFavourites.map((fav) => fav.creator.uuid);
+        this.postStories.map((fav) => fav.creator.uuid);
       return listOfPersonUUIDsWhoMarkedThisPostAsFavourite.includes(
         this.loggedInUserUUID
       );

@@ -94,7 +94,7 @@ class PersonsModel extends Model {
       },
       person_stories: {
         relation: Model.HasManyRelation,
-        modelClass: Sto,
+        modelClass: StoriesModel,
         join: {
           from: 'public.persons.id',
           to: 'public.stories.person_id',

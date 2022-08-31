@@ -13,9 +13,9 @@
       :postLikes="post.post_likes"
       :content="post.content"
       :numberOfLikes="post.post_stats.like_count"
-      :numberOfFavourites="post.post_stats.favourite_count"
+      :numberOfFavourites="post.post_stats.story_count"
       :time="time(post.updated_at, post.created_at)"
-      :personPostFavourites="post.post_stories"
+      :postStories="post.post_stories"
       @onPostLike="onPostLike"
       @onPostUnlike="onPostUnlike"
     ></post-card>

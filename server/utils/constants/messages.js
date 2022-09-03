@@ -10,11 +10,11 @@ const PERSON_SUCCESS_MESSAGES = Object.freeze({
   UNFOLLOW_SUCCESS: "Unfollow successful!",
   LIKE_SUCCESS: "Like successful!",
   UNLIKE_SUCCESS: "Unlike successful!",
-  FAVOURITE_SUCCESS: "Favourite successful!",
-  UNFAVOURITE_SUCCESS: "Unfavourite successful!",
+  STORY_SUCCESS: "Story added successful!",
+  UNSTORY_SUCCESS: "Story removed successful!",
   POST_SUCCESS: "Post successful!",
   PERSON_FEED_SUCCESS: "Person feed fetched successfully!",
-  PERSON_FAVOURTIE_SUCCESS: "Person favourite posts fetched successfully!",
+  PERSON_FAVOURTIE_SUCCESS: "Story fetched successfully!",
 });
 
 const PERSON_ERROR_MESSAGES = Object.freeze({
@@ -33,8 +33,8 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
   UNFOLLOWING_FAILURE: "Unfollowing failed!",
   LIKE_FAILURE: "Like failed!",
   UNLIKE_FAILURE: "Unlike failed!",
-  FAVOURITE_FAILURE: "Favourite failed!",
-  UNFAVOURITE_FAILURE: "Unfavourite failed!",
+  STORY_FAILURE: "Story add failed!",
+  UNSTORY_FAILURE: "Story removal failed!",
   FETCH_USER_DATA_FAILURE: "Fetching user data failed!",
   REGISTER_USER_FAILURE: "Registration failed!",
   POST_FAILURE: "Post failed!",
@@ -42,7 +42,7 @@ const PERSON_ERROR_MESSAGES = Object.freeze({
   NO_PEOPLE_FOUND: "No people found!",
   WRONG_CREDENTIALS: "Wrong Credentials!",
   POST_FEED_FAILURE: "Post feed failed!",
-  POST_FAVOURITE_FAILURE: "Post favourite failed!",
+  POST_STORY_FAILURE: "Story addition failed!",
 });
 
 const AUTH_SUCCESS_MESSAGES = Object.freeze({
@@ -67,8 +67,8 @@ const GENERAL_MESSAGES = Object.freeze({
   PROVIDE_POST_DETAILS: "Please, provide post details!",
   PROVIDE_PERSON_DETAILS: "Please, provide person details!",
   ALREADY_LIKED_POST: "You already liked this post!",
-  ALREADY_FAVOURITE_POST: "You have already marked this post as favourite!",
-  NOT_FAVOURITE_YET: "You have not marked this post as favourite yet!",
+  ALREADY_STORY_POST: "You have already added this post as story!",
+  NOT_STORY_YET: "You have not added this post as story yet!",
   NOT_LIKED_YET: "You have not liked this post yet!",
   AUTHORIZE_SUCCESS: "Authorization successful!",
   AUTHORIZE_FAILURE: "Authorization failed!",

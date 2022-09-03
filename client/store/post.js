@@ -1,9 +1,9 @@
 import axios from 'axios';
 import {
-  ADD_FAVOURITE_URL,
+  ADD_STORY_URL,
   ADD_LIKE_URL,
   FETCH_POST_URL,
-  REMOVE_FAVOURITE_URL,
+  REMOVE_STORY_URL,
   REMOVE_LIKE_URL,
 } from '../util/constants';
 import { getHeaders } from '../util/helpers';
@@ -85,7 +85,7 @@ export const actions = {
   async favouritePost({ commit }, { postUUID, token }) {
     try {
       const { data: responseData } = await axios.post(
-        `${ADD_FAVOURITE_URL}/${postUUID}`,
+        `${ADD_STORY_URL}/${postUUID}`,
         {},
         {
           ...getHeaders(token),
@@ -106,7 +106,7 @@ export const actions = {
   async unfavouritePost({ commit }, { postUUID, token }) {
     try {
       const { data: responseData } = await axios.post(
-        `${REMOVE_FAVOURITE_URL}/${postUUID}`,
+        `${REMOVE_STORY_URL}/${postUUID}`,
         {},
         {
           ...getHeaders(token),

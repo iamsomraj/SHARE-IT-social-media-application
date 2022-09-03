@@ -24,12 +24,12 @@ export const SEARCH_PEOPLE_URL = `${PERSON_URL}/search`;
 
 export const CREATE_POST_URL = `${POST_URL}/create`;
 export const GET_POST_FEED_URL = `${POST_URL}/feed`;
-export const GET_FAVOURITE_POSTS_URL = `${POST_URL}/stories`;
+export const GET_STORY_POSTS_URL = `${POST_URL}/stories`;
 export const ADD_LIKE_URL = `${POST_URL}/like`;
 export const REMOVE_LIKE_URL = `${POST_URL}/unlike`;
 export const FETCH_POST_URL = `${POST_URL}`;
-export const ADD_FAVOURITE_URL = `${POST_URL}/favourite`;
-export const REMOVE_FAVOURITE_URL = `${POST_URL}/unfavourite`;
+export const ADD_STORY_URL = `${POST_URL}/favourite`;
+export const REMOVE_STORY_URL = `${POST_URL}/unfavourite`;
 
 export const MESSAGES = Object.freeze({
   LOGIN_SUCCESS: 'You are now logged in!',
@@ -47,10 +47,10 @@ export const MESSAGES = Object.freeze({
   PERSON_UNFOLLOW_FAILURE: 'There was an error unfollowing this person!',
   SEARCH_SUCCESS: 'Search results found!',
   SEARCH_FAILURE: 'There was an error searching!',
-  ADD_FAVOURITE_SUCCESS: 'You marked this post as favourite!',
-  ADD_FAVOURITE_FAILURE: 'Failed to mark this post as favourite!',
-  REMOVE_FAVOURITE_SUCCESS: 'Your favourite has been removed!',
-  REMOVE_FAVOURITE_FAILURE: 'Failed to remove favourite!',
+  ADD_STORY_SUCCESS: 'You marked this post as favourite!',
+  ADD_STORY_FAILURE: 'Failed to mark this post as favourite!',
+  REMOVE_STORY_SUCCESS: 'Your favourite has been removed!',
+  REMOVE_STORY_FAILURE: 'Failed to remove favourite!',
 });
 
 /* ROUTES */

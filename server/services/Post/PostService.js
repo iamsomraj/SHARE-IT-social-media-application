@@ -59,13 +59,13 @@ class PostService extends RootService {
   }
 
   /**
-   * @description MARKS A POST AS FAVOURITE
+   * @description MARKS A POST AS STORY
    * @param {{ id }} user - logged in user
    * @param {string} post_uuid - post's uuid
-   * @route POST /api/v1/posts/favourite/:post_uuid
+   * @route POST /api/v1/posts/story/:post_uuid
    * @access private
    */
-  async addFavourite(user, post_uuid) {
+  async addStory(user, post_uuid) {
     /* BEGIN: VALIDATIONS */
     if (!post_uuid) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
     /* END: VALIDATIONS */
@@ -75,32 +75,32 @@ class PostService extends RootService {
     const postRecord = await PostsModel.query().findOne({ uuid: post_uuid, is_deleted: false });
     if (!postRecord) this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
 
-    /* CHECKING IF PERSON POST FAVOURITE RECORD FOR THE GIVEN USER EXISTS OR NOT */
+    /* CHECKING IF PERSON POST STORY RECORD FOR THE GIVEN USER EXISTS OR NOT */
     const storyRecord = await StoriesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
-    if (storyRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.ALREADY_FAVOURITE_POST);
+    if (storyRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.ALREADY_STORY_POST);
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: DATABASE OPERATIONS */
-    /* INSERT PERSON POST FAVOURITE RECORD */
+    /* INSERT PERSON POST STORY RECORD */
     const favouriteRecord = await StoriesModel.query().insert({
       post_id: postRecord.id,
       person_id: user.id,
     });
-    if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FAVOURITE_FAILURE);
+    if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.STORY_FAILURE);
 
     /* UPDATE POST STAT RECORD */
     const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).increment("story_count", 1);
-    if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FAVOURITE_FAILURE);
+    if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.STORY_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
-    if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.FAVOURITE_FAILURE);
+    if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.STORY_FAILURE);
     /* END: DATABASE OPERATIONS */
 
     return result;
   }
 
   /**
-   * @description REMOVES FAVOURITE MARK FROM A POST
+   * @description REMOVES STORY MARK FROM A POST
    * @param {{ id }} user - logged in user
    * @param {string} post_uuid - post's uuid
    * @route POST /api/v1/posts/unfavourite/:post_uuid
@@ -116,22 +116,22 @@ class PostService extends RootService {
     const postRecord = await PostsModel.query().findOne({ uuid: post_uuid, is_deleted: false });
     if (!postRecord) this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
 
-    /* CHECKING IF PERSON POST FAVOURITE RECORD FOR THE GIVEN USER EXISTS OR NOT */
+    /* CHECKING IF PERSON POST STORY RECORD FOR THE GIVEN USER EXISTS OR NOT */
     const storyRecord = await StoriesModel.query().findOne({ post_id: postRecord.id, person_id: user.id });
-    if (!storyRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.NOT_FAVOURITE_YET);
+    if (!storyRecord) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.NOT_STORY_YET);
     /* END: DATABASE VALIDATIONS */
 
     /* BEGIN: DATABASE OPERATIONS */
-    /* DELETE PERSON POST FAVOURITE RECORD */
+    /* DELETE PERSON POST STORY RECORD */
     const favouriteRecord = await StoriesModel.query().deleteById(storyRecord.id);
-    if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);
+    if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNSTORY_FAILURE);
 
     /* UPDATE POST STAT RECORD */
     const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).decrement("story_count", 1);
-    if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);
+    if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNSTORY_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
-    if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNFAVOURITE_FAILURE);
+    if (!result) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNSTORY_FAILURE);
     /* END: DATABASE OPERATIONS */
 
     return result;
@@ -246,17 +246,17 @@ class PostService extends RootService {
   }
 
   /**
-   * @description GET ALL THE FAVOURITE POSTS FOR THE USER
+   * @description GET ALL THE STORY POSTS FOR THE USER
    * @param {{ id }} user - logged in user
    * @route GET /api/v1/posts/stories
    * @access private
    */
   async getFavouritePosts(user) {
-    /* BEGIN: FETCH PERSON POST FAVOURITE RECORDS FOR A PERSON */
+    /* BEGIN: FETCH PERSON POST STORY RECORDS FOR A PERSON */
     const storyRecords = await StoriesModel.query().where("person_id", user.id);
-    /* END: FETCH PERSON POST FAVOURITE RECORDS FOR A PERSON */
+    /* END: FETCH PERSON POST STORY RECORDS FOR A PERSON */
 
-    if (!storyRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAVOURITE_FAILURE);
+    if (!storyRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_STORY_FAILURE);
 
     const postIds = storyRecords.map((record) => record.post_id);
 
@@ -269,7 +269,7 @@ class PostService extends RootService {
       .modifiers("orderByLatest");
     /* END: FETCH POSTS OF FOLLOWINGS */
 
-    if (!postRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAVOURITE_FAILURE);
+    if (!postRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_STORY_FAILURE);
 
     return postRecords;
   }

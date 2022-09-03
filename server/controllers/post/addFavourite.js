@@ -6,7 +6,7 @@ const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js")
 /**
  * @access private
  * @description marks a post as favourite for a given user
- * @route POST /api/v1/posts/favourite/:post_uuid
+ * @route POST /api/v1/posts/story/:post_uuid
  */
 const addLike = asyncHandler(async (req, res) => {
   const { post_uuid } = req.params;
@@ -17,7 +17,7 @@ const addLike = asyncHandler(async (req, res) => {
   res.status(HTTP_CODES.CREATED).json({
     state: true,
     data: result,
-    message: PERSON_SUCCESS_MESSAGES.FAVOURITE_SUCCESS,
+    message: PERSON_SUCCESS_MESSAGES.STORY_SUCCESS,
   });
 });
 

@@ -108,9 +108,9 @@ export default {
         token: this.token,
       });
       if (state) {
-        this.$store.dispatch('toast/success', MESSAGES.ADD_FAVOURITE_SUCCESS);
+        this.$store.dispatch('toast/success', MESSAGES.ADD_STORY_SUCCESS);
       } else {
-        this.$store.dispatch('toast/error', MESSAGES.ADD_FAVOURITE_FAILURE);
+        this.$store.dispatch('toast/error', MESSAGES.ADD_STORY_FAILURE);
       }
     },
     async markPostUnfavourite() {
@@ -121,10 +121,10 @@ export default {
       if (state) {
         this.$store.dispatch(
           'toast/success',
-          MESSAGES.REMOVE_FAVOURITE_SUCCESS
+          MESSAGES.REMOVE_STORY_SUCCESS
         );
       } else {
-        this.$store.dispatch('toast/error', MESSAGES.REMOVE_FAVOURITE_FAILURE);
+        this.$store.dispatch('toast/error', MESSAGES.REMOVE_STORY_FAILURE);
       }
     },
   },

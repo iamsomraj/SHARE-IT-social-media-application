@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {
   ADD_LIKE_URL,
-  GET_FAVOURITE_POSTS_URL,
+  GET_STORY_POSTS_URL,
   GET_POST_FEED_URL,
   REMOVE_LIKE_URL,
 } from '../util/constants';
@@ -39,7 +39,7 @@ export const actions = {
   async storyPosts({ commit }, token) {
     try {
       const { data: responseData } = await axios.get(
-        `${GET_FAVOURITE_POSTS_URL}`,
+        `${GET_STORY_POSTS_URL}`,
         {
           ...getHeaders(token),
         }

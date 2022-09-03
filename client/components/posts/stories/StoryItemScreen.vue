@@ -33,7 +33,7 @@
       <!-- BEGIN: POST SECTION -->
       <StoryItem
         :selectedPost="selectedPost"
-        :selectedFavouriteRecord="selectedFavouriteRecord"
+        :selectedStory="selectedStory"
         :postContent="postContent"
         :postAuthor="postAuthor"
         :isLiked="isLiked"
@@ -82,7 +82,7 @@ export default {
     selectedPost() {
       return this.posts.find((post) => post.id === this.selectedId);
     },
-    selectedFavouriteRecord() {
+    selectedStory() {
       return this.selectedPost.post_stories.find((record) => {
         return record.creator.uuid === this.loggedInUserUUID;
       });

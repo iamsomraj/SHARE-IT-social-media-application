@@ -2,10 +2,10 @@ const addLike = require("./addLike.js");
 const removeLike = require("./removeLike.js");
 const createPost = require("./createPost.js");
 const getFeedPosts = require("./getFeedPosts.js");
-const getFavouritePosts = require("./getFavouritePosts.js");
+const getStories = require("./getStories.js");
 const fetchPost = require("./fetchPost.js");
-const addFavourite = require("./addFavourite.js");
-const removeFavourite = require("./removeFavourite.js");
+const addStory = require("./addStory.js");
+const removeStory = require("./removeStory.js");
 
 module.exports = {
   addLike,
@@ -13,7 +13,7 @@ module.exports = {
   getFeedPosts,
   removeLike,
   fetchPost,
-  addFavourite,
-  removeFavourite,
-  getFavouritePosts
+  addStory,
+  removeStory,
+  getStories
 };

@@ -21,7 +21,7 @@ class PostStatsModel extends Model {
     return "comment_count";
   }
 
-  static get favouriteCountColumn() {
+  static get storyCountColumn() {
     return "story_count";
   }
 

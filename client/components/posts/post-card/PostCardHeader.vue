@@ -32,8 +32,8 @@
 
     <div v-if="!isSelfPost">
       <div
-        v-if="!isPostFavourite"
-        @click="markPostFavourite"
+        v-if="!isStory"
+        @click="addStory"
         class="flex items-center justify-between space-x-2"
       >
         <div
@@ -45,7 +45,7 @@
           class="h-6 w-6 cursor-pointer stroke-slate-400 transition-all duration-300 hover:scale-125 hover:fill-slate-400 dark:stroke-slate-600 hover:dark:fill-slate-600"
         ></favourite-icon>
       </div>
-      <div v-else @click="markPostUnfavourite">
+      <div v-else @click="removeStory">
         <favourite-icon
           class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 transition-all duration-300 hover:scale-125 dark:fill-yellow-200 dark:stroke-yellow-200"
         ></favourite-icon>
@@ -56,9 +56,9 @@
 </template>
 
 <script>
-import ProfilePicture from '../../persons/ProfilePicture.vue';
-import FavouriteIcon from '../../assets/FavouriteIcon.vue';
 import { MESSAGES } from '../../../util/constants';
+import FavouriteIcon from '../../assets/FavouriteIcon.vue';
+import ProfilePicture from '../../persons/ProfilePicture.vue';
 
 export default {
   name: 'PostCardHeader',
@@ -93,38 +93,36 @@ export default {
     loggedInUserUUID() {
       return this.$store.getters['auth/uuid'];
     },
-    isPostFavourite() {
-      const listOfPersonUUIDsWhoMarkedThisPostAsFavourite =
-        this.postStories.map((fav) => fav.creator.uuid);
-      return listOfPersonUUIDsWhoMarkedThisPostAsFavourite.includes(
+    isStory() {
+      const listOfPersonUUIDsWhoAddedThisAsStory = this.postStories.map(
+        (fav) => fav.creator.uuid
+      );
+      return listOfPersonUUIDsWhoAddedThisAsStory.includes(
         this.loggedInUserUUID
       );
     },
   },
   methods: {
-    async markPostFavourite() {
-      const { state } = await this.$store.dispatch('post/favouritePost', {
+    async addStory() {
+      const { state } = await this.$store.dispatch('post/addStory', {
         postUUID: this.postUUID,
         token: this.token,
       });
       if (state) {
-        this.$store.dispatch('toast/success', MESSAGES.ADD_FAVOURITE_SUCCESS);
+        this.$store.dispatch('toast/success', MESSAGES.ADD_STORY_SUCCESS);
       } else {
-        this.$store.dispatch('toast/error', MESSAGES.ADD_FAVOURITE_FAILURE);
+        this.$store.dispatch('toast/error', MESSAGES.ADD_STORY_FAILURE);
       }
     },
-    async markPostUnfavourite() {
-      const { state } = await this.$store.dispatch('post/unfavouritePost', {
+    async removeStory() {
+      const { state } = await this.$store.dispatch('post/removeStory', {
         postUUID: this.postUUID,
         token: this.token,
       });
       if (state) {
-        this.$store.dispatch(
-          'toast/success',
-          MESSAGES.REMOVE_FAVOURITE_SUCCESS
-        );
+        this.$store.dispatch('toast/success', MESSAGES.REMOVE_STORY_SUCCESS);
       } else {
-        this.$store.dispatch('toast/error', MESSAGES.REMOVE_FAVOURITE_FAILURE);
+        this.$store.dispatch('toast/error', MESSAGES.REMOVE_STORY_FAILURE);
       }
     },
   },

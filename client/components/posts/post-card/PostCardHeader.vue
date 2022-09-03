@@ -45,7 +45,7 @@
           class="h-6 w-6 cursor-pointer stroke-slate-400 transition-all duration-300 hover:scale-125 hover:fill-slate-400 dark:stroke-slate-600 hover:dark:fill-slate-600"
         ></favourite-icon>
       </div>
-      <div v-else @click="markPostUnfavourite">
+      <div v-else @click="removeStory">
         <favourite-icon
           class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 transition-all duration-300 hover:scale-125 dark:fill-yellow-200 dark:stroke-yellow-200"
         ></favourite-icon>
@@ -56,9 +56,9 @@
 </template>
 
 <script>
-import ProfilePicture from '../../persons/ProfilePicture.vue';
-import FavouriteIcon from '../../assets/FavouriteIcon.vue';
 import { MESSAGES } from '../../../util/constants';
+import FavouriteIcon from '../../assets/FavouriteIcon.vue';
+import ProfilePicture from '../../persons/ProfilePicture.vue';
 
 export default {
   name: 'PostCardHeader',
@@ -94,9 +94,10 @@ export default {
       return this.$store.getters['auth/uuid'];
     },
     isStory() {
-      const listOfPersonUUIDsWhoMarkedThisPostAsFavourite =
-        this.postStories.map((fav) => fav.creator.uuid);
-      return listOfPersonUUIDsWhoMarkedThisPostAsFavourite.includes(
+      const listOfPersonUUIDsWhoAddedThisAsStory = this.postStories.map(
+        (fav) => fav.creator.uuid
+      );
+      return listOfPersonUUIDsWhoAddedThisAsStory.includes(
         this.loggedInUserUUID
       );
     },
@@ -113,16 +114,13 @@ export default {
         this.$store.dispatch('toast/error', MESSAGES.ADD_STORY_FAILURE);
       }
     },
-    async markPostUnfavourite() {
+    async removeStory() {
       const { state } = await this.$store.dispatch('post/removeStory', {
         postUUID: this.postUUID,
         token: this.token,
       });
       if (state) {
-        this.$store.dispatch(
-          'toast/success',
-          MESSAGES.REMOVE_STORY_SUCCESS
-        );
+        this.$store.dispatch('toast/success', MESSAGES.REMOVE_STORY_SUCCESS);
       } else {
         this.$store.dispatch('toast/error', MESSAGES.REMOVE_STORY_FAILURE);
       }

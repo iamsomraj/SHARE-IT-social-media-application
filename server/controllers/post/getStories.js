@@ -5,7 +5,7 @@ const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages");
 
 /**
  * @access private
- * @description gets all the favourite post for the user
+ * @description gets all the stories for the user
  * @route GET /api/v1/posts/stories
  */
 const getStories = asyncHandler(async (req, res) => {

@@ -5,7 +5,7 @@ const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js")
 
 /**
  * @access private
- * @description marks a post as unfavourite for a given user
+ * @description removes a post from stories for a given user
  * @route POST /api/v1/posts/remove-story/:post_uuid
  */
 const removeStory = asyncHandler(async (req, res) => {

@@ -28,7 +28,7 @@ export const GET_STORY_POSTS_URL = `${POST_URL}/stories`;
 export const ADD_LIKE_URL = `${POST_URL}/like`;
 export const REMOVE_LIKE_URL = `${POST_URL}/unlike`;
 export const FETCH_POST_URL = `${POST_URL}`;
-export const ADD_STORY_URL = `${POST_URL}/favourite`;
+export const ADD_STORY_URL = `${POST_URL}/add-story`;
 export const REMOVE_STORY_URL = `${POST_URL}/remove-story`;
 
 export const MESSAGES = Object.freeze({
@@ -47,10 +47,10 @@ export const MESSAGES = Object.freeze({
   PERSON_UNFOLLOW_FAILURE: 'There was an error unfollowing this person!',
   SEARCH_SUCCESS: 'Search results found!',
   SEARCH_FAILURE: 'There was an error searching!',
-  ADD_STORY_SUCCESS: 'You marked this post as favourite!',
-  ADD_STORY_FAILURE: 'Failed to mark this post as favourite!',
-  REMOVE_STORY_SUCCESS: 'Your favourite has been removed!',
-  REMOVE_STORY_FAILURE: 'Failed to remove favourite!',
+  ADD_STORY_SUCCESS: 'You added this post as story!',
+  ADD_STORY_FAILURE: 'Failed to add this post as story!',
+  REMOVE_STORY_SUCCESS: 'Your story has been removed!',
+  REMOVE_STORY_FAILURE: 'Failed to remove story!',
 });
 
 /* ROUTES */

@@ -1,12 +1,12 @@
-const RootService = require("../Root/RootService");
-const HTTP_CODES = require("../../utils/constants/http-codes");
-const { PERSON_ERROR_MESSAGES, GENERAL_MESSAGES } = require("../../utils/constants/messages");
-const FollowingsModel = require("../../models/FollowingsModel");
-const PostsModel = require("../../models/PostsModel");
-const PostStatsModel = require("../../models/PostStatsModel");
-const PersonStatsModel = require("../../models/PersonStatsModel");
-const PostLikesModel = require("../../models/PostLikesModel");
-const StoriesModel = require("../../models/StoriesModel");
+const RootService = require('../Root/RootService');
+const HTTP_CODES = require('../../utils/constants/http-codes');
+const { PERSON_ERROR_MESSAGES, GENERAL_MESSAGES } = require('../../utils/constants/messages');
+const FollowingsModel = require('../../models/FollowingsModel');
+const PostsModel = require('../../models/PostsModel');
+const PostStatsModel = require('../../models/PostStatsModel');
+const PersonStatsModel = require('../../models/PersonStatsModel');
+const PostLikesModel = require('../../models/PostLikesModel');
+const StoriesModel = require('../../models/StoriesModel');
 
 /**
  * CLASS FOR HANDLING REQUESTS MADE BY ALL POST RELATED CONTROLLERS
@@ -48,7 +48,7 @@ class PostService extends RootService {
     if (!likeRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
 
     /* UPDATE POST STAT RECORD */
-    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).increment("like_count", 1);
+    const postStatRecord = await PostStatsModel.query().where('post_id', postRecord.id).increment('like_count', 1);
     if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.LIKE_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
@@ -82,14 +82,14 @@ class PostService extends RootService {
 
     /* BEGIN: DATABASE OPERATIONS */
     /* INSERT PERSON POST STORY RECORD */
-    const favouriteRecord = await StoriesModel.query().insert({
+    const insertedStoryRecord = await StoriesModel.query().insert({
       post_id: postRecord.id,
       person_id: user.id,
     });
-    if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.STORY_FAILURE);
+    if (!insertedStoryRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.STORY_FAILURE);
 
     /* UPDATE POST STAT RECORD */
-    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).increment("story_count", 1);
+    const postStatRecord = await PostStatsModel.query().where('post_id', postRecord.id).increment('story_count', 1);
     if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.STORY_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
@@ -123,11 +123,11 @@ class PostService extends RootService {
 
     /* BEGIN: DATABASE OPERATIONS */
     /* DELETE PERSON POST STORY RECORD */
-    const favouriteRecord = await StoriesModel.query().deleteById(storyRecord.id);
-    if (!favouriteRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNSTORY_FAILURE);
+    const deletedStoryRecord = await StoriesModel.query().deleteById(storyRecord.id);
+    if (!deletedStoryRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNSTORY_FAILURE);
 
     /* UPDATE POST STAT RECORD */
-    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).decrement("story_count", 1);
+    const postStatRecord = await PostStatsModel.query().where('post_id', postRecord.id).decrement('story_count', 1);
     if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNSTORY_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
@@ -165,7 +165,7 @@ class PostService extends RootService {
     if (!likeRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNLIKE_FAILURE);
 
     /* UPDATE POST STAT RECORD */
-    const postStatRecord = await PostStatsModel.query().where("post_id", postRecord.id).decrement("like_count", 1);
+    const postStatRecord = await PostStatsModel.query().where('post_id', postRecord.id).decrement('like_count', 1);
     if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.UNLIKE_FAILURE);
 
     const result = await PostsModel.getPostDetails(postRecord.uuid);
@@ -204,7 +204,7 @@ class PostService extends RootService {
     if (!postStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
 
     /* UPDATING PERSON STAT RECORD */
-    const creatorPersonStatRecord = await PersonStatsModel.query().where("person_id", user.id).increment("post_count", 1);
+    const creatorPersonStatRecord = await PersonStatsModel.query().where('person_id', user.id).increment('post_count', 1);
     if (!creatorPersonStatRecord) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FAILURE);
     /* END: DATABASE OPERATIONS */
 
@@ -223,7 +223,7 @@ class PostService extends RootService {
    */
   async getFeedPosts(user) {
     /* BEGIN: FETCH FOLLOWINGS OF PERSON */
-    const followingRecords = await FollowingsModel.query().where("follower_id", user.id);
+    const followingRecords = await FollowingsModel.query().where('follower_id', user.id);
     /* END: FETCH FOLLOWINGS OF PERSON */
 
     if (!followingRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FEED_FAILURE);
@@ -232,12 +232,12 @@ class PostService extends RootService {
 
     /* BEGIN: FETCH POSTS OF FOLLOWINGS */
     const postRecords = await PostsModel.query()
-      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), post_stories(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
+      .withGraphFetched('[post_likes(orderByLatest).creator(defaultSelects), post_stories(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]')
       .where((buider) => {
-        buider.orWhereIn("created_by", followingIds);
-        buider.orWhere("created_by", user.id);
+        buider.orWhereIn('created_by', followingIds);
+        buider.orWhere('created_by', user.id);
       })
-      .modifiers("orderByLatest");
+      .modifiers('orderByLatest');
     /* END: FETCH POSTS OF FOLLOWINGS */
 
     if (!postRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_FEED_FAILURE);
@@ -253,7 +253,7 @@ class PostService extends RootService {
    */
   async getStories(user) {
     /* BEGIN: FETCH PERSON POST STORY RECORDS FOR A PERSON */
-    const storyRecords = await StoriesModel.query().where("person_id", user.id);
+    const storyRecords = await StoriesModel.query().where('person_id', user.id);
     /* END: FETCH PERSON POST STORY RECORDS FOR A PERSON */
 
     if (!storyRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_STORY_FAILURE);
@@ -262,11 +262,11 @@ class PostService extends RootService {
 
     /* BEGIN: FETCH POSTS OF FOLLOWINGS */
     const postRecords = await PostsModel.query()
-      .withGraphFetched("[post_likes(orderByLatest).creator(defaultSelects), post_stories(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]")
-      .whereIn("id", postIds)
-      .andWhere("is_deleted", false)
+      .withGraphFetched('[post_likes(orderByLatest).creator(defaultSelects), post_stories(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]')
+      .whereIn('id', postIds)
+      .andWhere('is_deleted', false)
       .andWhereRaw("created_at::timestamptz >= NOW() - INTERVAL '1 DAY'")
-      .modifiers("orderByLatest");
+      .modifiers('orderByLatest');
     /* END: FETCH POSTS OF FOLLOWINGS */
 
     if (!postRecords) this.raiseError(HTTP_CODES.INTERNAL_SERVER_ERROR, PERSON_ERROR_MESSAGES.POST_STORY_FAILURE);

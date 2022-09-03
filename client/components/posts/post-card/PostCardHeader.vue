@@ -32,8 +32,8 @@
 
     <div v-if="!isSelfPost">
       <div
-        v-if="!isPostFavourite"
-        @click="markPostFavourite"
+        v-if="!isStory"
+        @click="addStory"
         class="flex items-center justify-between space-x-2"
       >
         <div
@@ -93,7 +93,7 @@ export default {
     loggedInUserUUID() {
       return this.$store.getters['auth/uuid'];
     },
-    isPostFavourite() {
+    isStory() {
       const listOfPersonUUIDsWhoMarkedThisPostAsFavourite =
         this.postStories.map((fav) => fav.creator.uuid);
       return listOfPersonUUIDsWhoMarkedThisPostAsFavourite.includes(
@@ -102,8 +102,8 @@ export default {
     },
   },
   methods: {
-    async markPostFavourite() {
-      const { state } = await this.$store.dispatch('post/favouritePost', {
+    async addStory() {
+      const { state } = await this.$store.dispatch('post/addStory', {
         postUUID: this.postUUID,
         token: this.token,
       });

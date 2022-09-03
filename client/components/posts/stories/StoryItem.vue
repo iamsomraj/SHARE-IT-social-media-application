@@ -28,7 +28,7 @@
         {{ postAuthor.name }}
       </div>
       <div class="mx-2 text-sm text-slate-400">
-        {{ time(selectedFavouriteRecord.created_at, selectedPost.created_at) }}
+        {{ time(selectedStory.created_at, selectedPost.created_at) }}
       </div>
     </div>
     <!-- END: HEADER SECTION -->
@@ -84,7 +84,7 @@ export default {
       type: Object,
       required: true,
     },
-    selectedFavouriteRecord: {
+    selectedStory: {
       type: Object,
       required: true,
     },

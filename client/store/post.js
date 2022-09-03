@@ -82,7 +82,7 @@ export const actions = {
     }
   },
   /* MARK POST AS STORY */
-  async favouritePost({ commit }, { postUUID, token }) {
+  async addStory({ commit }, { postUUID, token }) {
     try {
       const { data: responseData } = await axios.post(
         `${ADD_STORY_URL}/${postUUID}`,

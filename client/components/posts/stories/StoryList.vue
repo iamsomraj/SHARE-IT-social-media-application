@@ -5,7 +5,7 @@
     <story-item-screen
       v-if="showCard"
       @dismiss="onCardClose"
-      :posts="storyPosts"
+      :posts="stories"
       :selectedId="selectedId"
     ></story-item-screen>
     <!-- END: STORY CARD -->
@@ -20,7 +20,7 @@
       >
         <!-- BEGIN: STORY POST ITEM -->
         <div
-          v-for="post in storyPosts"
+          v-for="post in stories"
           :key="post.id"
           class="flex flex-col items-center justify-center space-y-2 py-2 transition-all duration-300 hover:scale-105"
           @click="onPostClick(post.id)"
@@ -54,7 +54,7 @@ import StoryItemScreen from './StoryItemScreen.vue';
 export default {
   name: 'StoryList',
   props: {
-    storyPosts: {
+    stories: {
       type: Array,
       required: true,
     },

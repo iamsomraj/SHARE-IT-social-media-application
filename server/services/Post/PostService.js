@@ -251,7 +251,7 @@ class PostService extends RootService {
    * @route GET /api/v1/posts/stories
    * @access private
    */
-  async getFavouritePosts(user) {
+  async getStories(user) {
     /* BEGIN: FETCH PERSON POST STORY RECORDS FOR A PERSON */
     const storyRecords = await StoriesModel.query().where("person_id", user.id);
     /* END: FETCH PERSON POST STORY RECORDS FOR A PERSON */

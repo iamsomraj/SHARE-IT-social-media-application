@@ -8,10 +8,10 @@ const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages");
  * @description gets all the favourite post for the user
  * @route GET /api/v1/posts/stories
  */
-const getFavouritePosts = asyncHandler(async (req, res) => {
+const getStories = asyncHandler(async (req, res) => {
   const { user } = req;
   const postService = new PostService();
-  const result = await postService.getFavouritePosts(user);
+  const result = await postService.getStories(user);
 
   res.status(HTTP_CODES.OK).json({
     state: true,
@@ -20,4 +20,4 @@ const getFavouritePosts = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = getFavouritePosts;
+module.exports = getStories;

@@ -3,7 +3,7 @@
     v-if="user"
     class="flex min-h-screen w-full flex-col items-center justify-start space-y-6 pt-4 pb-16 dark:bg-slate-800 md:py-6"
   >
-    <story-list :storyPosts="storyPosts" />
+    <story-list v-if="storyPosts.length" :story-posts="storyPosts" />
     <post-list
       class="w-full"
       v-if="posts"
@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import PostList from '../../components/posts/PostList.vue';
-import { MESSAGES } from '../../util/constants';
 import ProfilePicture from '../../components/persons/ProfilePicture.vue';
+import PostList from '../../components/posts/PostList.vue';
 import StoryList from '../../components/posts/stories/StoryList.vue';
+import { MESSAGES } from '../../util/constants';
 
 export default {
   name: 'FeedPage',

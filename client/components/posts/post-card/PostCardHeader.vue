@@ -41,14 +41,14 @@
         >
           Add this to your story
         </div>
-        <favourite-icon
+        <story-icon
           class="h-6 w-6 cursor-pointer stroke-slate-400 transition-all duration-300 hover:scale-125 hover:fill-slate-400 dark:stroke-slate-600 hover:dark:fill-slate-600"
-        ></favourite-icon>
+        ></story-icon>
       </div>
       <div v-else @click="removeStory">
-        <favourite-icon
+        <story-icon
           class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 transition-all duration-300 hover:scale-125 dark:fill-yellow-200 dark:stroke-yellow-200"
-        ></favourite-icon>
+        ></story-icon>
       </div>
     </div>
   </div>
@@ -57,7 +57,7 @@
 
 <script>
 import { MESSAGES } from '../../../util/constants';
-import FavouriteIcon from '../../assets/FavouriteIcon.vue';
+import StoryIcon from '../../assets/StoryIcon.vue';
 import ProfilePicture from '../../persons/ProfilePicture.vue';
 
 export default {
@@ -128,7 +128,7 @@ export default {
   },
   components: {
     ProfilePicture,
-    FavouriteIcon,
+    StoryIcon,
   },
 };
 </script>

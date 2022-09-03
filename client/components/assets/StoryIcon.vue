@@ -16,6 +16,6 @@
 
 <script>
 export default {
-  name: 'FavoriteIcon',
+  name: 'StoryIcon',
 };
 </script>

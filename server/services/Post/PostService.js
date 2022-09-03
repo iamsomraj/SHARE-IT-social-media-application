@@ -103,10 +103,10 @@ class PostService extends RootService {
    * @description REMOVES STORY MARK FROM A POST
    * @param {{ id }} user - logged in user
    * @param {string} post_uuid - post's uuid
-   * @route POST /api/v1/posts/unfavourite/:post_uuid
+   * @route POST /api/v1/posts/remove-story/:post_uuid
    * @access private
    */
-  async removeFavourite(user, post_uuid) {
+  async removeStory(user, post_uuid) {
     /* BEGIN: VALIDATIONS */
     if (!post_uuid) this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
     /* END: VALIDATIONS */

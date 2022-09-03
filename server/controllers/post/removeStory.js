@@ -6,13 +6,13 @@ const { PERSON_SUCCESS_MESSAGES } = require("../../utils/constants/messages.js")
 /**
  * @access private
  * @description marks a post as unfavourite for a given user
- * @route POST /api/v1/posts/unfavourite/:post_uuid
+ * @route POST /api/v1/posts/remove-story/:post_uuid
  */
-const removeLike = asyncHandler(async (req, res) => {
+const removeStory = asyncHandler(async (req, res) => {
   const { post_uuid } = req.params;
   const { user } = req;
   const postService = new PostService();
-  const result = await postService.removeFavourite(user, post_uuid);
+  const result = await postService.removeStory(user, post_uuid);
 
   res.status(HTTP_CODES.OK).json({
     state: true,
@@ -21,4 +21,4 @@ const removeLike = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = removeLike;
+module.exports = removeStory;

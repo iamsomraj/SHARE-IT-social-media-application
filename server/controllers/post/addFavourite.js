@@ -12,7 +12,7 @@ const addLike = asyncHandler(async (req, res) => {
   const { post_uuid } = req.params;
   const { user } = req;
   const postService = new PostService();
-  const result = await postService.addFavourite(user, post_uuid);
+  const result = await postService.addStory(user, post_uuid);
 
   res.status(HTTP_CODES.CREATED).json({
     state: true,

@@ -39,7 +39,7 @@
         <div
           class="hidden text-xs text-slate-400 underline-offset-4 transition-all duration-300 hover:cursor-pointer hover:underline md:block"
         >
-          Add to story
+          Add to story hi
         </div>
         <favourite-icon
           class="h-6 w-6 cursor-pointer stroke-slate-400 transition-all duration-300 hover:scale-125 hover:fill-slate-400 dark:stroke-slate-600 hover:dark:fill-slate-600"

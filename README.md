@@ -6,6 +6,8 @@ SHARE-IT-social-media-application is a full-stack application, where users can r
 
 - User Register and Login
 - Create Post
+- Create Story
+- See Stories
 - Like Post
 - Unlike Post
 - Follow User

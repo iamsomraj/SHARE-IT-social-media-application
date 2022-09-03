@@ -29,7 +29,7 @@ export const ADD_LIKE_URL = `${POST_URL}/like`;
 export const REMOVE_LIKE_URL = `${POST_URL}/unlike`;
 export const FETCH_POST_URL = `${POST_URL}`;
 export const ADD_STORY_URL = `${POST_URL}/favourite`;
-export const REMOVE_STORY_URL = `${POST_URL}/unfavourite`;
+export const REMOVE_STORY_URL = `${POST_URL}/remove-story`;
 
 export const MESSAGES = Object.freeze({
   LOGIN_SUCCESS: 'You are now logged in!',

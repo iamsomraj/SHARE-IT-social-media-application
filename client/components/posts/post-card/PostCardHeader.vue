@@ -114,7 +114,7 @@ export default {
       }
     },
     async markPostUnfavourite() {
-      const { state } = await this.$store.dispatch('post/unfavouritePost', {
+      const { state } = await this.$store.dispatch('post/removeStory', {
         postUUID: this.postUUID,
         token: this.token,
       });

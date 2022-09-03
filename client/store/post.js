@@ -103,7 +103,7 @@ export const actions = {
     }
   },
   /* UNMARK POST AS STORY */
-  async unfavouritePost({ commit }, { postUUID, token }) {
+  async removeStory({ commit }, { postUUID, token }) {
     try {
       const { data: responseData } = await axios.post(
         `${REMOVE_STORY_URL}/${postUUID}`,

@@ -42,7 +42,7 @@ export default {
   },
 
   // environment variable configuration
-  env: { NODE_ENV: process.env.NODE_ENV, DEV_API: process.env.DEV_API },
+  env: { NODE_ENV: process.env.NODE_ENV, DEV_API: process.env.DEV_API, PROD_API: process.env.PROD_API },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

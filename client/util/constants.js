@@ -1,10 +1,9 @@
 import ENVIRONMENT from '../../server/utils/constants/environments';
 
 /* BASE URL FOR SERVER */
-export const BASE_URL =
-  process.env.NODE_ENV === ENVIRONMENT.PRODUCTION
-    ? process.env.PROD_API
-    : process.env.DEV_API;
+export const BASE_URL = ENVIRONMENT.IS_PRODUCTION
+  ? process.env.PROD_API
+  : process.env.DEV_API;
 
 /* BASE URL FOR PERSON ROUTES */
 const PERSON_URL = `${BASE_URL}/persons`;

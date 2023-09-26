@@ -71,7 +71,7 @@ NODE_ENV = development
     npx knex migrate:latest
 ```
 
-- Start SHARE-IT-social-media-application
+- Start SHARE-IT-social-media-application by going to server and client folder both
 
 ```bash
   npm run dev

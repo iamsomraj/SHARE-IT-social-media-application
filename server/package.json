@@ -4,18 +4,15 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "setup": "npm run migrate-latest && npm install && npm install --prefix client",
-    "start": "node server/server",
-    "data-import": "npm run migrate-rollback && npm run migrate-latest && node server/seeds/seeder",
-    "server": "npm run data-import && nodemon server/server",
-    "client": "npm run dev --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\" ",
+    "start": "node server",
+    "data-import": "npm run migrate-rollback && npm run migrate-latest && node seeds/seeder",
+    "server": "npm run data-import && nodemon server",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
     "migrate-make": "knex migrate:make"
   },
   "keywords": [],
-  "author": "",
+  "author": "Somraj Mukherjee",
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0",
@@ -29,7 +26,6 @@
     "pg": "^8.7.3"
   },
   "devDependencies": {
-    "concurrently": "^7.0.0",
     "nodemon": "^2.0.15"
   }
 }

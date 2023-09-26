@@ -23,6 +23,10 @@ app.use('/api/v1/persons', personRoutes);
 app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/auth', authRoutes);
 
+app.get('/', (_req, res) => {
+  res.send('Our Express API is running..');
+});
+
 app.use(pageNotFound);
 app.use(errorHandler);
 

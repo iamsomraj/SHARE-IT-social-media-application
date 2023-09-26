@@ -44,7 +44,7 @@ To run this project, you will need to add the following environment variables to
 - `PROD_API` : For production API
 - `NODE_ENV` : For Node environment ( production / development / test )
 
-Create these environment variables, save them in Coding Pillow Editor root folder. File name can be `.env`.
+Create these environment variables, save them in root folder. File name can be `.env`.
 
 - `.env` file for server (.env) -
 

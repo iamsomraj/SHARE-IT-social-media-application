@@ -1,6 +1,6 @@
 # SHARE-IT
 
-SHARE-IT is a Modern Social Media Application, where users can register and login in the portal. Users can also create and like posts. There is also a feed where users can see posts from followed users. It is built using Nuxt 2, Vue, Tailwind CSS, Express, Postgres and Objection.js.
+SHARE-IT - A Modern Social Media Application, where users can register and login in the portal. Users can also create and like posts. There is also a feed where users can see posts from followed users. It is built using Nuxt 2, Vue, Tailwind CSS, Express, Postgres and Objection.js.
 
 ## Features
 
@@ -19,6 +19,10 @@ SHARE-IT is a Modern Social Media Application, where users can register and logi
 ## Preview Link
 
 ✅ [Live] [https://share-it-social.vercel.app/] 😊
+
+## Walkthrough of Share-IT
+
+✅ [Overview] [https://youtu.be/4XcMt8PRFJI]
 
 ## Run This Application
 

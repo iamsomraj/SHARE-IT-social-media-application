@@ -48,6 +48,8 @@ To run this project, you will need to add the following environment variables to
 - `JWT_SECRET` : For User tokens
 - `SALT` : For Hashing Passwords
 - `JWT_EXPIRATION_DURATION` : For User token expiration duration
+- `PRODUCTION_CLIENT_ORIGIN` : For Client Origin for Production Environment
+- `DEVELOPMENT_CLIENT_ORIGIN` : For Client Origin for Development Environment
 
 - `DEV_API` : For development API
 - `PROD_API` : For production API
@@ -64,6 +66,8 @@ NODE_ENV = development
 SALT = {YOUR_SALT}
 JWT_SECRET = {YOUR_SECRET}
 JWT_EXPIRATION_DURATION = '100d'
+PRODUCTION_CLIENT_ORIGIN=
+DEVELOPMENT_CLIENT_ORIGIN=http://localhost:3000
 ```
 
 - `.env` file for client (client/.env) -

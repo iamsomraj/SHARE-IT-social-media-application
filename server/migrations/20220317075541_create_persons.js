@@ -1,18 +1,18 @@
 exports.up = function (knex) {
   return Promise.all([
-    knex.schema.createTable("persons", (table) => {
-      table.increments("id").primary();
-      table.string("uuid");
-      table.string("name");
-      table.string("email");
-      table.string("password");
-      table.string("created_at");
-      table.string("updated_at");
-      table.boolean("is_deleted").defaultTo(false);
+    knex.schema.createTable('persons', (table) => {
+      table.increments('id').primary().comment('Unique identifier for a person');
+      table.string('uuid').comment('Universally Unique Identifier for a person');
+      table.string('name').comment('Name of the person');
+      table.string('email').comment('Email address of the person');
+      table.string('password').comment('Password of the person');
+      table.string('created_at').comment('Timestamp of when the record was created');
+      table.string('updated_at').comment('Timestamp of when the record was last updated');
+      table.boolean('is_deleted').notNullable().defaultTo(false).comment('Flag indicating whether the person is deleted');
     }),
   ]);
 };
 
 exports.down = function (knex) {
-  return Promise.all([knex.schema.dropTable("persons")]);
+  return Promise.all([knex.schema.dropTable('persons')]);
 };

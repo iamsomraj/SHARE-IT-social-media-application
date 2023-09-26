@@ -12,9 +12,9 @@
         :id="profile.id"
         :name="profile.name"
         :email="profile.email"
-        :numberOfPosts="profile.person_stats.post_count"
-        :numberOfFollowers="profile.person_stats.follower_count"
-        :numberOfFollowings="profile.person_stats.following_count"
+        :numberOfPosts="user?.person_stats?.post_count || 0"
+        :numberOfFollowers="user?.person_stats?.follower_count || 0"
+        :numberOfFollowings="user?.person_stats?.following_count || 0"
       />
       <!-- END: PROFILE HEADER  -->
 

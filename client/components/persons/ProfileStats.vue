@@ -17,7 +17,11 @@
 
 <script>
 export default {
-  name: '',
-  props: ['numberOfPosts', 'numberOfFollowers', 'numberOfFollowings'],
+  name: 'ProfileStats',
+  props: {
+    numberOfPosts: { type: Number, default: 0 },
+    numberOfFollowers: { type: Number, default: 0 },
+    numberOfFollowings: { type: Number, default: 0 },
+  },
 };
 </script>

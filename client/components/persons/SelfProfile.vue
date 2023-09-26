@@ -12,9 +12,9 @@
         :id="user.id"
         :name="user.name"
         :email="user.email"
-        :numberOfPosts="user.person_stats.post_count"
-        :numberOfFollowers="user.person_stats.follower_count"
-        :numberOfFollowings="user.person_stats.following_count"
+        :numberOfPosts="user?.person_stats?.post_count || 0"
+        :numberOfFollowers="user?.person_stats?.follower_count || 0"
+        :numberOfFollowings="user?.person_stats?.following_count || 0"
       />
       <!-- END: CURRENT LOGGED IN USER PROFILE HEADER  -->
 

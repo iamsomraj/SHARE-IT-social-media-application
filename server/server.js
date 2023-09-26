@@ -20,6 +20,7 @@ app.use(
 );
 
 app.use(express.json());
+
 app.use('/api/v1/persons', personRoutes);
 app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/auth', authRoutes);

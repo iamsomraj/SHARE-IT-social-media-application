@@ -32,8 +32,9 @@ app.get('/', (_req, res) => {
 app.use(pageNotFound);
 app.use(errorHandler);
 
+const MODE = process.env.NODE_ENV;
 const PORT = process.env.PORT || 4500;
 
 app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.blue.bgWhite);
+  console.log(`Server running in ${MODE} mode on port ${PORT}`.bold.blue.bgWhite);
 });

@@ -4,10 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
+    "start": "node index",
     "data-import": "npm run migrate-rollback && npm run migrate-latest && node seeds/seeder",
-    "server": "npm run data-import && nodemon server",
-    "dev": "nodemon server",
+    "server": "npm run data-import && nodemon index",
+    "dev": "nodemon index",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
     "migrate-make": "knex migrate:make"

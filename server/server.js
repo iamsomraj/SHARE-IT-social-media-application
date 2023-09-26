@@ -1,6 +1,7 @@
 const knex = require('./config/db-config.js');
 const express = require('express');
 const cors = require('cors');
+const colors = require('colors');
 const _ = require('colors');
 
 const personRoutes = require('./routes/personRoutes.js');
@@ -13,7 +14,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: [process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_CLIENT_ORIGIN : process.env.DEVELOPMENT_CLIENT_ORIGIN],
+    origin: [ENVIRONMENT.IS_PRODUCTION ? process.env.PRODUCTION_CLIENT_ORIGIN : process.env.DEVELOPMENT_CLIENT_ORIGIN],
     methods: ['POST', 'GET', 'PUT', 'DELETE'],
   })
 );
@@ -30,8 +31,8 @@ app.get('/', (_req, res) => {
 app.use(pageNotFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 4500;
 
 app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.blue.bgWhite.bold);
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.blue.bgWh);
 });

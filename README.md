@@ -22,7 +22,7 @@ SHARE-IT - A Modern Social Media Application, where users can register and login
 
 ## Walkthrough of Share-IT
 
-✅ [Overview] [https://youtu.be/4XcMt8PRFJI]
+✅ [Overview] [https://youtu.be/gM3WxzEyJSU]
 
 ## Run This Application
 

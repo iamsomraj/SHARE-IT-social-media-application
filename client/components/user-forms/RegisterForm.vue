@@ -8,7 +8,10 @@
     <!-- END: FORM LOGO -->
 
     <!-- BEGIN: REGISTER FORM -->
-    <div class="flex w-full flex-col items-center justify-center space-y-4 p-4">
+    <form
+      class="flex w-full flex-col items-center justify-center space-y-4 p-4"
+      @submit.prevent="onSubmit"
+    >
       <!-- BEGIN: REGISTER FORM NAME -->
       <div class="w-full">
         <text-input placeholder="Name" type="text" v-model="name" />
@@ -43,7 +46,7 @@
         </secondary-button>
       </div>
       <!-- END: REGISTER FORM SUBMIT -->
-    </div>
+    </form>
     <!-- END: REGISTER FORM -->
   </div>
   <!-- END: REGISTER FORM COMPONENT -->

@@ -1,9 +1,9 @@
 <template>
   <div
-    class="relative flex min-h-screen w-screen items-center justify-center dark:bg-slate-800"
+    class="relative flex max-h-screen min-h-screen w-full items-center justify-center dark:bg-slate-800"
   >
     <theme-button
-      class="absolute top-4 right-4 rounded-xl border-2 p-2 dark:border-slate-600"
+      class="absolute right-4 top-4 rounded-xl border-2 p-2 dark:border-slate-600"
     />
     <login-form />
   </div>

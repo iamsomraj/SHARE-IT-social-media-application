@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, readonly } from 'vue'
+import { ref } from 'vue'
 import type { User, ApiResponse } from '~/types/auth'
 import { getApiEndpoints } from '~/utils/constants'
 
@@ -78,9 +78,9 @@ export const useSearchStore = defineStore('search', () => {
 
   return {
     // State
-    searchResults: readonly(searchResults),
-    loading: readonly(loading),
-    query: readonly(query),
+    searchResults,
+    loading,
+    query,
 
     // Actions
     searchPeople,

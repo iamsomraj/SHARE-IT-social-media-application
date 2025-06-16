@@ -50,7 +50,7 @@ export const useThemeStore = defineStore('theme', () => {
 
   return {
     // State
-    theme: readonly(theme),
+    theme,
     // Getters
     isDarkTheme,
     // Actions

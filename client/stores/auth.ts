@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed, readonly } from 'vue'
+import { ref, computed } from 'vue'
 import type { User, ApiResponse, AuthResponse, Post } from '~/types/auth'
 import { getApiEndpoints } from '~/utils/constants'
 
@@ -202,8 +202,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     // State
-    user: readonly(user),
-    token: readonly(token),
+    user,
+    token,
     // Getters
     isLoggedIn,
     uuid,

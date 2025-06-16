@@ -247,8 +247,8 @@ export const usePostStore = defineStore('post', () => {
 
   return {
     // State
-    post: readonly(post),
-    loading: readonly(loading),
+    post,
+    loading,
 
     // Actions
     fetchPost,

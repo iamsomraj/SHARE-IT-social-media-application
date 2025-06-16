@@ -98,9 +98,9 @@ export const useFeedStore = defineStore('feed', () => {
 
   return {
     // State
-    posts: readonly(posts),
-    stories: readonly(stories),
-    loading: readonly(loading),
+    posts,
+    stories,
+    loading,
 
     // Actions
     fetchPosts,

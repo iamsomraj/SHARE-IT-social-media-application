@@ -59,7 +59,7 @@ export const useToastStore = defineStore('toast', () => {
 
   return {
     // State
-    toasts: readonly(toasts),
+    toasts,
     // Actions
     addToast,
     removeToast,

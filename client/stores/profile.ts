@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed, readonly } from 'vue'
+import { ref, computed } from 'vue'
 import type { User, ApiResponse } from '~/types/auth'
 import { getApiEndpoints } from '~/utils/constants'
 
@@ -250,7 +250,7 @@ export const useProfileStore = defineStore('profile', () => {
 
   return {
     // State
-    profile: readonly(profile),
+    profile,
 
     // Getters
     posts,

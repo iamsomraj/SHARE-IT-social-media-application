@@ -77,6 +77,7 @@
 
     try {
       const res = await authStore.login(loginFormData)
+      console.log('🚀 ~ LoginForm.vue:80 ~ onSubmit ~ res:', res)
       loading.value = false
 
       if (res.success) {
@@ -86,7 +87,8 @@
       } else {
         toastStore.error(res.error || 'Login failed')
       }
-    } catch {
+    } catch (error) {
+      console.log('🚀 ~ LoginForm.vue:91 ~ onSubmit ~ error:', error)
       loading.value = false
       toastStore.error('Login failed')
     }

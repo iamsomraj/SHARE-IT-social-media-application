@@ -50,7 +50,7 @@
       <div
         v-if="!isLiked"
         class="flex cursor-pointer items-center justify-center space-x-4 decoration-slate-400 hover:underline hover:underline-offset-4"
-        @click="$router.push(`post/${selectedPost.uuid}`)"
+        @click="$router.push(`/post/${selectedPost.uuid}`)"
       >
         <view-icon class="h-5 w-5 fill-transparent stroke-slate-400" />
         <div class="text-sm text-slate-400">View this post</div>

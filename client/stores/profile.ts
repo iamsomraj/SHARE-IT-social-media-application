@@ -156,7 +156,7 @@ export const useProfileStore = defineStore('profile', () => {
     try {
       const endpoints = getApiEndpoints()
       const response = await $fetch(`${endpoints.UNFOLLOW}/${uuid}`, {
-        method: 'DELETE',
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
         },

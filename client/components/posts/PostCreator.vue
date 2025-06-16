@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full items-center justify-center py-4">
     <div class="mx-6 flex w-full justify-center space-x-2 md:mx-0 md:w-1/2">
-      <post-input
+      <PostInput
         placeholder="Speak your mind"
         :loading="loading"
         v-model="postInput"

@@ -147,7 +147,7 @@ class PersonService extends RootService {
     /* END: VALIDATIONS */
 
     /* BEGIN: PERSON DETAILS FETCHING */
-    const personRecord = await PersonsModel.getPersonDetailsByEmail(email);
+    const personRecord = await PersonsModel.getPersonDetailsByEmail(user.email);
     /* END: PERSON DETAILS FETCHING */
 
     if (!personRecord) this.raiseError(HTTP_CODES.NOT_FOUND, PERSON_ERROR_MESSAGES.FETCH_USER_DATA_FAILURE);

@@ -100,7 +100,7 @@
   interface Props {
     uuid: string
     ownerName: string
-    ownerId: string
+    ownerId: number
     ownerUUID: string
     content: string
     numberOfLikes: number

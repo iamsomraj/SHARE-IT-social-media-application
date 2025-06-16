@@ -4,15 +4,18 @@ import type { User, ApiResponse, AuthResponse, Post } from '~/types/auth'
 import { getApiEndpoints } from '~/utils/constants'
 
 const defaultUser: User = {
-  id: '',
+  id: 0,
   uuid: '',
   name: '',
   email: '',
+  created_at: '',
+  updated_at: '',
+  is_deleted: false,
   person_followers: [],
   person_followings: [],
   person_stats: {
-    id: '',
-    person_id: '',
+    id: 0,
+    person_id: 0,
     post_count: 0,
     follower_count: 0,
     following_count: 0,
@@ -69,14 +72,15 @@ export const useAuthStore = defineStore('auth', () => {
         body: credentials,
       })
 
-      if (response?.token && response?.user) {
-        setToken(response.token)
-        setUser(response.user)
+      if (response?.state && response?.data && response?.data.token) {
+        const { token: userToken, ...userData } = response.data
+        setToken(userToken)
+        setUser(userData)
 
         // Store in localStorage
         if (process.client) {
-          localStorage.setItem('share-it-token', response.token)
-          localStorage.setItem('share-it-user', JSON.stringify(response.user))
+          localStorage.setItem('share-it-token', userToken)
+          localStorage.setItem('share-it-user', JSON.stringify(userData))
         }
 
         return { success: true, data: response, state: true }
@@ -103,14 +107,18 @@ export const useAuthStore = defineStore('auth', () => {
         body: userData,
       })
 
-      if (response?.token && response?.user) {
-        setToken(response.token)
-        setUser(response.user)
+      if (response?.state && response?.data && response?.data.token) {
+        const { token: userToken, ...userDataWithoutToken } = response.data
+        setToken(userToken)
+        setUser(userDataWithoutToken)
 
         // Store in localStorage
         if (process.client) {
-          localStorage.setItem('share-it-token', response.token)
-          localStorage.setItem('share-it-user', JSON.stringify(response.user))
+          localStorage.setItem('share-it-token', userToken)
+          localStorage.setItem(
+            'share-it-user',
+            JSON.stringify(userDataWithoutToken)
+          )
         }
 
         return { success: true, data: response, state: true }

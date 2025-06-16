@@ -40,10 +40,9 @@ export const LOCAL_STORAGE_KEYS = Object.freeze({
 
 // API Base URLs - these will be constructed dynamically using runtime config
 // Use getApiEndpoints() function to get the complete API URLs
-const API_BASE = '/api/v1'
-const PERSON_BASE = `${API_BASE}/persons`
-const POST_BASE = `${API_BASE}/posts`
-const AUTH_BASE = `${API_BASE}/auth`
+const PERSON_BASE = `/persons`
+const POST_BASE = `/posts`
+const AUTH_BASE = `/auth`
 
 // Helper function to get API base URL based on environment
 export const getApiBaseUrl = (): string => {

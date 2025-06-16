@@ -6,15 +6,18 @@ import { getApiEndpoints } from '~/utils/constants'
 export interface Profile extends User {}
 
 const defaultProfile: Profile = {
-  id: '',
+  id: 0,
   uuid: '',
   name: '',
   email: '',
+  created_at: '',
+  updated_at: '',
+  is_deleted: false,
   person_followers: [],
   person_followings: [],
   person_stats: {
-    id: '',
-    person_id: '',
+    id: 0,
+    person_id: 0,
     post_count: 0,
     follower_count: 0,
     following_count: 0,

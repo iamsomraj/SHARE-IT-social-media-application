@@ -1,67 +1,75 @@
 export interface User {
-  id: string
+  id: number
   uuid: string
   name: string
   email: string
+  created_at: string
+  updated_at: string
+  is_deleted: boolean
   person_followers: readonly PersonFollower[]
   person_followings: readonly PersonFollowing[]
   person_stats: PersonStats
   person_posts: readonly Post[]
+  token?: string // Optional token field for login response
 }
 
 export interface PersonFollower {
-  id: string
-  person_id: string
-  followed_id: string
+  id: number
+  follower_id: number
+  followed_id: number
   created_at: string
-  updated_at: string
-  follower?: User
+  updated_at: string | null
+  created_by: number
+  updated_by: number
 }
 
 export interface PersonFollowing {
-  id: string
-  person_id: string
-  followed_id: string
+  id: number
+  follower_id: number
+  followed_id: number
   created_at: string
-  updated_at: string
-  following?: User
+  updated_at: string | null
+  created_by: number
+  updated_by: number
 }
 
 export interface PersonStats {
-  id: string
-  person_id: string
+  id: number
+  person_id: number
   post_count: number
   follower_count: number
   following_count: number
 }
 
 export interface Post {
-  id: string
+  id: number
   uuid: string
-  person_id: string
   content: string
   created_at: string
   updated_at: string
-  person?: User
-  creator?: User // Legacy alias for person
-  post_likes?: readonly PostLike[]
-  post_stats?: PostStats
+  created_by: number
+  updated_by: number
+  is_deleted: boolean
+  post_likes: readonly PostLike[]
+  post_stats: PostStats
+  creator: User
   post_stories?: readonly PostStory[]
 }
 
 export interface PostLike {
-  id: string
-  post_id: string
-  person_id: string
+  id: number
+  post_id: number
   created_at: string
   updated_at: string
-  person?: User
-  creator?: User // For consistency with other interfaces
+  created_by: number
+  updated_by: number
+  creator: User
+  person?: User // For backward compatibility
 }
 
 export interface PostStats {
-  id: string
-  post_id: string
+  id: number
+  post_id: number
   like_count: number
   comment_count: number
   story_count: number
@@ -82,14 +90,15 @@ export interface ApiResponse<T = unknown> {
 }
 
 export interface AuthResponse {
-  token: string
-  user: User
+  state: boolean
+  data: User
+  message: string
 }
 
 export interface PostStory {
-  id: string
-  post_id: string
-  person_id: string
+  id: number
+  post_id: number
+  person_id: number
   created_at: string
   updated_at: string
   creator?: User

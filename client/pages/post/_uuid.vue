@@ -8,7 +8,7 @@
       :id="post.uuid"
       :uuid="post.uuid"
       :ownerName="post.creator?.name || 'Unknown'"
-      :ownerId="post.creator?.id || ''"
+      :ownerId="post.creator?.id || 0"
       :ownerUUID="post.creator?.uuid || ''"
       :postLikes="post.post_likes || []"
       :content="post.content"

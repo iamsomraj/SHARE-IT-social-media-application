@@ -21,7 +21,7 @@
 <script setup lang="ts">
   interface Props {
     uuid: string
-    id: string
+    id: number
     name: string
     email: string
     numberOfPosts: number

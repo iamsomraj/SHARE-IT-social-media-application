@@ -60,9 +60,9 @@
   const showCard = ref(false)
   const selectedId = ref<string | null>(null)
 
-  const onPostClick = (id: string) => {
+  const onPostClick = (id: number) => {
     showCard.value = true
-    selectedId.value = id
+    selectedId.value = id.toString()
   }
 
   const onCardClose = () => {

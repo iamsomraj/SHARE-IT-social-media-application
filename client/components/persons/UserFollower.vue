@@ -7,9 +7,9 @@
     >
       Follow
     </primary-button>
-    <secondary-button v-else @onClick="onUserUnfollow" :loading="loading"
-      >Followed</secondary-button
-    >
+    <secondary-button v-else @onClick="onUserUnfollow" :loading="loading">
+      Followed
+    </secondary-button>
   </div>
 </template>
 
@@ -37,24 +37,30 @@
     loading.value = true
 
     try {
-      const res = await profileStore.follow({
-        uuid: profile.value.uuid,
-        token: token.value!,
-      })
-      loading.value = false
-
-      if (res.state) {
-        toastStore.success(MESSAGES.PERSON_FOLLOW_SUCCESS)
-        await profileStore.getUserProfile({
+      const [followRes] = await Promise.all([
+        profileStore.follow({
           uuid: profile.value.uuid,
           token: token.value!,
-        })
+        }),
+      ])
+
+      if (followRes.state) {
+        await Promise.all([
+          profileStore.getUserProfile({
+            uuid: profile.value.uuid,
+            token: token.value!,
+          }),
+          authStore.checkAuth(),
+        ])
+
+        toastStore.success(MESSAGES.PERSON_FOLLOW_SUCCESS)
       } else {
         toastStore.error(MESSAGES.PERSON_FOLLOW_FAILURE)
       }
     } catch {
-      loading.value = false
       toastStore.error(MESSAGES.PERSON_FOLLOW_FAILURE)
+    } finally {
+      loading.value = false
     }
   }
 
@@ -62,24 +68,28 @@
     loading.value = true
 
     try {
-      const res = await profileStore.unfollow({
+      const unfollowRes = await profileStore.unfollow({
         uuid: profile.value.uuid,
         token: token.value!,
       })
-      loading.value = false
 
-      if (res.state) {
+      if (unfollowRes.state) {
+        await Promise.all([
+          profileStore.getUserProfile({
+            uuid: profile.value.uuid,
+            token: token.value!,
+          }),
+          authStore.checkAuth(), 
+        ])
+
         toastStore.success(MESSAGES.PERSON_UNFOLLOW_SUCCESS)
-        await profileStore.getUserProfile({
-          uuid: profile.value.uuid,
-          token: token.value!,
-        })
       } else {
         toastStore.error(MESSAGES.PERSON_UNFOLLOW_FAILURE)
       }
     } catch {
-      loading.value = false
       toastStore.error(MESSAGES.PERSON_UNFOLLOW_FAILURE)
+    } finally {
+      loading.value = false
     }
   }
 </script>

@@ -24,8 +24,7 @@
 </template>
 
 <script setup lang="ts">
-  const { $pinia } = useNuxtApp()
-  const toastStore = useToastStore($pinia)
+  const toastStore = useToastStore()
 
   const toasts = computed(() => toastStore.toasts)
 

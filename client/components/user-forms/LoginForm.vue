@@ -53,9 +53,8 @@
   import { MESSAGES } from '~/utils/constants'
 
   const router = useRouter()
-  const { $pinia } = useNuxtApp()
-  const authStore = useAuthStore($pinia)
-  const toastStore = useToastStore($pinia)
+  const authStore = useAuthStore()
+  const toastStore = useToastStore()
 
   const email = ref('')
   const password = ref('')
@@ -77,7 +76,6 @@
 
     try {
       const res = await authStore.login(loginFormData)
-      console.log('🚀 ~ LoginForm.vue:80 ~ onSubmit ~ res:', res)
       loading.value = false
 
       if (res.success) {
@@ -87,8 +85,7 @@
       } else {
         toastStore.error(res.error || 'Login failed')
       }
-    } catch (error) {
-      console.log('🚀 ~ LoginForm.vue:91 ~ onSubmit ~ error:', error)
+    } catch {
       loading.value = false
       toastStore.error('Login failed')
     }

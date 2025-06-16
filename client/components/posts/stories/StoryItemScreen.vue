@@ -47,7 +47,6 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
   import CrossIcon from '../../assets/CrossIcon.vue'
   import StoryItem from './StoryItem.vue'
   import type { Post } from '~/types/auth'

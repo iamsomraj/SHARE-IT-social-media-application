@@ -56,9 +56,8 @@
   import { MESSAGES } from '~/utils/constants'
 
   const router = useRouter()
-  const { $pinia } = useNuxtApp()
-  const authStore = useAuthStore($pinia)
-  const toastStore = useToastStore($pinia)
+  const authStore = useAuthStore()
+  const toastStore = useToastStore()
 
   const name = ref('')
   const email = ref('')

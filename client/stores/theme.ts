@@ -37,15 +37,14 @@ export const useThemeStore = defineStore('theme', () => {
         | 'light'
         | 'dark'
       if (storedTheme) {
-        theme.value = storedTheme
+        setTheme(storedTheme)
       } else {
         // Check system preference
         const prefersDark = window.matchMedia(
           '(prefers-color-scheme: dark)'
         ).matches
-        theme.value = prefersDark ? 'dark' : 'light'
+        setTheme(prefersDark ? 'dark' : 'light')
       }
-      updateDocumentClass()
     }
   }
 

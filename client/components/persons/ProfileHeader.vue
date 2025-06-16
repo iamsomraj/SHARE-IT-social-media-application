@@ -30,8 +30,7 @@
   }
 
   const props = defineProps<Props>()
-  const { $pinia } = useNuxtApp()
-  const authStore = useAuthStore($pinia)
+  const authStore = useAuthStore()
 
   const isSelf = computed(() => {
     return props.uuid === authStore.user.uuid

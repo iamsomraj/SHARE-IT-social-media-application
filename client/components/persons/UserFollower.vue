@@ -17,10 +17,9 @@
   import type { PersonFollower } from '~/types/auth'
   import { MESSAGES } from '~/utils/constants'
 
-  const { $pinia } = useNuxtApp()
-  const authStore = useAuthStore($pinia)
-  const profileStore = useProfileStore($pinia)
-  const toastStore = useToastStore($pinia)
+  const authStore = useAuthStore()
+  const profileStore = useProfileStore()
+  const toastStore = useToastStore()
 
   const loading = ref(false)
 

@@ -18,8 +18,7 @@
   }
 
   const props = defineProps<Props>()
-  const { $pinia } = useNuxtApp()
-  const authStore = useAuthStore($pinia)
+  const authStore = useAuthStore()
 
   const initialLetterOfName = computed(() => {
     return props.name.charAt(0)

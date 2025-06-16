@@ -1,0 +1,19 @@
+# Nuxt 3 build outputs
+.nuxt/
+.output/
+.nitro/
+
+# Development files
+.env*
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+
+# IDE files
+.vscode/settings.json
+.vscode/launch.json
+*.code-workspace
+
+# Node modules (if accidentally added)
+node_modules/

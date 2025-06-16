@@ -1,4 +1,4 @@
-const plugin = require('tailwindcss/plugin');
+const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   content: [
@@ -25,8 +25,8 @@ module.exports = {
           '-ms-overflow-style': 'none' /* IE and Edge */,
           'scrollbar-width': 'none' /* Firefox */,
         },
-      });
+      })
     }),
     require('@tailwindcss/line-clamp'),
   ],
-};
+}

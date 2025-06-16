@@ -32,69 +32,60 @@
   <!-- END: PROFILE COMPONENT -->
 </template>
 
-<script>
-import ProfileBody from '../../components/persons/ProfileBody.vue';
-import ProfileHeader from '../../components/persons/ProfileHeader.vue';
-import { MESSAGES } from '../../util/constants';
+<script setup lang="ts">
+  import ProfileBody from '../../components/persons/ProfileBody.vue'
+  import ProfileHeader from '../../components/persons/ProfileHeader.vue'
+  import { MESSAGES } from '~/utils/constants'
+  import { useAuthStore } from '~/stores/auth'
+  import { useProfileStore } from '~/stores/profile'
+  import { useToastStore } from '~/stores/toast'
 
-export default {
-  name: 'OtherProfile',
-  computed: {
-    person_posts() {
-      return this.$store.getters['profile/posts'];
-    },
-    profile() {
-      return this.$store.getters['profile/profile'];
-    },
-    token() {
-      return this.$store.getters['auth/token'];
-    },
-    isLoggedInUserProfile() {
-      return this.$store.getters['auth/uuid'] === this.$route.params.uuid;
-    },
-  },
-  async fetch() {
-    /* BEGIN: FETCHING PROFILE DETAIL */
-    const uuid = this.$router.currentRoute.params.uuid; // GETTING UUID FROM URL
-    await this.$store.dispatch('profile/getUserProfile', {
-      uuid,
-      token: this.token,
-    });
-    /* END: FETCHING PROFILE DETAIL */
-  },
-  methods: {
-    async onPostLike(uuid) {
-      this.loading = true;
-      const payload = {
-        postUUID: uuid,
-        token: this.token,
-      };
-      const res = await this.$store.dispatch('profile/likePost', payload);
-      this.loading = false;
-      if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.POST_LIKE_SUCCESS);
-      } else {
-        this.$store.dispatch('toast/error', MESSAGES.POST_LIKE_FAILURE);
+  const route = useRoute()
+  const authStore = useAuthStore()
+  const profileStore = useProfileStore()
+  const toastStore = useToastStore()
+
+  const loading = ref(false)
+
+  const person_posts = computed(() => profileStore.posts)
+  const profile = computed(() => profileStore.profile)
+
+  // Fetch profile data on component mount
+  onMounted(async () => {
+    const uuid = route.params.uuid as string
+    const token = authStore.token
+    if (token) {
+      await profileStore.getUserProfile({ uuid, token })
+    }
+  })
+
+  const onPostLike = async (uuid: string) => {
+    loading.value = true
+    try {
+      const token = authStore.token
+      if (token) {
+        await profileStore.likePost({ postUUID: uuid, token })
+        toastStore.success(MESSAGES.POST_LIKE_SUCCESS)
       }
-    },
-    async onPostUnlike(uuid) {
-      this.loading = true;
-      const payload = {
-        postUUID: uuid,
-        token: this.token,
-      };
-      const res = await this.$store.dispatch('profile/unlikePost', payload);
-      this.loading = false;
-      if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.POST_UNLIKE_SUCCESS);
-      } else {
-        this.$store.dispatch('toast/error', MESSAGES.POST_UNLIKE_FAILURE);
+    } catch {
+      toastStore.error(MESSAGES.POST_LIKE_FAILURE)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const onPostUnlike = async (uuid: string) => {
+    loading.value = true
+    try {
+      const token = authStore.token
+      if (token) {
+        await profileStore.unlikePost({ postUUID: uuid, token })
+        toastStore.success(MESSAGES.POST_UNLIKE_SUCCESS)
       }
-    },
-  },
-  components: {
-    ProfileBody,
-    ProfileHeader,
-  },
-};
+    } catch {
+      toastStore.error(MESSAGES.POST_UNLIKE_FAILURE)
+    } finally {
+      loading.value = false
+    }
+  }
 </script>

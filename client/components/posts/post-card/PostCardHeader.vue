@@ -9,7 +9,7 @@
         :uuid="ownerUUID"
         :name="ownerName"
         class="h-8 w-8 shrink-0 text-5xl"
-      ></profile-picture>
+      />
       <!-- END: POST PROFILE PICTURE -->
 
       <!-- BEGIN: POST OWNER NAME AND TIME -->
@@ -43,92 +43,75 @@
         </div>
         <story-icon
           class="h-6 w-6 cursor-pointer stroke-slate-400 transition-all duration-300 hover:scale-125 hover:fill-slate-400 dark:stroke-slate-600 hover:dark:fill-slate-600"
-        ></story-icon>
+        />
       </div>
       <div v-else @click="removeStory">
         <story-icon
           class="h-6 w-6 cursor-pointer fill-yellow-400 stroke-yellow-400 transition-all duration-300 hover:scale-125 dark:fill-yellow-200 dark:stroke-yellow-200"
-        ></story-icon>
+        />
       </div>
     </div>
   </div>
   <!-- END: POST CARD HEADER -->
 </template>
 
-<script>
-import { MESSAGES } from '../../../util/constants';
-import StoryIcon from '../../assets/StoryIcon.vue';
-import ProfilePicture from '../../persons/ProfilePicture.vue';
+<script setup lang="ts">
+  import { MESSAGES } from '~/utils/constants'
+  import StoryIcon from '../../assets/StoryIcon.vue'
+  import ProfilePicture from '../../persons/ProfilePicture.vue'
+  import type { PostStory } from '~/types/auth'
+  import { useAuthStore } from '~/stores/auth'
+  import { usePostStore } from '~/stores/post'
+  import { useToastStore } from '~/stores/toast'
 
-export default {
-  name: 'PostCardHeader',
-  props: {
-    ownerUUID: {
-      type: String,
-      required: true,
-    },
-    ownerName: {
-      type: String,
-      required: true,
-    },
-    time: {
-      type: String,
-      required: true,
-    },
-    postStories: {
-      type: Array,
-      required: true,
-    },
-  },
-  computed: {
-    postUUID: function () {
-      return this.$route.params.uuid;
-    },
-    token() {
-      return this.$store.getters['auth/token'];
-    },
-    isSelfPost() {
-      return this.ownerUUID === this.$store.getters['auth/uuid'];
-    },
-    loggedInUserUUID() {
-      return this.$store.getters['auth/uuid'];
-    },
-    isStory() {
-      const listOfPersonUUIDsWhoAddedThisAsStory = this.postStories.map(
-        (fav) => fav.creator.uuid
-      );
-      return listOfPersonUUIDsWhoAddedThisAsStory.includes(
-        this.loggedInUserUUID
-      );
-    },
-  },
-  methods: {
-    async addStory() {
-      const { state } = await this.$store.dispatch('post/addStory', {
-        postUUID: this.postUUID,
-        token: this.token,
-      });
-      if (state) {
-        this.$store.dispatch('toast/success', MESSAGES.ADD_STORY_SUCCESS);
-      } else {
-        this.$store.dispatch('toast/error', MESSAGES.ADD_STORY_FAILURE);
+  interface Props {
+    ownerUUID: string
+    ownerName: string
+    time: string
+    postStories: readonly PostStory[]
+  }
+
+  const props = defineProps<Props>()
+
+  const route = useRoute()
+  const authStore = useAuthStore()
+  const postStore = usePostStore()
+  const toastStore = useToastStore()
+
+  const postUUID = computed(() => route.params.uuid as string)
+  const loggedInUserUUID = computed(() => authStore.uuid)
+  const isSelfPost = computed(() => props.ownerUUID === loggedInUserUUID.value)
+
+  const isStory = computed(() => {
+    const listOfPersonUUIDsWhoAddedThisAsStory = props.postStories.map(
+      fav => fav.creator?.uuid
+    )
+    return listOfPersonUUIDsWhoAddedThisAsStory.includes(loggedInUserUUID.value)
+  })
+
+  const addStory = async () => {
+    try {
+      const authStore = useAuthStore()
+      const token = authStore.token
+      if (token) {
+        await postStore.addStory({ postUUID: postUUID.value, token })
+        toastStore.success(MESSAGES.ADD_STORY_SUCCESS)
       }
-    },
-    async removeStory() {
-      const { state } = await this.$store.dispatch('post/removeStory', {
-        postUUID: this.postUUID,
-        token: this.token,
-      });
-      if (state) {
-        this.$store.dispatch('toast/success', MESSAGES.REMOVE_STORY_SUCCESS);
-      } else {
-        this.$store.dispatch('toast/error', MESSAGES.REMOVE_STORY_FAILURE);
+    } catch {
+      toastStore.error(MESSAGES.ADD_STORY_FAILURE)
+    }
+  }
+
+  const removeStory = async () => {
+    try {
+      const authStore = useAuthStore()
+      const token = authStore.token
+      if (token) {
+        await postStore.removeStory({ postUUID: postUUID.value, token })
+        toastStore.success(MESSAGES.REMOVE_STORY_SUCCESS)
       }
-    },
-  },
-  components: {
-    ProfilePicture,
-    StoryIcon,
-  },
-};
+    } catch {
+      toastStore.error(MESSAGES.REMOVE_STORY_FAILURE)
+    }
+  }
 </script>

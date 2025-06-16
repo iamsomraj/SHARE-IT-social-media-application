@@ -9,34 +9,26 @@
   </div>
 </template>
 
-<script>
-import LoginForm from '../components/user-forms/LoginForm.vue';
-import ThemeButton from '../components/user-interfaces/ThemeButton.vue';
-export default {
-  name: 'HomePage',
-  layout: 'guest',
-  computed: {
-    user() {
-      return this.$store.getters['auth/user'];
-    },
-    token() {
-      return this.$store.getters['auth/token'];
-    },
-    isLoggedIn() {
-      return this.$store.getters['auth/isLoggedIn'];
-    },
-  },
-  fetch() {
-    if (this.isLoggedIn) {
-      this.$router.push('/feed');
+<script setup lang="ts">
+  definePageMeta({
+    layout: 'guest',
+  })
+
+  const router = useRouter()
+  const authStore = useAuthStore()
+
+  const isLoggedIn = computed(() => authStore.isLoggedIn)
+
+  // Check auth on page load
+  onMounted(async () => {
+    await authStore.checkAuth()
+    if (isLoggedIn.value) {
+      await router.push('/feed')
     }
-  },
-  async mounted() {
-    await this.$store.dispatch('auth/checkAuth');
-    if (this.isLoggedIn) {
-      this.$router.push('/feed');
-    }
-  },
-  components: { LoginForm, ThemeButton },
-};
+  })
+
+  // Also check if already logged in
+  if (isLoggedIn.value) {
+    await navigateTo('/feed')
+  }
 </script>

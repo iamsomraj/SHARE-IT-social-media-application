@@ -5,49 +5,37 @@
         :uuid="uuid"
         :name="name"
         class="col-span-4 h-16 w-16 text-8xl"
-      ></profile-picture>
+      />
       <profile-stats
         :numberOfPosts="numberOfPosts"
         :numberOfFollowers="numberOfFollowers"
         :numberOfFollowings="numberOfFollowings"
-      ></profile-stats>
-      <profile-detail
-        class="col-span-4"
-        :name="name"
-        :email="email"
-      ></profile-detail>
-      <div v-if="!isSelf" class="col-span-2 md:hidden"></div>
+      />
+      <profile-detail class="col-span-4" :name="name" :email="email" />
+      <div v-if="!isSelf" class="col-span-2 md:hidden" />
       <user-follower v-if="!isSelf" class="col-span-6 md:col-span-8" />
     </div>
   </div>
 </template>
 
-<script>
-import ProfileDetail from './ProfileDetail.vue';
-import ProfileStats from './ProfileStats.vue';
-import ProfilePicture from './ProfilePicture.vue';
-import UserFollower from './UserFollower.vue';
-export default {
-  name: 'ProfileHeader',
-  props: [
-    'uuid',
-    'id',
-    'name',
-    'email',
-    'numberOfPosts',
-    'numberOfFollowers',
-    'numberOfFollowings',
-  ],
-  computed: {
-    initialLetterOfName() {
-      return this.name.charAt(0);
-    },
-    isSelf() {
-      return this.uuid === this.$store.getters['auth/uuid'];
-    },
-  },
-  components: { ProfilePicture, ProfileStats, ProfileDetail, UserFollower },
-};
+<script setup lang="ts">
+  interface Props {
+    uuid: string
+    id: string
+    name: string
+    email: string
+    numberOfPosts: number
+    numberOfFollowers: number
+    numberOfFollowings: number
+  }
+
+  const props = defineProps<Props>()
+  const { $pinia } = useNuxtApp()
+  const authStore = useAuthStore($pinia)
+
+  const isSelf = computed(() => {
+    return props.uuid === authStore.user.uuid
+  })
 </script>
 
 <style scoped></style>

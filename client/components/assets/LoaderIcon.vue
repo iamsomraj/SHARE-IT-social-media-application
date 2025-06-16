@@ -15,8 +15,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: 'LoaderIcon',
-};
+<script setup lang="ts">
+  // Component name is automatically inferred from the filename
 </script>

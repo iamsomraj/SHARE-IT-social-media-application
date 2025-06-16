@@ -4,37 +4,30 @@
     :placeholder="placeholder"
     autocomplete="off"
     :type="type"
-    :value="value"
-    @change="onChange"
+    :value="modelValue"
     @input="onInput"
   />
 </template>
 
-<script>
-export default {
-  name: 'TextInput',
-  props: {
-    value: {
-      type: String,
-      default: '',
-    },
-    type: {
-      type: String,
-      default: 'text',
-    },
-    placeholder: {
-      type: String,
-      default: '',
-    },
-  },
-  emits: ['change', 'input'],
-  methods: {
-    onChange(event) {
-      this.$emit('change', event.target.value);
-    },
-    onInput(event) {
-      this.$emit('input', event.target.value);
-    },
-  },
-};
+<script setup lang="ts">
+  interface Props {
+    modelValue?: string
+    type?: string
+    placeholder?: string
+  }
+
+  withDefaults(defineProps<Props>(), {
+    modelValue: '',
+    type: 'text',
+    placeholder: '',
+  })
+
+  const emit = defineEmits<{
+    'update:modelValue': [value: string]
+  }>()
+
+  const onInput = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    emit('update:modelValue', target.value)
+  }
 </script>

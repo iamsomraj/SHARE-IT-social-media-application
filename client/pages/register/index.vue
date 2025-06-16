@@ -9,33 +9,28 @@
   </div>
 </template>
 
-<script>
-import RegisterForm from '../../components/user-forms/RegisterForm.vue';
-import ThemeButton from '../../components/user-interfaces/ThemeButton.vue';
-export default {
-  name: 'RegisterPage',
-  layout: 'guest',
-  computed: {
-    user() {
-      return this.$store.getters['auth/user'];
-    },
-    token() {
-      return this.$store.getters['auth/token'];
-    },
-  },
-  fetch() {
-    if (this.user && this.token) {
-      this.$router.push('/feed');
+<script setup lang="ts">
+  definePageMeta({
+    layout: 'guest',
+  })
+
+  const router = useRouter()
+  const authStore = useAuthStore()
+
+  const isLoggedIn = computed(() => authStore.isLoggedIn)
+
+  // Check auth on page load
+  onMounted(async () => {
+    await authStore.checkAuth()
+    if (isLoggedIn.value) {
+      await router.push('/feed')
     }
-  },
-  async mounted() {
-    await this.$store.dispatch('auth/checkAuth');
-    if (this.isLoggedIn) {
-      this.$router.push('/feed');
-    }
-  },
-  components: { RegisterForm, ThemeButton },
-};
+  })
+
+  // Also check if already logged in
+  if (isLoggedIn.value) {
+    await navigateTo('/feed')
+  }
 </script>
 
 <style lang="scss" scoped></style>

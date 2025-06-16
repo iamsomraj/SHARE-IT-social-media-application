@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-full flex-col items-start justify-center space-y-4 border-t border-b transition-all duration-300 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border"
+    class="flex w-full flex-col items-start justify-center space-y-4 border-b border-t transition-all duration-300 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border"
   >
     <!-- BEGIN: POST LIST ITEM HEADER -->
     <div class="flex items-center justify-start space-x-4 px-6 pt-2">
@@ -9,7 +9,7 @@
         :uuid="ownerUUID"
         :name="ownerName"
         class="h-8 w-8 text-5xl"
-      ></profile-picture>
+      />
       <!-- END: POST PROFILE PICTURE -->
 
       <!-- BEGIN: POST OWNER NAME AND TIME -->
@@ -44,7 +44,7 @@
 
       <!-- BEGIN: NUMBER OF LIKES -->
       <div
-        v-if="this.numberOfLikes === 0"
+        v-if="numberOfLikes === 0"
         class="cursor-pointer text-sm text-slate-400 underline-offset-4 hover:text-red-400 hover:underline dark:hover:text-red-200"
         @click="onPostLike(uuid)"
       >
@@ -72,7 +72,7 @@
       >
         <heart-icon
           class="fill-transparent stroke-slate-400 hover:fill-slate-400 active:fill-slate-400"
-        ></heart-icon>
+        />
       </div>
       <!-- END: LIKE ICON -->
       <!-- BEGIN: LIKE ICON -->
@@ -83,7 +83,7 @@
       >
         <heart-icon
           class="fill-red-400 stroke-red-400 hover:fill-red-200 hover:stroke-red-200 active:stroke-red-200"
-        ></heart-icon>
+        />
       </div>
       <!-- END: LIKE ICON -->
     </div>
@@ -91,48 +91,55 @@
   </div>
 </template>
 
-<script>
-import ProfilePicture from '../persons/ProfilePicture.vue';
-import HeartIcon from './../assets/HeartIcon.vue';
-export default {
-  name: 'PostListItem',
-  props: [
-    'uuid',
-    'ownerName',
-    'ownerId',
-    'ownerUUID',
-    'content',
-    'numberOfLikes',
-    'time',
-    'postLikes',
-  ],
-  computed: {
-    likeText() {
-      return this.numberOfLikes == 0
-        ? 'Be the first to like this post'
-        : this.numberOfLikes > 1
-        ? `${this.numberOfLikes} likes`
-        : `${this.numberOfLikes} like`;
-    },
-    loggedInUserUUID() {
-      return this.$store.getters['auth/uuid'];
-    },
-    isLiked() {
-      return this.postLikes?.some(
-        (likeRecord) => likeRecord?.creator?.uuid === this.loggedInUserUUID
-      );
-    },
-  },
-  methods: {
-    onPostLike(uuid) {
-      this.$emit('onPostLike', uuid);
-    },
-    onPostUnlike(uuid) {
-      this.$emit('onPostUnlike', uuid);
-    },
-  },
-  components: { ProfilePicture, HeartIcon },
-};
+<script setup lang="ts">
+  import ProfilePicture from '../persons/ProfilePicture.vue'
+  import HeartIcon from './../assets/HeartIcon.vue'
+  import type { PostLike } from '~/types/auth'
+  import { useAuthStore } from '~/stores/auth'
+
+  interface Props {
+    uuid: string
+    ownerName: string
+    ownerId: string
+    ownerUUID: string
+    content: string
+    numberOfLikes: number
+    time: string
+    postLikes: readonly PostLike[]
+  }
+
+  const props = defineProps<Props>()
+
+  const emit = defineEmits<{
+    onPostLike: [uuid: string]
+    onPostUnlike: [uuid: string]
+  }>()
+
+  const authStore = useAuthStore()
+
+  const loggedInUserUUID = computed(() => authStore.uuid)
+
+  const isLiked = computed(() => {
+    return props.postLikes?.some(
+      likeRecord => likeRecord?.creator?.uuid === loggedInUserUUID.value
+    )
+  })
+
+  const likeText = computed(() => {
+    return props.numberOfLikes == 0
+      ? 'Be the first to like this post'
+      : props.numberOfLikes > 1
+        ? `${props.numberOfLikes} likes`
+        : `${props.numberOfLikes} like`
+  })
+
+  const onPostLike = (uuid: string) => {
+    emit('onPostLike', uuid)
+  }
+
+  const onPostUnlike = (uuid: string) => {
+    emit('onPostUnlike', uuid)
+  }
 </script>
 
 <style lang="scss" scoped></style>

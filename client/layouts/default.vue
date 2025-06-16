@@ -2,30 +2,29 @@
   <div>
     <Toast />
     <Header />
-    <Nuxt />
+    <slot />
   </div>
 </template>
 
-<script>
-import Header from '../components/app-layouts/Header.vue';
-import Toast from '../components/user-interfaces/Toast.vue';
-import { LOCAL_STORAGE_KEYS } from '../util/constants';
+<script setup lang="ts">
+  import { LOCAL_STORAGE_KEYS } from '~/utils/constants'
 
-export default {
-  name: 'DefaultLayout',
-  components: { Toast, Header },
-  mounted() {
-    this.$store.dispatch('theme/handleTheme');
+  const router = useRouter()
+  const route = useRoute()
+  const themeStore = useThemeStore()
+
+  onMounted(() => {
+    themeStore.initializeTheme()
+
     setInterval(() => {
-      const tokenFromStorage = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
+      const tokenFromStorage = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN)
       if (
         !tokenFromStorage &&
-        this.$route.path !== '/' &&
-        this.$route.path !== '/register'
+        route.path !== '/' &&
+        route.path !== '/register'
       ) {
-        this.$router.push('/');
+        router.push('/')
       }
-    }, 1000);
-  },
-};
+    }, 1000)
+  })
 </script>

@@ -11,37 +11,43 @@
   </div>
 </template>
 
-<script>
-import { MESSAGES } from '../../util/constants';
-import PostInput from '../posts/PostInput.vue';
-import SecondaryButton from '../user-interfaces/SecondaryButton.vue';
-export default {
-  name: 'PostCreator',
-  data() {
-    return {
-      postInput: '',
-      loading: false,
-    };
-  },
-  methods: {
-    async onPostCreate() {
-      this.loading = true;
-      const content = this.postInput;
-      this.postInput = '';
-      const res = await this.$store.dispatch('auth/createPost', {
+<script setup lang="ts">
+  import { MESSAGES } from '~/utils/constants'
+  import { usePostStore } from '~/stores/post'
+  import { useToastStore } from '~/stores/toast'
+  import { useAuthStore } from '~/stores/auth'
+
+  const postStore = usePostStore()
+  const toastStore = useToastStore()
+  const authStore = useAuthStore()
+
+  const postInput = ref('')
+  const loading = ref(false)
+
+  const onPostCreate = async () => {
+    loading.value = true
+    const content = postInput.value
+    postInput.value = ''
+
+    try {
+      const res = await postStore.createPost({
         content,
-      });
-      this.loading = false;
+        token: authStore.token!,
+      })
+      loading.value = false
+
       if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.POST_CREATE_SUCCESS);
+        toastStore.success(MESSAGES.POST_CREATE_SUCCESS)
       } else {
-        this.postInput = content;
-        this.$store.dispatch('toast/error', MESSAGES.POST_CREATE_FAILURE);
+        postInput.value = content
+        toastStore.error(MESSAGES.POST_CREATE_FAILURE)
       }
-    },
-  },
-  components: { PostInput, SecondaryButton },
-};
+    } catch {
+      loading.value = false
+      postInput.value = content
+      toastStore.error(MESSAGES.POST_CREATE_FAILURE)
+    }
+  }
 </script>
 
 <style scoped></style>

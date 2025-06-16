@@ -1,25 +1,19 @@
 <template>
-  <div class="min-h-screen w-full pt-4 pb-16 dark:bg-slate-800 md:py-8">
-    <self-profile v-if="isLoggedInUserProfile"></self-profile>
-    <other-profile v-else></other-profile>
+  <div class="min-h-screen w-full pb-16 pt-4 dark:bg-slate-800 md:py-8">
+    <self-profile v-if="isLoggedInUserProfile" />
+    <other-profile v-else />
   </div>
 </template>
 
-<script>
-import SelfProfile from '../../components/persons/SelfProfile.vue';
-import OtherProfile from '../../components/persons/OtherProfile.vue';
+<script setup lang="ts">
+  definePageMeta({
+    middleware: 'authenticated',
+  })
 
-export default {
-  name: 'ProfilePage',
-  middleware: 'authenticated',
-  computed: {
-    isLoggedInUserProfile() {
-      return this.$store.getters['auth/uuid'] === this.$route.params.uuid;
-    },
-  },
-  components: {
-    OtherProfile,
-    SelfProfile,
-  },
-};
+  const route = useRoute()
+  const authStore = useAuthStore()
+
+  const isLoggedInUserProfile = computed(() => {
+    return authStore.user?.uuid === route.params.uuid
+  })
 </script>

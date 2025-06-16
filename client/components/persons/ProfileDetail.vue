@@ -11,9 +11,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ProfileDetail',
-  props: ['name', 'email'],
-};
+<script setup lang="ts">
+  interface Props {
+    name: string
+    email: string
+  }
+
+  defineProps<Props>()
 </script>

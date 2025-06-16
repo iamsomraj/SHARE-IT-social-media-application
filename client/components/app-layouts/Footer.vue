@@ -13,10 +13,8 @@
   </footer>
 </template>
 
-<script>
-export default {
-  name: 'Footer',
-};
+<script setup lang="ts">
+  // Component name is automatically inferred from the filename
 </script>
 
 <style scoped></style>

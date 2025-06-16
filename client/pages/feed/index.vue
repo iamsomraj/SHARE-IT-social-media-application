@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="user"
-    class="flex min-h-screen w-full flex-col items-center justify-start space-y-6 pt-4 pb-16 dark:bg-slate-800 md:py-6"
+    class="flex min-h-screen w-full flex-col items-center justify-start space-y-6 pb-16 pt-4 dark:bg-slate-800 md:py-6"
   >
     <story-list v-if="stories.length" :stories="stories" />
     <post-list
@@ -14,75 +14,61 @@
   </div>
 </template>
 
-<script>
-import ProfilePicture from '../../components/persons/ProfilePicture.vue';
-import PostList from '../../components/posts/PostList.vue';
-import StoryList from '../../components/posts/stories/StoryList.vue';
-import { MESSAGES } from '../../util/constants';
+<script setup lang="ts">
+  import { MESSAGES } from '~/utils/constants'
+  import { usePostStore } from '~/stores/post'
 
-export default {
-  name: 'FeedPage',
-  middleware: 'authenticated',
-  data() {
-    return {
-      showCard: false,
-    };
-  },
-  computed: {
-    user() {
-      return this.$store.getters['auth/user'];
-    },
-    token() {
-      return this.$store.getters['auth/token'];
-    },
-    posts() {
-      return this.$store.getters['feed/posts'];
-    },
-    stories() {
-      return this.$store.getters['feed/stories'];
-    },
-  },
-  async fetch() {
-    await this.$store.dispatch('feed/posts', this.token);
-    await this.$store.dispatch('feed/stories', this.token);
-  },
-  methods: {
-    async onPostLike(uuid) {
-      this.loading = true;
-      const payload = {
-        postUUID: uuid,
-        token: this.token,
-      };
-      const res = await this.$store.dispatch('feed/likePost', payload);
-      this.loading = false;
-      if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.POST_LIKE_SUCCESS);
-      } else {
-        this.$store.dispatch('toast/error', MESSAGES.POST_LIKE_FAILURE);
-      }
-    },
-    async onPostUnlike(uuid) {
-      this.loading = true;
-      const payload = {
-        postUUID: uuid,
-        token: this.token,
-      };
-      const res = await this.$store.dispatch('feed/unlikePost', payload);
-      this.loading = false;
-      if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.POST_UNLIKE_SUCCESS);
-      } else {
-        this.$store.dispatch('toast/error', MESSAGES.POST_UNLIKE_FAILURE);
-      }
-    },
-  },
-  components: {
-    PostList,
-    ProfilePicture,
-    ProfilePicture,
-    StoryList,
-  },
-};
+  definePageMeta({
+    middleware: 'authenticated',
+  })
+
+  const authStore = useAuthStore()
+  const feedStore = useFeedStore()
+  const postStore = usePostStore()
+  const toastStore = useToastStore()
+
+  const user = computed(() => authStore.user)
+  const token = computed(() => authStore.token)
+  const posts = computed(() => feedStore.posts)
+  const stories = computed(() => feedStore.stories)
+
+  // Fetch data on page load
+  await feedStore.fetchPosts(token.value || '')
+  await feedStore.fetchStories(token.value || '')
+
+  const onPostLike = async (uuid: string) => {
+    if (!token.value) return
+
+    const payload = {
+      postUUID: uuid,
+      token: token.value,
+    }
+
+    const res = await postStore.likePost(payload)
+
+    if (res.success) {
+      toastStore.success(MESSAGES.POST_LIKE_SUCCESS)
+    } else {
+      toastStore.error(MESSAGES.POST_LIKE_FAILURE)
+    }
+  }
+
+  const onPostUnlike = async (uuid: string) => {
+    if (!token.value) return
+
+    const payload = {
+      postUUID: uuid,
+      token: token.value,
+    }
+
+    const res = await postStore.unlikePost(payload)
+
+    if (res.success) {
+      toastStore.success(MESSAGES.POST_UNLIKE_SUCCESS)
+    } else {
+      toastStore.error(MESSAGES.POST_UNLIKE_FAILURE)
+    }
+  }
 </script>
 
 <style scoped></style>

@@ -13,69 +13,74 @@
   </div>
 </template>
 
-<script>
-import PrimaryButton from '../user-interfaces/PrimaryButton.vue';
-import SecondaryButton from '../user-interfaces/SecondaryButton.vue';
-import { MESSAGES } from '../../util/constants.js';
-export default {
-  name: 'UserFollower',
-  data() {
-    return {
-      loading: false,
-    };
-  },
-  computed: {
-    profile() {
-      return this.$store.getters['profile/profile'];
-    },
-    user() {
-      return this.$store.getters['auth/user'];
-    },
-    token() {
-      return this.$store.getters['auth/token'];
-    },
-    followers() {
-      return this.$store.getters['auth/followers'];
-    },
-    doesUserFollow() {
-      return this.followers.some(
-        (person) => person.followed_id === this.profile.id
-      );
-    },
-  },
-  methods: {
-    async onUserFollow() {
-      this.loading = true;
-      const res = await this.$store.dispatch('auth/follow', this.profile.uuid);
-      this.loading = false;
+<script setup lang="ts">
+  import type { PersonFollower } from '~/types/auth'
+  import { MESSAGES } from '~/utils/constants'
+
+  const { $pinia } = useNuxtApp()
+  const authStore = useAuthStore($pinia)
+  const profileStore = useProfileStore($pinia)
+  const toastStore = useToastStore($pinia)
+
+  const loading = ref(false)
+
+  const profile = computed(() => profileStore.profile)
+  const token = computed(() => authStore.token)
+  const followers = computed(() => authStore.followers)
+
+  const doesUserFollow = computed(() => {
+    return followers.value.some(
+      (person: PersonFollower) => person.followed_id === profile.value.id
+    )
+  })
+
+  const onUserFollow = async () => {
+    loading.value = true
+
+    try {
+      const res = await profileStore.follow({
+        uuid: profile.value.uuid,
+        token: token.value!,
+      })
+      loading.value = false
+
       if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.PERSON_FOLLOW_SUCCESS);
-        await this.$store.dispatch('profile/getUserProfile', {
-          uuid: this.profile.uuid,
-          token: this.token,
-        });
+        toastStore.success(MESSAGES.PERSON_FOLLOW_SUCCESS)
+        await profileStore.getUserProfile({
+          uuid: profile.value.uuid,
+          token: token.value!,
+        })
       } else {
-        this.$store.dispatch('toast/error', MESSAGES.PERSON_FOLLOW_FAILURE);
+        toastStore.error(MESSAGES.PERSON_FOLLOW_FAILURE)
       }
-    },
-    async onUserUnfollow() {
-      this.loading = true;
-      const res = await this.$store.dispatch(
-        'auth/unfollow',
-        this.profile.uuid
-      );
-      this.loading = false;
+    } catch {
+      loading.value = false
+      toastStore.error(MESSAGES.PERSON_FOLLOW_FAILURE)
+    }
+  }
+
+  const onUserUnfollow = async () => {
+    loading.value = true
+
+    try {
+      const res = await profileStore.unfollow({
+        uuid: profile.value.uuid,
+        token: token.value!,
+      })
+      loading.value = false
+
       if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.PERSON_UNFOLLOW_SUCCESS);
-        await this.$store.dispatch('profile/getUserProfile', {
-          uuid: this.profile.uuid,
-          token: this.token,
-        });
+        toastStore.success(MESSAGES.PERSON_UNFOLLOW_SUCCESS)
+        await profileStore.getUserProfile({
+          uuid: profile.value.uuid,
+          token: token.value!,
+        })
       } else {
-        this.$store.dispatch('toast/error', MESSAGES.PERSON_UNFOLLOW_FAILURE);
+        toastStore.error(MESSAGES.PERSON_UNFOLLOW_FAILURE)
       }
-    },
-  },
-  components: { PrimaryButton, SecondaryButton },
-};
+    } catch {
+      loading.value = false
+      toastStore.error(MESSAGES.PERSON_UNFOLLOW_FAILURE)
+    }
+  }
 </script>

@@ -15,13 +15,16 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ProfileStats',
-  props: {
-    numberOfPosts: { type: Number, default: 0 },
-    numberOfFollowers: { type: Number, default: 0 },
-    numberOfFollowings: { type: Number, default: 0 },
-  },
-};
+<script setup lang="ts">
+  interface Props {
+    numberOfPosts?: number
+    numberOfFollowers?: number
+    numberOfFollowings?: number
+  }
+
+  withDefaults(defineProps<Props>(), {
+    numberOfPosts: 0,
+    numberOfFollowers: 0,
+    numberOfFollowings: 0,
+  })
 </script>

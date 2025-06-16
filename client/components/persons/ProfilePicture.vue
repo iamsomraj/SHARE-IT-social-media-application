@@ -11,17 +11,21 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ProfilePicture',
-  props: ['uuid', 'name'],
-  computed: {
-    initialLetterOfName() {
-      return this.name.charAt(0);
-    },
-    isSelf() {
-      return this.$store.getters['auth/uuid'] === this.uuid;
-    },
-  },
-};
+<script setup lang="ts">
+  interface Props {
+    uuid: string
+    name: string
+  }
+
+  const props = defineProps<Props>()
+  const { $pinia } = useNuxtApp()
+  const authStore = useAuthStore($pinia)
+
+  const initialLetterOfName = computed(() => {
+    return props.name.charAt(0)
+  })
+
+  const isSelf = computed(() => {
+    return authStore.user.uuid === props.uuid
+  })
 </script>

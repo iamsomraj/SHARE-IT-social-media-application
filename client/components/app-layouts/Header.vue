@@ -21,7 +21,7 @@
       </div>
       <div v-else class="flex items-center justify-between space-x-6 font-bold">
         <div @click="redirectToFeed">
-          <feed-icon
+          <FeedIcon
             class="h-8 w-8 cursor-pointer fill-slate-300 stroke-slate-300 hover:fill-blue-400 hover:stroke-blue-400 active:fill-blue-400 active:stroke-blue-400 dark:fill-slate-600 dark:stroke-slate-600 dark:hover:fill-blue-400 dark:hover:stroke-blue-400 dark:active:fill-blue-400 dark:active:stroke-blue-400 md:h-6 md:w-6"
             :class="{
               'fill-blue-400 stroke-blue-400 dark:fill-blue-400 dark:stroke-blue-400':
@@ -30,7 +30,7 @@
           />
         </div>
         <div @click="redirectToSearch">
-          <search-icon
+          <SearchIcon
             class="h-8 w-8 cursor-pointer fill-slate-300 stroke-slate-300 hover:fill-blue-400 hover:stroke-blue-400 active:fill-blue-400 active:stroke-blue-400 dark:fill-slate-600 dark:stroke-slate-600 dark:hover:fill-blue-400 dark:hover:stroke-blue-400 dark:active:fill-blue-400 dark:active:stroke-blue-400 md:h-6 md:w-6"
             :class="{
               'fill-blue-400 stroke-blue-400 dark:fill-blue-400 dark:stroke-blue-400':
@@ -45,74 +45,67 @@
             class="h-8 w-8 text-4xl md:h-6 md:w-6"
           />
         </div>
-        <theme-button />
+        <ThemeButton />
         <div @click="onLogout">
-          <logout-icon
+          <LogoutIcon
             class="h-8 w-8 cursor-pointer stroke-slate-300 hover:stroke-blue-400 active:stroke-blue-400 dark:stroke-slate-600 dark:hover:stroke-blue-400 dark:active:stroke-blue-400 md:h-6 md:w-6"
-          >
-          </logout-icon>
+          />
         </div>
       </div>
     </div>
   </header>
 </template>
 
-<script>
-import { MESSAGES, ROUTES } from '../../util/constants.js';
-import FeedIcon from '../assets/FeedIcon.vue';
-import LogoutIcon from '../assets/LogoutIcon.vue';
-import SearchIcon from '../assets/SearchIcon.vue';
-import UserIcon from '../assets/UserIcon.vue';
-import ProfilePicture from '../persons/ProfilePicture.vue';
-import TertiaryButton from '../user-interfaces/TertiaryButton.vue';
-import ThemeButton from '../user-interfaces/ThemeButton.vue';
+<script setup lang="ts">
+  import { MESSAGES, ROUTES } from '~/utils/constants'
+  import { useAuthStore } from '~/stores/auth'
+  import { useToastStore } from '~/stores/toast'
 
-export default {
-  name: 'Header',
-  data() {
-    return {
-      ROUTES,
-    };
-  },
-  computed: {
-    isLoggedIn() {
-      return this.$store.getters['auth/isLoggedIn'];
-    },
-    user() {
-      return this.$store.getters['auth/user'];
-    },
-    routeName() {
-      return this.$route.name;
-    },
-  },
-  methods: {
-    onLogout() {
-      this.$store.commit('auth/clear');
-      this.$store.commit('profile/setProfile', null);
-      this.$router.push('/');
-      this.$store.dispatch('toast/success', MESSAGES.LOGOUT_SUCCESS);
-    },
-    redirectToFeed() {
-      this.$router.push('/feed');
-    },
-    redirectToProfile() {
-      this.$router.push(`/profile/${this.user.uuid}`);
-    },
-    redirectToSearch() {
-      this.$router.push('/search');
-    },
-    isActiveRoute(routeName) {
-      return this.routeName === routeName;
-    },
-  },
-  components: {
-    TertiaryButton,
-    FeedIcon,
-    LogoutIcon,
-    UserIcon,
-    ProfilePicture,
-    SearchIcon,
-    ThemeButton,
-  },
-};
+  // Components
+  import FeedIcon from '~/components/assets/FeedIcon.vue'
+  import LogoutIcon from '~/components/assets/LogoutIcon.vue'
+  import SearchIcon from '~/components/assets/SearchIcon.vue'
+  import ProfilePicture from '~/components/persons/ProfilePicture.vue'
+  import ThemeButton from '~/components/user-interfaces/ThemeButton.vue'
+
+  // Stores
+  const authStore = useAuthStore()
+  const toastStore = useToastStore()
+
+  // Router
+  const router = useRouter()
+  const route = useRoute()
+
+  // Computed properties
+  const isLoggedIn = computed(() => authStore.isLoggedIn)
+  const user = computed(() => authStore.user)
+  const routeName = computed(() => route.name)
+
+  // Methods
+  const onLogout = async () => {
+    authStore.clear()
+    await router.push('/')
+    toastStore.success(MESSAGES.LOGOUT_SUCCESS)
+  }
+
+  const redirectToFeed = async () => {
+    await router.push('/feed')
+  }
+
+  const redirectToProfile = async () => {
+    await router.push(`/profile/${user.value.uuid}`)
+  }
+
+  const redirectToSearch = async () => {
+    await router.push('/search')
+  }
+
+  const isActiveRoute = (targetRoute: string): boolean => {
+    return routeName.value === targetRoute
+  }
+
+  // Initialize auth on component mount
+  onMounted(() => {
+    authStore.initializeAuth()
+  })
 </script>

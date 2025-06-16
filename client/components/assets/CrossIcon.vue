@@ -14,8 +14,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: 'CrossIcon',
-};
+<script setup lang="ts">
+  // Component name is automatically inferred from the filename
 </script>

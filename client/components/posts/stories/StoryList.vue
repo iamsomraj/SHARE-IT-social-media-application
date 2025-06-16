@@ -3,16 +3,16 @@
   <div class="flex w-full justify-center md:px-12">
     <!-- BEGIN: STORY CARD -->
     <story-item-screen
-      v-if="showCard"
+      v-if="showCard && selectedId"
       @dismiss="onCardClose"
       :posts="stories"
       :selectedId="selectedId"
-    ></story-item-screen>
+    />
     <!-- END: STORY CARD -->
 
     <!-- BEGIN: ROOT LIST SECTION -->
     <div
-      class="flex w-full items-start justify-start space-x-2 border-t border-b px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border md:py-6 md:px-4"
+      class="flex w-full items-start justify-start space-x-2 border-b border-t px-2 py-3 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border md:px-4 md:py-6"
     >
       <!-- BEGIN: OTHER STORY POST ITEMS SECTION -->
       <div
@@ -29,14 +29,14 @@
           <div
             class="flex h-12 w-12 rotate-45 cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-yellow-400 text-center text-7xl font-extrabold capitalize text-white shadow-inner transition-all duration-300 dark:border-none"
           >
-            {{ post.creator.name[0] }}
+            {{ post.creator?.name?.[0] || 'U' }}
           </div>
 
           <!-- NAME SECTION -->
           <div
-            class="text-xsF w-20 cursor-pointer break-words text-center text-sm text-slate-400 line-clamp-1 hover:underline"
+            class="text-xsF line-clamp-1 w-20 cursor-pointer break-words text-center text-sm text-slate-400 hover:underline"
           >
-            {{ post.creator.name }}
+            {{ post.creator?.name || 'Unknown' }}
           </div>
         </div>
         <!-- END: STORY POST ITEM -->
@@ -48,40 +48,25 @@
   <!-- END: STORY POST SECTIONS -->
 </template>
 
-<script>
-import StoryItemScreen from './StoryItemScreen.vue';
+<script setup lang="ts">
+  import type { Post } from '~/types/auth'
 
-export default {
-  name: 'StoryList',
-  props: {
-    stories: {
-      type: Array,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      showCard: false,
-      selectedId: null,
-    };
-  },
-  computed: {
-    user() {
-      return this.$store.getters['auth/user'];
-    },
-  },
-  methods: {
-    onPostClick(id) {
-      this.showCard = true;
-      this.selectedId = id;
-    },
-    onCardClose() {
-      this.showCard = false;
-      this.selectedId = null;
-    },
-  },
-  components: {
-    StoryItemScreen,
-  },
-};
+  interface Props {
+    stories: readonly Post[]
+  }
+
+  defineProps<Props>()
+
+  const showCard = ref(false)
+  const selectedId = ref<string | null>(null)
+
+  const onPostClick = (id: string) => {
+    showCard.value = true
+    selectedId.value = id
+  }
+
+  const onCardClose = () => {
+    showCard.value = false
+    selectedId.value = null
+  }
 </script>

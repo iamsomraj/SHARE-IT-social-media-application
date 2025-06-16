@@ -52,55 +52,48 @@
   <!-- END: REGISTER FORM COMPONENT -->
 </template>
 
-<script>
-import { MESSAGES } from '../../util/constants.js';
-import FormLogo from '../assets/FormLogo.vue';
-import PrimaryButton from './../user-interfaces/PrimaryButton.vue';
-import SecondaryButton from './../user-interfaces/SecondaryButton.vue';
-import TextInput from './../user-interfaces/TextInput.vue';
+<script setup lang="ts">
+  import { MESSAGES } from '~/utils/constants'
 
-export default {
-  name: 'LoginForm',
-  components: {
-    SecondaryButton,
-    PrimaryButton,
-    TextInput,
-    FormLogo,
-  },
-  data() {
-    return {
-      name: '',
-      email: '',
-      password: '',
-      loading: false,
-    };
-  },
-  computed: {
-    user() {
-      return this.$store.getters['auth/user'];
-    },
-    disabled() {
-      return !this.name || !this.email || !this.password;
-    },
-  },
-  methods: {
-    async onSubmit() {
-      const registerFormData = {
-        name: this.name,
-        email: this.email,
-        password: this.password,
-      };
-      this.loading = true;
-      const res = await this.$store.dispatch('auth/register', registerFormData);
-      this.loading = false;
-      if (res.state) {
-        /* REDIRECTING TO THE PROFILE OF THE LOGGED IN USER */
-        this.$router.push(`profile/${this.user.uuid}`);
-        this.$store.dispatch('toast/success', MESSAGES.REGISTER_SUCCESS);
+  const router = useRouter()
+  const { $pinia } = useNuxtApp()
+  const authStore = useAuthStore($pinia)
+  const toastStore = useToastStore($pinia)
+
+  const name = ref('')
+  const email = ref('')
+  const password = ref('')
+  const loading = ref(false)
+
+  const user = computed(() => authStore.user)
+
+  const disabled = computed(() => {
+    return !name.value || !email.value || !password.value
+  })
+
+  const onSubmit = async () => {
+    const registerFormData = {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    }
+
+    loading.value = true
+
+    try {
+      const res = await authStore.register(registerFormData)
+      loading.value = false
+
+      if (res.success) {
+        // Redirecting to the profile of the logged in user
+        await router.push(`/profile/${user.value.uuid}`)
+        toastStore.success(MESSAGES.REGISTER_SUCCESS)
       } else {
-        this.$store.dispatch('toast/error', res.message);
+        toastStore.error(res.error || 'Registration failed')
       }
-    },
-  },
-};
+    } catch {
+      loading.value = false
+      toastStore.error('Registration failed')
+    }
+  }
 </script>

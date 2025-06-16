@@ -17,7 +17,7 @@ export const useToastStore = defineStore('toast', () => {
     const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     const newToast: ToastMessage = {
       id,
-      duration: 3000,
+      duration: toast.duration ?? 3000,
       ...toast,
     }
 
@@ -47,19 +47,19 @@ export const useToastStore = defineStore('toast', () => {
     }
   }
 
-  const success = (message: string, duration?: number) => {
+  const success = (message: string, duration = 3000) => {
     addToast({ message, type: 'success', duration })
   }
 
-  const error = (message: string, duration?: number) => {
+  const error = (message: string, duration = 3000) => {
     addToast({ message, type: 'error', duration })
   }
 
-  const warning = (message: string, duration?: number) => {
+  const warning = (message: string, duration = 3000) => {
     addToast({ message, type: 'warning', duration })
   }
 
-  const info = (message: string, duration?: number) => {
+  const info = (message: string, duration = 3000) => {
     addToast({ message, type: 'info', duration })
   }
 

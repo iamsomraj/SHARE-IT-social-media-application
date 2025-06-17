@@ -12,7 +12,6 @@ import { AuthRequest } from '@/types';
  */
 export const followPerson = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    // Data is already validated by Zod middleware
     const { uuid } = req.params as { uuid: string };
     const { user } = req;
 

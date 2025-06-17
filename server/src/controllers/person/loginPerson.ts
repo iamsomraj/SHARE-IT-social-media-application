@@ -12,7 +12,6 @@ import { LoginInput } from '@/schemas';
  * @access public
  */
 export const loginPerson = asyncHandler(async (req: Request, res: Response) => {
-  // Data is already validated by Zod middleware
   const { email, password }: LoginInput = req.body;
 
   const personService = new PersonService();

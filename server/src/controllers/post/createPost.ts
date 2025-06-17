@@ -13,7 +13,6 @@ import { CreatePostInput } from '@/schemas';
  */
 export const createPost = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    // Data is already validated by Zod middleware
     const { content }: CreatePostInput = req.body;
     const { user } = req;
 

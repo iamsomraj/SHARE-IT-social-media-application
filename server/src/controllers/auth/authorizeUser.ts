@@ -11,7 +11,6 @@ import { AuthInput } from '@/schemas';
  * @access public
  */
 const authorizeUser = asyncHandler(async (req: Request, res: Response) => {
-  // Data is already validated by Zod middleware
   const { uuid, token }: AuthInput = req.body;
 
   const authService = new AuthService();

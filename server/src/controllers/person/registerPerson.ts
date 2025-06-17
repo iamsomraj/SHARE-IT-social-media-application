@@ -13,7 +13,6 @@ import { RegisterInput } from '@/schemas';
  */
 export const registerPerson = asyncHandler(
   async (req: Request, res: Response) => {
-    // Data is already validated by Zod middleware
     const { name, email, password }: RegisterInput = req.body;
 
     const personService = new PersonService();

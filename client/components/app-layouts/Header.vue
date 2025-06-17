@@ -61,27 +61,22 @@
   import { useAuthStore } from '~/stores/auth'
   import { useToastStore } from '~/stores/toast'
 
-  // Components
   import FeedIcon from '~/components/assets/FeedIcon.vue'
   import LogoutIcon from '~/components/assets/LogoutIcon.vue'
   import SearchIcon from '~/components/assets/SearchIcon.vue'
   import ProfilePicture from '~/components/persons/ProfilePicture.vue'
   import ThemeButton from '~/components/user-interfaces/ThemeButton.vue'
 
-  // Stores
   const authStore = useAuthStore()
   const toastStore = useToastStore()
 
-  // Router
   const router = useRouter()
   const route = useRoute()
 
-  // Computed properties
   const isLoggedIn = computed(() => authStore.isLoggedIn)
   const user = computed(() => authStore.user)
   const routeName = computed(() => route.name)
 
-  // Methods
   const onLogout = async () => {
     authStore.clear()
     await router.push('/')
@@ -104,7 +99,6 @@
     return routeName.value === targetRoute
   }
 
-  // Initialize auth on component mount
   onMounted(() => {
     authStore.initializeAuth()
   })

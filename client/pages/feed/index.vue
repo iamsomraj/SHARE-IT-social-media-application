@@ -32,7 +32,6 @@
   const posts = computed(() => feedStore.posts)
   const stories = computed(() => feedStore.stories)
 
-  // Fetch data on page load
   await feedStore.fetchPosts(token.value || '')
   await feedStore.fetchStories(token.value || '')
 

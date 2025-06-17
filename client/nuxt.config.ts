@@ -1,14 +1,11 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
-  // TypeScript configuration
   typescript: {
     strict: true,
     typeCheck: true,
   },
 
-  // Global page headers
   app: {
     head: {
       title: '💭 SHARE IT - share thoughts, posts',
@@ -35,25 +32,19 @@ export default defineNuxtConfig({
     },
   },
 
-  // Global CSS
   css: [],
 
-  // Modules
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
 
-  // Runtime config for environment variables
   runtimeConfig: {
-    // Private keys (only available on server-side)
     nodeEnv: process.env.NODE_ENV || 'development',
 
-    // Public keys (exposed to client-side)
     public: {
       devApi: process.env.DEV_API || 'http://localhost:4500',
       prodApi: process.env.PROD_API || 'https://share-it-social-api.vercel.app',
     },
   },
 
-  // Auto import components
   components: [
     {
       path: '~/components',
@@ -61,7 +52,6 @@ export default defineNuxtConfig({
     },
   ],
 
-  // Nitro configuration for API proxy
   nitro: {
     devProxy: {
       '/api': {
@@ -71,9 +61,7 @@ export default defineNuxtConfig({
     },
   },
 
-  // Build configuration
   build: {},
 
-  // Compatibility date
   compatibilityDate: '2024-11-01',
 })

@@ -1,5 +1,3 @@
-// Component-specific types for Vue 3 with better type safety
-
 import type {
   BaseComponentProps,
   LoadableComponentProps,
@@ -13,7 +11,6 @@ import type {
   EmitFunction,
 } from './common'
 
-// Button component types
 export interface ButtonProps
   extends LoadableComponentProps,
     DisableableComponentProps {

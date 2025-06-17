@@ -2,7 +2,6 @@
   <div
     class="flex w-full flex-col items-start justify-center space-y-4 px-6 md:w-1/2"
   >
-    <!-- BEGIN: SEARCH INPUT -->
     <div class="relative w-full">
       <input
         ref="searchInput"
@@ -15,9 +14,7 @@
         class="absolute left-4 top-2.5 h-4 w-4 fill-slate-600 stroke-slate-600 dark:fill-slate-200 dark:stroke-slate-200"
       />
     </div>
-    <!-- END: SEARCH INPUT -->
 
-    <!-- BEGIN: SEARCH RESULTS -->
     <div v-if="loading" class="flex w-full items-center justify-center">
       <loader-icon class="h-6 w-6 animate-spin stroke-slate-400" />
     </div>
@@ -37,7 +34,6 @@
         No results found.
       </div>
     </div>
-    <!-- END: SEARCH RESULTS -->
   </div>
 </template>
 
@@ -59,7 +55,6 @@
     searchInput.value?.focus()
   })
 
-  // Computed to get search results and loading state from store
   const people = computed(() => searchStore.searchResults)
   const loading = computed(() => searchStore.loading)
 

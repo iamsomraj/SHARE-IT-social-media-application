@@ -1,21 +1,15 @@
-// Utility types for enhanced type safety and reusability
-
-// Make all properties optional (reuse built-in if available)
 export type PartialType<T> = {
   [P in keyof T]?: T[P]
 }
 
-// Make all properties required (reuse built-in if available)
 export type RequiredType<T> = {
   [P in keyof T]-?: T[P]
 }
 
-// Pick specific properties from a type (reuse built-in if available)
 export type PickType<T, K extends keyof T> = {
   [P in K]: T[P]
 }
 
-// Omit specific properties from a type (reuse built-in if available)
 export type OmitType<T, K extends keyof T> = PickType<T, Exclude<keyof T, K>>
 
 // Create a type with specific keys
@@ -23,25 +17,19 @@ export type RecordType<K extends string | number | symbol, T> = {
   [P in K]: T
 }
 
-// Non-nullable type (reuse built-in if available)
 export type NonNullableType<T> = T extends null | undefined ? never : T
 
-// Extract function return type
 export type ReturnTypeHelper<T extends (...args: unknown[]) => unknown> =
   T extends (...args: unknown[]) => infer R ? R : unknown
 
-// Extract function parameters
 export type ParametersHelper<T extends (...args: unknown[]) => unknown> =
   T extends (...args: infer P) => unknown ? P : never
 
-// Create union from object values
 export type ValueOf<T> = T[keyof T]
 
-// Create union from array elements
 export type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never
 
-// Deep readonly type
 export type DeepReadonly<T> = {
   readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P]
 }

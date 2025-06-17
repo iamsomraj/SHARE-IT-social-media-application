@@ -19,7 +19,6 @@
 
   const isLoggedIn = computed(() => authStore.isLoggedIn)
 
-  // Check auth on page load
   onMounted(async () => {
     await authStore.checkAuth()
     if (isLoggedIn.value) {
@@ -27,7 +26,6 @@
     }
   })
 
-  // Also check if already logged in
   if (isLoggedIn.value) {
     await navigateTo('/feed')
   }

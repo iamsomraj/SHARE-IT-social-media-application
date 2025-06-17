@@ -5,10 +5,8 @@ import typescriptParser from '@typescript-eslint/parser'
 import vueParser from 'vue-eslint-parser'
 
 export default [
-  // Base JavaScript configuration
   js.configs.recommended,
 
-  // Vue files configuration
   {
     files: ['**/*.vue'],
     languageOptions: {
@@ -59,7 +57,6 @@ export default [
       '@typescript-eslint': typescript,
     },
     rules: {
-      // Vue specific rules
       'vue/multi-word-component-names': 'off',
       'vue/no-multiple-template-root': 'off',
       'vue/html-self-closing': [
@@ -77,19 +74,17 @@ export default [
       'vue/max-attributes-per-line': 'off',
       'vue/singleline-html-element-content-newline': 'off',
       'vue/multiline-html-element-content-newline': 'off',
-      // General rules
       'no-console': 'warn',
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
-      'no-undef': 'off', // TypeScript handles this
-      'no-unused-vars': 'off', // Use TypeScript version instead
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
 
-  // TypeScript files configuration
   {
     files: ['**/*.ts'],
     languageOptions: {
@@ -129,20 +124,17 @@ export default [
       '@typescript-eslint': typescript,
     },
     rules: {
-      // TypeScript specific rules
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
-      // General rules
       'no-console': 'warn',
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
-      'no-undef': 'off', // TypeScript handles this
-      'no-unused-vars': 'off', // Use TypeScript version instead
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
     },
   },
 
-  // JavaScript files configuration
   {
     files: ['**/*.js', '**/*.mjs'],
     languageOptions: {
@@ -170,7 +162,7 @@ export default [
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
-      'no-unsafe-optional-chaining': 'off', // Allow for store files
+      'no-unsafe-optional-chaining': 'off',
       'no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
@@ -178,7 +170,6 @@ export default [
     },
   },
 
-  // Ignore patterns
   {
     ignores: [
       'node_modules/',

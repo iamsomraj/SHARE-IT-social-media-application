@@ -18,16 +18,13 @@
   import { useAuthStore } from '~/stores/auth'
   import type { PostOperationResult } from '~/types/auth'
 
-  // Store instances
   const postStore = usePostStore()
   const toastStore = useToastStore()
   const authStore = useAuthStore()
 
-  // Component state
   const postInput = ref<string>('')
   const loading = ref<boolean>(false)
 
-  // Create post handler with proper error handling
   const onPostCreate = async (): Promise<void> => {
     if (!postInput.value.trim()) {
       toastStore.warning('Please enter some content for your post')

@@ -39,7 +39,6 @@
   const uuid = computed(() => route.params.uuid as string)
   const post = computed(() => postStore.post)
 
-  // Fetch post data on page load
   await postStore.fetchPost({ uuid: uuid.value, token: token.value || '' })
 
   const time = (updated_at: string, created_at: string) => {

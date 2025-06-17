@@ -32,11 +32,9 @@ const defaultUser: User = {
 }
 
 export const useAuthStore = defineStore('auth', () => {
-  // State
   const user = ref<User>(defaultUser)
   const token = ref<string | null>(null)
 
-  // Getters
   const isLoggedIn = computed(
     () => !!token.value && !!user.value?.id && !!user.value?.uuid
   )
@@ -50,10 +48,8 @@ export const useAuthStore = defineStore('auth', () => {
   const followerCount = computed(() => user.value.person_stats.follower_count)
   const followingCount = computed(() => user.value.person_stats.following_count)
 
-  // Actions
   const setUser = (userData: User) => {
     user.value = userData
-    // Store in localStorage
     if (import.meta.client) {
       localStorage.setItem('share-it-user', JSON.stringify(userData))
     }
@@ -61,7 +57,6 @@ export const useAuthStore = defineStore('auth', () => {
 
   const setToken = (tokenValue: string) => {
     token.value = tokenValue
-    // Store in localStorage
     if (import.meta.client) {
       localStorage.setItem('share-it-token', tokenValue)
     }
@@ -70,7 +65,6 @@ export const useAuthStore = defineStore('auth', () => {
   const clear = () => {
     user.value = defaultUser
     token.value = null
-    // Clear localStorage
     if (import.meta.client) {
       localStorage.removeItem('share-it-token')
       localStorage.removeItem('share-it-user')
@@ -144,7 +138,6 @@ export const useAuthStore = defineStore('auth', () => {
           setToken(storedToken)
           setUser(JSON.parse(storedUser))
         } catch {
-          // Failed to parse stored user data
           clear()
         }
       }
@@ -241,10 +234,8 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   return {
-    // State
     user,
     token,
-    // Getters
     isLoggedIn,
     uuid,
     posts,
@@ -253,7 +244,6 @@ export const useAuthStore = defineStore('auth', () => {
     postCount,
     followerCount,
     followingCount,
-    // Actions
     setUser,
     setToken,
     clear,

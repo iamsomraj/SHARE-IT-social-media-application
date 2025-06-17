@@ -1,6 +1,3 @@
-// Central export for all types to improve import statements and type organization
-
-// Common types
 export type {
   BaseEntity,
   EntityWithUuid,
@@ -47,7 +44,6 @@ export type {
   UploadResult,
 } from './common'
 
-// Auth and user types
 export type {
   PersonStats,
   PersonFollower,

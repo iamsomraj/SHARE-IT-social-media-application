@@ -1,34 +1,26 @@
-// Common types used across the application
-
-// Base entity interface
 export interface BaseEntity {
   id: number
   created_at: string
   updated_at: string
 }
 
-// Entity with UUID
 export interface EntityWithUuid extends BaseEntity {
   uuid: string
 }
 
-// Entity with audit fields
 export interface AuditableEntity extends BaseEntity {
   created_by: number
   updated_by: number
 }
 
-// Loading states
 export interface LoadingState {
   loading: boolean
 }
 
-// Error handling
 export interface ErrorState {
   error: string | null
 }
 
-// API Response wrapper
 export interface ApiResponse<T = never> {
   success: boolean
   data?: T
@@ -37,31 +29,26 @@ export interface ApiResponse<T = never> {
   state?: boolean
 }
 
-// Specific success response
 export interface SuccessApiResponse<T> extends ApiResponse<T> {
   success: true
   data: T
   state: true
 }
 
-// Specific error response
 export interface ErrorApiResponse extends ApiResponse<never> {
   success: false
   error: string
   state: false
 }
 
-// Union type for all possible API responses
 export type ApiResult<T> = SuccessApiResponse<T> | ErrorApiResponse
 
-// Async operation result types
 export interface AsyncOperation<T = void> {
   success: boolean
   data?: T
   error?: string
 }
 
-// Pagination
 export interface PaginationMeta {
   page: number
   limit: number

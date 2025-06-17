@@ -95,15 +95,7 @@ class PersonService extends RootService {
     /* END: TOKEN GENERATION */
 
     const result: AuthResponse = {
-      user: {
-        id: personRecord.id,
-        uuid: personRecord.uuid,
-        name: personRecord.name,
-        email: personRecord.email,
-        created_at: personRecord.created_at,
-        updated_at: personRecord.updated_at,
-        is_deleted: personRecord.is_deleted,
-      },
+      ...personRecord,
       token,
     };
 
@@ -185,15 +177,7 @@ class PersonService extends RootService {
     /* END: TOKEN GENERATION */
 
     const result: AuthResponse = {
-      user: {
-        id: registeredPerson.id,
-        uuid: registeredPerson.uuid,
-        name: registeredPerson.name,
-        email: registeredPerson.email,
-        created_at: registeredPerson.created_at,
-        updated_at: registeredPerson.updated_at,
-        is_deleted: registeredPerson.is_deleted,
-      },
+      ...registeredPerson,
       token,
     };
 

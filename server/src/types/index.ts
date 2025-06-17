@@ -153,8 +153,7 @@ export interface RegisterRequest {
   password: string;
 }
 
-export interface AuthResponse {
-  user: Omit<Person, 'password'>;
+export interface AuthResponse extends Omit<PersonWithStats, 'password'> {
   token: string;
 }
 

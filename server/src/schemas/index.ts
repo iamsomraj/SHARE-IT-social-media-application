@@ -87,7 +87,7 @@ export const ZodPaginationQuerySchema = z.object({
 });
 
 export const ZodSearchQuerySchema = z.object({
-  query: z
+  searchQuery: z
     .string()
     .min(1, 'Search query cannot be empty')
     .max(100, 'Search query cannot exceed 100 characters'),

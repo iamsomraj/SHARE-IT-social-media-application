@@ -15,7 +15,9 @@ async function main() {
     await FollowingsModel.query().delete();
     await PostLikesModel.query().delete();
     await PostStatsModel.query().delete();
+    await StoriesModel.query().delete();
     await PostsModel.query().delete();
+    await PersonStatsModel.query().delete();
     await PersonsModel.query().delete();
 
     /* BEGIN: PERSON MODEL HANDLING */

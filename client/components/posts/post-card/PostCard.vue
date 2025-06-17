@@ -5,6 +5,7 @@
     >
       <!-- BEGIN: HEADER SECTION -->
       <post-card-header
+        :uuid="uuid"
         :ownerUUID="ownerUUID"
         :ownerName="ownerName"
         :time="time"

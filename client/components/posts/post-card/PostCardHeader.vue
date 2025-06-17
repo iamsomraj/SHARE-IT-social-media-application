@@ -65,6 +65,7 @@
   import { useToastStore } from '~/stores/toast'
 
   interface Props {
+    uuid: string
     ownerUUID: string
     ownerName: string
     time: string
@@ -73,12 +74,10 @@
 
   const props = defineProps<Props>()
 
-  const route = useRoute()
   const authStore = useAuthStore()
   const postStore = usePostStore()
   const toastStore = useToastStore()
 
-  const postUUID = computed(() => route.params.uuid as string)
   const loggedInUserUUID = computed(() => authStore.uuid)
   const isSelfPost = computed(() => props.ownerUUID === loggedInUserUUID.value)
 
@@ -94,8 +93,12 @@
       const authStore = useAuthStore()
       const token = authStore.token
       if (token) {
-        await postStore.addStory({ postUUID: postUUID.value, token })
-        toastStore.success(MESSAGES.ADD_STORY_SUCCESS)
+        const result = await postStore.addStory({ postUUID: props.uuid, token })
+        if (result.success) {
+          toastStore.success(MESSAGES.ADD_STORY_SUCCESS)
+        } else {
+          toastStore.error(MESSAGES.ADD_STORY_FAILURE)
+        }
       }
     } catch {
       toastStore.error(MESSAGES.ADD_STORY_FAILURE)
@@ -107,8 +110,15 @@
       const authStore = useAuthStore()
       const token = authStore.token
       if (token) {
-        await postStore.removeStory({ postUUID: postUUID.value, token })
-        toastStore.success(MESSAGES.REMOVE_STORY_SUCCESS)
+        const result = await postStore.removeStory({
+          postUUID: props.uuid,
+          token,
+        })
+        if (result.success) {
+          toastStore.success(MESSAGES.REMOVE_STORY_SUCCESS)
+        } else {
+          toastStore.error(MESSAGES.REMOVE_STORY_FAILURE)
+        }
       }
     } catch {
       toastStore.error(MESSAGES.REMOVE_STORY_FAILURE)

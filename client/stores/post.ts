@@ -205,7 +205,12 @@ export const usePostStore = defineStore('post', () => {
       })
 
       if (responseData.state) {
-        post.value = responseData.data
+        if (post.value && post.value.id === responseData.data.id) {
+          post.value = responseData.data
+        }
+
+        const feedStore = useFeedStore()
+        feedStore.updatePostInFeed(responseData.data)
       }
 
       return {
@@ -242,7 +247,12 @@ export const usePostStore = defineStore('post', () => {
       })
 
       if (responseData.state) {
-        post.value = responseData.data
+        if (post.value && post.value.id === responseData.data.id) {
+          post.value = responseData.data
+        }
+
+        const feedStore = useFeedStore()
+        feedStore.updatePostInFeed(responseData.data)
       }
 
       return {

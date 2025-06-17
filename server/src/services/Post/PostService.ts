@@ -334,16 +334,16 @@ class PostService extends RootService {
     const followingPersonIds = followingIds.map(follow => follow.followed_id);
     followingPersonIds.push(user.id); // Include user's own stories
 
-    /* GET POSTS WITH STORIES FROM FOLLOWING PEOPLE */
+    /* GET POSTS WHERE USER HAS CREATED STORIES */
     const postsWithStories = await PostsModel.query()
       .whereExists(
         StoriesModel.query()
           .whereColumn('post_id', 'posts.id')
-          .whereIn('person_id', followingPersonIds),
+          .where('person_id', user.id),
       )
       .where('is_deleted', false)
       .withGraphFetched(
-        '[creator(defaultSelects), post_stats, post_stories.creator(defaultSelects), post_likes.creator(defaultSelects)]',
+        '[post_stories.creator(defaultSelects), creator(defaultSelects), post_stats, post_likes.creator(defaultSelects)]',
       )
       .modify('orderByLatest');
 

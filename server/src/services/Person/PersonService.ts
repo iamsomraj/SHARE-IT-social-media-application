@@ -468,9 +468,9 @@ class PersonService extends RootService {
     const followingCount = Number((followingCountResult as any)?.count || 0);
     const postCount = Number((postCountResult as any)?.count || 0);
 
-    // Update or create person stats record
+    // Update or create person stats record using ON CONFLICT
     await PersonStatsModel.query()
-      .insertAndFetch({
+      .insert({
         person_id: personId,
         follower_count: followerCount,
         following_count: followingCount,

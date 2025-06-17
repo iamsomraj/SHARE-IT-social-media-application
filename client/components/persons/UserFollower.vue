@@ -42,7 +42,7 @@
         token: token.value!,
       })
 
-      if (followRes.state) {
+      if (followRes.success) {
         await profileStore.getUserProfile({
           uuid: profile.value.uuid,
           token: token.value!,
@@ -67,7 +67,7 @@
         token: token.value!,
       })
 
-      if (unfollowRes.state) {
+      if (unfollowRes.success) {
         await profileStore.getUserProfile({
           uuid: profile.value.uuid,
           token: token.value!,

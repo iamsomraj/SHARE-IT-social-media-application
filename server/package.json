@@ -1,32 +1,71 @@
 {
   "name": "share-it-social-media-application",
-  "version": "2.0.0",
-  "description": "",
-  "main": "server.js",
+  "version": "2.1.0",
+  "description": "A modern social media application backend built with Node.js, Express, and TypeScript",
+  "main": "dist/index.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "scripts": {
-    "start": "node index",
-    "data-import": "npm run migrate-rollback && npm run migrate-latest && node seeds/seeder",
-    "server": "npm run data-import && nodemon index",
-    "dev": "nodemon index",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "server": "npm run data-import && npm run dev",
+    "data-import": "npm run migrate-rollback && npm run migrate-latest && tsx src/seeds/seeder.ts",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
-    "migrate-make": "knex migrate:make"
+    "migrate-make": "knex migrate:make",
+    "lint": "eslint src/**/*.ts --cache",
+    "lint:fix": "eslint src/**/*.ts --fix --cache",
+    "prettier": "prettier --check \"src/**/*.{ts,js,json}\"",
+    "prettier:fix": "prettier --write \"src/**/*.{ts,js,json}\"",
+    "typecheck": "tsc --noEmit",
+    "format": "npm run prettier:fix && npm run lint:fix",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean && npm run typecheck",
+    "postinstall": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "social-media",
+    "express",
+    "typescript",
+    "postgresql",
+    "objection",
+    "knex"
+  ],
   "author": "Somraj Mukherjee",
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.17.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "express-async-handler": "^1.2.0",
-    "jsonwebtoken": "^8.5.1",
-    "knex": "^1.0.4",
-    "objection": "^3.0.1",
-    "pg": "^8.7.3"
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "objection": "^3.1.5",
+    "pg": "^8.13.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.10.2",
+    "@types/pg": "^8.11.10",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.4.2",
+    "rimraf": "^6.0.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
   }
 }

@@ -49,12 +49,9 @@ export const LOCAL_STORAGE_KEYS = Object.freeze({
 export type LocalStorageKey = keyof typeof LOCAL_STORAGE_KEYS
 export type LocalStorageValue = (typeof LOCAL_STORAGE_KEYS)[LocalStorageKey]
 
-// API endpoint structure types
 export interface ApiEndpoints {
-  // Auth endpoints
   AUTHORIZE_USER: string
 
-  // Person endpoints
   LOGIN: string
   REGISTER: string
   GET_USER_DATA: string
@@ -64,7 +61,6 @@ export interface ApiEndpoints {
   SEARCH_PEOPLE: string
   GET_PEOPLE: string
 
-  // Post endpoints
   CREATE_POST: string
   GET_POST_FEED: string
   GET_STORY_POSTS: string
@@ -75,7 +71,6 @@ export interface ApiEndpoints {
   REMOVE_STORY: string
 }
 
-// API configuration
 export interface ApiConfig {
   baseUrl: string
   timeout: number

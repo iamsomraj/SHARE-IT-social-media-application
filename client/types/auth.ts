@@ -32,7 +32,7 @@ export interface User extends EntityWithUuid {
   person_followings: readonly PersonFollowing[]
   person_stats: PersonStats
   person_posts: readonly Post[]
-  token?: string // Optional token field for login response
+  token?: string
 }
 
 // Post-related types
@@ -46,7 +46,7 @@ export interface PostStats extends BaseEntity {
 export interface PostLike extends AuditableEntity {
   post_id: number
   creator: User
-  person?: User // For backward compatibility
+  person?: User
 }
 
 export interface PostStory extends BaseEntity {

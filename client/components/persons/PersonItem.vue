@@ -25,7 +25,6 @@
 <script setup lang="ts">
   import type { User } from '~/types/auth'
 
-  // Component props with better typing
   interface Props {
     person: User
     showEmail?: boolean
@@ -33,14 +32,12 @@
     clickable?: boolean
   }
 
-  // Define props with defaults
   const props = withDefaults(defineProps<Props>(), {
     showEmail: true,
     compact: false,
     clickable: true,
   })
 
-  // Component emits
   interface Emits {
     onPersonClick: [person: User]
     onProfileView: [uuid: string]
@@ -48,10 +45,8 @@
 
   const emit = defineEmits<Emits>()
 
-  // Router for navigation
   const router = useRouter()
 
-  // Handle person click
   const handlePersonClick = (): void => {
     if (props.clickable) {
       emit('onPersonClick', props.person)

@@ -6,6 +6,4 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  // Global app configuration can go here
-</script>
+<script setup lang="ts"></script>

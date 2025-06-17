@@ -4,12 +4,10 @@ import type { User, SearchOperationResult } from '~/types/auth'
 import { getApiEndpoints } from '~/utils/constants'
 
 export const useSearchStore = defineStore('search', () => {
-  // State
   const searchResults = ref<User[]>([])
   const loading = ref(false)
   const query = ref('')
 
-  // Actions
   const searchPeople = async (
     searchQuery: string
   ): Promise<SearchOperationResult> => {
@@ -77,12 +75,10 @@ export const useSearchStore = defineStore('search', () => {
   }
 
   return {
-    // State
     searchResults,
     loading,
     query,
 
-    // Actions
     searchPeople,
     clearSearch,
   }

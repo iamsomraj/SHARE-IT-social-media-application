@@ -10,6 +10,4 @@
   </svg>
 </template>
 
-<script setup lang="ts">
-  // Component name is automatically inferred from the filename in Nuxt 3
-</script>
+<script setup lang="ts"></script>

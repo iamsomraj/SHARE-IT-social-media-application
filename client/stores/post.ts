@@ -79,7 +79,6 @@ export const usePostStore = defineStore('post', () => {
       })
 
       if (responseData.state && responseData.data) {
-        // Update auth store like in old store
         const authStore = useAuthStore()
         authStore.addPost(responseData.data)
         authStore.incrementPostCount()
@@ -118,12 +117,10 @@ export const usePostStore = defineStore('post', () => {
       })
 
       if (responseData.state) {
-        // Update current post if it's the same
         if (post.value && post.value.id === responseData.data.id) {
           post.value = responseData.data
         }
 
-        // Update feed post if feed store is available
         const feedStore = useFeedStore()
         feedStore.updatePostInFeed(responseData.data)
       }
@@ -162,12 +159,10 @@ export const usePostStore = defineStore('post', () => {
       })
 
       if (responseData.state) {
-        // Update current post if it's the same
         if (post.value && post.value.id === responseData.data.id) {
           post.value = responseData.data
         }
 
-        // Update feed post if feed store is available
         const feedStore = useFeedStore()
         feedStore.updatePostInFeed(responseData.data)
       }
@@ -272,11 +267,9 @@ export const usePostStore = defineStore('post', () => {
   }
 
   return {
-    // State
     post,
     loading,
 
-    // Actions
     fetchPost,
     createPost,
     likePost,

@@ -121,7 +121,6 @@ export const useFeedStore = defineStore('feed', () => {
       if (responseData.state) {
         updatePostInFeed(responseData.data)
 
-        // Also update auth store if this is the user's own post
         const authStore = useAuthStore()
         if (authStore.posts.some(post => post.id === responseData.data.id)) {
           authStore.updatePost(responseData.data)
@@ -167,7 +166,6 @@ export const useFeedStore = defineStore('feed', () => {
       if (responseData.state) {
         updatePostInFeed(responseData.data)
 
-        // Also update auth store if this is the user's own post
         const authStore = useAuthStore()
         if (authStore.posts.some(post => post.id === responseData.data.id)) {
           authStore.updatePost(responseData.data)
@@ -190,12 +188,10 @@ export const useFeedStore = defineStore('feed', () => {
   }
 
   return {
-    // State
     posts,
     stories,
     loading,
 
-    // Actions
     fetchPosts,
     fetchStories,
     updatePostInFeed,

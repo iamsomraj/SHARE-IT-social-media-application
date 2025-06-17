@@ -8,11 +8,9 @@ export interface ToastMessage {
 }
 
 export const useToastStore = defineStore('toast', () => {
-  // State
   const toasts = ref<ToastMessage[]>([])
   const timeouts = ref<Map<string, NodeJS.Timeout>>(new Map())
 
-  // Actions
   const addToast = (toast: Omit<ToastMessage, 'id'>) => {
     const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     const newToast: ToastMessage = {
@@ -62,7 +60,6 @@ export const useToastStore = defineStore('toast', () => {
   }
 
   const clear = () => {
-    // Clear all timeouts
     timeouts.value.forEach(timeoutId => {
       clearTimeout(timeoutId)
     })

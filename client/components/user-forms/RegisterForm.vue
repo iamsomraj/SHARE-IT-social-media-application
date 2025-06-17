@@ -84,7 +84,6 @@
       loading.value = false
 
       if (res.success) {
-        // Redirecting to the profile of the logged in user
         await router.push(`/profile/${user.value.uuid}`)
         toastStore.success(MESSAGES.REGISTER_SUCCESS)
       } else {

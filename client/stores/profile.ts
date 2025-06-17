@@ -33,13 +33,10 @@ const defaultProfile: Profile = {
 }
 
 export const useProfileStore = defineStore('profile', () => {
-  // State
   const profile = ref<Profile>(defaultProfile)
 
-  // Getters
   const posts = computed(() => profile.value.person_posts)
 
-  // Actions
   const setProfile = (newProfile: Profile) => {
     profile.value = newProfile
   }
@@ -158,7 +155,6 @@ export const useProfileStore = defineStore('profile', () => {
       })
 
       if (responseData.state && responseData.data) {
-        // Update auth store user data like in old store
         const authStore = useAuthStore()
         authStore.setUser(responseData.data)
       }
@@ -198,7 +194,6 @@ export const useProfileStore = defineStore('profile', () => {
       })
 
       if (responseData.state && responseData.data) {
-        // Update auth store user data like in old store
         const authStore = useAuthStore()
         authStore.setUser(responseData.data)
       }
@@ -238,7 +233,6 @@ export const useProfileStore = defineStore('profile', () => {
       })
 
       if (responseData.state) {
-        // Update the specific post like in old store
         updatePost(responseData.data)
       }
 
@@ -276,7 +270,6 @@ export const useProfileStore = defineStore('profile', () => {
       })
 
       if (responseData.state) {
-        // Update the specific post like in old store
         updatePost(responseData.data)
       }
 
@@ -294,13 +287,10 @@ export const useProfileStore = defineStore('profile', () => {
   }
 
   return {
-    // State
     profile,
 
-    // Getters
     posts,
 
-    // Actions
     getUserProfile,
     getSelfProfile,
     follow,

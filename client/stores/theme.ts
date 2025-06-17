@@ -1,13 +1,10 @@
 import { defineStore } from 'pinia'
 
 export const useThemeStore = defineStore('theme', () => {
-  // State
   const theme = ref<'light' | 'dark'>('light')
 
-  // Getters
   const isDarkTheme = computed(() => theme.value === 'dark')
 
-  // Actions
   const setTheme = (newTheme: 'light' | 'dark') => {
     theme.value = newTheme
     if (import.meta.client) {
@@ -39,7 +36,6 @@ export const useThemeStore = defineStore('theme', () => {
       if (storedTheme) {
         setTheme(storedTheme)
       } else {
-        // Check system preference
         const prefersDark = window.matchMedia(
           '(prefers-color-scheme: dark)'
         ).matches
@@ -49,11 +45,10 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   return {
-    // State
     theme,
-    // Getters
+
     isDarkTheme,
-    // Actions
+
     setTheme,
     toggleTheme,
     initializeTheme,

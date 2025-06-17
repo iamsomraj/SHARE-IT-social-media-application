@@ -16,18 +16,14 @@
   import MoonIcon from '~/components/assets/MoonIcon.vue'
   import SunIcon from '~/components/assets/SunIcon.vue'
 
-  // Store
   const themeStore = useThemeStore()
 
-  // Computed properties
   const isDarkMode = computed(() => themeStore.isDarkTheme)
 
-  // Methods
   const toggleTheme = () => {
     themeStore.toggleTheme()
   }
 
-  // Initialize theme on component mount
   onMounted(() => {
     themeStore.initializeTheme()
   })

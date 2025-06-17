@@ -7,6 +7,4 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  // Component name is automatically inferred from the filename
-</script>
+<script setup lang="ts"></script>

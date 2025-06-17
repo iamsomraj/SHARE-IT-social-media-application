@@ -37,22 +37,16 @@
     loading.value = true
 
     try {
-      const [followRes] = await Promise.all([
-        profileStore.follow({
-          uuid: profile.value.uuid,
-          token: token.value!,
-        }),
-      ])
+      const followRes = await profileStore.follow({
+        uuid: profile.value.uuid,
+        token: token.value!,
+      })
 
       if (followRes.state) {
-        await Promise.all([
-          profileStore.getUserProfile({
-            uuid: profile.value.uuid,
-            token: token.value!,
-          }),
-          authStore.checkAuth(),
-        ])
-
+        await profileStore.getUserProfile({
+          uuid: profile.value.uuid,
+          token: token.value!,
+        })
         toastStore.success(MESSAGES.PERSON_FOLLOW_SUCCESS)
       } else {
         toastStore.error(MESSAGES.PERSON_FOLLOW_FAILURE)
@@ -74,14 +68,10 @@
       })
 
       if (unfollowRes.state) {
-        await Promise.all([
-          profileStore.getUserProfile({
-            uuid: profile.value.uuid,
-            token: token.value!,
-          }),
-          authStore.checkAuth(), 
-        ])
-
+        await profileStore.getUserProfile({
+          uuid: profile.value.uuid,
+          token: token.value!,
+        })
         toastStore.success(MESSAGES.PERSON_UNFOLLOW_SUCCESS)
       } else {
         toastStore.error(MESSAGES.PERSON_UNFOLLOW_FAILURE)

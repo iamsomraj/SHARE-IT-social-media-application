@@ -46,10 +46,15 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// TODO: Import routes when they are created
-// app.use('/api/v1/persons', personRoutes);
-// app.use('/api/v1/posts', postRoutes);
-// app.use('/api/v1/auth', authRoutes);
+// Import routes
+import personRoutes from '@/routes/personRoutes';
+import postRoutes from '@/routes/postRoutes';
+import authRoutes from '@/routes/authRoutes';
+
+// Define API routes
+app.use('/api/v1/persons', personRoutes);
+app.use('/api/v1/posts', postRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 // Health check endpoint
 app.get('/', (_req: Request, res: Response) => {
@@ -81,12 +86,15 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Start server
 const server = app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(
     colors.bold.blue.bgWhite(
       `🚀 Server running in ${NODE_ENV} mode on port ${PORT}`,
     ),
   );
+  // eslint-disable-next-line no-console
   console.log(colors.bold.green(`📱 API URL: http://localhost:${PORT}`));
+  // eslint-disable-next-line no-console
   console.log(
     colors.bold.cyan(`🏥 Health Check: http://localhost:${PORT}/health`),
   );
@@ -94,16 +102,20 @@ const server = app.listen(PORT, () => {
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
+  // eslint-disable-next-line no-console
   console.log(colors.yellow('SIGTERM signal received. Closing HTTP server.'));
   server.close(() => {
+    // eslint-disable-next-line no-console
     console.log(colors.red('HTTP server closed.'));
     process.exit(0);
   });
 });
 
 process.on('SIGINT', () => {
+  // eslint-disable-next-line no-console
   console.log(colors.yellow('SIGINT signal received. Closing HTTP server.'));
   server.close(() => {
+    // eslint-disable-next-line no-console
     console.log(colors.red('HTTP server closed.'));
     process.exit(0);
   });
@@ -111,6 +123,7 @@ process.on('SIGINT', () => {
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (error: Error) => {
+  // eslint-disable-next-line no-console
   console.error(colors.red('Uncaught Exception:'), error);
   process.exit(1);
 });
@@ -119,6 +132,7 @@ process.on('uncaughtException', (error: Error) => {
 process.on(
   'unhandledRejection',
   (reason: unknown, promise: Promise<unknown>) => {
+    // eslint-disable-next-line no-console
     console.error(
       colors.red('Unhandled Rejection at:'),
       promise,

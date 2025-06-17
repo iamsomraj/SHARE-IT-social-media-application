@@ -44,6 +44,11 @@ export const PERSON_ERROR_MESSAGES = Object.freeze({
   WRONG_CREDENTIALS: 'Wrong Credentials!',
   POST_FEED_FAILURE: 'Post feed failed!',
   POST_STORY_FAILURE: 'Story addition failed!',
+  REGISTER_PERSON_FAILURE: 'Person registration failed!',
+  PROVIDE_PERSON_UUID: 'Please provide person UUID!',
+  CANNOT_FOLLOW_YOURSELF: 'You cannot follow yourself!',
+  ALREADY_FOLLOWING: 'You are already following this person!',
+  NOT_FOLLOWING: 'You are not following this person!',
 } as const);
 
 export const AUTH_SUCCESS_MESSAGES = Object.freeze({
@@ -65,6 +70,12 @@ export const GENERAL_MESSAGES = Object.freeze({
   INVALID_REQUEST: 'Invalid request!',
   UNAUTHORIZED: 'Unauthorized access!',
   FORBIDDEN: 'Access forbidden!',
+  PROVIDE_POST_DETAILS: 'Please provide post details!',
+  POST_NOT_FOUND: 'Post not found!',
+  ALREADY_LIKED_POST: 'You have already liked this post!',
+  ALREADY_STORY_POST: 'You have already added this post to your story!',
+  NOT_STORY_YET: 'You have not added this post to your story yet!',
+  NOT_LIKED_YET: 'You have not liked this post yet!',
   NOT_FOUND: 'Resource not found!',
   VALIDATION_ERROR: 'Validation error!',
   SERVER_ERROR: 'Internal server error!',

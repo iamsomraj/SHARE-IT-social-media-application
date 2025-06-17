@@ -75,6 +75,11 @@ export interface PersonFollowing extends AuditableEntity {
   followed_id: number;
 }
 
+export interface Following extends AuditableEntity {
+  follower_id: number;
+  followed_id: number;
+}
+
 // =========================
 // POST TYPES
 // =========================
@@ -94,6 +99,10 @@ export interface PostStats extends BaseEntity {
 export interface PostLike extends AuditableEntity {
   post_id: number;
   person_id: number;
+}
+
+export interface PostLikeModel extends AuditableEntity {
+  post_id: number;
 }
 
 export interface PostStory extends BaseEntity {

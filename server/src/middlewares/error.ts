@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { IS_PRODUCTION, IS_DEVELOPMENT } from '../utils/constants/environments';
-import { HTTP_CODES } from '../utils/constants/http-codes';
-import { GENERAL_MESSAGES } from '../utils/constants/messages';
-import { ApiResponse } from '../types';
+import { IS_PRODUCTION, IS_DEVELOPMENT } from '@/utils/constants/environments';
+import { HTTP_CODES } from '@/utils/constants/http-codes';
+import { GENERAL_MESSAGES } from '@/utils/constants/messages';
+import { ApiResponse } from '@/types';
 
 export const pageNotFound = (
   req: Request,
@@ -30,7 +30,10 @@ export const errorHandler = (
     data: IS_PRODUCTION ? '' : err.stack,
   };
 
-  if (IS_DEVELOPMENT) console.error(result);
+  if (IS_DEVELOPMENT) {
+    // eslint-disable-next-line no-console
+    console.error(result);
+  }
 
   res.status(statusCode).json(result);
 };

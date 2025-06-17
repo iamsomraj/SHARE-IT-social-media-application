@@ -1,8 +1,8 @@
 import { Response, NextFunction } from 'express';
-import { verifyToken } from '../utils/helpers';
-import { HTTP_CODES } from '../utils/constants/http-codes';
-import { GENERAL_MESSAGES } from '../utils/constants/messages';
-import { CustomRequest, ApiResponse } from '../types';
+import { verifyToken } from '@/utils/helpers';
+import { HTTP_CODES } from '@/utils/constants/http-codes';
+import { GENERAL_MESSAGES } from '@/utils/constants/messages';
+import { CustomRequest, ApiResponse } from '@/types';
 
 /**
  * Authentication middleware to verify JWT tokens
@@ -67,7 +67,7 @@ export const optionalAuth = (
         email: '',
       };
     } catch (error) {
-      // Ignore token errors for optional auth
+      // eslint-disable-next-line no-console
       console.warn('Invalid token in optional auth:', error);
     }
   }

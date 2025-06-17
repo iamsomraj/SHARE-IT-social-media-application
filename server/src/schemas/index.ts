@@ -1,93 +1,8 @@
-import Joi from 'joi';
 import { z } from 'zod';
-
-// =========================
-// JOI VALIDATION SCHEMAS
-// =========================
-
-// Auth validation schemas
-export const authSchema = Joi.object({
-  uuid: Joi.string().uuid().required(),
-  token: Joi.string().required(),
-});
-
-export const loginSchema = Joi.object({
-  email: Joi.string().email().required().messages({
-    'string.email': 'Please provide a valid email address',
-    'any.required': 'Email is required',
-  }),
-  password: Joi.string().min(4).required().messages({
-    'string.min': 'Password must be at least 4 characters long',
-    'any.required': 'Password is required',
-  }),
-});
-
-export const registerSchema = Joi.object({
-  name: Joi.string().min(4).max(50).required().messages({
-    'string.min': 'Name must be at least 4 characters long',
-    'string.max': 'Name cannot exceed 50 characters',
-    'any.required': 'Name is required',
-  }),
-  email: Joi.string().email().required().messages({
-    'string.email': 'Please provide a valid email address',
-    'any.required': 'Email is required',
-  }),
-  password: Joi.string().min(4).required().messages({
-    'string.min': 'Password must be at least 4 characters long',
-    'any.required': 'Password is required',
-  }),
-});
-
-// Person validation schemas
-export const followSchema = Joi.object({
-  uuid: Joi.string().uuid().required().messages({
-    'string.uuid': 'Invalid person UUID format',
-    'any.required': 'Person UUID is required',
-  }),
-});
-
-export const searchPersonSchema = Joi.object({
-  query: Joi.string().min(1).max(100).required().messages({
-    'string.min': 'Search query cannot be empty',
-    'string.max': 'Search query cannot exceed 100 characters',
-    'any.required': 'Search query is required',
-  }),
-});
-
-// Post validation schemas
-export const createPostSchema = Joi.object({
-  content: Joi.string().min(1).max(500).required().messages({
-    'string.min': 'Post content cannot be empty',
-    'string.max': 'Post content cannot exceed 500 characters',
-    'any.required': 'Post content is required',
-  }),
-});
-
-export const postActionSchema = Joi.object({
-  postUUID: Joi.string().uuid().required().messages({
-    'string.uuid': 'Invalid post UUID format',
-    'any.required': 'Post UUID is required',
-  }),
-});
-
-// UUID validation schema
-export const uuidSchema = Joi.string().uuid().required().messages({
-  'string.uuid': 'Invalid UUID format',
-  'any.required': 'UUID is required',
-});
-
-// Pagination schema
-export const paginationSchema = Joi.object({
-  page: Joi.number().integer().min(1).default(1).messages({
-    'number.integer': 'Page must be an integer',
-    'number.min': 'Page must be at least 1',
-  }),
-  limit: Joi.number().integer().min(1).max(100).default(10).messages({
-    'number.integer': 'Limit must be an integer',
-    'number.min': 'Limit must be at least 1',
-    'number.max': 'Limit cannot exceed 100',
-  }),
-});
+import { Request, Response, NextFunction } from 'express';
+import { HTTP_CODES } from '@/utils/constants/http-codes';
+import { GENERAL_MESSAGES } from '@/utils/constants/messages';
+import { ApiResponse } from '@/types';
 
 // =========================
 // ZOD VALIDATION SCHEMAS
@@ -125,6 +40,13 @@ export const ZodSearchPersonSchema = z.object({
     .max(100, 'Search query cannot exceed 100 characters'),
 });
 
+export const ZodUserDataSchema = z.object({
+  id: z.number().int().positive(),
+  uuid: z.string().uuid(),
+  name: z.string().min(1),
+  email: z.string().email(),
+});
+
 // Post schemas
 export const ZodCreatePostSchema = z.object({
   content: z
@@ -137,12 +59,38 @@ export const ZodPostActionSchema = z.object({
   postUUID: z.string().uuid('Invalid post UUID format'),
 });
 
+export const ZodFetchPostSchema = z.object({
+  uuid: z.string().uuid('Invalid post UUID format'),
+});
+
 // Common schemas
 export const ZodUuidSchema = z.string().uuid('Invalid UUID format');
 
 export const ZodPaginationSchema = z.object({
-  page: z.number().int().min(1).default(1),
-  limit: z.number().int().min(1).max(100).default(10),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(10),
+});
+
+// Params schemas
+export const ZodUuidParamsSchema = z.object({
+  uuid: z.string().uuid('Invalid UUID format'),
+});
+
+export const ZodPostUuidParamsSchema = z.object({
+  post_uuid: z.string().uuid('Invalid post UUID format'),
+});
+
+// Query schemas
+export const ZodPaginationQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(10),
+});
+
+export const ZodSearchQuerySchema = z.object({
+  query: z
+    .string()
+    .min(1, 'Search query cannot be empty')
+    .max(100, 'Search query cannot exceed 100 characters'),
 });
 
 // =========================
@@ -158,18 +106,118 @@ export type SearchPersonInput = z.infer<typeof ZodSearchPersonSchema>;
 export type CreatePostInput = z.infer<typeof ZodCreatePostSchema>;
 export type PostActionInput = z.infer<typeof ZodPostActionSchema>;
 export type PaginationInput = z.infer<typeof ZodPaginationSchema>;
+export type UuidParamsInput = z.infer<typeof ZodUuidParamsSchema>;
+export type PostUuidParamsInput = z.infer<typeof ZodPostUuidParamsSchema>;
+export type PaginationQueryInput = z.infer<typeof ZodPaginationQuerySchema>;
+export type SearchQueryInput = z.infer<typeof ZodSearchQuerySchema>;
+export type UserDataInput = z.infer<typeof ZodUserDataSchema>;
+
+// =========================
+// ZOD VALIDATION MIDDLEWARE
+// =========================
+
+export const validateZodRequest = <T>(schema: z.ZodSchema<T>) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    try {
+      const result = schema.safeParse(req.body);
+
+      if (!result.success) {
+        const errorMessage = result.error.errors
+          .map(err => `${err.path.join('.')}: ${err.message}`)
+          .join(', ');
+
+        const response: ApiResponse = {
+          state: false,
+          message: errorMessage || GENERAL_MESSAGES.INVALID_REQUEST,
+        };
+
+        res.status(HTTP_CODES.BAD_REQUEST).json(response);
+        return;
+      }
+
+      // Attach validated data to request
+      req.body = result.data;
+      next();
+    } catch (error) {
+      const response: ApiResponse = {
+        state: false,
+        message: GENERAL_MESSAGES.INVALID_REQUEST,
+      };
+
+      res.status(HTTP_CODES.BAD_REQUEST).json(response);
+    }
+  };
+};
+
+export const validateZodQuery = <T>(schema: z.ZodSchema<T>) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    try {
+      const result = schema.safeParse(req.query);
+
+      if (!result.success) {
+        const errorMessage = result.error.errors
+          .map(err => `${err.path.join('.')}: ${err.message}`)
+          .join(', ');
+
+        const response: ApiResponse = {
+          state: false,
+          message: errorMessage || GENERAL_MESSAGES.INVALID_REQUEST,
+        };
+
+        res.status(HTTP_CODES.BAD_REQUEST).json(response);
+        return;
+      }
+
+      // Attach validated data to request
+      req.query = result.data as any;
+      next();
+    } catch (error) {
+      const response: ApiResponse = {
+        state: false,
+        message: GENERAL_MESSAGES.INVALID_REQUEST,
+      };
+
+      res.status(HTTP_CODES.BAD_REQUEST).json(response);
+    }
+  };
+};
+
+export const validateZodParams = <T>(schema: z.ZodSchema<T>) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    try {
+      const result = schema.safeParse(req.params);
+
+      if (!result.success) {
+        const errorMessage = result.error.errors
+          .map(err => `${err.path.join('.')}: ${err.message}`)
+          .join(', ');
+
+        const response: ApiResponse = {
+          state: false,
+          message: errorMessage || GENERAL_MESSAGES.INVALID_REQUEST,
+        };
+
+        res.status(HTTP_CODES.BAD_REQUEST).json(response);
+        return;
+      }
+
+      // Attach validated data to request
+      req.params = result.data as any;
+      next();
+    } catch (error) {
+      const response: ApiResponse = {
+        state: false,
+        message: GENERAL_MESSAGES.INVALID_REQUEST,
+      };
+
+      res.status(HTTP_CODES.BAD_REQUEST).json(response);
+    }
+  };
+};
 
 // =========================
 // VALIDATION HELPERS
 // =========================
-
-export const validateWithJoi = <T>(schema: Joi.Schema, data: unknown): T => {
-  const { error, value } = schema.validate(data);
-  if (error) {
-    throw new Error(error.details[0]?.message || 'Validation failed');
-  }
-  return value as T;
-};
 
 export const validateWithZod = <T>(
   schema: z.ZodSchema<T>,
@@ -181,3 +229,21 @@ export const validateWithZod = <T>(
   }
   return result.data;
 };
+
+export const safeValidateWithZod = <T>(
+  schema: z.ZodSchema<T>,
+  data: unknown,
+): { success: true; data: T } | { success: false; error: string } => {
+  const result = schema.safeParse(data);
+  if (!result.success) {
+    return {
+      success: false,
+      error: result.error.errors[0]?.message || 'Validation failed',
+    };
+  }
+  return { success: true, data: result.data };
+};
+
+// =========================
+// LEGACY JOI SCHEMAS (for backward compatibility)
+// =========================

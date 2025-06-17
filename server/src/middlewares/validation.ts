@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { Schema } from 'joi';
-import { HTTP_CODES } from '../utils/constants/http-codes';
-import { GENERAL_MESSAGES } from '../utils/constants/messages';
-import { ApiResponse } from '../types';
+import { HTTP_CODES } from '@/utils/constants/http-codes';
+import { GENERAL_MESSAGES } from '@/utils/constants/messages';
+import { ApiResponse } from '@/types';
 
 export const validateRequest = (schema: Schema) => {
   return (req: Request, res: Response, next: NextFunction): void => {

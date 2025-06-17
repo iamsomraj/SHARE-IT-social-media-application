@@ -18,11 +18,11 @@ const knex = Knex({
   },
   migrations: {
     directory: '../migrations',
-    extension: 'js',
+    extension: 'ts',
   },
   seeds: {
     directory: '../seeds',
-    extension: 'js',
+    extension: 'ts',
   },
 });
 

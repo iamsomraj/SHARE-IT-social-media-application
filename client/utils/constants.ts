@@ -46,7 +46,7 @@ const AUTH_BASE = `/auth`
 
 // Helper function to get API base URL based on environment
 export const getApiBaseUrl = (): string => {
-  if (process.client) {
+  if (import.meta.client) {
     const config = useRuntimeConfig()
     return process.env.NODE_ENV === 'production'
       ? config.public.prodApi

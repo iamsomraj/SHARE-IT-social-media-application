@@ -10,7 +10,7 @@ export const useThemeStore = defineStore('theme', () => {
   // Actions
   const setTheme = (newTheme: 'light' | 'dark') => {
     theme.value = newTheme
-    if (process.client) {
+    if (import.meta.client) {
       localStorage.setItem('share-it-theme', newTheme)
       updateDocumentClass()
     }
@@ -22,7 +22,7 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   const updateDocumentClass = () => {
-    if (process.client) {
+    if (import.meta.client) {
       if (theme.value === 'dark') {
         document.documentElement.classList.add('dark')
       } else {
@@ -32,7 +32,7 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   const initializeTheme = () => {
-    if (process.client) {
+    if (import.meta.client) {
       const storedTheme = localStorage.getItem('share-it-theme') as
         | 'light'
         | 'dark'

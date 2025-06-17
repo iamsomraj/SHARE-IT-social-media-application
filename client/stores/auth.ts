@@ -46,7 +46,7 @@ export const useAuthStore = defineStore('auth', () => {
   const setUser = (userData: User) => {
     user.value = userData
     // Store in localStorage
-    if (process.client) {
+    if (import.meta.client) {
       localStorage.setItem('share-it-user', JSON.stringify(userData))
     }
   }
@@ -54,7 +54,7 @@ export const useAuthStore = defineStore('auth', () => {
   const setToken = (tokenValue: string) => {
     token.value = tokenValue
     // Store in localStorage
-    if (process.client) {
+    if (import.meta.client) {
       localStorage.setItem('share-it-token', tokenValue)
     }
   }
@@ -63,7 +63,7 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = defaultUser
     token.value = null
     // Clear localStorage
-    if (process.client) {
+    if (import.meta.client) {
       localStorage.removeItem('share-it-token')
       localStorage.removeItem('share-it-user')
     }
@@ -127,7 +127,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const initializeAuth = () => {
-    if (process.client) {
+    if (import.meta.client) {
       const storedToken = localStorage.getItem('share-it-token')
       const storedUser = localStorage.getItem('share-it-user')
 

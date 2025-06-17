@@ -24,7 +24,7 @@ export const useToastStore = defineStore('toast', () => {
     toasts.value.push(newToast)
 
     // Auto remove after duration (only on client-side)
-    if (newToast.duration && newToast.duration > 0 && process.client) {
+    if (newToast.duration && newToast.duration > 0 && import.meta.client) {
       const timeoutId = setTimeout(() => {
         removeToast(id)
       }, newToast.duration)

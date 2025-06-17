@@ -316,7 +316,16 @@ class PostService extends RootService {
       .increment('post_count', 1);
     /* END: DATABASE OPERATIONS */
 
-    return postRecord;
+    /* FETCH AND RETURN COMPLETE POST DATA WITH RELATIONS */
+    const completePostData = await PostsModel.getPostDetails(postRecord.uuid);
+    if (!completePostData) {
+      this.raiseError(
+        HTTP_CODES.INTERNAL_SERVER_ERROR,
+        PERSON_ERROR_MESSAGES.POST_FAILURE,
+      );
+    }
+
+    return completePostData;
   }
 
   /**

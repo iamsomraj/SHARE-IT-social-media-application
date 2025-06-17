@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { User, ApiResponse } from '~/types/auth'
+import type { User, SearchOperationResult } from '~/types/auth'
 import { getApiEndpoints } from '~/utils/constants'
 
 export const useSearchStore = defineStore('search', () => {
@@ -12,7 +12,7 @@ export const useSearchStore = defineStore('search', () => {
   // Actions
   const searchPeople = async (
     searchQuery: string
-  ): Promise<ApiResponse<User[]>> => {
+  ): Promise<SearchOperationResult> => {
     loading.value = true
     query.value = searchQuery
 

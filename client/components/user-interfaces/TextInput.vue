@@ -10,24 +10,21 @@
 </template>
 
 <script setup lang="ts">
-  interface Props {
-    modelValue?: string
-    type?: string
-    placeholder?: string
-  }
+  import type { InputEvent } from '~/types/common'
+  import type { TextInputProps, TextInputEmits } from '~/types/components'
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<TextInputProps>(), {
     modelValue: '',
     type: 'text',
     placeholder: '',
+    required: false,
+    readonly: false,
   })
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: string]
-  }>()
+  const emit = defineEmits<TextInputEmits>()
 
   const onInput = (event: Event) => {
-    const target = event.target as HTMLInputElement
-    emit('update:modelValue', target.value)
+    const inputEvent = event as InputEvent
+    emit('update:modelValue', inputEvent.target.value)
   }
 </script>

@@ -1,3 +1,5 @@
+import type { ApiEndpoints } from '~/types/constants'
+
 // Routes configuration
 export const ROUTES = Object.freeze({
   FEED: 'feed',
@@ -56,7 +58,7 @@ export const getApiBaseUrl = (): string => {
 }
 
 // Function to get complete API endpoints with base URL
-export const getApiEndpoints = () => {
+export const getApiEndpoints = (): ApiEndpoints => {
   const baseUrl = getApiBaseUrl()
 
   return {

@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { User, Post, ApiResponse } from '~/types/auth'
+import type {
+  User,
+  Post,
+  UserOperationResult,
+  PostOperationResult,
+} from '~/types/auth'
 import { getApiEndpoints } from '~/utils/constants'
 
 export interface Profile extends User {}
@@ -21,6 +26,8 @@ const defaultProfile: Profile = {
     post_count: 0,
     follower_count: 0,
     following_count: 0,
+    created_at: '',
+    updated_at: '',
   },
   person_posts: [],
 }
@@ -57,7 +64,7 @@ export const useProfileStore = defineStore('profile', () => {
   }: {
     uuid: string
     token: string
-  }): Promise<ApiResponse<Profile>> => {
+  }): Promise<UserOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{
@@ -100,7 +107,7 @@ export const useProfileStore = defineStore('profile', () => {
   }: {
     uuid: string
     token: string
-  }): Promise<ApiResponse<Profile>> => {
+  }): Promise<UserOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const data = await $fetch<{
@@ -136,7 +143,7 @@ export const useProfileStore = defineStore('profile', () => {
   }: {
     uuid: string
     token: string
-  }): Promise<ApiResponse<unknown>> => {
+  }): Promise<UserOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{
@@ -176,7 +183,7 @@ export const useProfileStore = defineStore('profile', () => {
   }: {
     uuid: string
     token: string
-  }): Promise<ApiResponse<unknown>> => {
+  }): Promise<UserOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{
@@ -216,7 +223,7 @@ export const useProfileStore = defineStore('profile', () => {
   }: {
     postUUID: string
     token: string
-  }): Promise<ApiResponse<unknown>> => {
+  }): Promise<PostOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{
@@ -254,7 +261,7 @@ export const useProfileStore = defineStore('profile', () => {
   }: {
     postUUID: string
     token: string
-  }): Promise<ApiResponse<unknown>> => {
+  }): Promise<PostOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{

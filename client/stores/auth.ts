@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { User, ApiResponse, AuthResponse, Post } from '~/types/auth'
+import type {
+  User,
+  AuthResponse,
+  Post,
+  UserOperationResult,
+} from '~/types/auth'
+import type { ApiResponse } from '~/types/common'
 import { getApiEndpoints } from '~/utils/constants'
 
 const defaultUser: User = {
@@ -19,6 +25,8 @@ const defaultUser: User = {
     post_count: 0,
     follower_count: 0,
     following_count: 0,
+    created_at: '',
+    updated_at: '',
   },
   person_posts: [],
 }
@@ -199,7 +207,7 @@ export const useAuthStore = defineStore('auth', () => {
   }: {
     uuid: string
     token: string
-  }): Promise<ApiResponse<User>> => {
+  }): Promise<UserOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{

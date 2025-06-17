@@ -16,34 +16,48 @@
   import { usePostStore } from '~/stores/post'
   import { useToastStore } from '~/stores/toast'
   import { useAuthStore } from '~/stores/auth'
+  import type { PostOperationResult } from '~/types/auth'
 
+  // Store instances
   const postStore = usePostStore()
   const toastStore = useToastStore()
   const authStore = useAuthStore()
 
-  const postInput = ref('')
-  const loading = ref(false)
+  // Component state
+  const postInput = ref<string>('')
+  const loading = ref<boolean>(false)
 
-  const onPostCreate = async () => {
+  // Create post handler with proper error handling
+  const onPostCreate = async (): Promise<void> => {
+    if (!postInput.value.trim()) {
+      toastStore.warning('Please enter some content for your post')
+      return
+    }
+
+    if (!authStore.token) {
+      toastStore.error('You must be logged in to create a post')
+      return
+    }
+
     loading.value = true
-    const content = postInput.value
+    const content = postInput.value.trim()
 
     try {
-      const res = await postStore.createPost({
+      const result: PostOperationResult = await postStore.createPost({
         content,
-        token: authStore.token!,
+        token: authStore.token,
       })
-      loading.value = false
 
-      if (res.success) {
+      if (result.success) {
         postInput.value = ''
         toastStore.success(MESSAGES.POST_CREATE_SUCCESS)
       } else {
-        toastStore.error(MESSAGES.POST_CREATE_FAILURE)
+        toastStore.error(result.error || MESSAGES.POST_CREATE_FAILURE)
       }
     } catch {
-      loading.value = false
       toastStore.error(MESSAGES.POST_CREATE_FAILURE)
+    } finally {
+      loading.value = false
     }
   }
 </script>

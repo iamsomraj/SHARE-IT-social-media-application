@@ -16,13 +16,9 @@
 </template>
 
 <script setup lang="ts">
-  interface Props {
-    numberOfPosts?: number
-    numberOfFollowers?: number
-    numberOfFollowings?: number
-  }
+  import type { ProfileStatsProps } from '~/types/auth'
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ProfileStatsProps>(), {
     numberOfPosts: 0,
     numberOfFollowers: 0,
     numberOfFollowings: 0,

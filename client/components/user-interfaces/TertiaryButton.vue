@@ -16,23 +16,19 @@
 </template>
 
 <script setup lang="ts">
-  interface Props {
-    loading?: boolean
-    disabled?: boolean
-  }
+  import type { ButtonProps, ButtonEmits } from '~/types/components'
 
-  interface Emits {
-    onClick: []
-  }
-
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ButtonProps>(), {
     loading: false,
     disabled: false,
+    variant: 'tertiary',
+    type: 'button',
+    fullWidth: false,
   })
 
-  const emit = defineEmits<Emits>()
+  const emit = defineEmits<ButtonEmits>()
 
-  const onClick = (event: Event) => {
+  const onClick = (event: MouseEvent) => {
     event.preventDefault()
     emit('onClick')
   }

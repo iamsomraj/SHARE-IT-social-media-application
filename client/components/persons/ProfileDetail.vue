@@ -12,10 +12,10 @@
 </template>
 
 <script setup lang="ts">
-  interface Props {
+  interface ProfileDetailProps {
     name: string
     email: string
   }
 
-  defineProps<Props>()
+  defineProps<ProfileDetailProps>()
 </script>

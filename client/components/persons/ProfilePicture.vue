@@ -12,12 +12,9 @@
 </template>
 
 <script setup lang="ts">
-  interface Props {
-    uuid: string
-    name: string
-  }
+  import type { ProfilePictureProps } from '~/types/auth'
 
-  const props = defineProps<Props>()
+  const props = defineProps<ProfilePictureProps>()
   const authStore = useAuthStore()
 
   const initialLetterOfName = computed(() => {

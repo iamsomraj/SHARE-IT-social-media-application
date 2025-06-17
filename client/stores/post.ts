@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import type { Post, ApiResponse } from '~/types/auth'
+import type { Post, PostOperationResult } from '~/types/auth'
+import type { ApiResponse } from '~/types/common'
 import { getApiEndpoints } from '~/utils/constants'
 
 export const usePostStore = defineStore('post', () => {
@@ -54,7 +55,7 @@ export const usePostStore = defineStore('post', () => {
   }: {
     content: string
     token: string
-  }): Promise<ApiResponse<unknown>> => {
+  }): Promise<PostOperationResult> => {
     try {
       if (!token) {
         return {
@@ -101,7 +102,7 @@ export const usePostStore = defineStore('post', () => {
   const likePost = async (payload: {
     postUUID: string
     token: string
-  }): Promise<ApiResponse<Post>> => {
+  }): Promise<PostOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{
@@ -145,7 +146,7 @@ export const usePostStore = defineStore('post', () => {
   const unlikePost = async (payload: {
     postUUID: string
     token: string
-  }): Promise<ApiResponse<Post>> => {
+  }): Promise<PostOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{
@@ -189,7 +190,7 @@ export const usePostStore = defineStore('post', () => {
   const addStory = async (payload: {
     postUUID: string
     token: string
-  }): Promise<ApiResponse<Post>> => {
+  }): Promise<PostOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{
@@ -231,7 +232,7 @@ export const usePostStore = defineStore('post', () => {
   const removeStory = async (payload: {
     postUUID: string
     token: string
-  }): Promise<ApiResponse<Post>> => {
+  }): Promise<PostOperationResult> => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{

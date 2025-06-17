@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import type { Post, ApiResponse } from '~/types/auth'
+import type { Post } from '~/types/auth'
+import type { ApiResponse } from '~/types/common'
 import { getApiEndpoints } from '~/utils/constants'
 
 export const useFeedStore = defineStore('feed', () => {

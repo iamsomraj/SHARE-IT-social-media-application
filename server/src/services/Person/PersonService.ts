@@ -5,7 +5,7 @@ import { generateToken, validateHash, hash } from '@/utils/helpers';
 import RootService from '@/services/Root/RootService';
 import { HTTP_CODES } from '@/utils/constants/http-codes';
 import { PERSON_ERROR_MESSAGES } from '@/utils/constants/messages';
-import { Person, AuthResponse, PersonWithStats } from '@/types';
+import { Person, AuthResponse } from '@/types';
 import {
   validateWithZod,
   ZodLoginSchema,
@@ -273,10 +273,7 @@ class PersonService extends RootService {
    * @route POST /api/v1/persons/follow/:uuid
    * @access private
    */
-  async followPerson(
-    user: Person,
-    uuid: string,
-  ): Promise<PersonWithStats | undefined> {
+  async followPerson(user: Person, uuid: string): Promise<PersonsModel> {
     /* BEGIN: VALIDATIONS */
     if (!uuid) {
       this.raiseError(
@@ -329,17 +326,21 @@ class PersonService extends RootService {
     await this.updatePersonStats(user.id); // Update follower's stats
     /* END: UPDATE STATS FOR BOTH USERS */
 
-    /* BEGIN: FETCH UPDATED PERSON DETAILS */
-    const updatedPersonDetails =
-      await PersonsModel.getPersonDetailsByUUID(uuid);
-    /* END: FETCH UPDATED PERSON DETAILS */
+    /* BEGIN: FETCH UPDATED CURRENT USER DETAILS */
+    const updatedCurrentUserDetails = await PersonsModel.query()
+      .findById(user.id)
+      .modify('defaultSelects')
+      .withGraphFetched('[person_stats, person_followers, person_followings]');
+    /* END: FETCH UPDATED CURRENT USER DETAILS */
 
-    /* BEGIN: UPDATE PERSON STATS */
-    await this.updatePersonStats(user.id);
-    await this.updatePersonStats(personToFollow.id);
-    /* END: UPDATE PERSON STATS */
+    if (!updatedCurrentUserDetails) {
+      this.raiseError(
+        HTTP_CODES.NOT_FOUND,
+        PERSON_ERROR_MESSAGES.USER_NOT_FOUND,
+      );
+    }
 
-    return updatedPersonDetails;
+    return updatedCurrentUserDetails;
   }
 
   /**
@@ -349,10 +350,7 @@ class PersonService extends RootService {
    * @route POST /api/v1/persons/unfollow/:uuid
    * @access private
    */
-  async unfollowPerson(
-    user: Person,
-    uuid: string,
-  ): Promise<PersonWithStats | undefined> {
+  async unfollowPerson(user: Person, uuid: string): Promise<PersonsModel> {
     /* BEGIN: VALIDATIONS */
     if (!uuid) {
       this.raiseError(
@@ -396,17 +394,21 @@ class PersonService extends RootService {
     await this.updatePersonStats(user.id); // Update unfollower's stats
     /* END: UPDATE STATS FOR BOTH USERS */
 
-    /* BEGIN: FETCH UPDATED PERSON DETAILS */
-    const updatedPersonDetails =
-      await PersonsModel.getPersonDetailsByUUID(uuid);
-    /* END: FETCH UPDATED PERSON DETAILS */
+    /* BEGIN: FETCH UPDATED CURRENT USER DETAILS */
+    const updatedCurrentUserDetails = await PersonsModel.query()
+      .findById(user.id)
+      .modify('defaultSelects')
+      .withGraphFetched('[person_stats, person_followers, person_followings]');
+    /* END: FETCH UPDATED CURRENT USER DETAILS */
 
-    /* BEGIN: UPDATE PERSON STATS */
-    await this.updatePersonStats(user.id);
-    await this.updatePersonStats(personToUnfollow.id);
-    /* END: UPDATE PERSON STATS */
+    if (!updatedCurrentUserDetails) {
+      this.raiseError(
+        HTTP_CODES.NOT_FOUND,
+        PERSON_ERROR_MESSAGES.USER_NOT_FOUND,
+      );
+    }
 
-    return updatedPersonDetails;
+    return updatedCurrentUserDetails;
   }
 
   /**

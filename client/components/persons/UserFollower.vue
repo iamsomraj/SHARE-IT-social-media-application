@@ -7,75 +7,79 @@
     >
       Follow
     </primary-button>
-    <secondary-button v-else @onClick="onUserUnfollow" :loading="loading"
-      >Followed</secondary-button
-    >
+    <secondary-button v-else @onClick="onUserUnfollow" :loading="loading">
+      Followed
+    </secondary-button>
   </div>
 </template>
 
-<script>
-import PrimaryButton from '../user-interfaces/PrimaryButton.vue';
-import SecondaryButton from '../user-interfaces/SecondaryButton.vue';
-import { MESSAGES } from '../../util/constants.js';
-export default {
-  name: 'UserFollower',
-  data() {
-    return {
-      loading: false,
-    };
-  },
-  computed: {
-    profile() {
-      return this.$store.getters['profile/profile'];
-    },
-    user() {
-      return this.$store.getters['auth/user'];
-    },
-    token() {
-      return this.$store.getters['auth/token'];
-    },
-    followers() {
-      return this.$store.getters['auth/followers'];
-    },
-    doesUserFollow() {
-      return this.followers.some(
-        (person) => person.followed_id === this.profile.id
-      );
-    },
-  },
-  methods: {
-    async onUserFollow() {
-      this.loading = true;
-      const res = await this.$store.dispatch('auth/follow', this.profile.uuid);
-      this.loading = false;
-      if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.PERSON_FOLLOW_SUCCESS);
-        await this.$store.dispatch('profile/getUserProfile', {
-          uuid: this.profile.uuid,
-          token: this.token,
-        });
+<script setup lang="ts">
+  import type { PersonFollower } from '~/types/auth'
+  import { MESSAGES } from '~/utils/constants'
+
+  const authStore = useAuthStore()
+  const profileStore = useProfileStore()
+  const toastStore = useToastStore()
+
+  const loading = ref(false)
+
+  const profile = computed(() => profileStore.profile)
+  const token = computed(() => authStore.token)
+  const followers = computed(() => authStore.followers)
+
+  const doesUserFollow = computed(() => {
+    return followers.value.some(
+      (person: PersonFollower) => person.followed_id === profile.value.id
+    )
+  })
+
+  const onUserFollow = async () => {
+    loading.value = true
+
+    try {
+      const followRes = await profileStore.follow({
+        uuid: profile.value.uuid,
+        token: token.value!,
+      })
+
+      if (followRes.success) {
+        await profileStore.getUserProfile({
+          uuid: profile.value.uuid,
+          token: token.value!,
+        })
+        toastStore.success(MESSAGES.PERSON_FOLLOW_SUCCESS)
       } else {
-        this.$store.dispatch('toast/error', MESSAGES.PERSON_FOLLOW_FAILURE);
+        toastStore.error(MESSAGES.PERSON_FOLLOW_FAILURE)
       }
-    },
-    async onUserUnfollow() {
-      this.loading = true;
-      const res = await this.$store.dispatch(
-        'auth/unfollow',
-        this.profile.uuid
-      );
-      this.loading = false;
-      if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.PERSON_UNFOLLOW_SUCCESS);
-        await this.$store.dispatch('profile/getUserProfile', {
-          uuid: this.profile.uuid,
-          token: this.token,
-        });
+    } catch {
+      toastStore.error(MESSAGES.PERSON_FOLLOW_FAILURE)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const onUserUnfollow = async () => {
+    loading.value = true
+
+    try {
+      const unfollowRes = await profileStore.unfollow({
+        uuid: profile.value.uuid,
+        token: token.value!,
+      })
+
+      if (unfollowRes.success) {
+        await profileStore.getUserProfile({
+          uuid: profile.value.uuid,
+          token: token.value!,
+        })
+        toastStore.success(MESSAGES.PERSON_UNFOLLOW_SUCCESS)
       } else {
-        this.$store.dispatch('toast/error', MESSAGES.PERSON_UNFOLLOW_FAILURE);
+        toastStore.error(MESSAGES.PERSON_UNFOLLOW_FAILURE)
       }
-    },
-  },
-  components: { PrimaryButton, SecondaryButton },
-};
+    } catch {
+      toastStore.error(MESSAGES.PERSON_UNFOLLOW_FAILURE)
+    } finally {
+      loading.value = false
+    }
+  }
 </script>

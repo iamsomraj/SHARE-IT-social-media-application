@@ -11,31 +11,25 @@
     >
       <loader-icon />
     </div>
-    <slot v-else name="default"></slot>
+    <slot v-else name="default" />
   </button>
 </template>
 
-<script>
-import LoaderIcon from '../assets/LoaderIcon.vue';
-export default {
-  name: 'PrimaryButton',
-  props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ['onClick'],
-  methods: {
-    onClick(event) {
-      event.preventDefault();
-      this.$emit('onClick');
-    },
-  },
-  components: { LoaderIcon },
-};
+<script setup lang="ts">
+  import type { ButtonProps, ButtonEmits } from '~/types/components'
+
+  withDefaults(defineProps<ButtonProps>(), {
+    loading: false,
+    disabled: false,
+    variant: 'primary',
+    type: 'button',
+    fullWidth: false,
+  })
+
+  const emit = defineEmits<ButtonEmits>()
+
+  const onClick = (event: MouseEvent) => {
+    event.preventDefault()
+    emit('onClick')
+  }
 </script>

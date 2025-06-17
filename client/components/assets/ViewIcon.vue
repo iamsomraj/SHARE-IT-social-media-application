@@ -19,8 +19,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: 'ViewIcon',
-};
+<script setup lang="ts">
+  // Component name is automatically inferred from the filename
 </script>

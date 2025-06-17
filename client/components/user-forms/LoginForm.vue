@@ -49,55 +49,47 @@
   <!-- END: LOGIN FORM COMPONENT -->
 </template>
 
-<script>
-import { MESSAGES } from '../../util/constants.js';
-import FormLogo from '../assets/FormLogo.vue';
-import PrimaryButton from './../user-interfaces/PrimaryButton.vue';
-import SecondaryButton from './../user-interfaces/SecondaryButton.vue';
-import TextInput from './../user-interfaces/TextInput.vue';
+<script setup lang="ts">
+  import { MESSAGES } from '~/utils/constants'
 
-export default {
-  name: 'LoginForm',
-  components: {
-    SecondaryButton,
-    PrimaryButton,
-    TextInput,
-    FormLogo,
-  },
-  data() {
-    return {
-      email: '',
-      password: '',
-      loading: false,
-    };
-  },
-  computed: {
-    user() {
-      return this.$store.getters['auth/user'];
-    },
-    disabled() {
-      return !this.email || !this.password;
-    },
-  },
-  methods: {
-    async onSubmit() {
-      const loginFormData = {
-        email: this.email,
-        password: this.password,
-      };
-      this.loading = true;
-      const res = await this.$store.dispatch('auth/login', loginFormData);
-      this.loading = false;
-      if (res.state) {
-        /* REDIRECTING TO THE PROFILE OF THE LOGGED IN USER */
-        this.$router.push(`profile/${this.user.uuid}`);
-        this.$store.dispatch('toast/success', MESSAGES.LOGIN_SUCCESS);
+  const router = useRouter()
+  const authStore = useAuthStore()
+  const toastStore = useToastStore()
+
+  const email = ref('')
+  const password = ref('')
+  const loading = ref(false)
+
+  const user = computed(() => authStore.user)
+
+  const disabled = computed(() => {
+    return !email.value || !password.value
+  })
+
+  const onSubmit = async () => {
+    const loginFormData = {
+      email: email.value,
+      password: password.value,
+    }
+
+    loading.value = true
+
+    try {
+      const res = await authStore.login(loginFormData)
+      loading.value = false
+
+      if (res.success) {
+        // Redirecting to the profile of the logged in user
+        await router.push(`/profile/${user.value.uuid}`)
+        toastStore.success(MESSAGES.LOGIN_SUCCESS)
       } else {
-        this.$store.dispatch('toast/error', res.message);
+        toastStore.error(res.error || 'Login failed')
       }
-    },
-  },
-};
+    } catch {
+      loading.value = false
+      toastStore.error('Login failed')
+    }
+  }
 </script>
 
 <style scoped></style>

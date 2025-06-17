@@ -1,7 +1,5 @@
 <template>
-  <!-- BEGIN: POST INPUT -->
   <div class="w-full px-0 md:px-6">
-    <!-- BEGIN: POST TEXT INPUT -->
     <textarea
       :disabled="loading"
       class="w-full resize-none break-words rounded border-b-2 border-slate-200 text-2xl text-slate-400 outline-none placeholder:text-slate-400 focus:border-blue-200 disabled:bg-white dark:border-b-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-600 dark:disabled:bg-slate-800"
@@ -10,87 +8,89 @@
       :maxlength="postLengthLimit"
       autocomplete="off"
       :type="type"
-      :value="value"
+      :value="modelValue"
       @change="onChange"
       @input="onInput"
       @keydown.enter="onEnter"
     />
-    <!-- END: POST TEXT INPUT -->
 
-    <!-- BEGIN: CHARACTERS LEFT FROM LIMIT -->
     <div
       class="my-2 w-full text-right text-xs text-slate-200 dark:text-slate-600"
     >
       {{ charactersLeft }}
     </div>
-    <!-- END: CHARACTERS LEFT FROM LIMIT -->
   </div>
-  <!-- END: POST INPUT -->
 </template>
 
-<script>
-export default {
-  name: 'PostInput',
-  props: {
-    value: {
-      type: String,
-      default: '',
-    },
-    type: {
-      type: String,
-      default: 'text',
-    },
-    placeholder: {
-      type: String,
-      default: '',
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ['change', 'input'],
-  data() {
-    return {
-      postLengthLimit: 160,
-    };
-  },
-  computed: {
-    charactersLeft() {
-      return this.postLengthLimit - this.value.length;
-    },
-    inputPlaceholder() {
-      return this.loading ? 'Posting...' : this.placeholder;
-    },
-  },
+<script setup lang="ts">
+  interface Props {
+    modelValue?: string
+    type?: string
+    placeholder?: string
+    loading?: boolean
+  }
 
-  methods: {
-    onChange(event) {
-      event.preventDefault();
-      if (!event || !event.target || !event.target.value) {
-        this.$emit('change', '');
-      }
+  interface Emits {
+    'update:modelValue': [value: string]
+    onEnter: [value: string]
+  }
 
-      if (event.target.value.length > this.maxLength) {
-        event.target.value = event.target.value.slice(0, this.maxLength);
-      }
-      this.$emit('change', event.target.value);
-    },
-    onInput(event) {
-      event.preventDefault();
-      if (!event || !event.target || !event.target.value) {
-        this.$emit('input', '');
-      }
+  const props = withDefaults(defineProps<Props>(), {
+    modelValue: '',
+    type: 'text',
+    placeholder: '',
+    loading: false,
+  })
 
-      if (event.target.value.length > this.maxLength) {
-        event.target.value = event.target.value.slice(0, this.maxLength);
-      }
-      this.$emit('input', event.target.value);
-    },
-    onEnter(event) {
-      event.preventDefault();
-      this.$emit('onEnter', event.target.value);
-    },
-  },
-};
+  const emit = defineEmits<Emits>()
+
+  const postLengthLimit = 160
+
+  const charactersLeft = computed(() => {
+    return postLengthLimit - props.modelValue.length
+  })
+
+  const inputPlaceholder = computed(() => {
+    return props.loading ? 'Posting...' : props.placeholder
+  })
+
+  const onChange = (event: Event) => {
+    event.preventDefault()
+    const target = event.target as HTMLTextAreaElement
+
+    if (!event || !target) {
+      emit('update:modelValue', '')
+      return
+    }
+
+    let value = target.value || ''
+    if (value.length > postLengthLimit) {
+      value = value.slice(0, postLengthLimit)
+      target.value = value
+    }
+    emit('update:modelValue', value)
+  }
+
+  const onInput = (event: Event) => {
+    event.preventDefault()
+    const target = event.target as HTMLTextAreaElement
+
+    if (!event || !target) {
+      emit('update:modelValue', '')
+      return
+    }
+
+    let value = target.value || ''
+    if (value.length > postLengthLimit) {
+      value = value.slice(0, postLengthLimit)
+      target.value = value
+    }
+    emit('update:modelValue', value)
+  }
+
+  const onEnter = (event: Event) => {
+    event.preventDefault()
+    const target = event.target as HTMLTextAreaElement
+    emit('onEnter', target.value)
+  }
 </script>

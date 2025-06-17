@@ -13,11 +13,12 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: 'HeartIcon',
-  props: ['fill'],
-};
+<script setup lang="ts">
+  interface Props {
+    fill?: string
+  }
+
+  defineProps<Props>()
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full items-center justify-center py-4">
     <div class="mx-6 flex w-full justify-center space-x-2 md:mx-0 md:w-1/2">
-      <post-input
+      <PostInput
         placeholder="Speak your mind"
         :loading="loading"
         v-model="postInput"
@@ -11,37 +11,52 @@
   </div>
 </template>
 
-<script>
-import { MESSAGES } from '../../util/constants';
-import PostInput from '../posts/PostInput.vue';
-import SecondaryButton from '../user-interfaces/SecondaryButton.vue';
-export default {
-  name: 'PostCreator',
-  data() {
-    return {
-      postInput: '',
-      loading: false,
-    };
-  },
-  methods: {
-    async onPostCreate() {
-      this.loading = true;
-      const content = this.postInput;
-      this.postInput = '';
-      const res = await this.$store.dispatch('auth/createPost', {
+<script setup lang="ts">
+  import { MESSAGES } from '~/utils/constants'
+  import { usePostStore } from '~/stores/post'
+  import { useToastStore } from '~/stores/toast'
+  import { useAuthStore } from '~/stores/auth'
+  import type { PostOperationResult } from '~/types/auth'
+
+  const postStore = usePostStore()
+  const toastStore = useToastStore()
+  const authStore = useAuthStore()
+
+  const postInput = ref<string>('')
+  const loading = ref<boolean>(false)
+
+  const onPostCreate = async (): Promise<void> => {
+    if (!postInput.value.trim()) {
+      toastStore.warning('Please enter some content for your post')
+      return
+    }
+
+    if (!authStore.token) {
+      toastStore.error('You must be logged in to create a post')
+      return
+    }
+
+    loading.value = true
+    const content = postInput.value.trim()
+
+    try {
+      const result: PostOperationResult = await postStore.createPost({
         content,
-      });
-      this.loading = false;
-      if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.POST_CREATE_SUCCESS);
+        token: authStore.token,
+      })
+
+      if (result.success) {
+        postInput.value = ''
+        toastStore.success(MESSAGES.POST_CREATE_SUCCESS)
       } else {
-        this.postInput = content;
-        this.$store.dispatch('toast/error', MESSAGES.POST_CREATE_FAILURE);
+        toastStore.error(result.error || MESSAGES.POST_CREATE_FAILURE)
       }
-    },
-  },
-  components: { PostInput, SecondaryButton },
-};
+    } catch {
+      toastStore.error(MESSAGES.POST_CREATE_FAILURE)
+    } finally {
+      loading.value = false
+    }
+  }
 </script>
 
 <style scoped></style>

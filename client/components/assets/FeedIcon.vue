@@ -10,8 +10,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: 'FeedIcon',
-};
+<script setup lang="ts">
+  // Component name is automatically inferred from the filename in Nuxt 3
 </script>

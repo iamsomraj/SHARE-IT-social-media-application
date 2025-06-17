@@ -1,19 +1,16 @@
 <template>
   <div>
     <Toast />
-    <Nuxt />
+    <slot />
   </div>
 </template>
 
-<script>
-import Toast from '../components/user-interfaces/Toast.vue';
-export default {
-  name: 'GuestLayout',
-  components: { Toast },
-  mounted() {
-    this.$store.dispatch('theme/handleTheme');
-  },
-};
+<script setup lang="ts">
+  const themeStore = useThemeStore()
+
+  onMounted(() => {
+    themeStore.initializeTheme()
+  })
 </script>
 
 <style scoped></style>

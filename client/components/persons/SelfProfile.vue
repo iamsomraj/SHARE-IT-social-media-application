@@ -1,12 +1,9 @@
 <template>
-  <!-- BEGIN: CURRENT LOGGED IN USER PROFILE COMPONENT -->
   <div class="w-full">
-    <!-- BEGIN: CURRENT LOGGED IN USER PROFILE COMPONENT MAIN SECTION -->
     <div
       v-if="user"
       class="flex w-full flex-col items-center justify-center space-y-2"
     >
-      <!-- BEGIN: CURRENT LOGGED IN USER PROFILE HEADER  -->
       <profile-header
         :uuid="user.uuid"
         :id="user.id"
@@ -16,81 +13,79 @@
         :numberOfFollowers="user?.person_stats?.follower_count || 0"
         :numberOfFollowings="user?.person_stats?.following_count || 0"
       />
-      <!-- END: CURRENT LOGGED IN USER PROFILE HEADER  -->
 
-      <!-- BEGIN: POST CREATOR -->
       <post-creator />
-      <!-- END: POST CREATOR -->
 
-      <!-- BEGIN: CURRENT LOGGED IN USER PROFILE BODY  -->
       <profile-body
         :posts="user.person_posts"
         :name="user.name"
         @onPostLike="onPostLike"
         @onPostUnlike="onPostUnlike"
       />
-      <!-- END: CURRENT LOGGED IN USER PROFILE BODY  -->
     </div>
-    <!-- END: CURRENT LOGGED IN USER PROFILE COMPONENT MAIN SECTION -->
   </div>
-  <!-- END: CURRENT LOGGED IN USER PROFILE COMPONENT -->
 </template>
 
-<script>
-import ProfileBody from '../../components/persons/ProfileBody.vue';
-import ProfileHeader from '../../components/persons/ProfileHeader.vue';
-import PostCreator from '../../components/posts/PostCreator.vue';
-import { MESSAGES } from '../../util/constants';
+<script setup lang="ts">
+  import ProfileBody from '../../components/persons/ProfileBody.vue'
+  import ProfileHeader from '../../components/persons/ProfileHeader.vue'
+  import PostCreator from '../../components/posts/PostCreator.vue'
+  import { MESSAGES } from '~/utils/constants'
+  import { useAuthStore } from '~/stores/auth'
+  import { usePostStore } from '~/stores/post'
+  import { useToastStore } from '~/stores/toast'
 
-export default {
-  name: 'SelfProfile',
-  data() {
-    return {
-      loading: false,
-    };
-  },
-  async fetch() {
-    /* BEGIN: FETCHING PROFILE DETAIL */
-    const uuid = this.$router.currentRoute.params.uuid; // GETTING UUID FROM URL
-    await this.$store.dispatch('auth/getSelfProfile', {
-      uuid,
-      token: this.token,
-    });
-    /* END: FETCHING PROFILE DETAIL */
-  },
-  computed: {
-    user() {
-      return this.$store.getters['auth/user'];
-    },
-    token() {
-      return this.$store.getters['auth/token'];
-    },
-    isLoggedIn() {
-      return this.$store.getters['auth/isLoggedIn'];
-    },
-  },
-  methods: {
-    async onPostLike(uuid) {
-      this.loading = true;
-      const res = await this.$store.dispatch('auth/likePost', uuid);
-      this.loading = false;
-      if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.POST_LIKE_SUCCESS);
-      } else {
-        this.$store.dispatch('toast/error', MESSAGES.POST_LIKE_FAILURE);
+  const authStore = useAuthStore()
+  const postStore = usePostStore()
+  const toastStore = useToastStore()
+
+  const loading = ref(false)
+
+  const user = computed(() => authStore.user)
+
+  onMounted(async () => {
+    const uuid = authStore.uuid
+    const token = authStore.token
+    if (uuid && token) {
+      await authStore.getSelfProfile({ uuid, token })
+    }
+  })
+
+  const onPostLike = async (uuid: string) => {
+    loading.value = true
+    try {
+      const token = authStore.token
+      if (token) {
+        await postStore.likePost({ postUUID: uuid, token })
+        const userUuid = authStore.uuid
+        if (userUuid) {
+          await authStore.getSelfProfile({ uuid: userUuid, token })
+        }
+        toastStore.success(MESSAGES.POST_LIKE_SUCCESS)
       }
-    },
-    async onPostUnlike(uuid) {
-      this.loading = true;
-      const res = await this.$store.dispatch('auth/unlikePost', uuid);
-      this.loading = false;
-      if (res.state) {
-        this.$store.dispatch('toast/success', MESSAGES.POST_UNLIKE_SUCCESS);
-      } else {
-        this.$store.dispatch('toast/error', MESSAGES.POST_UNLIKE_FAILURE);
+    } catch {
+      toastStore.error(MESSAGES.POST_LIKE_FAILURE)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const onPostUnlike = async (uuid: string) => {
+    loading.value = true
+    try {
+      const token = authStore.token
+      if (token) {
+        await postStore.unlikePost({ postUUID: uuid, token })
+        const userUuid = authStore.uuid
+        if (userUuid) {
+          await authStore.getSelfProfile({ uuid: userUuid, token })
+        }
+        toastStore.success(MESSAGES.POST_UNLIKE_SUCCESS)
       }
-    },
-  },
-  components: { ProfileBody, ProfileHeader, PostCreator },
-};
+    } catch {
+      toastStore.error(MESSAGES.POST_UNLIKE_FAILURE)
+    } finally {
+      loading.value = false
+    }
+  }
 </script>

@@ -2,54 +2,84 @@
   <!-- BEGIN: TOAST COMPONENT ROOT ELEMENT -->
   <div
     v-if="toasts.length > 0"
-    class="fixed z-50 flex w-full flex-col items-center px-2"
+    class="fixed right-4 top-4 z-50 flex w-full max-w-sm flex-col items-end gap-2"
   >
     <!-- BEGIN: TOAST LIST -->
-    <div v-for="toast in toasts" :key="toast.id">
-      <!-- BEGIN: TOAST ITEM -->
-      <div
-        :title="toast.message"
-        :class="`${background(toast.variant)} ${textColor(toast.variant)}`"
-        class="mt-2 w-64 break-words rounded-lg px-4 py-5 text-center text-xs font-bold shadow-sm"
-      >
-        <div class="line-clamp-2">
-          {{ toast.message }}
+    <TransitionGroup name="toast" tag="div" class="space-y-2">
+      <div v-for="toast in toasts" :key="toast.id" class="relative">
+        <!-- BEGIN: TOAST ITEM -->
+        <div
+          :title="toast.message"
+          :class="`${background(toast.type)} ${textColor(toast.type)}`"
+          class="relative w-80 cursor-pointer break-words rounded-lg px-4 py-3 text-sm font-medium shadow-lg transition-all hover:shadow-xl"
+          @click="removeToast(toast.id)"
+        >
+          <div class="pr-6">
+            {{ toast.message }}
+          </div>
+          <!-- Close button -->
+          <button
+            @click.stop="removeToast(toast.id)"
+            class="absolute right-2 top-2 text-current opacity-70 transition-opacity hover:opacity-100"
+          >
+            ×
+          </button>
         </div>
+        <!-- END: TOAST ITEM -->
       </div>
-      <!-- END: TOAST ITEM -->
-    </div>
+    </TransitionGroup>
     <!-- END: TOAST LIST -->
   </div>
-  <!-- BEGIN: TOAST COMPONENT ROOT ELEMENT -->
+  <!-- END: TOAST COMPONENT ROOT ELEMENT -->
 </template>
 
-<script>
-export default {
-  name: 'ToastComponent',
-  computed: {
-    toasts() {
-      return this.$store.getters['toast/toasts'];
-    },
-  },
-  methods: {
-    background(variant) {
-      const variants = {
-        error: 'bg-red-300',
-        success: 'bg-green-300',
-        info: 'bg-blue-300',
-        warning: 'bg-yellow-300',
-      };
-      return variants[variant];
-    },
-    textColor(variant) {
-      const variants = {
-        error: 'text-red-700',
-        success: 'text-green-700',
-        info: 'text-blue-700',
-        warning: 'text-yellow-700',
-      };
-      return variants[variant];
-    },
-  },
-};
+<script setup lang="ts">
+  const toastStore = useToastStore()
+
+  const toasts = computed(() => toastStore.toasts)
+
+  const removeToast = (id: string) => {
+    toastStore.removeToast(id)
+  }
+
+  const background = (variant: string) => {
+    const variants: Record<string, string> = {
+      error: 'bg-red-100 border border-red-300',
+      success: 'bg-green-100 border border-green-300',
+      info: 'bg-blue-100 border border-blue-300',
+      warning: 'bg-yellow-100 border border-yellow-300',
+    }
+    return variants[variant]
+  }
+
+  const textColor = (variant: string) => {
+    const variants: Record<string, string> = {
+      error: 'text-red-800',
+      success: 'text-green-800',
+      info: 'text-blue-800',
+      warning: 'text-yellow-800',
+    }
+    return variants[variant]
+  }
 </script>
+
+<style scoped>
+  .toast-enter-active,
+  .toast-leave-active {
+    transition: all 0.3s ease;
+  }
+
+  .toast-enter-from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  .toast-leave-to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  .toast-move {
+    transition: transform 0.3s ease;
+  }
+</style>

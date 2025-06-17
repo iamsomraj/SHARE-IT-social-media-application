@@ -32,6 +32,7 @@
 
       <!-- BEGIN: POST SECTION -->
       <StoryItem
+        v-if="selectedPost && selectedStory && postAuthor"
         :selectedPost="selectedPost"
         :selectedStory="selectedStory"
         :postContent="postContent"
@@ -45,77 +46,86 @@
   </div>
 </template>
 
-<script>
-import CrossIcon from '../../assets/CrossIcon.vue';
-import StoryItem from './StoryItem.vue';
+<script setup lang="ts">
+  import CrossIcon from '../../assets/CrossIcon.vue'
+  import StoryItem from './StoryItem.vue'
+  import type { Post } from '~/types/auth'
+  import { useAuthStore } from '~/stores/auth'
 
-export default {
-  name: 'StoryItemScreen',
-  data() {
-    return {
-      loadingPercentage: 0,
-    };
-  },
-  props: {
-    posts: {
-      type: Array,
-      required: true,
-    },
-    selectedId: {
-      type: Number,
-      required: true,
-    },
-  },
-  mounted() {
-    const body = document.querySelector('body');
-    body.style.overflow = 'hidden';
-    this.setTimer();
-  },
-  beforeDestroy() {
-    const body = document.querySelector('body');
-    body.style.overflow = 'auto';
-  },
-  computed: {
-    loggedInUserUUID() {
-      return this.$store.getters['auth/uuid'];
-    },
-    selectedPost() {
-      return this.posts.find((post) => post.id === this.selectedId);
-    },
-    selectedStory() {
-      return this.selectedPost.post_stories.find((record) => {
-        return record.creator.uuid === this.loggedInUserUUID;
-      });
-    },
-    postContent() {
-      return this.selectedPost.content;
-    },
-    postAuthor() {
-      return this.selectedPost.creator;
-    },
-    isLiked() {
-      return this.selectedPost.post_likes?.some(
-        (likeRecord) => likeRecord?.creator?.uuid === this.loggedInUserUUID
-      );
-    },
-  },
-  methods: {
-    setTimer() {
-      const time = 50;
-      let i = 0;
-      const interval = setInterval(() => {
-        i++;
-        this.loadingPercentage = i;
-        if (i >= 100) {
-          clearInterval(interval);
-          this.$emit('dismiss');
-          return;
-        }
-      }, time);
-    },
-  },
-  emits: ['dismiss'],
-  components: { CrossIcon, StoryItem },
-};
+  interface Props {
+    posts: readonly Post[]
+    selectedId: string | null
+  }
+
+  const props = defineProps<Props>()
+
+  const emit = defineEmits<{
+    dismiss: []
+  }>()
+
+  const authStore = useAuthStore()
+  const loadingPercentage = ref(0)
+
+  const loggedInUserUUID = computed(() => authStore.uuid)
+
+  const selectedPost = computed(() => {
+    const post = props.posts.find(post => post.uuid === props.selectedId)
+    return post
+  })
+
+  const selectedStory = computed(() => {
+    if (!selectedPost.value?.post_stories?.length) return null
+    const story = selectedPost.value.post_stories[0]
+    return story
+  })
+
+  const postContent = computed(() => {
+    const content = selectedPost.value?.content || ''
+    return content
+  })
+
+  const postAuthor = computed(() => {
+    const author = selectedPost.value?.creator
+    return author
+  })
+
+  const isLiked = computed(() => {
+    return (
+      selectedPost.value?.post_likes?.some(
+        likeRecord =>
+          likeRecord?.creator?.uuid === loggedInUserUUID.value ||
+          likeRecord?.person?.uuid === loggedInUserUUID.value
+      ) || false
+    )
+  })
+
+  const setTimer = () => {
+    const time = 50
+    let i = 0
+    const interval = setInterval(() => {
+      i++
+      loadingPercentage.value = i
+      if (i >= 100) {
+        clearInterval(interval)
+        emit('dismiss')
+        return
+      }
+    }, time)
+  }
+
+  onMounted(() => {
+    const body = document.querySelector('body')
+    if (body) {
+      body.style.overflow = 'hidden'
+    }
+    setTimer()
+  })
+
+  onBeforeUnmount(() => {
+    const body = document.querySelector('body')
+    if (body) {
+      body.style.overflow = 'auto'
+    }
+  })
 </script>
 0

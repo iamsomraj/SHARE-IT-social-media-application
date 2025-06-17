@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const PersonService = require("../../services/Person/PersonService.js");
+const HTTP_CODES = require('../../utils/constants/http-codes.js');
+const { PERSON_SUCCESS_MESSAGES } = require('../../utils/constants/messages.js');
 
 /**
  * @description FETCHES DETAILS OF THE LOGGED IN USER

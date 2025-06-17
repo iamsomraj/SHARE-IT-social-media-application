@@ -92,7 +92,7 @@ class PostService extends RootService {
    * @route POST /api/v1/posts/add-story/:post_uuid
    * @access private
    */
-  async addStory(user: Person, post_uuid: string): Promise<void> {
+  async addStory(user: Person, post_uuid: string): Promise<PostsModel> {
     /* BEGIN: VALIDATIONS */
     if (!post_uuid) {
       this.raiseError(
@@ -143,6 +143,14 @@ class PostService extends RootService {
       .where('post_id', postRecord.id)
       .increment('story_count', 1);
     /* END: DATABASE OPERATIONS */
+
+    /* FETCH AND RETURN UPDATED POST DATA */
+    const updatedPost = await PostsModel.getPostDetails(post_uuid);
+    if (!updatedPost) {
+      this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
+    }
+
+    return updatedPost;
   }
 
   /**
@@ -152,7 +160,7 @@ class PostService extends RootService {
    * @route POST /api/v1/posts/remove-story/:post_uuid
    * @access private
    */
-  async removeStory(user: Person, post_uuid: string): Promise<void> {
+  async removeStory(user: Person, post_uuid: string): Promise<PostsModel> {
     /* BEGIN: VALIDATIONS */
     if (!post_uuid) {
       this.raiseError(
@@ -194,6 +202,14 @@ class PostService extends RootService {
       .where('post_id', postRecord.id)
       .decrement('story_count', 1);
     /* END: DATABASE OPERATIONS */
+
+    /* FETCH AND RETURN UPDATED POST DATA */
+    const updatedPost = await PostsModel.getPostDetails(post_uuid);
+    if (!updatedPost) {
+      this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
+    }
+
+    return updatedPost;
   }
 
   /**

@@ -243,8 +243,18 @@ class PersonService extends RootService {
     const personProfile = await PersonsModel.query()
       .findOne({ uuid })
       .where('is_deleted', false)
-      .modify('defaultSelects')
-      .withGraphFetched('[person_stats, person_followers, person_followings]');
+      .select(
+        'id',
+        'uuid',
+        'name',
+        'email',
+        'created_at',
+        'updated_at',
+        'is_deleted',
+      )
+      .withGraphFetched(
+        '[person_stats, person_followers, person_followings, person_posts.[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]]',
+      );
 
     if (!personProfile) {
       this.raiseError(

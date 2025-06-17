@@ -28,7 +28,7 @@ export const unfollowPerson = asyncHandler(
     res.status(HTTP_CODES.OK).json({
       state: true,
       data: result,
-      message: PERSON_SUCCESS_MESSAGES.FOLLOW_SUCCESS,
+      message: PERSON_SUCCESS_MESSAGES.UNFOLLOW_SUCCESS,
     });
   },
 );

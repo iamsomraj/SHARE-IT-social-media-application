@@ -5,7 +5,7 @@ import { generateToken, validateHash, hash } from '@/utils/helpers';
 import RootService from '@/services/Root/RootService';
 import { HTTP_CODES } from '@/utils/constants/http-codes';
 import { PERSON_ERROR_MESSAGES } from '@/utils/constants/messages';
-import { Person, AuthResponse } from '@/types';
+import { Person, AuthResponse, PersonWithStats } from '@/types';
 import {
   validateWithZod,
   ZodLoginSchema,
@@ -273,7 +273,10 @@ class PersonService extends RootService {
    * @route POST /api/v1/persons/follow/:uuid
    * @access private
    */
-  async followPerson(user: Person, uuid: string): Promise<void> {
+  async followPerson(
+    user: Person,
+    uuid: string,
+  ): Promise<PersonWithStats | undefined> {
     /* BEGIN: VALIDATIONS */
     if (!uuid) {
       this.raiseError(
@@ -320,6 +323,23 @@ class PersonService extends RootService {
       updated_by: user.id,
     });
     /* END: CREATE FOLLOW RELATIONSHIP */
+
+    /* BEGIN: UPDATE STATS FOR BOTH USERS */
+    await this.updatePersonStats(personToFollow.id); // Update followed person's stats
+    await this.updatePersonStats(user.id); // Update follower's stats
+    /* END: UPDATE STATS FOR BOTH USERS */
+
+    /* BEGIN: FETCH UPDATED PERSON DETAILS */
+    const updatedPersonDetails =
+      await PersonsModel.getPersonDetailsByUUID(uuid);
+    /* END: FETCH UPDATED PERSON DETAILS */
+
+    /* BEGIN: UPDATE PERSON STATS */
+    await this.updatePersonStats(user.id);
+    await this.updatePersonStats(personToFollow.id);
+    /* END: UPDATE PERSON STATS */
+
+    return updatedPersonDetails;
   }
 
   /**
@@ -329,7 +349,10 @@ class PersonService extends RootService {
    * @route POST /api/v1/persons/unfollow/:uuid
    * @access private
    */
-  async unfollowPerson(user: Person, uuid: string): Promise<void> {
+  async unfollowPerson(
+    user: Person,
+    uuid: string,
+  ): Promise<PersonWithStats | undefined> {
     /* BEGIN: VALIDATIONS */
     if (!uuid) {
       this.raiseError(
@@ -367,6 +390,23 @@ class PersonService extends RootService {
       followed_id: personToUnfollow.id,
     });
     /* END: REMOVE FOLLOW RELATIONSHIP */
+
+    /* BEGIN: UPDATE STATS FOR BOTH USERS */
+    await this.updatePersonStats(personToUnfollow.id); // Update unfollowed person's stats
+    await this.updatePersonStats(user.id); // Update unfollower's stats
+    /* END: UPDATE STATS FOR BOTH USERS */
+
+    /* BEGIN: FETCH UPDATED PERSON DETAILS */
+    const updatedPersonDetails =
+      await PersonsModel.getPersonDetailsByUUID(uuid);
+    /* END: FETCH UPDATED PERSON DETAILS */
+
+    /* BEGIN: UPDATE PERSON STATS */
+    await this.updatePersonStats(user.id);
+    await this.updatePersonStats(personToUnfollow.id);
+    /* END: UPDATE PERSON STATS */
+
+    return updatedPersonDetails;
   }
 
   /**
@@ -398,6 +438,50 @@ class PersonService extends RootService {
       .modify('orderByLatest');
 
     return searchResults;
+  }
+
+  /**
+   * @description Update follower and following counts after follow/unfollow operations
+   * @param personId - ID of the person whose stats need to be updated
+   */
+  private async updatePersonStats(personId: number): Promise<void> {
+    // Get current counts from the database
+    const followerCountResult = await FollowingsModel.query()
+      .where('followed_id', personId)
+      .count('* as count')
+      .first();
+
+    const followingCountResult = await FollowingsModel.query()
+      .where('follower_id', personId)
+      .count('* as count')
+      .first();
+
+    // Get current post count
+    const PostsModel = require('@/models/PostsModel').default;
+    const postCountResult = await PostsModel.query()
+      .where('created_by', personId)
+      .where('is_deleted', false)
+      .count('* as count')
+      .first();
+
+    const followerCount = Number((followerCountResult as any)?.count || 0);
+    const followingCount = Number((followingCountResult as any)?.count || 0);
+    const postCount = Number((postCountResult as any)?.count || 0);
+
+    // Update or create person stats record
+    await PersonStatsModel.query()
+      .insertAndFetch({
+        person_id: personId,
+        follower_count: followerCount,
+        following_count: followingCount,
+        post_count: postCount,
+      })
+      .onConflict('person_id')
+      .merge({
+        follower_count: followerCount,
+        following_count: followingCount,
+        post_count: postCount,
+      });
   }
 }
 

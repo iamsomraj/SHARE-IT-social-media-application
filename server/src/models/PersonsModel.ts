@@ -222,6 +222,28 @@ export class PersonsModel extends Model implements Person {
       is_deleted: false,
     });
   }
+
+  /**
+   * @description fetches details of a person by UUID
+   * @param uuid - person's uuid
+   */
+  static async getPersonDetailsByUUID(
+    uuid: string,
+  ): Promise<PersonWithStats | undefined> {
+    const personRecord = await PersonsModel.query()
+      .findOne({ uuid, is_deleted: false })
+      .withGraphFetched(
+        '[person_followers, person_followings, person_stats, person_posts.[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]]',
+      );
+
+    if (personRecord) {
+      // Remove password from response
+      const { password, ...personWithoutPassword } = personRecord;
+      return personWithoutPassword as PersonWithStats;
+    }
+
+    return undefined;
+  }
 }
 
 export default PersonsModel;

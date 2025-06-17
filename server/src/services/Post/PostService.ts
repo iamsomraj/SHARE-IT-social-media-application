@@ -312,7 +312,7 @@ class PostService extends RootService {
       .whereIn('created_by', followingPersonIds)
       .where('is_deleted', false)
       .withGraphFetched(
-        '[creator(defaultSelects), post_likes(orderByLatest).creator(defaultSelects), post_stats]',
+        '[creator(defaultSelects), post_likes(orderByLatest).creator(defaultSelects), post_stats, post_stories.creator(defaultSelects)]',
       )
       .modify('orderByLatest');
 

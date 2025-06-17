@@ -37,9 +37,9 @@
 </template>
 
 <script setup lang="ts">
-  import PostCardHeader from './PostCardHeader.vue'
-  import PostCardBody from './PostCardBody.vue'
-  import PostCardFooter from './PostCardFooter.vue'
+  import PostCardHeader from '~/components/posts/post-card/PostCardHeader.vue'
+  import PostCardBody from '~/components/posts/post-card/PostCardBody.vue'
+  import PostCardFooter from '~/components/posts/post-card/PostCardFooter.vue'
   import type { PostLike, PostStory } from '~/types/auth'
   import { useAuthStore } from '~/stores/auth'
 

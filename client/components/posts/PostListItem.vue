@@ -70,8 +70,8 @@
 </template>
 
 <script setup lang="ts">
-  import ProfilePicture from '../persons/ProfilePicture.vue'
-  import HeartIcon from './../assets/HeartIcon.vue'
+  import ProfilePicture from '~/components/persons/ProfilePicture.vue'
+  import HeartIcon from '~/components/assets/HeartIcon.vue'
   import type { PostLike } from '~/types/auth'
   import { useAuthStore } from '~/stores/auth'
 

@@ -47,8 +47,8 @@
 </template>
 
 <script setup lang="ts">
-  import CrossIcon from '../../assets/CrossIcon.vue'
-  import StoryItem from './StoryItem.vue'
+  import CrossIcon from '~/components/assets/CrossIcon.vue'
+  import StoryItem from '~/components/posts/stories/StoryItem.vue'
   import type { Post } from '~/types/auth'
   import { useAuthStore } from '~/stores/auth'
 

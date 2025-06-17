@@ -27,9 +27,10 @@
 </template>
 
 <script setup lang="ts">
-  import ProfileBody from '../../components/persons/ProfileBody.vue'
-  import ProfileHeader from '../../components/persons/ProfileHeader.vue'
-  import PostCreator from '../../components/posts/PostCreator.vue'
+  import ProfileBody from '~/components/persons/ProfileBody.vue'
+  import ProfileHeader from '~/components/persons/ProfileHeader.vue'
+  // import PostCreator from '~/components/posts/PostCreator.vue'
+  import PostCreator from '~/components/posts/PostCreator.vue'
   import { MESSAGES } from '~/utils/constants'
   import { useAuthStore } from '~/stores/auth'
   import { usePostStore } from '~/stores/post'

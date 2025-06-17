@@ -47,8 +47,8 @@
 
 <script setup lang="ts">
   import { MESSAGES } from '~/utils/constants'
-  import StoryIcon from '../../assets/StoryIcon.vue'
-  import ProfilePicture from '../../persons/ProfilePicture.vue'
+  import StoryIcon from '~/components/assets/StoryIcon.vue'
+  import ProfilePicture from '~/components/persons/ProfilePicture.vue'
   import type { PostStory } from '~/types/auth'
   import { useAuthStore } from '~/stores/auth'
   import { usePostStore } from '~/stores/post'

@@ -25,8 +25,8 @@
 </template>
 
 <script setup lang="ts">
-  import ProfileBody from '../../components/persons/ProfileBody.vue'
-  import ProfileHeader from '../../components/persons/ProfileHeader.vue'
+  import ProfileBody from '~/components/persons/ProfileBody.vue'
+  import ProfileHeader from '~/components/persons/ProfileHeader.vue'
   import { MESSAGES } from '~/utils/constants'
   import { useAuthStore } from '~/stores/auth'
   import { useProfileStore } from '~/stores/profile'

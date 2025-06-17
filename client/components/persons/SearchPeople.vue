@@ -39,9 +39,9 @@
 
 <script setup lang="ts">
   import { MESSAGES } from '~/utils/constants'
-  import LoaderIcon from '../assets/LoaderIcon.vue'
-  import SearchIcon from '../assets/SearchIcon.vue'
-  import PersonItem from './PersonItem.vue'
+  import LoaderIcon from '~/components/assets/LoaderIcon.vue'
+  import SearchIcon from '~/components/assets/SearchIcon.vue'
+  import PersonItem from '~/components/persons/PersonItem.vue'
   import { useToastStore } from '~/stores/toast'
   import { useSearchStore } from '~/stores/search'
 

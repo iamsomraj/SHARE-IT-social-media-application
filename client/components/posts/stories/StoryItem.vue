@@ -70,11 +70,11 @@
 </template>
 
 <script setup lang="ts">
-  import { getTime } from '~/utils/helpers'
-  import ProfilePicture from '../../persons/ProfilePicture.vue'
-  import ViewIcon from '../../assets/ViewIcon.vue'
-  import HeartIcon from '../../assets/HeartIcon.vue'
-  import type { Post, PostStory, User } from '~/types/auth'
+  import HeartIcon from '~/components/assets/HeartIcon.vue'
+import ViewIcon from '~/components/assets/ViewIcon.vue'
+import ProfilePicture from '~/components/persons/ProfilePicture.vue'
+import type { Post, PostStory, User } from '~/types/auth'
+import { getTime } from '~/utils/helpers'
 
   interface Props {
     selectedPost: Post

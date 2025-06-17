@@ -42,26 +42,37 @@
   import PostCreator from '../../components/posts/PostCreator.vue'
   import { MESSAGES } from '~/utils/constants'
   import { useAuthStore } from '~/stores/auth'
+  import { usePostStore } from '~/stores/post'
   import { useToastStore } from '~/stores/toast'
 
   const authStore = useAuthStore()
+  const postStore = usePostStore()
   const toastStore = useToastStore()
 
   const loading = ref(false)
 
   const user = computed(() => authStore.user)
 
-  // Fetch profile data on component mount
   onMounted(async () => {
-    // For self profile, we might not need to fetch again if data is already in store
-    // But if needed, you can add a getSelfProfile action to the auth store
+    const uuid = authStore.uuid
+    const token = authStore.token
+    if (uuid && token) {
+      await authStore.getSelfProfile({ uuid, token })
+    }
   })
 
-  const onPostLike = async () => {
+  const onPostLike = async (uuid: string) => {
     loading.value = true
     try {
-      // Using auth store's existing likePost if available, otherwise implement in auth store
-      toastStore.success(MESSAGES.POST_LIKE_SUCCESS)
+      const token = authStore.token
+      if (token) {
+        await postStore.likePost({ postUUID: uuid, token })
+        const userUuid = authStore.uuid
+        if (userUuid) {
+          await authStore.getSelfProfile({ uuid: userUuid, token })
+        }
+        toastStore.success(MESSAGES.POST_LIKE_SUCCESS)
+      }
     } catch {
       toastStore.error(MESSAGES.POST_LIKE_FAILURE)
     } finally {
@@ -69,11 +80,18 @@
     }
   }
 
-  const onPostUnlike = async () => {
+  const onPostUnlike = async (uuid: string) => {
     loading.value = true
     try {
-      // Using auth store's existing unlikePost if available, otherwise implement in auth store
-      toastStore.success(MESSAGES.POST_UNLIKE_SUCCESS)
+      const token = authStore.token
+      if (token) {
+        await postStore.unlikePost({ postUUID: uuid, token })
+        const userUuid = authStore.uuid
+        if (userUuid) {
+          await authStore.getSelfProfile({ uuid: userUuid, token })
+        }
+        toastStore.success(MESSAGES.POST_UNLIKE_SUCCESS)
+      }
     } catch {
       toastStore.error(MESSAGES.POST_UNLIKE_FAILURE)
     } finally {

@@ -221,7 +221,7 @@ class PersonService extends RootService {
     const userData = await PersonsModel.query()
       .findById(user.id)
       .modify('defaultSelects')
-      .withGraphFetched('[person_stats, person_followers, person_following]');
+      .withGraphFetched('[person_stats, person_followers, person_followings]');
 
     if (!userData) {
       this.raiseError(
@@ -244,7 +244,7 @@ class PersonService extends RootService {
       .findOne({ uuid })
       .where('is_deleted', false)
       .modify('defaultSelects')
-      .withGraphFetched('[person_stats, person_followers, person_following]');
+      .withGraphFetched('[person_stats, person_followers, person_followings]');
 
     if (!personProfile) {
       this.raiseError(

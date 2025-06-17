@@ -325,7 +325,7 @@ class PostService extends RootService {
    * @route GET /api/v1/posts/stories
    * @access private
    */
-  async getStories(user: Person): Promise<StoriesModel[]> {
+  async getStories(user: Person): Promise<PostsModel[]> {
     /* GET ALL FOLLOWING IDS */
     const followingIds = await FollowingsModel.query()
       .where('follower_id', user.id)
@@ -334,15 +334,20 @@ class PostService extends RootService {
     const followingPersonIds = followingIds.map(follow => follow.followed_id);
     followingPersonIds.push(user.id); // Include user's own stories
 
-    /* GET STORIES FROM FOLLOWING PEOPLE */
-    const stories = await StoriesModel.query()
-      .whereIn('person_id', followingPersonIds)
+    /* GET POSTS WITH STORIES FROM FOLLOWING PEOPLE */
+    const postsWithStories = await PostsModel.query()
+      .whereExists(
+        StoriesModel.query()
+          .whereColumn('post_id', 'posts.id')
+          .whereIn('person_id', followingPersonIds),
+      )
+      .where('is_deleted', false)
       .withGraphFetched(
-        '[post.creator(defaultSelects), creator(defaultSelects)]',
+        '[creator(defaultSelects), post_stats, post_stories.creator(defaultSelects), post_likes.creator(defaultSelects)]',
       )
       .modify('orderByLatest');
 
-    return stories;
+    return postsWithStories;
   }
 
   /**

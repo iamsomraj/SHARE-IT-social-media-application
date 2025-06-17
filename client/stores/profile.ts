@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { User, ApiResponse } from '~/types/auth'
+import type { User, Post, ApiResponse } from '~/types/auth'
 import { getApiEndpoints } from '~/utils/constants'
 
 export interface Profile extends User {}
@@ -39,6 +39,16 @@ export const useProfileStore = defineStore('profile', () => {
 
   const clearProfile = () => {
     profile.value = defaultProfile
+  }
+
+  const updatePost = (updatedPost: Post) => {
+    profile.value.person_posts = profile.value.person_posts.map(postItem => {
+      if (Number(postItem?.id) === Number(updatedPost?.id)) {
+        return { ...updatedPost }
+      } else {
+        return postItem
+      }
+    })
   }
 
   const getUserProfile = async ({
@@ -129,14 +139,28 @@ export const useProfileStore = defineStore('profile', () => {
   }): Promise<ApiResponse<unknown>> => {
     try {
       const endpoints = getApiEndpoints()
-      const response = await $fetch(`${endpoints.FOLLOW}/${uuid}`, {
+      const responseData = await $fetch<{
+        data: User
+        state: boolean
+        message: string
+      }>(`${endpoints.FOLLOW}/${uuid}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
 
-      return { success: true, data: response, state: true }
+      if (responseData.state && responseData.data) {
+        // Update auth store user data like in old store
+        const authStore = useAuthStore()
+        authStore.setUser(responseData.data)
+      }
+
+      return {
+        success: responseData.state,
+        data: responseData.data,
+        message: responseData.message,
+      }
     } catch (error: unknown) {
       return {
         success: false,
@@ -155,14 +179,28 @@ export const useProfileStore = defineStore('profile', () => {
   }): Promise<ApiResponse<unknown>> => {
     try {
       const endpoints = getApiEndpoints()
-      const response = await $fetch(`${endpoints.UNFOLLOW}/${uuid}`, {
+      const responseData = await $fetch<{
+        data: User
+        state: boolean
+        message: string
+      }>(`${endpoints.UNFOLLOW}/${uuid}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
 
-      return { success: true, data: response, state: true }
+      if (responseData.state && responseData.data) {
+        // Update auth store user data like in old store
+        const authStore = useAuthStore()
+        authStore.setUser(responseData.data)
+      }
+
+      return {
+        success: responseData.state,
+        data: responseData.data,
+        message: responseData.message,
+      }
     } catch (error: unknown) {
       return {
         success: false,
@@ -182,7 +220,7 @@ export const useProfileStore = defineStore('profile', () => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{
-        data: unknown
+        data: Post
         state: boolean
         message: string
       }>(`${endpoints.ADD_LIKE}/${postUUID}`, {
@@ -193,8 +231,8 @@ export const useProfileStore = defineStore('profile', () => {
       })
 
       if (responseData.state) {
-        // Refresh the profile to get updated posts
-        await getUserProfile({ uuid: profile.value.uuid, token })
+        // Update the specific post like in old store
+        updatePost(responseData.data)
       }
 
       return {
@@ -220,7 +258,7 @@ export const useProfileStore = defineStore('profile', () => {
     try {
       const endpoints = getApiEndpoints()
       const responseData = await $fetch<{
-        data: unknown
+        data: Post
         state: boolean
         message: string
       }>(`${endpoints.REMOVE_LIKE}/${postUUID}`, {
@@ -231,8 +269,8 @@ export const useProfileStore = defineStore('profile', () => {
       })
 
       if (responseData.state) {
-        // Refresh the profile to get updated posts
-        await getUserProfile({ uuid: profile.value.uuid, token })
+        // Update the specific post like in old store
+        updatePost(responseData.data)
       }
 
       return {

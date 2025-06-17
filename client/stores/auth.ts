@@ -45,10 +45,18 @@ export const useAuthStore = defineStore('auth', () => {
   // Actions
   const setUser = (userData: User) => {
     user.value = userData
+    // Store in localStorage
+    if (process.client) {
+      localStorage.setItem('share-it-user', JSON.stringify(userData))
+    }
   }
 
   const setToken = (tokenValue: string) => {
     token.value = tokenValue
+    // Store in localStorage
+    if (process.client) {
+      localStorage.setItem('share-it-token', tokenValue)
+    }
   }
 
   const clear = () => {
@@ -76,12 +84,6 @@ export const useAuthStore = defineStore('auth', () => {
         const { token: userToken, ...userData } = response.data
         setToken(userToken)
         setUser(userData)
-
-        // Store in localStorage
-        if (process.client) {
-          localStorage.setItem('share-it-token', userToken)
-          localStorage.setItem('share-it-user', JSON.stringify(userData))
-        }
 
         return { success: true, data: response, state: true }
       }
@@ -111,15 +113,6 @@ export const useAuthStore = defineStore('auth', () => {
         const { token: userToken, ...userDataWithoutToken } = response.data
         setToken(userToken)
         setUser(userDataWithoutToken)
-
-        // Store in localStorage
-        if (process.client) {
-          localStorage.setItem('share-it-token', userToken)
-          localStorage.setItem(
-            'share-it-user',
-            JSON.stringify(userDataWithoutToken)
-          )
-        }
 
         return { success: true, data: response, state: true }
       }
@@ -200,6 +193,45 @@ export const useAuthStore = defineStore('auth', () => {
     user.value.person_stats.post_count += 1
   }
 
+  const getSelfProfile = async ({
+    uuid,
+    token,
+  }: {
+    uuid: string
+    token: string
+  }): Promise<ApiResponse<User>> => {
+    try {
+      const endpoints = getApiEndpoints()
+      const responseData = await $fetch<{
+        data: User
+        state: boolean
+        message: string
+      }>(`${endpoints.GET_USER_PROFILE}/${uuid}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (responseData.state && responseData.data) {
+        setUser(responseData.data)
+      } else {
+        clear()
+      }
+
+      return {
+        success: responseData.state,
+        data: responseData.data,
+        message: responseData.message,
+      }
+    } catch (error: unknown) {
+      clear()
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to get profile',
+      }
+    }
+  }
+
   return {
     // State
     user,
@@ -224,5 +256,6 @@ export const useAuthStore = defineStore('auth', () => {
     addPost,
     updatePost,
     incrementPostCount,
+    getSelfProfile,
   }
 })

@@ -65,7 +65,11 @@ export const usePostStore = defineStore('post', () => {
       }
 
       const endpoints = getApiEndpoints()
-      const data = await $fetch(endpoints.CREATE_POST, {
+      const responseData = await $fetch<{
+        data: Post
+        state: boolean
+        message: string
+      }>(endpoints.CREATE_POST, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -73,7 +77,18 @@ export const usePostStore = defineStore('post', () => {
         body: { content },
       })
 
-      return { success: true, data, state: true }
+      if (responseData.state && responseData.data) {
+        // Update auth store like in old store
+        const authStore = useAuthStore()
+        authStore.addPost(responseData.data)
+        authStore.incrementPostCount()
+      }
+
+      return {
+        success: responseData.state,
+        data: responseData.data,
+        state: responseData.state,
+      }
     } catch (error: unknown) {
       return {
         success: false,

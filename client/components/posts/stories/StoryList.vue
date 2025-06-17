@@ -55,14 +55,15 @@
     stories: readonly Post[]
   }
 
-  defineProps<Props>()
+  const props = defineProps<Props>()
 
   const showCard = ref(false)
   const selectedId = ref<string | null>(null)
 
   const onPostClick = (id: number) => {
     showCard.value = true
-    selectedId.value = id.toString()
+    const post = props.stories.find((story: Post) => story.id === id)
+    selectedId.value = post?.uuid || null
   }
 
   const onCardClose = () => {

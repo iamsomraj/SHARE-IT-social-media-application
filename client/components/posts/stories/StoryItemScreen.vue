@@ -69,19 +69,25 @@
   const loggedInUserUUID = computed(() => authStore.uuid)
 
   const selectedPost = computed(() => {
-    return props.posts.find(post => post.uuid === props.selectedId)
+    const post = props.posts.find(post => post.uuid === props.selectedId)
+    return post
   })
 
   const selectedStory = computed(() => {
-    if (!selectedPost.value?.post_stories) return null
-    return selectedPost.value.post_stories.find(record => {
-      return record.creator?.uuid === loggedInUserUUID.value
-    })
+    if (!selectedPost.value?.post_stories?.length) return null
+    const story = selectedPost.value.post_stories[0]
+    return story
   })
 
-  const postContent = computed(() => selectedPost.value?.content || '')
+  const postContent = computed(() => {
+    const content = selectedPost.value?.content || ''
+    return content
+  })
 
-  const postAuthor = computed(() => selectedPost.value?.creator)
+  const postAuthor = computed(() => {
+    const author = selectedPost.value?.creator
+    return author
+  })
 
   const isLiked = computed(() => {
     return (

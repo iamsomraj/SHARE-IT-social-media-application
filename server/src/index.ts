@@ -7,10 +7,10 @@ import colors from 'colors';
 import './config/db-config';
 
 // Import middleware
-import { pageNotFound, errorHandler } from './middlewares/error';
+import { pageNotFound, errorHandler } from '@/middlewares/error';
 
 // Import constants
-import { IS_PRODUCTION } from './utils/constants/environments';
+import { IS_PRODUCTION } from '@/utils/constants/environments';
 
 // Load environment variables
 dotenv.config();

@@ -27,7 +27,6 @@
   const onPostCreate = async () => {
     loading.value = true
     const content = postInput.value
-    postInput.value = ''
 
     try {
       const res = await postStore.createPost({
@@ -36,15 +35,14 @@
       })
       loading.value = false
 
-      if (res.state) {
+      if (res.success) {
+        postInput.value = ''
         toastStore.success(MESSAGES.POST_CREATE_SUCCESS)
       } else {
-        postInput.value = content
         toastStore.error(MESSAGES.POST_CREATE_FAILURE)
       }
     } catch {
       loading.value = false
-      postInput.value = content
       toastStore.error(MESSAGES.POST_CREATE_FAILURE)
     }
   }

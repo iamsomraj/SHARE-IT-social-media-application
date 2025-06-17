@@ -1,7 +1,7 @@
 {
-  "name": "share-it-social-media-application",
+  "name": "share-it-server",
   "version": "2.1.0",
-  "description": "A modern social media application backend built with Node.js, Express, and TypeScript",
+  "description": "Backend server for SHARE-IT - A modern, full-stack social media platform built with Express.js, TypeScript, and PostgreSQL",
   "main": "dist/index.js",
   "type": "commonjs",
   "engines": {
@@ -34,10 +34,28 @@
     "typescript",
     "postgresql",
     "objection",
-    "knex"
+    "knex",
+    "jwt",
+    "zod",
+    "backend",
+    "api",
+    "rest-api"
   ],
-  "author": "Somraj Mukherjee",
-  "license": "ISC",
+  "author": {
+    "name": "Somraj Mukherjee",
+    "email": "iamsomraj@gmail.com",
+    "url": "https://github.com/iamsomraj"
+  },
+  "license": "MIT",
+  "homepage": "https://share-it-social.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamsomraj/SHARE-IT-social-media-application.git",
+    "directory": "server"
+  },
+  "bugs": {
+    "url": "https://github.com/iamsomraj/SHARE-IT-social-media-application/issues"
+  },
   "dependencies": {
     "colors": "^1.4.0",
     "cors": "^2.8.5",

@@ -7,10 +7,10 @@ import colors from 'colors';
 import './config/db-config';
 
 // Import middleware
-import { pageNotFound, errorHandler } from '@/middlewares/error';
+import { pageNotFound, errorHandler } from './middlewares/error';
 
 // Import constants
-import { IS_PRODUCTION } from '@/utils/constants/environments';
+import { IS_PRODUCTION } from './utils/constants/environments';
 
 // Load environment variables
 dotenv.config();
@@ -47,9 +47,9 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
 });
 
 // Import routes
-import personRoutes from '@/routes/personRoutes';
-import postRoutes from '@/routes/postRoutes';
-import authRoutes from '@/routes/authRoutes';
+import personRoutes from './routes/personRoutes';
+import postRoutes from './routes/postRoutes';
+import authRoutes from './routes/authRoutes';
 
 // Define API routes
 app.use('/api/v1/persons', personRoutes);
@@ -87,30 +87,32 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 // Start server
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   const server = app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(
-    colors.bold.blue.bgWhite(
-      `🚀 Server running in ${NODE_ENV} mode on port ${PORT}`,
-    ),
-  );
-  // eslint-disable-next-line no-console
-  console.log(colors.bold.green(`📱 API URL: http://localhost:${PORT}`));
-  // eslint-disable-next-line no-console
-  console.log(
-    colors.bold.cyan(`🏥 Health Check: http://localhost:${PORT}/health`),
-  );
-});
-
-const gracefulShutdown = (signal: string) => {
-  // eslint-disable-next-line no-console
-  console.log(colors.yellow(`${signal} signal received. Closing HTTP server.`));
-
-  server.close(() => {
     // eslint-disable-next-line no-console
-    console.log(colors.green('HTTP server closed successfully.'));
-    process.exit(0);
+    console.log(
+      colors.bold.blue.bgWhite(
+        `🚀 Server running in ${NODE_ENV} mode on port ${PORT}`,
+      ),
+    );
+    // eslint-disable-next-line no-console
+    console.log(colors.bold.green(`📱 API URL: http://localhost:${PORT}`));
+    // eslint-disable-next-line no-console
+    console.log(
+      colors.bold.cyan(`🏥 Health Check: http://localhost:${PORT}/health`),
+    );
   });
-};
+
+  const gracefulShutdown = (signal: string) => {
+    // eslint-disable-next-line no-console
+    console.log(
+      colors.yellow(`${signal} signal received. Closing HTTP server.`),
+    );
+
+    server.close(() => {
+      // eslint-disable-next-line no-console
+      console.log(colors.green('HTTP server closed successfully.'));
+      process.exit(0);
+    });
+  };
 
   // Graceful shutdown handlers
   process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));

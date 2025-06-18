@@ -10,8 +10,8 @@
   },
   "scripts": {
     "start": "node dist/index.js",
-    "build": "rm -rf dist && tsc && tsc-alias",
-    "ts.check": "tsc --project tsconfig.json",
+    "build": "rm -rf dist && npx tsc && npx tsc-alias",
+    "ts.check": "npx tsc --project tsconfig.json",
     "add-build": "git add dist",
     "dev": "tsx watch src/index.ts",
     "server": "npm run data-import && npm run dev",
@@ -23,7 +23,7 @@
     "lint:fix": "eslint src/**/*.ts --fix --cache",
     "prettier": "prettier --check \"src/**/*.{ts,js,json}\"",
     "prettier:fix": "prettier --write \"src/**/*.{ts,js,json}\"",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "npx tsc --noEmit",
     "format": "npm run prettier:fix && npm run lint:fix",
     "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -67,6 +67,8 @@
     "knex": "^3.1.0",
     "objection": "^3.1.5",
     "pg": "^8.13.1",
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.7.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -85,9 +87,7 @@
     "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
-    "tsc-alias": "^1.8.16",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "tsx": "^4.19.2"
   },
   "pre-commit": [
     "ts.check",

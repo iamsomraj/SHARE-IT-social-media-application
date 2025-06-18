@@ -11,6 +11,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "rm -rf dist && npx tsc && npx tsc-alias",
+    "vercel-build": "npm run build",
     "ts.check": "npx tsc --project tsconfig.json",
     "add-build": "git add dist",
     "dev": "tsx watch src/index.ts",

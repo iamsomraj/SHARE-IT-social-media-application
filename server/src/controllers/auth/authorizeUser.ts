@@ -23,4 +23,4 @@ const authorizeUser = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export default authorizeUser;
+export { authorizeUser };

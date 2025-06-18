@@ -1,3 +1,1 @@
-import authorizeUser from './authorizeUser';
-
-export { authorizeUser };
+export { authorizeUser } from './authorizeUser';

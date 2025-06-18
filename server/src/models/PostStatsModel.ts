@@ -50,7 +50,7 @@ class PostStatsModel extends Model implements PostStats {
 
   static override get relationMappings(): RelationMappings {
     // TODO: Import PostsModel when circular dependency is resolved
-    const PostsModel = require('./PostsModel').default;
+    const PostsModel = require('@/models/PostsModel').default;
     return {
       post: {
         relation: Model.BelongsToOneRelation,

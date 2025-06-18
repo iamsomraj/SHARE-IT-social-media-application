@@ -80,11 +80,11 @@ export class PersonsModel extends Model implements Person {
 
   static override get relationMappings(): RelationMappings {
     // Import other models dynamically to avoid circular dependencies
-    const FollowingsModel = require('./FollowingsModel').default;
-    const PostsModel = require('./PostsModel').default;
-    const PostLikesModel = require('./PostLikesModel').default;
-    const PersonStatsModel = require('./PersonStatsModel').default;
-    const StoriesModel = require('./StoriesModel').default;
+    const FollowingsModel = require('@/models/FollowingsModel').default;
+    const PostsModel = require('@/models/PostsModel').default;
+    const PostLikesModel = require('@/models/PostLikesModel').default;
+    const PersonStatsModel = require('@/models/PersonStatsModel').default;
+    const StoriesModel = require('@/models/StoriesModel').default;
 
     return {
       person_followers: {

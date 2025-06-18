@@ -1,10 +1,10 @@
 import { Model, RelationMappings, QueryBuilder } from 'objection';
 import { randomUUID } from 'crypto';
 import { Post } from '@/types';
-import PersonsModel from './PersonsModel';
-import PostLikesModel from './PostLikesModel';
-import PostStatsModel from './PostStatsModel';
-import StoriesModel from './StoriesModel';
+import PersonsModel from '@/models/PersonsModel';
+import PostLikesModel from '@/models/PostLikesModel';
+import PostStatsModel from '@/models/PostStatsModel';
+import StoriesModel from '@/models/StoriesModel';
 
 class PostsModel extends Model implements Post {
   id!: number;

@@ -1,6 +1,6 @@
 import { Model, RelationMappings } from 'objection';
 import { PersonStats } from '@/types';
-import PersonsModel from './PersonsModel';
+import PersonsModel from '@/models/PersonsModel';
 
 class PersonStatsModel extends Model implements PersonStats {
   id!: number;

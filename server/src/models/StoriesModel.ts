@@ -1,7 +1,7 @@
 import { Model, RelationMappings, QueryBuilder } from 'objection';
 import { PostStory } from '@/types';
-import PostsModel from './PostsModel';
-import PersonsModel from './PersonsModel';
+import PostsModel from '@/models/PostsModel';
+import PersonsModel from '@/models/PersonsModel';
 
 class StoriesModel extends Model implements PostStory {
   id!: number;

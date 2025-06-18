@@ -3,15 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const RootService_1 = __importDefault(require("@/services/Root/RootService"));
-const http_codes_1 = require("@/utils/constants/http-codes");
-const messages_1 = require("@/utils/constants/messages");
-const FollowingsModel_1 = __importDefault(require("@/models/FollowingsModel"));
-const PostsModel_1 = __importDefault(require("@/models/PostsModel"));
-const PostStatsModel_1 = __importDefault(require("@/models/PostStatsModel"));
-const PersonStatsModel_1 = __importDefault(require("@/models/PersonStatsModel"));
-const PostLikesModel_1 = __importDefault(require("@/models/PostLikesModel"));
-const StoriesModel_1 = __importDefault(require("@/models/StoriesModel"));
+const RootService_1 = __importDefault(require("../Root/RootService"));
+const http_codes_1 = require("../../utils/constants/http-codes");
+const messages_1 = require("../../utils/constants/messages");
+const FollowingsModel_1 = __importDefault(require("../../models/FollowingsModel"));
+const PostsModel_1 = __importDefault(require("../../models/PostsModel"));
+const PostStatsModel_1 = __importDefault(require("../../models/PostStatsModel"));
+const PersonStatsModel_1 = __importDefault(require("../../models/PersonStatsModel"));
+const PostLikesModel_1 = __importDefault(require("../../models/PostLikesModel"));
+const StoriesModel_1 = __importDefault(require("../../models/StoriesModel"));
 class PostService extends RootService_1.default {
     constructor() {
         super();

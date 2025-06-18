@@ -1,6 +1,6 @@
-import PersonsModel from '@/models/PersonsModel';
-import RootService from '@/services/Root/RootService';
-import { Person, AuthResponse } from '@/types';
+import PersonsModel from '../../models/PersonsModel';
+import RootService from '../Root/RootService';
+import { Person, AuthResponse } from '../../types';
 declare class PersonService extends RootService {
     constructor();
     private validateLoginInput;

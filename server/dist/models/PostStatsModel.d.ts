@@ -1,5 +1,5 @@
 import { Model, RelationMappings } from 'objection';
-import { PostStats } from '@/types';
+import { PostStats } from '../types';
 declare class PostStatsModel extends Model implements PostStats {
     id: number;
     post_id: number;

@@ -1,6 +1,6 @@
-import RootService from '@/services/Root/RootService';
-import PostsModel from '@/models/PostsModel';
-import { Person } from '@/types';
+import RootService from '../Root/RootService';
+import PostsModel from '../../models/PostsModel';
+import { Person } from '../../types';
 declare class PostService extends RootService {
     constructor();
     addLike(user: Person, uuid: string): Promise<PostsModel>;

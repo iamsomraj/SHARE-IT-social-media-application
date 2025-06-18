@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const PersonsModel_1 = __importDefault(require("@/models/PersonsModel"));
-const PersonStatsModel_1 = __importDefault(require("@/models/PersonStatsModel"));
-const FollowingsModel_1 = __importDefault(require("@/models/FollowingsModel"));
-const helpers_1 = require("@/utils/helpers");
-const RootService_1 = __importDefault(require("@/services/Root/RootService"));
-const http_codes_1 = require("@/utils/constants/http-codes");
-const messages_1 = require("@/utils/constants/messages");
-const schemas_1 = require("@/schemas");
+const PersonsModel_1 = __importDefault(require("../../models/PersonsModel"));
+const PersonStatsModel_1 = __importDefault(require("../../models/PersonStatsModel"));
+const FollowingsModel_1 = __importDefault(require("../../models/FollowingsModel"));
+const helpers_1 = require("../../utils/helpers");
+const RootService_1 = __importDefault(require("../Root/RootService"));
+const http_codes_1 = require("../../utils/constants/http-codes");
+const messages_1 = require("../../utils/constants/messages");
+const schemas_1 = require("../../schemas");
 class PersonService extends RootService_1.default {
     constructor() {
         super();
@@ -201,7 +201,7 @@ class PersonService extends RootService_1.default {
             .where('follower_id', personId)
             .count('* as count')
             .first();
-        const PostsModel = require('@/models/PostsModel').default;
+        const PostsModel = require('../../models/PostsModel').default;
         const postCountResult = await PostsModel.query()
             .where('created_by', personId)
             .where('is_deleted', false)

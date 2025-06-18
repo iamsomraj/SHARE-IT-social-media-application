@@ -1,5 +1,5 @@
 import { Model, RelationMappings, QueryBuilder } from 'objection';
-import { PostLikeModel } from '@/types';
+import { PostLikeModel } from '../types';
 declare class PostLikesModel extends Model implements PostLikeModel {
     id: number;
     post_id: number;

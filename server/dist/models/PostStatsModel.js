@@ -41,7 +41,7 @@ class PostStatsModel extends objection_1.Model {
         };
     }
     static get relationMappings() {
-        const PostsModel = require('@/models/PostsModel').default;
+        const PostsModel = require('./PostsModel').default;
         return {
             post: {
                 relation: objection_1.Model.BelongsToOneRelation,

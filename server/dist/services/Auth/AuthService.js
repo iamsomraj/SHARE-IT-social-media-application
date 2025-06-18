@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const messages_1 = require("@/utils/constants/messages");
-const RootService_1 = __importDefault(require("@/services/Root/RootService"));
-const http_codes_1 = require("@/utils/constants/http-codes");
-const PersonsModel_1 = __importDefault(require("@/models/PersonsModel"));
+const messages_1 = require("../../utils/constants/messages");
+const RootService_1 = __importDefault(require("../Root/RootService"));
+const http_codes_1 = require("../../utils/constants/http-codes");
+const PersonsModel_1 = __importDefault(require("../../models/PersonsModel"));
 class AuthService extends RootService_1.default {
     constructor() {
         super();

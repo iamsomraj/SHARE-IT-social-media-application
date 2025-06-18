@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const objection_1 = require("objection");
 const crypto_1 = require("crypto");
-const PersonsModel_1 = __importDefault(require("@/models/PersonsModel"));
-const PostLikesModel_1 = __importDefault(require("@/models/PostLikesModel"));
-const PostStatsModel_1 = __importDefault(require("@/models/PostStatsModel"));
-const StoriesModel_1 = __importDefault(require("@/models/StoriesModel"));
+const PersonsModel_1 = __importDefault(require("./PersonsModel"));
+const PostLikesModel_1 = __importDefault(require("./PostLikesModel"));
+const PostStatsModel_1 = __importDefault(require("./PostStatsModel"));
+const StoriesModel_1 = __importDefault(require("./StoriesModel"));
 class PostsModel extends objection_1.Model {
     id;
     uuid;

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.person_data = void 0;
-const helpers_1 = require("@/utils/helpers");
+const helpers_1 = require("../helpers");
 const person_data = [
     {
         name: 'Sheldon Cooper',

@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.safeValidateWithZod = exports.validateWithZod = exports.validateZodParams = exports.validateZodQuery = exports.validateZodRequest = exports.ZodSearchQuerySchema = exports.ZodPaginationQuerySchema = exports.ZodPostUuidParamsSchema = exports.ZodUuidParamsSchema = exports.ZodPaginationSchema = exports.ZodUuidSchema = exports.ZodFetchPostSchema = exports.ZodPostActionSchema = exports.ZodCreatePostSchema = exports.ZodUserDataSchema = exports.ZodSearchPersonSchema = exports.ZodFollowSchema = exports.ZodRegisterSchema = exports.ZodLoginSchema = exports.ZodAuthSchema = void 0;
 const zod_1 = require("zod");
-const http_codes_1 = require("@/utils/constants/http-codes");
-const messages_1 = require("@/utils/constants/messages");
+const http_codes_1 = require("../utils/constants/http-codes");
+const messages_1 = require("../utils/constants/messages");
 exports.ZodAuthSchema = zod_1.z.object({
     uuid: zod_1.z.string().uuid('Invalid UUID format'),
     token: zod_1.z.string().min(1, 'Token is required'),

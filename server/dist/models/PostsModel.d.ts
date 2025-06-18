@@ -1,5 +1,5 @@
 import { Model, RelationMappings, QueryBuilder } from 'objection';
-import { Post } from '@/types';
+import { Post } from '../types';
 declare class PostsModel extends Model implements Post {
     id: number;
     uuid: string;

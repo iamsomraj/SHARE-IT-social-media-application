@@ -66,11 +66,11 @@ class PersonsModel extends objection_1.Model {
         };
     }
     static get relationMappings() {
-        const FollowingsModel = require('@/models/FollowingsModel').default;
-        const PostsModel = require('@/models/PostsModel').default;
-        const PostLikesModel = require('@/models/PostLikesModel').default;
-        const PersonStatsModel = require('@/models/PersonStatsModel').default;
-        const StoriesModel = require('@/models/StoriesModel').default;
+        const FollowingsModel = require('./FollowingsModel').default;
+        const PostsModel = require('./PostsModel').default;
+        const PostLikesModel = require('./PostLikesModel').default;
+        const PersonStatsModel = require('./PersonStatsModel').default;
+        const StoriesModel = require('./StoriesModel').default;
         return {
             person_followers: {
                 relation: objection_1.Model.HasManyRelation,

@@ -1,5 +1,5 @@
 import { Model, QueryBuilder, RelationMappings } from 'objection';
-import type { Person, PersonWithStats } from '@/types';
+import type { Person, PersonWithStats } from '../types';
 export declare class PersonsModel extends Model implements Person {
     id: number;
     uuid: string;

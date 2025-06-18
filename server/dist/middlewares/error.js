@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorHandler = exports.pageNotFound = void 0;
-const environments_1 = require("@/utils/constants/environments");
-const http_codes_1 = require("@/utils/constants/http-codes");
-const messages_1 = require("@/utils/constants/messages");
+const environments_1 = require("../utils/constants/environments");
+const http_codes_1 = require("../utils/constants/http-codes");
+const messages_1 = require("../utils/constants/messages");
 const pageNotFound = (req, res, next) => {
     const error = new Error(`Page Not Found - ${req.originalUrl}`);
     res.status(404);

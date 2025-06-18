@@ -3,15 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const db_config_1 = __importDefault(require("@/config/db-config"));
-const FollowingsModel_1 = __importDefault(require("@/models/FollowingsModel"));
-const PostLikesModel_1 = __importDefault(require("@/models/PostLikesModel"));
-const PersonsModel_1 = __importDefault(require("@/models/PersonsModel"));
-const PostStatsModel_1 = __importDefault(require("@/models/PostStatsModel"));
-const PostsModel_1 = __importDefault(require("@/models/PostsModel"));
-const PersonStatsModel_1 = __importDefault(require("@/models/PersonStatsModel"));
-const StoriesModel_1 = __importDefault(require("@/models/StoriesModel"));
-const dummy_data_1 = require("@/utils/data/dummy-data");
+const db_config_1 = __importDefault(require("../config/db-config"));
+const FollowingsModel_1 = __importDefault(require("../models/FollowingsModel"));
+const PostLikesModel_1 = __importDefault(require("../models/PostLikesModel"));
+const PersonsModel_1 = __importDefault(require("../models/PersonsModel"));
+const PostStatsModel_1 = __importDefault(require("../models/PostStatsModel"));
+const PostsModel_1 = __importDefault(require("../models/PostsModel"));
+const PersonStatsModel_1 = __importDefault(require("../models/PersonStatsModel"));
+const StoriesModel_1 = __importDefault(require("../models/StoriesModel"));
+const dummy_data_1 = require("../utils/data/dummy-data");
 require("colors");
 async function main() {
     try {

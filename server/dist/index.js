@@ -9,8 +9,8 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const colors_1 = __importDefault(require("colors"));
 require("./config/db-config");
-const error_1 = require("@/middlewares/error");
-const environments_1 = require("@/utils/constants/environments");
+const error_1 = require("./middlewares/error");
+const environments_1 = require("./utils/constants/environments");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 exports.app = app;
@@ -33,9 +33,9 @@ app.use((_req, res, next) => {
     res.header('X-XSS-Protection', '1; mode=block');
     next();
 });
-const personRoutes_1 = __importDefault(require("@/routes/personRoutes"));
-const postRoutes_1 = __importDefault(require("@/routes/postRoutes"));
-const authRoutes_1 = __importDefault(require("@/routes/authRoutes"));
+const personRoutes_1 = __importDefault(require("./routes/personRoutes"));
+const postRoutes_1 = __importDefault(require("./routes/postRoutes"));
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 app.use('/api/v1/persons', personRoutes_1.default);
 app.use('/api/v1/posts', postRoutes_1.default);
 app.use('/api/v1/auth', authRoutes_1.default);
@@ -59,27 +59,33 @@ app.use(error_1.pageNotFound);
 app.use(error_1.errorHandler);
 const PORT = parseInt(process.env.PORT || '4500', 10);
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const server = app.listen(PORT, () => {
-    console.log(colors_1.default.bold.blue.bgWhite(`🚀 Server running in ${NODE_ENV} mode on port ${PORT}`));
-    console.log(colors_1.default.bold.green(`📱 API URL: http://localhost:${PORT}`));
-    console.log(colors_1.default.bold.cyan(`🏥 Health Check: http://localhost:${PORT}/health`));
-});
-const gracefulShutdown = (signal) => {
-    console.log(colors_1.default.yellow(`${signal} signal received. Closing HTTP server.`));
-    server.close(() => {
-        console.log(colors_1.default.green('HTTP server closed successfully.'));
-        process.exit(0);
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    const server = app.listen(PORT, () => {
+        console.log(colors_1.default.bold.blue.bgWhite(`🚀 Server running in ${NODE_ENV} mode on port ${PORT}`));
+        console.log(colors_1.default.bold.green(`📱 API URL: http://localhost:${PORT}`));
+        console.log(colors_1.default.bold.cyan(`🏥 Health Check: http://localhost:${PORT}/health`));
     });
-};
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+    const gracefulShutdown = (signal) => {
+        console.log(colors_1.default.yellow(`${signal} signal received. Closing HTTP server.`));
+        server.close(() => {
+            console.log(colors_1.default.green('HTTP server closed successfully.'));
+            process.exit(0);
+        });
+    };
+    process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+    process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+}
 process.on('uncaughtException', (error) => {
     console.error(colors_1.default.red('Uncaught Exception:'), error.message);
-    process.exit(1);
+    if (!process.env.VERCEL) {
+        process.exit(1);
+    }
 });
 process.on('unhandledRejection', (reason) => {
     console.error(colors_1.default.red('Unhandled Promise Rejection:'), reason);
-    process.exit(1);
+    if (!process.env.VERCEL) {
+        process.exit(1);
+    }
 });
 exports.default = app;
 //# sourceMappingURL=index.js.map

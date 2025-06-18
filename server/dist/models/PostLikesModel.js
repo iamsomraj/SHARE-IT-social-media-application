@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const objection_1 = require("objection");
-const PostsModel_1 = __importDefault(require("@/models/PostsModel"));
-const PersonsModel_1 = __importDefault(require("@/models/PersonsModel"));
+const PostsModel_1 = __importDefault(require("./PostsModel"));
+const PersonsModel_1 = __importDefault(require("./PersonsModel"));
 class PostLikesModel extends objection_1.Model {
     id;
     post_id;

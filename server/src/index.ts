@@ -85,7 +85,8 @@ const PORT = parseInt(process.env.PORT || '4500', 10);
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Start server
-const server = app.listen(PORT, () => {
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  const server = app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(
     colors.bold.blue.bgWhite(
@@ -111,21 +112,26 @@ const gracefulShutdown = (signal: string) => {
   });
 };
 
-// Graceful shutdown handlers
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+  // Graceful shutdown handlers
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+  process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+}
 
-// Error handlers
+// Error handlers (these work in both environments)
 process.on('uncaughtException', (error: Error) => {
   // eslint-disable-next-line no-console
   console.error(colors.red('Uncaught Exception:'), error.message);
-  process.exit(1);
+  if (!process.env.VERCEL) {
+    process.exit(1);
+  }
 });
 
 process.on('unhandledRejection', (reason: unknown) => {
   // eslint-disable-next-line no-console
   console.error(colors.red('Unhandled Promise Rejection:'), reason);
-  process.exit(1);
+  if (!process.env.VERCEL) {
+    process.exit(1);
+  }
 });
 
 export { app };

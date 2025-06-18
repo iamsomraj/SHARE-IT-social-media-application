@@ -1,7 +1,7 @@
 import { Request } from 'express';
-import RootService from '@/services/Root/RootService';
-import { TokenPayload } from '@/types';
-import PersonsModel from '@/models/PersonsModel';
+import RootService from '../Root/RootService';
+import { TokenPayload } from '../../types';
+import PersonsModel from '../../models/PersonsModel';
 declare class AuthService extends RootService {
     constructor();
     verifyTokenAndReturnDecoded(req: Request): TokenPayload;

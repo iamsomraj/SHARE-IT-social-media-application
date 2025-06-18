@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "node dist/index.js",
-    "build": "rimraf dist && tsc && tsc-alias",
+    "build": "rm -rf dist && tsc && tsc-alias",
     "ts.check": "tsc --project tsconfig.json",
     "add-build": "git add dist",
     "dev": "tsx watch src/index.ts",
@@ -25,7 +25,7 @@
     "prettier:fix": "prettier --write \"src/**/*.{ts,js,json}\"",
     "typecheck": "tsc --noEmit",
     "format": "npm run prettier:fix && npm run lint:fix",
-    "clean": "rimraf dist",
+    "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

@@ -1,0 +1,2 @@
+export declare const getFeedPosts: import("express").RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>;
+//# sourceMappingURL=getFeedPosts.d.ts.map

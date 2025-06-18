@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.search = exports.getUserData = exports.getPeople = exports.unfollowPerson = exports.followPerson = exports.getPersonProfile = exports.loginPerson = exports.registerPerson = void 0;
+var registerPerson_1 = require("./registerPerson");
+Object.defineProperty(exports, "registerPerson", { enumerable: true, get: function () { return registerPerson_1.registerPerson; } });
+var loginPerson_1 = require("./loginPerson");
+Object.defineProperty(exports, "loginPerson", { enumerable: true, get: function () { return loginPerson_1.loginPerson; } });
+var getPersonProfile_1 = require("./getPersonProfile");
+Object.defineProperty(exports, "getPersonProfile", { enumerable: true, get: function () { return getPersonProfile_1.getPersonProfile; } });
+var followPerson_1 = require("./followPerson");
+Object.defineProperty(exports, "followPerson", { enumerable: true, get: function () { return followPerson_1.followPerson; } });
+var unfollowPerson_1 = require("./unfollowPerson");
+Object.defineProperty(exports, "unfollowPerson", { enumerable: true, get: function () { return unfollowPerson_1.unfollowPerson; } });
+var getPeople_1 = require("./getPeople");
+Object.defineProperty(exports, "getPeople", { enumerable: true, get: function () { return getPeople_1.getPeople; } });
+var getUserData_1 = require("./getUserData");
+Object.defineProperty(exports, "getUserData", { enumerable: true, get: function () { return getUserData_1.getUserData; } });
+var search_1 = require("./search");
+Object.defineProperty(exports, "search", { enumerable: true, get: function () { return search_1.search; } });
+//# sourceMappingURL=index.js.map

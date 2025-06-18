@@ -79,7 +79,8 @@ typings/
 .output
 
 # Nuxt generate
-dist
+client/dist
+client/.output
 
 # Nitro build output
 .nitro

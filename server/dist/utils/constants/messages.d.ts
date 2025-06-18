@@ -1,0 +1,78 @@
+export declare const PERSON_SUCCESS_MESSAGES: Readonly<{
+    readonly LOGIN_SUCCESS: "Login successful!";
+    readonly FETCH_POST_SUCCESS: "Post fetched successfully!";
+    readonly FETCH_PEOPLE_SUCCESS: "People fetched successfully!";
+    readonly FETCH_USER_DATA_SUCCESS: "User data fetched successfully!";
+    readonly REGISTER_SUCCESS: "Registration successful!";
+    readonly FETCH_PERSON_PROFILE_SUCCESS: "Person profile fetched successfully!";
+    readonly FOLLOW_SUCCESS: "Follow successful!";
+    readonly SEARCH_SUCCESS: "Search successful!";
+    readonly UNFOLLOW_SUCCESS: "Unfollow successful!";
+    readonly LIKE_SUCCESS: "Like successful!";
+    readonly UNLIKE_SUCCESS: "Unlike successful!";
+    readonly STORY_SUCCESS: "Story added successful!";
+    readonly UNSTORY_SUCCESS: "Story removed successful!";
+    readonly POST_SUCCESS: "Post successful!";
+    readonly PERSON_FEED_SUCCESS: "Person feed fetched successfully!";
+    readonly PERSON_FAVOURTIE_SUCCESS: "Story fetched successfully!";
+}>;
+export declare const PERSON_ERROR_MESSAGES: Readonly<{
+    readonly LOGIN_FAILURE: "Login failed!";
+    readonly PROVIDE_SEARCH_QUERY: "Provide search query!";
+    readonly PROVIDE_EMAIL_AND_PASSWORD: "Please, provide Email and Password!";
+    readonly PROVIDE_NAME_EMAIL_AND_PASSWORD: "Please, provide Name, Email and Password!";
+    readonly INVALID_NAME_EMAIL_OR_PASSWORD: "Name, Email or Password has less than 4 characters!";
+    readonly PROVIDE_USER_DETAILS: "Please, provide User details!";
+    readonly INVALID_USER_DETAILS: "Invalid User details!";
+    readonly USER_NOT_FOUND: "User not found!";
+    readonly USER_ALREADY_EXISTS: "User already exists!";
+    readonly REGISTER_FAILURE: "Registration failed!";
+    readonly FOLLOWING_FAILURE: "Following failed!";
+    readonly SEARCH_FAILURE: "Search failed due to an issue!";
+    readonly UNFOLLOWING_FAILURE: "Unfollowing failed!";
+    readonly LIKE_FAILURE: "Like failed!";
+    readonly UNLIKE_FAILURE: "Unlike failed!";
+    readonly STORY_FAILURE: "Story add failed!";
+    readonly UNSTORY_FAILURE: "Story removal failed!";
+    readonly FETCH_USER_DATA_FAILURE: "Fetching user data failed!";
+    readonly REGISTER_USER_FAILURE: "Registration failed!";
+    readonly POST_FAILURE: "Post failed!";
+    readonly UPDATE_PERSON_STATS_FAILURE: "Updating person stats failed!";
+    readonly NO_PEOPLE_FOUND: "No people found!";
+    readonly WRONG_CREDENTIALS: "Wrong Credentials!";
+    readonly POST_FEED_FAILURE: "Post feed failed!";
+    readonly POST_STORY_FAILURE: "Story addition failed!";
+    readonly REGISTER_PERSON_FAILURE: "Person registration failed!";
+    readonly PROVIDE_PERSON_UUID: "Please provide person UUID!";
+    readonly CANNOT_FOLLOW_YOURSELF: "You cannot follow yourself!";
+    readonly ALREADY_FOLLOWING: "You are already following this person!";
+    readonly NOT_FOLLOWING: "You are not following this person!";
+}>;
+export declare const AUTH_SUCCESS_MESSAGES: Readonly<{
+    readonly AUTHORIZE_SUCCESS: "Authorization successful!";
+}>;
+export declare const AUTH_ERROR_MESSAGES: Readonly<{
+    readonly NO_AUTHORIZATION_HEADER: "No Authorization Header provided!";
+    readonly INVALID_TOKEN_FORMAT: "Invalid token format!";
+    readonly INVALID_TOKEN: "No token found!";
+    readonly PROVIDE_TOKEN: "Please, provide token!";
+    readonly VERIFY_TOKEN_FAILURE: "Token verification failed!";
+    readonly UUID_MISMATCH: "Credentials mismatch!";
+    readonly ID_MISMATCH: "Credentials mismatch!";
+}>;
+export declare const GENERAL_MESSAGES: Readonly<{
+    readonly SOMETHING_WENT_WRONG: "Something went wrong!";
+    readonly INVALID_REQUEST: "Invalid request!";
+    readonly UNAUTHORIZED: "Unauthorized access!";
+    readonly FORBIDDEN: "Access forbidden!";
+    readonly PROVIDE_POST_DETAILS: "Please provide post details!";
+    readonly POST_NOT_FOUND: "Post not found!";
+    readonly ALREADY_LIKED_POST: "You have already liked this post!";
+    readonly ALREADY_STORY_POST: "You have already added this post to your story!";
+    readonly NOT_STORY_YET: "You have not added this post to your story yet!";
+    readonly NOT_LIKED_YET: "You have not liked this post yet!";
+    readonly NOT_FOUND: "Resource not found!";
+    readonly VALIDATION_ERROR: "Validation error!";
+    readonly SERVER_ERROR: "Internal server error!";
+}>;
+//# sourceMappingURL=messages.d.ts.map

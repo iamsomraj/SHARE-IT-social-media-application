@@ -82,7 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
         body: credentials,
       })
 
-      if (response?.state && response?.data && response?.data.token) {
+      if (response?.state && response?.data?.token) {
         const { token: userToken, ...userData } = response.data
         setToken(userToken)
         setUser(userData)
@@ -90,11 +90,15 @@ export const useAuthStore = defineStore('auth', () => {
         return { success: true, data: response, state: true }
       }
 
-      return { success: false, error: 'Invalid response format' }
+      return {
+        success: false,
+        error: response?.message || 'Invalid credentials',
+      }
     } catch (error: unknown) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Login failed',
+        error:
+          error instanceof Error ? error.message : 'Network error during login',
       }
     }
   }

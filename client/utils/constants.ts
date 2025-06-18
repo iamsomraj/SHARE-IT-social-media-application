@@ -44,7 +44,7 @@ const AUTH_BASE = `/auth`
 export const getApiBaseUrl = (): string => {
   if (import.meta.client) {
     const config = useRuntimeConfig()
-    return process.env.NODE_ENV === 'production'
+    return config.public.nodeEnv === 'production'
       ? config.public.prodApi
       : config.public.devApi
   }

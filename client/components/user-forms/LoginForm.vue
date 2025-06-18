@@ -1,30 +1,21 @@
 <template>
-  <!-- BEGIN: LOGIN FORM COMPONENT -->
   <div
     class="mx-4 flex h-full w-full flex-col items-center justify-center space-y-4 p-4 md:w-1/2 md:flex-row md:space-x-4 md:divide-x md:dark:divide-slate-600"
   >
-    <!-- BEGIN: FORM LOGO -->
     <form-logo />
-    <!-- END: FORM LOGO -->
 
-    <!-- BEGIN: LOGIN FORM -->
     <form
       class="flex w-full flex-col items-center justify-center space-y-4 p-4"
       @submit.prevent="onSubmit"
     >
-      <!-- BEGIN: LOGIN FORM EMAIL -->
       <div class="w-full">
         <text-input placeholder="Email" type="email" v-model="email" />
       </div>
-      <!-- END: LOGIN FORM EMAIL -->
 
-      <!-- BEGIN: LOGIN FORM PASSWORD -->
       <div class="w-full">
         <text-input placeholder="Password" type="password" v-model="password" />
       </div>
-      <!-- END: LOGIN FORM PASSWORD -->
 
-      <!-- BEGIN: LOGIN FORM SUBMIT -->
       <div class="w-full space-y-2">
         <primary-button
           @onClick="onSubmit"
@@ -42,11 +33,8 @@
           <template #default>Register</template>
         </secondary-button>
       </div>
-      <!-- END: LOGIN FORM SUBMIT -->
     </form>
-    <!-- END: LOGIN FORM -->
   </div>
-  <!-- END: LOGIN FORM COMPONENT -->
 </template>
 
 <script setup lang="ts">

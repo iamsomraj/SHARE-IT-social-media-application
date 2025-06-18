@@ -1,10 +1,30 @@
 // Utility functions with improved type safety
 import type { RequestHeaders } from '~/types/common'
 
+const getShortTimeFormat = (
+  seconds: number,
+  minutes: number,
+  hours: number,
+  days: number,
+  months: number,
+  years: number
+): string => {
+  if (seconds < 60) {
+    const rounded = Math.floor(seconds / 10) * 10
+    return rounded === 0 ? '10 s' : `${Math.min(rounded, 50)} s`
+  }
+  if (minutes < 60) return `${minutes} m`
+  if (hours < 24) return `${hours} h`
+  if (days < 30) return `${days} d`
+  if (months < 12) return `${months} mo`
+  return `${years} y`
+}
+
 export const getTime = (time: string | Date, short = false): string => {
   const date = new Date(time)
   const now = new Date()
   const diff = now.getTime() - date.getTime()
+
   const seconds = Math.floor(diff / 1000)
   const minutes = Math.floor(seconds / 60)
   const hours = Math.floor(minutes / 60)
@@ -13,34 +33,7 @@ export const getTime = (time: string | Date, short = false): string => {
   const years = Math.floor(months / 12)
 
   if (short) {
-    if (seconds < 60) {
-      if (seconds < 10) {
-        return '10 s'
-      }
-      if (seconds < 20) {
-        return '20 s'
-      }
-      if (seconds < 30) {
-        return '30 s'
-      }
-      if (seconds < 40) {
-        return '40 s'
-      }
-      if (seconds < 50) {
-        return '50 s'
-      }
-      return '1 m'
-    } else if (minutes < 60) {
-      return `${minutes} m`
-    } else if (hours < 24) {
-      return `${hours} h`
-    } else if (days < 30) {
-      return `${days} d`
-    } else if (months < 12) {
-      return `${months} mo`
-    } else {
-      return `${years} y`
-    }
+    return getShortTimeFormat(seconds, minutes, hours, days, months, years)
   }
 
   if (seconds < 60) {

@@ -100,48 +100,33 @@ const server = app.listen(PORT, () => {
   );
 });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
+const gracefulShutdown = (signal: string) => {
   // eslint-disable-next-line no-console
-  console.log(colors.yellow('SIGTERM signal received. Closing HTTP server.'));
+  console.log(colors.yellow(`${signal} signal received. Closing HTTP server.`));
+
   server.close(() => {
     // eslint-disable-next-line no-console
-    console.log(colors.red('HTTP server closed.'));
+    console.log(colors.green('HTTP server closed successfully.'));
     process.exit(0);
   });
-});
+};
 
-process.on('SIGINT', () => {
-  // eslint-disable-next-line no-console
-  console.log(colors.yellow('SIGINT signal received. Closing HTTP server.'));
-  server.close(() => {
-    // eslint-disable-next-line no-console
-    console.log(colors.red('HTTP server closed.'));
-    process.exit(0);
-  });
-});
+// Graceful shutdown handlers
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
-// Handle uncaught exceptions
+// Error handlers
 process.on('uncaughtException', (error: Error) => {
   // eslint-disable-next-line no-console
-  console.error(colors.red('Uncaught Exception:'), error);
+  console.error(colors.red('Uncaught Exception:'), error.message);
   process.exit(1);
 });
 
-// Handle unhandled promise rejections
-process.on(
-  'unhandledRejection',
-  (reason: unknown, promise: Promise<unknown>) => {
-    // eslint-disable-next-line no-console
-    console.error(
-      colors.red('Unhandled Rejection at:'),
-      promise,
-      'reason:',
-      reason,
-    );
-    process.exit(1);
-  },
-);
+process.on('unhandledRejection', (reason: unknown) => {
+  // eslint-disable-next-line no-console
+  console.error(colors.red('Unhandled Promise Rejection:'), reason);
+  process.exit(1);
+});
 
 export { app };
 export default app;

@@ -66,28 +66,50 @@ export const validateHash = (
 
 /**
  * Generate a JWT token
- * @param id - The user ID to include in the token
+ * @param userId - The user ID to include in the token
  * @returns The JWT token
  */
-export const generateToken = (id: number): string => {
-  const payload = { id };
+export const generateToken = (userId: number): string => {
+  const payload = { id: userId };
 
   return jwt.sign(payload, JWT_SECRET, {
     expiresIn: '7d',
+    issuer: 'share-it-api',
+    audience: 'share-it-client',
   });
 };
+
+interface TokenPayload {
+  id: number;
+  iat?: number;
+  exp?: number;
+  iss?: string;
+  aud?: string;
+}
 
 /**
  * Verify a JWT token
  * @param token - The token to verify
  * @returns The decoded token payload
+ * @throws {Error} When token is invalid or expired
  */
-export const verifyToken = (token: string): { id: number } => {
+export const verifyToken = (token: string): TokenPayload => {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
+    const decoded = jwt.verify(token, JWT_SECRET) as TokenPayload;
+
+    if (!decoded.id || typeof decoded.id !== 'number') {
+      throw new Error('Invalid token payload');
+    }
+
     return decoded;
   } catch (error) {
-    throw new Error('Invalid or expired token');
+    if (error instanceof jwt.JsonWebTokenError) {
+      throw new Error('Invalid token');
+    }
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new Error('Token expired');
+    }
+    throw new Error('Token verification failed');
   }
 };
 

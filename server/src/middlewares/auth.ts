@@ -4,6 +4,20 @@ import { HTTP_CODES } from '@/utils/constants/http-codes';
 import { GENERAL_MESSAGES } from '@/utils/constants/messages';
 import { CustomRequest, ApiResponse } from '@/types';
 
+const BEARER_PREFIX = 'Bearer ';
+
+const createUnauthorizedResponse = (): ApiResponse => ({
+  state: false,
+  message: GENERAL_MESSAGES.UNAUTHORIZED,
+});
+
+const extractTokenFromHeader = (authHeader?: string): string | null => {
+  if (!authHeader?.startsWith(BEARER_PREFIX)) {
+    return null;
+  }
+  return authHeader.slice(BEARER_PREFIX.length);
+};
+
 /**
  * Authentication middleware to verify JWT tokens
  */
@@ -12,37 +26,26 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction,
 ): void => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+  const token = extractTokenFromHeader(req.headers.authorization);
 
   if (!token) {
-    const result: ApiResponse = {
-      state: false,
-      message: GENERAL_MESSAGES.UNAUTHORIZED,
-    };
-    res.status(HTTP_CODES.UNAUTHORIZED).json(result);
+    res.status(HTTP_CODES.UNAUTHORIZED).json(createUnauthorizedResponse());
     return;
   }
 
   try {
-    // Verify the token
     const decoded = verifyToken(token);
 
-    // Attach user info to request
     req.user = {
       id: decoded.id,
-      uuid: '', // Will be populated by the service if needed
+      uuid: '',
       name: '',
       email: '',
     };
 
     next();
-  } catch (error) {
-    const result: ApiResponse = {
-      state: false,
-      message: GENERAL_MESSAGES.UNAUTHORIZED,
-    };
-    res.status(HTTP_CODES.UNAUTHORIZED).json(result);
+  } catch {
+    res.status(HTTP_CODES.UNAUTHORIZED).json(createUnauthorizedResponse());
   }
 };
 
@@ -54,8 +57,7 @@ export const optionalAuth = (
   _res: Response,
   next: NextFunction,
 ): void => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = extractTokenFromHeader(req.headers.authorization);
 
   if (token) {
     try {
@@ -66,9 +68,8 @@ export const optionalAuth = (
         name: '',
         email: '',
       };
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn('Invalid token in optional auth:', error);
+    } catch {
+      // Token is invalid, but we continue without user context
     }
   }
 

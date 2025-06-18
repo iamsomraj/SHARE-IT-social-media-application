@@ -37,9 +37,8 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
 
   runtimeConfig: {
-    nodeEnv: process.env.NODE_ENV || 'development',
-
     public: {
+      nodeEnv: process.env.NODE_ENV || 'development',
       devApi: process.env.DEV_API || 'http://localhost:4500',
       prodApi: process.env.PROD_API || 'https://share-it-social-api.vercel.app',
     },

@@ -30,7 +30,7 @@
     "url": "https://github.com/iamsomraj/SHARE-IT-social-media-application/issues"
   },
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "build": "nuxt build",

@@ -71,10 +71,10 @@
 
 <script setup lang="ts">
   import HeartIcon from '~/components/assets/HeartIcon.vue'
-import ViewIcon from '~/components/assets/ViewIcon.vue'
-import ProfilePicture from '~/components/persons/ProfilePicture.vue'
-import type { Post, PostStory, User } from '~/types/auth'
-import { getTime } from '~/utils/helpers'
+  import ViewIcon from '~/components/assets/ViewIcon.vue'
+  import ProfilePicture from '~/components/persons/ProfilePicture.vue'
+  import type { Post, PostStory, User } from '~/types/auth'
+  import { getTime } from '~/utils/helpers'
 
   interface Props {
     selectedPost: Post

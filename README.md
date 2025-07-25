@@ -1,3 +1,6 @@
+![SHARE-IT](./SHARE_IT.png)
+
+
 # SHARE-IT
 
 A modern, full-stack social media platform built with Nuxt 4 and Express. Connect, share, and engage with your community through posts, stories, and real-time interactions. This application showcases the power of TypeScript, Vue 3, and a robust backend architecture using Express.js and PostgreSQL.

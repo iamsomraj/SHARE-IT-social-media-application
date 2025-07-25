@@ -1,12 +1,12 @@
 {
   "name": "share-it-client",
   "version": "2.1.0",
-  "description": "Frontend client for SHARE-IT - A modern, full-stack social media platform built with Nuxt 3, Vue 3, and TypeScript",
+  "description": "Frontend client for SHARE-IT - A modern, full-stack social media platform built with Nuxt 4, Vue 3, and TypeScript",
   "proxy": "http://localhost:4500/",
   "private": true,
   "type": "module",
   "keywords": [
-    "nuxt3",
+    "nuxt4",
     "vue3",
     "typescript",
     "social-media",
@@ -28,6 +28,9 @@
   },
   "bugs": {
     "url": "https://github.com/iamsomraj/SHARE-IT-social-media-application/issues"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   },
   "scripts": {
     "build": "nuxt build",

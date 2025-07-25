@@ -1,6 +1,6 @@
 # SHARE-IT
 
-A modern, full-stack social media platform built with Nuxt 3 and Express. Connect, share, and engage with your community through posts, stories, and real-time interactions. This application showcases the power of TypeScript, Vue 3, and a robust backend architecture using Express.js and PostgreSQL.
+A modern, full-stack social media platform built with Nuxt 4 and Express. Connect, share, and engage with your community through posts, stories, and real-time interactions. This application showcases the power of TypeScript, Vue 3, and a robust backend architecture using Express.js and PostgreSQL.
 
 ## 🚀 Features
 
@@ -20,7 +20,7 @@ A modern, full-stack social media platform built with Nuxt 3 and Express. Connec
 
 ### Frontend
 
-- **Nuxt 3** - Vue.js framework
+- **Nuxt 4** - Vue.js framework
 - **Vue 3** - Progressive JavaScript framework
 - **Pinia** - State management
 - **Tailwind CSS** - Utility-first CSS framework
@@ -42,7 +42,7 @@ A modern, full-stack social media platform built with Nuxt 3 and Express. Connec
 
 ### Prerequisites
 
-- Node.js (v18+)
+- Node.js (v20.19+ or v22.12+)
 - PostgreSQL database
 - npm or yarn
 - TypeScript knowledge (recommended)
@@ -139,21 +139,51 @@ npm run format           # Run prettier + eslint fixes
 ## 📁 Project Structure
 
 ```text
-├── client/               # Nuxt 3 frontend application
-│   ├── components/       # Vue components
-│   │   ├── app-layouts/  # Header, Footer components
-│   │   ├── assets/       # Icon components
-│   │   ├── persons/      # User profile components
-│   │   ├── posts/        # Post-related components
-│   │   ├── user-forms/   # Authentication forms
-│   │   └── user-interfaces/ # Reusable UI components
-│   ├── composables/      # Vue composables
-│   ├── layouts/          # Application layouts
-│   ├── middleware/       # Route middleware
-│   ├── pages/            # Application routes
-│   ├── stores/           # Pinia state management
-│   ├── types/            # TypeScript definitions
-│   └── utils/            # Utility functions
+├── client/               # Nuxt 4 frontend application
+│   ├── app/              # Nuxt 4 application directory
+│   │   ├── app.vue       # Root Vue component
+│   │   ├── components/   # Vue components
+│   │   │   ├── app-layouts/  # Header, Footer components
+│   │   │   ├── assets/       # Icon components
+│   │   │   ├── persons/      # User profile components
+│   │   │   ├── posts/        # Post-related components
+│   │   │   ├── user-forms/   # Authentication forms
+│   │   │   └── user-interfaces/ # Reusable UI components
+│   │   ├── layouts/      # Application layouts (default, guest)
+│   │   ├── middleware/   # Route middleware (authentication)
+│   │   ├── pages/        # File-based routing
+│   │   │   ├── feed/     # Feed page
+│   │   │   ├── post/     # Individual post pages
+│   │   │   ├── profile/  # Profile pages
+│   │   │   ├── register/ # Registration page
+│   │   │   ├── search/   # Search functionality
+│   │   │   └── index.vue # Home/login page
+│   │   ├── stores/       # Pinia state management
+│   │   │   ├── auth.ts   # Authentication store
+│   │   │   ├── feed.ts   # Feed management
+│   │   │   ├── post.ts   # Post operations
+│   │   │   ├── profile.ts # Profile management
+│   │   │   ├── search.ts # Search functionality
+│   │   │   ├── theme.ts  # Theme switching
+│   │   │   └── toast.ts  # Toast notifications
+│   │   ├── types/        # TypeScript definitions
+│   │   │   ├── auth.ts   # Authentication types
+│   │   │   ├── common.ts # Common types
+│   │   │   ├── components.ts # Component types
+│   │   │   ├── constants.ts  # Constant types
+│   │   │   ├── errors.ts     # Error types
+│   │   │   ├── index.ts      # Type exports
+│   │   │   └── utils.ts      # Utility types
+│   │   └── utils/        # Utility functions
+│   │       ├── constants.ts  # Application constants
+│   │       └── helpers.ts    # Helper functions
+│   ├── static/           # Static assets (favicon, etc.)
+│   ├── eslint.config.js  # ESLint configuration
+│   ├── nuxt.config.ts    # Nuxt configuration
+│   ├── package.json      # Dependencies and scripts
+│   ├── tailwind.config.js # Tailwind CSS configuration
+│   ├── tsconfig.json     # TypeScript configuration
+│   └── vercel.json       # Vercel deployment config
 └── server/               # Express.js TypeScript backend
     ├── src/
     │   ├── config/       # Database and app configuration

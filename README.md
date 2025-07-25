@@ -7,7 +7,7 @@ A modern, full-stack social media## This project runs on **Nuxt 4.0** and follow
 - ✅ Enhanced TypeScript configuration for better development experience
 - ✅ Optimized for deployment on Vercel with Node.js 20+
 
-**Requirements**: Node.js v20.19+ or v22.12+ (required for Nuxt 4 compatibility)is project runs on **Nuxt 4.0** and follows modern development practices:atform built with Nuxt 4 and Express. Connect, share, and engage with your community through posts, stories, and real-time interactions. This application showcases the power of TypeScript, Vue 3, and a robust backend architecture using Express.js and PostgreSQL.
+This project follows modern development practices:atform built with Nuxt 4 and Express. Connect, share, and engage with your community through posts, stories, and real-time interactions. This application showcases the power of TypeScript, Vue 3, and a robust backend architecture using Express.js and PostgreSQL.
 
 ## 🚀 Features
 

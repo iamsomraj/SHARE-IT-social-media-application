@@ -1,25 +1,15 @@
 # SHARE-IT
 
-A modern, full-stack social media## This project runs on **Nuxt 4.0** and follows modern development practices:
-
-- ✅ Built with the latest Nuxt 4 architecture
-- ✅ Organized with the new `app/` directory structure
-- ✅ Enhanced TypeScript configuration for better development experience
-- ✅ Optimized for deployment on Vercel with Node.js 20+
+A modern, full-stack social media platform built with Nuxt 4 and Express. Connect, share, and engage with your community through posts, stories, and real-time interactions. This application showcases the power of TypeScript, Vue 3, and a robust backend architecture using Express.js and PostgreSQL.
 
 ## 🚀 Features
 
-- **Authentication**: Secure user registration and login with JWT tokens
-- **Content Creation**: Create and share posts with rich text content
-- **Social Features**: Like posts, follow/unfollow users, and build connections
-- **Personalized Feed**: View content from users you follow in real-time
-- **User Discovery**: Search and discover new users and their content
-- **Real-time Updates**: Dynamic content updates without page refreshes
-- **Profile Management**: Comprehensive user profiles with stats and post history
-- **Stories**: Create and view time-based story content
-- **Responsive Design**: Fully responsive UI that works on all devices
-- **Dark/Light Theme**: Toggle between dark and light themes
-- **Toast Notifications**: Real-time feedback for user actions
+- **Authentication**: Secure user registration and login
+- **Content Creation**: Create and share posts and stories
+- **Social Features**: Like, follow, and interact with other users
+- **Personalized Feed**: View content from followed users
+- **User Discovery**: Search and connect with new users
+- **Real-time Updates**: Dynamic content updates
 
 ## 🔗 Links
 
@@ -30,11 +20,11 @@ A modern, full-stack social media## This project runs on **Nuxt 4.0** and follow
 
 ### Frontend
 
-- **Nuxt 4** - Modern Vue.js framework for server-side rendering and static generation
-- **Vue 3** - Progressive JavaScript framework with Composition API
-- **Pinia** - Lightweight state management for user auth, posts, and app state
-- **Tailwind CSS** - Utility-first CSS framework for rapid UI development
-- **TypeScript** - Type-safe development with enhanced IDE support
+- **Nuxt 4** - Vue.js framework
+- **Vue 3** - Progressive JavaScript framework
+- **Pinia** - State management
+- **Tailwind CSS** - Utility-first CSS framework
+- **TypeScript** - Type-safe JavaScript
 
 ### Backend
 
@@ -48,34 +38,11 @@ A modern, full-stack social media## This project runs on **Nuxt 4.0** and follow
 - **ESLint + Prettier** - Code linting and formatting
 - **tsx** - Fast TypeScript execution and hot reload
 
-## � Nuxt 4 Migration
-
-This project has been successfully upgraded to **Nuxt 4.0** from Nuxt 3. Here's what you need to know:
-
-### ✅ **Migration Completed**
-
-- ✅ Updated to new `app/` directory structure
-- ✅ Enhanced TypeScript configuration with project separation
-- ✅ Improved data fetching with automatic sharing
-- ✅ Node.js requirements updated to v20.19+ or v22.12+
-- ✅ Vercel deployment configuration optimized for Nuxt 4
-
-### �🚀 **Upgrade Benefits Implemented**
-
-- **Faster Development**: Cold start improvements and native file watching
-- **Better Organization**: Clean separation between app, server, and shared code
-- **Enhanced DX**: Improved TypeScript intellisense and error handling
-- **Optimized Performance**: Socket-based communication and compile cache
-
-### 📚 **For New Contributors**
-
-If you're new to Nuxt 4, check out the [official migration guide](https://nuxt.com/docs/getting-started/upgrade) and [announcement blog post](https://nuxt.com/blog/v4).
-
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v20.19+ or v22.12+) - **Required for Nuxt 4**
+- Node.js (v20.19+ or v22.12+)
 - PostgreSQL database
 - npm or yarn
 - TypeScript knowledge (recommended)
@@ -167,23 +134,6 @@ npm run prettier         # Check code formatting
 npm run prettier:fix     # Fix code formatting
 npm run typecheck        # TypeScript type checking
 npm run format           # Run prettier + eslint fixes
-```
-
-### Client Scripts
-
-```bash
-# Development server
-npm run dev              # Start development server at localhost:3000
-
-# Build for production
-npm run build            # Build optimized production bundle
-npm run generate         # Generate static site
-npm run preview          # Preview production build locally
-
-# Development utilities
-npm run type-check       # Run TypeScript type checking
-npm run lint:prettier    # Check code formatting
-npm run lintfix          # Fix formatting issues
 ```
 
 ## 📁 Project Structure
@@ -343,13 +293,6 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 **Somraj Mukherjee** - <iamsomraj@gmail.com>
 
 Project Link: [https://github.com/iamsomraj/SHARE-IT-social-media-application](https://github.com/iamsomraj/SHARE-IT-social-media-application)
-
-## 📚 Resources
-
-- [Nuxt Documentation](https://nuxt.com/docs) - Complete framework guide and API reference
-- [Vue 3 Documentation](https://vuejs.org/) - Vue.js framework documentation
-- [Pinia Documentation](https://pinia.vuejs.org/) - State management guide
-- [Tailwind CSS](https://tailwindcss.com/) - CSS framework documentation
 
 ---
 

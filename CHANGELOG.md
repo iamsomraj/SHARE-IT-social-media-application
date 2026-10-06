@@ -66,6 +66,13 @@ spacing differences, and colors render through Tailwind 4's `oklch` palette.
 - Favicon moved to `public/` (it returned 404 under Nuxt 4).
 - Removed ~1,200 lines of unused types and helpers.
 
+### SEO & repository
+
+- Open Graph / Twitter card tags with a 1200×630 preview image, `theme-color`,
+  `robots.txt` and `sitemap.xml`; signed-in pages send `X-Robots-Tag: noindex`.
+- GitHub Actions CI (typecheck, lint, format, build for both apps), Dependabot,
+  issue/PR templates, `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`.
+
 ### Known advisories
 
 `npm audit` in `client/` reports 13 entries, all from two packages inside Nitro

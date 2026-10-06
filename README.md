@@ -1,24 +1,41 @@
-![SHARE-IT](./SHARE_IT.png)
+# SHARE-IT: full-stack social media app (Nuxt 4 + Express 5)
 
+[![CI](https://github.com/iamsomraj/SHARE-IT-social-media-application/actions/workflows/ci.yml/badge.svg)](https://github.com/iamsomraj/SHARE-IT-social-media-application/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![Live demo](https://img.shields.io/badge/demo-share--it--social.vercel.app-black?logo=vercel)](https://share-it-social.vercel.app/)
+![Nuxt](https://img.shields.io/badge/Nuxt-4-00DC82?logo=nuxt.js&logoColor=white)
+![Vue](https://img.shields.io/badge/Vue-3-4FC08D?logo=vue.js&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-4169E1?logo=postgresql&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 
-# SHARE-IT
+![SHARE-IT login screen](./SHARE_IT.png)
 
-A modern, full-stack social media platform built with Nuxt 4 and Express. Connect, share, and engage with your community through posts, stories, and real-time interactions. This application showcases the power of TypeScript, Vue 3, and a robust backend architecture using Express.js and PostgreSQL.
+**SHARE-IT** is an open-source social media application. Users write posts,
+like them, follow people, search for users and add posts to their story. The
+frontend uses **Nuxt 4, Vue 3, Pinia and Tailwind CSS 4**; the REST API uses
+**Express 5, Objection.js/Knex and PostgreSQL**. Both are written in strict
+TypeScript and deploy to **Vercel**.
 
 ## 🚀 Features
 
-- **Authentication**: Secure user registration and login
-- **Content Creation**: Create and share posts and stories
-- **Social Features**: Like, follow, and interact with other users
-- **Personalized Feed**: View content from followed users
-- **User Discovery**: Search and connect with new users
-- **Real-time Updates**: Dynamic content updates
+- **Authentication**: registration and login with JWT; passwords hashed with salted scrypt
+- **Posts**: create posts and like/unlike them
+- **Stories**: add any post to your story
+- **Social graph**: follow and unfollow people; follower/following counts
+- **Personalized feed**: your posts plus posts from people you follow
+- **People search**: find users by name or email
+- **Dark mode**: theme toggle that remembers your choice
+- **Responsive**: mobile and desktop layouts
 
 ## 🔗 Links
 
 - **Live Demo**: [share-it-social.vercel.app](https://share-it-social.vercel.app/)
+- **Demo login**: `sheldon@example.com` / `123456` (sample data, may be reset)
 - **Video Overview**: [Watch Demo](https://youtu.be/gM3WxzEyJSU)
 - **Changelog**: [CHANGELOG.md](./CHANGELOG.md). Read it when upgrading from 2.x (env vars and auth changed)
+- **Contributing**: [CONTRIBUTING.md](./CONTRIBUTING.md) · **Security**: [SECURITY.md](./SECURITY.md) · **Code of Conduct**: [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
 
 ## 🛠️ Tech Stack
 
@@ -190,7 +207,9 @@ This project is licensed under the [MIT License](https://choosealicense.com/lice
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/iamsomraj/SHARE-IT-social-media-application/issues).
+Contributions, issues and feature requests are welcome. Read the
+[contributing guide](./CONTRIBUTING.md) to get started, and report security
+issues privately as described in [SECURITY.md](./SECURITY.md).
 
 ## 📧 Contact
 

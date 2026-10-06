@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /feed
+Disallow: /post/
+Disallow: /profile/
+Disallow: /search
+
+Sitemap: https://share-it-social.vercel.app/sitemap.xml

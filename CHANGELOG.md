@@ -2,8 +2,9 @@
 
 ## 3.0.0 — 2026-10-06
 
-Dependency upgrade, security hardening and refactor. **No UI/UX changes**: the
-compiled CSS and rendered pages match 2.1.0.
+Dependency upgrade, security hardening and refactor. No UI/UX redesign: colors,
+fonts and text sizes are unchanged. The Tailwind 4 upgrade causes a few pixels of
+spacing differences, and colors render through Tailwind 4's `oklch` palette.
 
 ### ⚠️ Breaking changes / upgrade notes
 
@@ -27,7 +28,9 @@ compiled CSS and rendered pages match 2.1.0.
 - **Server scripts renamed:** `migrate-latest` → `migrate:latest`,
   `migrate-rollback` → `migrate:rollback`, `data-import` → `db:reset`;
   `seed` added.
-- Node.js **22.x** is required.
+- Node.js **22.21+** is required (Nuxt 4.6). Vercel uses the latest 22.x.
+- **Browser support** follows Tailwind CSS 4: Safari 16.4+, Chrome 111+,
+  Firefox 128+.
 
 ### Server
 
@@ -48,6 +51,13 @@ compiled CSS and rendered pages match 2.1.0.
 
 - Nuxt 4.6, Pinia 4, TypeScript 6, @nuxt/eslint; removed unused `@nuxt/ui`,
   `moment`, `@nuxt/typescript-build`, `@tailwindcss/line-clamp`.
+- Tailwind CSS 4 through the official `@tailwindcss/vite` plugin; config moved
+  from `tailwind.config.js` into `app/assets/css/main.css`. Migrated with the
+  official upgrade tool (`break-words` → `wrap-break-word`, `flex-grow` →
+  `grow`). The upgrade guide's v3-compatible defaults are kept for border color,
+  placeholder color and the button cursor.
+- Nuxt DevTools 4 (pinned via `overrides`), which drops the vulnerable
+  `simple-git` dependency of DevTools 3.
 - Stores share one typed API helper; error toasts show the API's message
   (e.g. "Wrong Credentials!") instead of a raw fetch error.
 - Session restored in a client plugin; authenticated pages render client-side,
@@ -58,8 +68,14 @@ compiled CSS and rendered pages match 2.1.0.
 
 ### Known advisories
 
-`npm audit` in `client/` still reports advisories in **build-time tooling**:
-`braces` (via Tailwind 3 / nitropack globbing) and `node-forge` (via the dev
-server's `listhen`). No patched versions exist upstream, and neither package
-ships in the deployed runtime. The fixable ones (`simple-git`,
-`postcss-selector-parser`) are pinned via `overrides`.
+`npm audit` in `client/` reports 13 entries, all from two packages inside Nitro
+(Nuxt's server engine, latest 2.13.4) that have **no patched release**:
+
+- `braces`: stack exhaustion on deeply nested glob patterns, reached via
+  `globby` → `fast-glob` → `micromatch`. It only receives the project's own
+  build-time glob patterns.
+- `node-forge`: RSA signature verification flaw, reached via `listhen`, which
+  only generates a self-signed certificate for `nuxt dev --https`.
+
+Neither package handles user input in the deployed app. Re-check once Nitro
+publishes updated dependencies.

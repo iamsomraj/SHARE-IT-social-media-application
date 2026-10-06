@@ -2,7 +2,7 @@
   <!-- BEGIN: TOAST COMPONENT ROOT ELEMENT -->
   <div
     v-if="toasts.length > 0"
-    class="fixed right-4 top-4 z-50 flex w-full max-w-sm flex-col items-end gap-2"
+    class="fixed top-4 right-4 z-50 flex w-full max-w-sm flex-col items-end gap-2"
   >
     <!-- BEGIN: TOAST LIST -->
     <TransitionGroup name="toast" tag="div" class="space-y-2">
@@ -11,7 +11,7 @@
         <div
           :title="toast.message"
           :class="`${background(toast.type)} ${textColor(toast.type)}`"
-          class="relative w-80 cursor-pointer break-words rounded-lg px-4 py-3 text-sm font-medium shadow-lg transition-all hover:shadow-xl"
+          class="relative w-80 cursor-pointer rounded-lg px-4 py-3 text-sm font-medium wrap-break-word shadow-lg transition-all hover:shadow-xl"
           @click="removeToast(toast.id)"
         >
           <div class="pr-6">
@@ -20,7 +20,7 @@
           <!-- Close button -->
           <button
             @click.stop="removeToast(toast.id)"
-            class="absolute right-2 top-2 text-current opacity-70 transition-opacity hover:opacity-100"
+            class="absolute top-2 right-2 text-current opacity-70 transition-opacity hover:opacity-100"
           >
             ×
           </button>

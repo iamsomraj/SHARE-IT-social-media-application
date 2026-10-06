@@ -1,11 +1,13 @@
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineNuxtConfig({
   compatibilityDate: '2026-10-01',
 
-  // Devtools is disabled: its git integration depends on a vulnerable
-  // `simple-git` release (see `overrides` in package.json).
-  devtools: { enabled: false },
+  devtools: { enabled: true },
 
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/eslint'],
+  modules: ['@pinia/nuxt', '@nuxt/eslint'],
+
+  css: ['~/assets/css/main.css'],
 
   typescript: {
     strict: true,
@@ -60,20 +62,8 @@ export default defineNuxtConfig({
     },
   ],
 
-  postcss: {
-    plugins: {
-      // No nested CSS is used, and Tailwind v3's nesting plugin is not
-      // ESM-importable by Nuxt 4's PostCSS loader.
-      'tailwindcss/nesting': false,
-    },
-  },
-
   vite: {
-    build: {
-      // Keep the previous browser baseline so CSS output stays compatible
-      // (e.g. no media-query range syntax for Safari < 16.4).
-      cssTarget: ['chrome87', 'edge88', 'firefox78', 'safari14'],
-    },
+    plugins: [tailwindcss()],
   },
 
   eslint: {

@@ -11,7 +11,7 @@
         @input="findPeople"
       />
       <search-icon
-        class="absolute left-4 top-2.5 h-4 w-4 fill-slate-600 stroke-slate-600 dark:fill-slate-200 dark:stroke-slate-200"
+        class="absolute top-2.5 left-4 h-4 w-4 fill-slate-600 stroke-slate-600 dark:fill-slate-200 dark:stroke-slate-200"
       />
     </div>
 

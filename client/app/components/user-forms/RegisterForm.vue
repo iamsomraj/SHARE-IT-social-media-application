@@ -35,13 +35,13 @@
         <primary-button
           @onClick="onSubmit"
           type="submit"
-          class="flex-grow"
+          class="grow"
           :loading="loading"
           :disabled="disabled"
         >
           <template #default>Register</template>
         </primary-button>
-        <secondary-button @onClick="$router.push('/')" class="flex-grow">
+        <secondary-button @onClick="$router.push('/')" class="grow">
           <template #default>Login</template>
         </secondary-button>
       </div>

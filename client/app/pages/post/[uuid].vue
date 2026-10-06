@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex min-h-screen w-full items-start justify-center pb-16 pt-4 text-slate-600 dark:bg-slate-800 dark:text-slate-200 md:py-8"
+    class="flex min-h-screen w-full items-start justify-center pt-4 pb-16 text-slate-600 md:py-8 dark:bg-slate-800 dark:text-slate-200"
   >
     <post-card
       v-if="post"

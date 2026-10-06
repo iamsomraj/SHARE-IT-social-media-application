@@ -27,7 +27,7 @@ A modern, full-stack social media platform built with Nuxt 4 and Express. Connec
 - **Nuxt 4** - Vue.js framework (SSR for public pages, client-rendered app pages)
 - **Vue 3** - Progressive JavaScript framework
 - **Pinia** - State management
-- **Tailwind CSS 3** - Utility-first CSS framework
+- **Tailwind CSS 4** - Utility-first CSS framework (via `@tailwindcss/vite`)
 - **TypeScript** - Type-safe JavaScript
 
 ### Backend
@@ -44,7 +44,7 @@ A modern, full-stack social media platform built with Nuxt 4 and Express. Connec
 
 ### Prerequisites
 
-- Node.js 22 (see `.nvmrc`)
+- Node.js 22.21+ (`nvm use` picks it up from `.nvmrc`)
 - A PostgreSQL database (e.g. [Neon](https://neon.tech))
 
 ### Installation
@@ -120,6 +120,7 @@ npm run typecheck | lint | format
 ```text
 ├── client/                 # Nuxt 4 frontend
 │   ├── app/
+│   │   ├── assets/css/     # Tailwind entry stylesheet
 │   │   ├── components/     # Vue components
 │   │   ├── layouts/        # default, guest
 │   │   ├── middleware/     # Route guards
@@ -129,8 +130,7 @@ npm run typecheck | lint | format
 │   │   ├── types/          # Shared TypeScript types
 │   │   └── utils/          # API client, constants, helpers
 │   ├── public/             # Static assets (favicon)
-│   ├── nuxt.config.ts
-│   └── tailwind.config.ts
+│   └── nuxt.config.ts
 └── server/                 # Express 5 API
     ├── src/
     │   ├── app.ts          # Express app (Vercel entrypoint)

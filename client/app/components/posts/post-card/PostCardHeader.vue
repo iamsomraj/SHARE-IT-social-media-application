@@ -12,7 +12,7 @@
       <div class="flex flex-col items-start justify-center font-bold">
         <div
           @click="$router.push(`/profile/${ownerUUID}`)"
-          class="cursor-pointer break-words text-3xl text-slate-600 transition-all duration-300 hover:underline dark:text-slate-200"
+          class="cursor-pointer text-3xl wrap-break-word text-slate-600 transition-all duration-300 hover:underline dark:text-slate-200"
         >
           {{ ownerName }}
         </div>

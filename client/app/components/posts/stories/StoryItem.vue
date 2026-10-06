@@ -1,7 +1,7 @@
 <template>
   <!-- BEGIN: POST SECTION -->
   <div
-    class="flex h-3/4 w-full flex-col break-words border-b border-t dark:border-slate-600 md:w-1/4 md:rounded-xl md:border"
+    class="flex h-3/4 w-full flex-col border-t border-b wrap-break-word md:w-1/4 md:rounded-xl md:border dark:border-slate-600"
   >
     <!-- BEGIN: LOADER SECTION -->
     <div class="h-0.5 w-full rounded-full px-4 py-2">
@@ -23,7 +23,7 @@
       />
       <div
         @click="$router.push(`/profile/${postAuthor.uuid}`)"
-        class="line-clamp-1 break-words text-sm hover:cursor-pointer hover:underline hover:underline-offset-4"
+        class="line-clamp-1 text-sm wrap-break-word hover:cursor-pointer hover:underline hover:underline-offset-4"
       >
         {{ postAuthor.name }}
       </div>
@@ -35,7 +35,7 @@
 
     <!-- BEGIN: BODY SECTION -->
     <div
-      class="flex-grow border-b px-6 py-4 hover:cursor-pointer hover:underline hover:underline-offset-4 dark:border-slate-600"
+      class="grow border-b px-6 py-4 hover:cursor-pointer hover:underline hover:underline-offset-4 dark:border-slate-600"
       @click="$router.push(`/post/${selectedPost.uuid}`)"
     >
       {{ postContent }}

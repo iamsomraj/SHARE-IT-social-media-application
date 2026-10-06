@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex min-h-screen w-screen items-start justify-center pb-16 pt-4 dark:bg-slate-800 md:py-6"
+    class="flex min-h-screen w-screen items-start justify-center pt-4 pb-16 md:py-6 dark:bg-slate-800"
   >
     <search-people />
   </div>

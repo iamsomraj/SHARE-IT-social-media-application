@@ -23,32 +23,28 @@ A modern, full-stack social media platform built with Nuxt 4 and Express. Connec
 
 ### Frontend
 
-- **Nuxt 4** - Vue.js framework
+- **Nuxt 4** - Vue.js framework (SSR for public pages, client-rendered app pages)
 - **Vue 3** - Progressive JavaScript framework
 - **Pinia** - State management
-- **Tailwind CSS** - Utility-first CSS framework
+- **Tailwind CSS 3** - Utility-first CSS framework
 - **TypeScript** - Type-safe JavaScript
 
 ### Backend
 
-- **Express.js** - Modern web application framework
-- **TypeScript** - Full type safety and modern JavaScript features
-- **PostgreSQL** - Robust relational database
-- **Objection.js** - Type-safe SQL query builder and ORM
-- **Knex.js** - SQL query builder and migration tool
-- **JWT** - Secure authentication tokens
-- **Zod/Joi** - Runtime schema validation
-- **ESLint + Prettier** - Code linting and formatting
-- **tsx** - Fast TypeScript execution and hot reload
+- **Express 5** - Web framework with native async error handling
+- **TypeScript** - Strict type checking
+- **PostgreSQL** (Neon) - Relational database
+- **Objection.js + Knex.js** - ORM, query builder and migrations
+- **Zod 4** - Request and environment validation
+- **JWT** - Stateless authentication; passwords hashed with salted `scrypt`
+- **Helmet + CORS** - Security headers and an origin allowlist
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v20.19+ or v22.12+)
-- PostgreSQL database
-- npm or yarn
-- TypeScript knowledge (recommended)
+- Node.js 22 (see `.nvmrc`)
+- A PostgreSQL database (e.g. [Neon](https://neon.tech))
 
 ### Installation
 
@@ -59,229 +55,133 @@ A modern, full-stack social media platform built with Nuxt 4 and Express. Connec
    cd SHARE-IT-social-media-application
    ```
 
-2. **Environment Configuration**
+2. **Environment configuration**
 
-   Create `server/.env` in the root directory:
+   Create `server/.env` (see `server/.env.example`):
 
    ```env
+   NODE_ENV=development
    PORT=4500
-   DATABASE_URL=postgres://username:password@hostname:5432/database
-   NODE_ENV=development
-   SALT=your_salt_here
-   JWT_SECRET=your_jwt_secret_here
-   JWT_EXPIRATION_DURATION=100d
-   PRODUCTION_CLIENT_ORIGIN=https://your-production-url.com
-   DEVELOPMENT_CLIENT_ORIGIN=http://localhost:3000
+   DATABASE_URL=postgresql://user:password@host/db?sslmode=require
+   JWT_SECRET=at-least-32-characters   # openssl rand -hex 32
+   JWT_EXPIRATION_DURATION=7d
+   CLIENT_ORIGINS=http://localhost:3000 # comma-separated, `*` wildcard supported
    ```
 
-   Create `client/.env`:
+   Create `client/.env` (see `client/.env.example`):
 
    ```env
-   DEV_API=http://localhost:4500
-   PROD_API=https://your-api-url.com
-   NODE_ENV=development
+   NUXT_PUBLIC_API_BASE=http://localhost:4500/api/v1
    ```
 
-3. **Database Setup**
+3. **Install, migrate and seed**
 
    ```bash
-   # Navigate to server directory
-   cd server
-
-   # Run database migrations
-   npx knex migrate:latest
-
-   # Optional: Seed database with sample data
-   npm run data-import
-   ```
-
-4. **Install Dependencies & Start Development**
-
-   ```bash
-   # Install server dependencies
    cd server && npm install
+   npm run migrate:latest
+   npm run seed            # optional sample data (password for all users: 123456)
 
-   # Install client dependencies
    cd ../client && npm install
-
-   # Start server in development mode (with TypeScript hot reload)
-   cd ../server && npm run dev
-
-   # In a new terminal, start client in development mode
-   cd client && npm run dev
    ```
 
-## 🔧 Development Scripts
+4. **Run**
 
-### Server Scripts
+   ```bash
+   cd server && npm run dev   # http://localhost:4500
+   cd client && npm run dev   # http://localhost:3000
+   ```
+
+## 🔧 Scripts
+
+### Server
 
 ```bash
-# Development with hot reload
-npm run dev
+npm run dev               # Start with hot reload (tsx)
+npm run build             # Compile TypeScript to dist/
+npm start                 # Run the compiled server
+npm run migrate:latest    # Apply migrations
+npm run migrate:rollback  # Roll back all migrations
+npm run migrate:make name # Create a migration
+npm run seed              # Replace all data with sample data
+npm run db:reset          # Rollback + migrate + seed
+npm run typecheck | lint | format
+```
 
-# Build TypeScript to JavaScript
-npm run build
+### Client
 
-# Start production server
-npm start
-
-# Database operations
-npm run migrate-latest    # Run latest migrations
-npm run migrate-rollback  # Rollback last migration
-npm run data-import      # Reset DB and import seed data
-
-# Code quality
-npm run lint             # Check code with ESLint
-npm run lint:fix         # Fix ESLint issues
-npm run prettier         # Check code formatting
-npm run prettier:fix     # Fix code formatting
-npm run typecheck        # TypeScript type checking
-npm run format           # Run prettier + eslint fixes
+```bash
+npm run dev | build | preview
+npm run typecheck | lint | format
 ```
 
 ## 📁 Project Structure
 
 ```text
-├── client/               # Nuxt 4 frontend application
-│   ├── app/              # Nuxt 4 application directory
-│   │   ├── app.vue       # Root Vue component
-│   │   ├── components/   # Vue components
-│   │   │   ├── app-layouts/  # Header, Footer components
-│   │   │   ├── assets/       # Icon components
-│   │   │   ├── persons/      # User profile components
-│   │   │   ├── posts/        # Post-related components
-│   │   │   ├── user-forms/   # Authentication forms
-│   │   │   └── user-interfaces/ # Reusable UI components
-│   │   ├── layouts/      # Application layouts (default, guest)
-│   │   ├── middleware/   # Route middleware (authentication)
-│   │   ├── pages/        # File-based routing
-│   │   │   ├── feed/     # Feed page
-│   │   │   ├── post/     # Individual post pages
-│   │   │   ├── profile/  # Profile pages
-│   │   │   ├── register/ # Registration page
-│   │   │   ├── search/   # Search functionality
-│   │   │   └── index.vue # Home/login page
-│   │   ├── stores/       # Pinia state management
-│   │   │   ├── auth.ts   # Authentication store
-│   │   │   ├── feed.ts   # Feed management
-│   │   │   ├── post.ts   # Post operations
-│   │   │   ├── profile.ts # Profile management
-│   │   │   ├── search.ts # Search functionality
-│   │   │   ├── theme.ts  # Theme switching
-│   │   │   └── toast.ts  # Toast notifications
-│   │   ├── types/        # TypeScript definitions
-│   │   │   ├── auth.ts   # Authentication types
-│   │   │   ├── common.ts # Common types
-│   │   │   ├── components.ts # Component types
-│   │   │   ├── constants.ts  # Constant types
-│   │   │   ├── errors.ts     # Error types
-│   │   │   ├── index.ts      # Type exports
-│   │   │   └── utils.ts      # Utility types
-│   │   └── utils/        # Utility functions
-│   │       ├── constants.ts  # Application constants
-│   │       └── helpers.ts    # Helper functions
-│   ├── static/           # Static assets (favicon, etc.)
-│   ├── eslint.config.js  # ESLint configuration
-│   ├── nuxt.config.ts    # Nuxt configuration
-│   ├── package.json      # Dependencies and scripts
-│   ├── tailwind.config.js # Tailwind CSS configuration
-│   ├── tsconfig.json     # TypeScript configuration
-│   └── vercel.json       # Vercel deployment config
-└── server/               # Express.js TypeScript backend
+├── client/                 # Nuxt 4 frontend
+│   ├── app/
+│   │   ├── components/     # Vue components
+│   │   ├── layouts/        # default, guest
+│   │   ├── middleware/     # Route guards
+│   │   ├── pages/          # File-based routing
+│   │   ├── plugins/        # Session restore (client only)
+│   │   ├── stores/         # Pinia stores
+│   │   ├── types/          # Shared TypeScript types
+│   │   └── utils/          # API client, constants, helpers
+│   ├── public/             # Static assets (favicon)
+│   ├── nuxt.config.ts
+│   └── tailwind.config.ts
+└── server/                 # Express 5 API
     ├── src/
-    │   ├── config/       # Database and app configuration
-    │   ├── controllers/  # Route handlers (auth, person, post)
-    │   ├── middlewares/  # Custom middleware (auth, validation, error)
-    │   ├── migrations/   # Database migrations
-    │   ├── models/       # Objection.js database models
-    │   ├── queries/      # Database query builders
-    │   ├── routes/       # API route definitions
-    │   ├── schemas/      # Validation schemas (Zod/Joi)
-    │   ├── seeds/        # Database seed files
-    │   ├── services/     # Business logic services
-    │   ├── types/        # TypeScript type definitions
-    │   └── utils/        # Utility functions and constants
-    ├── dist/             # Compiled JavaScript output
-    ├── knexfile.js       # Knex configuration
-    └── tsconfig.json     # TypeScript configuration
+    │   ├── app.ts          # Express app (Vercel entrypoint)
+    │   ├── server.ts       # Local HTTP server
+    │   ├── config/         # Env validation, database
+    │   ├── controllers/    # Route handlers
+    │   ├── middlewares/    # Auth, errors
+    │   ├── migrations/     # Knex migrations
+    │   ├── models/         # Objection models
+    │   ├── routes/         # Route definitions
+    │   ├── schemas/        # Zod schemas + validation middleware
+    │   ├── seeds/          # Sample data seeder
+    │   ├── services/       # Business logic
+    │   └── utils/          # Constants, crypto/JWT helpers, errors
+    └── knexfile.ts
 ```
 
-## 🏗️ Backend Architecture
+## 🔌 API
 
-### Modern TypeScript Implementation
+Base URL: `http://localhost:4500/api/v1` (production: `https://share-it-social-api.vercel.app/api/v1`).
+All responses use the envelope `{ state, message, data }`. 🔒 = requires `Authorization: Bearer <token>`.
 
-- **Full TypeScript Coverage**: Complete type safety across the entire backend
-- **Path Aliases**: Clean imports using `@/` prefix for better code organization
-- **Strict Type Checking**: Enhanced type safety with strict TypeScript configuration
-- **Hot Reload Development**: Fast development with `tsx` for instant code changes
-- **Modern ES Features**: ES2022 target with latest JavaScript features
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/persons/` | Register |
+| POST | `/persons/auth` | Log in |
+| GET 🔒 | `/persons/` | Current user |
+| GET 🔒 | `/persons/:uuid` | Profile with posts |
+| GET 🔒 | `/persons/people?page=&limit=` | People list |
+| POST 🔒 | `/persons/search` | Search by name or email |
+| POST 🔒 | `/persons/follow/:uuid` | Follow |
+| POST 🔒 | `/persons/unfollow/:uuid` | Unfollow |
+| POST 🔒 | `/posts/create` | Create post |
+| GET 🔒 | `/posts/feed` | Own and followed users' posts |
+| GET 🔒 | `/posts/stories` | Posts added to own story |
+| GET 🔒 | `/posts/:uuid` | Single post |
+| POST 🔒 | `/posts/like/:uuid` · `/posts/unlike/:uuid` | Like / unlike |
+| POST 🔒 | `/posts/add-story/:uuid` · `/posts/remove-story/:uuid` | Add / remove story |
+| POST | `/auth/` | Verify that a token belongs to a user |
 
-### Key Backend Features
+Health: `GET /` and `GET /health`.
 
-- **Type-Safe Database Models**: Objection.js models with full TypeScript support
-- **Schema Validation**: Runtime validation using Zod/Joi for API requests
-- **Structured Error Handling**: Centralized error handling with custom middleware
-- **Security Headers**: Built-in security headers and CORS configuration
-- **Environment Configuration**: Type-safe environment variable handling
-- **Database Migrations**: Version-controlled database schema management
-- **Seed Data**: Automated database seeding for development
-- **Health Check Endpoints**: Monitoring and debugging endpoints
-- **Graceful Shutdown**: Proper server lifecycle management
+## ☁️ Deployment (Vercel)
 
-## 🔌 API Documentation
+The repo deploys as two Vercel projects:
 
-### Base URL
+| Project | Root directory | Notes |
+| --- | --- | --- |
+| `share-it-social` | `client` | Nuxt preset. Env: `NUXT_PUBLIC_API_BASE` |
+| `share-it-social-api` | `server` | Express preset (`src/app.ts`). Env: `DATABASE_URL`, `JWT_SECRET`, `JWT_EXPIRATION_DURATION`, `CLIENT_ORIGINS`, `NODE_ENV` |
 
-- **Development**: `http://localhost:4500/api/v1`
-- **Production**: `https://your-api-url.com/api/v1`
-
-### Available Endpoints
-
-#### Authentication
-
-- `POST /auth/register` - User registration
-- `POST /auth/login` - User login
-
-#### Users/Persons
-
-- `GET /persons` - Get all users
-- `GET /persons/:uuid` - Get user profile
-- `POST /persons/follow` - Follow/unfollow user
-- `GET /persons/search` - Search users
-
-#### Posts
-
-- `GET /posts` - Get user feed
-- `POST /posts` - Create new post
-- `GET /posts/:uuid` - Get specific post
-- `POST /posts/:uuid/like` - Like/unlike post
-
-### Health Check
-
-- `GET /` - API status and version info
-- `GET /health` - Detailed health check with system info
-
-## 🛠️ Development Tools
-
-### Code Quality
-
-- **ESLint**: Comprehensive linting with TypeScript rules
-- **Prettier**: Consistent code formatting
-- **TypeScript**: Strict type checking and modern JavaScript features
-- **Husky**: Git hooks for code quality (if configured)
-
-### Database Tools
-
-- **Knex.js**: Database migrations and query building
-- **Objection.js**: Type-safe ORM with relationship support
-- **Database Seeding**: Automated test data generation
-
-### Development Experience
-
-- **tsx**: Fast TypeScript execution with hot reload
-- **Path Aliases**: Clean imports with `@/` prefix
-- **Environment Variables**: Type-safe configuration management
-- **Error Handling**: Structured error responses with proper HTTP status codes
+Run migrations against the production database from your machine (`npm run migrate:latest`) before deploying schema-dependent changes.
 
 ## 📄 License
 

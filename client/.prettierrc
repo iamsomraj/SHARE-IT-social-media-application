@@ -9,5 +9,6 @@
   "arrowParens": "avoid",
   "endOfLine": "lf",
   "vueIndentScriptAndStyle": true,
-  "plugins": ["prettier-plugin-tailwindcss"]
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./app/assets/css/main.css"
 }

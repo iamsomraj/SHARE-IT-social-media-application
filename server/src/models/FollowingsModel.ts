@@ -1,6 +1,6 @@
-import { Model, RelationMappings } from 'objection';
-import { Following } from '@/types';
-import PersonsModel from '@/models/PersonsModel';
+import { Model, type RelationMappings } from 'objection';
+import type { Following } from '../types';
+import PersonsModel from './PersonsModel';
 
 class FollowingsModel extends Model implements Following {
   id!: number;
@@ -25,30 +25,6 @@ class FollowingsModel extends Model implements Following {
 
   static override get idColumn(): string {
     return 'id';
-  }
-
-  static get followerIdColumn(): string {
-    return 'follower_id';
-  }
-
-  static get followedIdColumn(): string {
-    return 'followed_id';
-  }
-
-  static get createdAtColumn(): string {
-    return 'created_at';
-  }
-
-  static get updatedAtColumn(): string {
-    return 'updated_at';
-  }
-
-  static get createdByColumn(): string {
-    return 'created_by';
-  }
-
-  static get updatedByColumn(): string {
-    return 'updated_by';
   }
 
   static override get jsonSchema() {

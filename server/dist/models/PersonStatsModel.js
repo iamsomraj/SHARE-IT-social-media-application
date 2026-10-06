@@ -19,18 +19,6 @@ class PersonStatsModel extends objection_1.Model {
     static get idColumn() {
         return 'id';
     }
-    static get personIdColumn() {
-        return 'person_id';
-    }
-    static get postCountColumn() {
-        return 'post_count';
-    }
-    static get followerCountColumn() {
-        return 'follower_count';
-    }
-    static get followingCountColumn() {
-        return 'following_count';
-    }
     static get jsonSchema() {
         return {
             type: 'object',

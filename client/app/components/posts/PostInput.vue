@@ -2,7 +2,7 @@
   <div class="w-full px-0 md:px-6">
     <textarea
       :disabled="loading"
-      class="w-full resize-none break-words rounded border-b-2 border-slate-200 text-2xl text-slate-400 outline-none placeholder:text-slate-400 focus:border-blue-200 disabled:bg-white dark:border-b-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-600 dark:disabled:bg-slate-800"
+      class="w-full resize-none rounded border-b-2 border-slate-200 text-2xl wrap-break-word text-slate-400 outline-none placeholder:text-slate-400 focus:border-blue-200 disabled:bg-white dark:border-b-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-600 dark:disabled:bg-slate-800"
       :class="{ 'cursor-not-allowed': loading }"
       :placeholder="inputPlaceholder"
       :maxlength="postLengthLimit"

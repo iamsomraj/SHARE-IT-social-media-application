@@ -92,9 +92,7 @@
   const isLiked = computed(() => {
     return (
       selectedPost.value?.post_likes?.some(
-        likeRecord =>
-          likeRecord?.creator?.uuid === loggedInUserUUID.value ||
-          likeRecord?.person?.uuid === loggedInUserUUID.value
+        likeRecord => likeRecord?.creator?.uuid === loggedInUserUUID.value
       ) || false
     )
   })

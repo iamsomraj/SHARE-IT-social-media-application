@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const objection_1 = require("objection");
+const PostsModel_1 = __importDefault(require("./PostsModel"));
 class PostStatsModel extends objection_1.Model {
     id;
     post_id;
@@ -14,18 +18,6 @@ class PostStatsModel extends objection_1.Model {
     }
     static get idColumn() {
         return 'id';
-    }
-    static get postIdColumn() {
-        return 'post_id';
-    }
-    static get likeCountColumn() {
-        return 'like_count';
-    }
-    static get commentCountColumn() {
-        return 'comment_count';
-    }
-    static get storyCountColumn() {
-        return 'story_count';
     }
     static get jsonSchema() {
         return {
@@ -41,11 +33,10 @@ class PostStatsModel extends objection_1.Model {
         };
     }
     static get relationMappings() {
-        const PostsModel = require('./PostsModel').default;
         return {
             post: {
                 relation: objection_1.Model.BelongsToOneRelation,
-                modelClass: PostsModel,
+                modelClass: PostsModel_1.default,
                 join: {
                     from: 'public.post_stats.post_id',
                     to: 'public.posts.id',

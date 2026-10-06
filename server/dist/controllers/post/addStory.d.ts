@@ -1,2 +1,0 @@
-export declare const addStory: import("express").RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>;
-//# sourceMappingURL=addStory.d.ts.map

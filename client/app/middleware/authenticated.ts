@@ -1,8 +1,10 @@
 export default defineNuxtRouteMiddleware(() => {
-  const authStore = useAuthStore()
+  // The session lives in localStorage, so it can only be checked on the client.
+  if (import.meta.server) {
+    return
+  }
 
-  /* WHEN THE USER IS NOT AUTHENTICATED */
-  if (!authStore.isLoggedIn) {
+  if (!useAuthStore().isLoggedIn) {
     return navigateTo('/')
   }
 })

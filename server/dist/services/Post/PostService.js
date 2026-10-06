@@ -3,214 +3,177 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const RootService_1 = __importDefault(require("../Root/RootService"));
-const http_codes_1 = require("../../utils/constants/http-codes");
-const messages_1 = require("../../utils/constants/messages");
 const FollowingsModel_1 = __importDefault(require("../../models/FollowingsModel"));
-const PostsModel_1 = __importDefault(require("../../models/PostsModel"));
-const PostStatsModel_1 = __importDefault(require("../../models/PostStatsModel"));
 const PersonStatsModel_1 = __importDefault(require("../../models/PersonStatsModel"));
 const PostLikesModel_1 = __importDefault(require("../../models/PostLikesModel"));
+const PostsModel_1 = __importDefault(require("../../models/PostsModel"));
+const PostStatsModel_1 = __importDefault(require("../../models/PostStatsModel"));
 const StoriesModel_1 = __importDefault(require("../../models/StoriesModel"));
-class PostService extends RootService_1.default {
-    constructor() {
-        super();
-    }
+const http_codes_1 = require("../../utils/constants/http-codes");
+const messages_1 = require("../../utils/constants/messages");
+const errors_1 = require("../../utils/errors");
+const postNotFound = () => new errors_1.HttpError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.GENERAL_MESSAGES.POST_NOT_FOUND);
+/**
+ * Handles all post-related business logic.
+ */
+class PostService {
+    /**
+     * @route POST /api/v1/posts/like/:uuid
+     */
     async addLike(user, uuid) {
-        if (!uuid) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
-        }
-        const postRecord = await PostsModel_1.default.query().findOne({
-            uuid,
-            is_deleted: false,
-        });
-        if (!postRecord) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.GENERAL_MESSAGES.POST_NOT_FOUND);
-        }
-        const postLikeRecord = await PostLikesModel_1.default.query().findOne({
-            post_id: postRecord.id,
+        const post = await this.findActivePost(uuid);
+        const existingLike = await PostLikesModel_1.default.query().findOne({
+            post_id: post.id,
             created_by: user.id,
         });
-        if (!postLikeRecord) {
-            const likeRecord = await PostLikesModel_1.default.query().insert({
-                post_id: postRecord.id,
+        if (!existingLike) {
+            await PostsModel_1.default.transaction(async (trx) => {
+                await PostLikesModel_1.default.query(trx).insert({
+                    post_id: post.id,
+                    created_by: user.id,
+                    updated_by: user.id,
+                });
+                await PostStatsModel_1.default.query(trx)
+                    .where('post_id', post.id)
+                    .increment('like_count', 1);
+            });
+        }
+        return this.getPostDetailsOrThrow(uuid);
+    }
+    /**
+     * @route POST /api/v1/posts/unlike/:uuid
+     */
+    async removeLike(user, uuid) {
+        const post = await this.findActivePost(uuid);
+        await PostsModel_1.default.transaction(async (trx) => {
+            const deleted = await PostLikesModel_1.default.query(trx)
+                .delete()
+                .where({ post_id: post.id, created_by: user.id });
+            if (deleted > 0) {
+                await PostStatsModel_1.default.query(trx)
+                    .where('post_id', post.id)
+                    .decrement('like_count', deleted);
+            }
+        });
+        return this.getPostDetailsOrThrow(uuid);
+    }
+    /**
+     * @route POST /api/v1/posts/add-story/:post_uuid
+     */
+    async addStory(user, postUuid) {
+        const post = await this.findActivePost(postUuid);
+        const existingStory = await StoriesModel_1.default.query().findOne({
+            post_id: post.id,
+            person_id: user.id,
+        });
+        if (existingStory) {
+            throw new errors_1.HttpError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.GENERAL_MESSAGES.ALREADY_STORY_POST);
+        }
+        await PostsModel_1.default.transaction(async (trx) => {
+            await StoriesModel_1.default.query(trx).insert({
+                post_id: post.id,
+                person_id: user.id,
+            });
+            await PostStatsModel_1.default.query(trx)
+                .where('post_id', post.id)
+                .increment('story_count', 1);
+        });
+        return this.getPostDetailsOrThrow(postUuid);
+    }
+    /**
+     * @route POST /api/v1/posts/remove-story/:post_uuid
+     */
+    async removeStory(user, postUuid) {
+        const post = await this.findActivePost(postUuid);
+        await PostsModel_1.default.transaction(async (trx) => {
+            const deleted = await StoriesModel_1.default.query(trx)
+                .delete()
+                .where({ post_id: post.id, person_id: user.id });
+            if (deleted === 0) {
+                throw new errors_1.HttpError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.GENERAL_MESSAGES.NOT_STORY_YET);
+            }
+            await PostStatsModel_1.default.query(trx)
+                .where('post_id', post.id)
+                .decrement('story_count', deleted);
+        });
+        return this.getPostDetailsOrThrow(postUuid);
+    }
+    /**
+     * @route POST /api/v1/posts/create
+     */
+    async createPost(user, content) {
+        const post = await PostsModel_1.default.transaction(async (trx) => {
+            const inserted = await PostsModel_1.default.query(trx).insertAndFetch({
+                content,
                 created_by: user.id,
                 updated_by: user.id,
+                is_deleted: false,
             });
-            if (!likeRecord) {
-                this.raiseError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.PERSON_ERROR_MESSAGES.LIKE_FAILURE);
-            }
-            await PostStatsModel_1.default.query()
-                .where('post_id', postRecord.id)
-                .increment('like_count', 1);
-        }
-        const updatedPost = await PostsModel_1.default.getPostDetails(uuid);
-        if (!updatedPost) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.GENERAL_MESSAGES.POST_NOT_FOUND);
-        }
-        return updatedPost;
-    }
-    async addStory(user, post_uuid) {
-        if (!post_uuid) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
-        }
-        const postRecord = await PostsModel_1.default.query().findOne({
-            uuid: post_uuid,
-            is_deleted: false,
-        });
-        if (!postRecord) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.GENERAL_MESSAGES.POST_NOT_FOUND);
-        }
-        const storyRecord = await StoriesModel_1.default.query().findOne({
-            post_id: postRecord.id,
-            person_id: user.id,
-        });
-        if (storyRecord) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.GENERAL_MESSAGES.ALREADY_STORY_POST);
-        }
-        const insertedStory = await StoriesModel_1.default.query().insert({
-            post_id: postRecord.id,
-            person_id: user.id,
-        });
-        if (!insertedStory) {
-            this.raiseError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.PERSON_ERROR_MESSAGES.STORY_FAILURE);
-        }
-        await PostStatsModel_1.default.query()
-            .where('post_id', postRecord.id)
-            .increment('story_count', 1);
-        const updatedPost = await PostsModel_1.default.getPostDetails(post_uuid);
-        if (!updatedPost) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.GENERAL_MESSAGES.POST_NOT_FOUND);
-        }
-        return updatedPost;
-    }
-    async removeStory(user, post_uuid) {
-        if (!post_uuid) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
-        }
-        const postRecord = await PostsModel_1.default.query().findOne({
-            uuid: post_uuid,
-            is_deleted: false,
-        });
-        if (!postRecord) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.GENERAL_MESSAGES.POST_NOT_FOUND);
-        }
-        const storyRecord = await StoriesModel_1.default.query().findOne({
-            post_id: postRecord.id,
-            person_id: user.id,
-        });
-        if (!storyRecord) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.GENERAL_MESSAGES.NOT_STORY_YET);
-        }
-        await StoriesModel_1.default.query().delete().where({
-            post_id: postRecord.id,
-            person_id: user.id,
-        });
-        await PostStatsModel_1.default.query()
-            .where('post_id', postRecord.id)
-            .decrement('story_count', 1);
-        const updatedPost = await PostsModel_1.default.getPostDetails(post_uuid);
-        if (!updatedPost) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.GENERAL_MESSAGES.POST_NOT_FOUND);
-        }
-        return updatedPost;
-    }
-    async removeLike(user, uuid) {
-        if (!uuid) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
-        }
-        const postRecord = await PostsModel_1.default.query().findOne({
-            uuid,
-            is_deleted: false,
-        });
-        if (!postRecord) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.GENERAL_MESSAGES.POST_NOT_FOUND);
-        }
-        const postLikeRecord = await PostLikesModel_1.default.query().findOne({
-            post_id: postRecord.id,
-            created_by: user.id,
-        });
-        if (postLikeRecord) {
-            await PostLikesModel_1.default.query().delete().where({
-                post_id: postRecord.id,
-                created_by: user.id,
+            await PostStatsModel_1.default.query(trx).insert({
+                post_id: inserted.id,
+                like_count: 0,
+                comment_count: 0,
+                story_count: 0,
             });
-            await PostStatsModel_1.default.query()
-                .where('post_id', postRecord.id)
-                .decrement('like_count', 1);
-        }
-        const updatedPost = await PostsModel_1.default.getPostDetails(uuid);
-        if (!updatedPost) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.GENERAL_MESSAGES.POST_NOT_FOUND);
-        }
-        return updatedPost;
-    }
-    async createPost(user, content) {
-        if (!content) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
-        }
-        const postRecord = await PostsModel_1.default.query().insertAndFetch({
-            content,
-            created_by: user.id,
-            updated_by: user.id,
-            is_deleted: false,
+            await PersonStatsModel_1.default.query(trx)
+                .where('person_id', user.id)
+                .increment('post_count', 1);
+            return inserted;
         });
-        if (!postRecord) {
-            this.raiseError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.PERSON_ERROR_MESSAGES.POST_FAILURE);
+        const details = await PostsModel_1.default.getPostDetails(post.uuid);
+        if (!details) {
+            throw new errors_1.HttpError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.PERSON_ERROR_MESSAGES.POST_FAILURE);
         }
-        await PostStatsModel_1.default.query().insert({
-            post_id: postRecord.id,
-            like_count: 0,
-            comment_count: 0,
-            story_count: 0,
-        });
-        await PersonStatsModel_1.default.query()
-            .where('person_id', user.id)
-            .increment('post_count', 1);
-        const completePostData = await PostsModel_1.default.getPostDetails(postRecord.uuid);
-        if (!completePostData) {
-            this.raiseError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.PERSON_ERROR_MESSAGES.POST_FAILURE);
-        }
-        return completePostData;
+        return details;
     }
+    /**
+     * Posts from the user and everyone they follow.
+     * @route GET /api/v1/posts/feed
+     */
     async getFeedPosts(user) {
-        const followingIds = await FollowingsModel_1.default.query()
-            .where('follower_id', user.id)
-            .select('followed_id');
-        const followingPersonIds = followingIds.map(follow => follow.followed_id);
-        followingPersonIds.push(user.id);
-        const feedPosts = await PostsModel_1.default.query()
-            .whereIn('created_by', followingPersonIds)
+        const followings = await FollowingsModel_1.default.query()
+            .select('followed_id')
+            .where('follower_id', user.id);
+        const personIds = [user.id, ...followings.map(f => f.followed_id)];
+        return PostsModel_1.default.query()
+            .whereIn('created_by', personIds)
             .where('is_deleted', false)
             .withGraphFetched('[creator(defaultSelects), post_likes(orderByLatest).creator(defaultSelects), post_stats, post_stories.creator(defaultSelects)]')
             .modify('orderByLatest');
-        return feedPosts;
     }
+    /**
+     * Posts the user has added to their story.
+     * @route GET /api/v1/posts/stories
+     */
     async getStories(user) {
-        const followingIds = await FollowingsModel_1.default.query()
-            .where('follower_id', user.id)
-            .select('followed_id');
-        const followingPersonIds = followingIds.map(follow => follow.followed_id);
-        followingPersonIds.push(user.id);
-        const postsWithStories = await PostsModel_1.default.query()
+        return PostsModel_1.default.query()
             .whereExists(StoriesModel_1.default.query()
-            .whereColumn('post_id', 'posts.id')
-            .where('person_id', user.id))
+            .whereColumn('stories.post_id', 'posts.id')
+            .where('stories.person_id', user.id))
             .where('is_deleted', false)
             .withGraphFetched('[post_stories.creator(defaultSelects), creator(defaultSelects), post_stats, post_likes.creator(defaultSelects)]')
             .modify('orderByLatest');
-        return postsWithStories;
     }
+    /**
+     * @route GET /api/v1/posts/:uuid
+     */
     async fetchPost(uuid) {
-        if (!uuid) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.GENERAL_MESSAGES.PROVIDE_POST_DETAILS);
+        return this.getPostDetailsOrThrow(uuid);
+    }
+    async findActivePost(uuid) {
+        const post = await PostsModel_1.default.query().findOne({ uuid, is_deleted: false });
+        if (!post) {
+            throw postNotFound();
         }
-        const postRecord = await PostsModel_1.default.getPostDetails(uuid);
-        if (!postRecord) {
-            this.raiseError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.GENERAL_MESSAGES.POST_NOT_FOUND);
+        return post;
+    }
+    async getPostDetailsOrThrow(uuid) {
+        const post = await PostsModel_1.default.getPostDetails(uuid);
+        if (!post) {
+            throw postNotFound();
         }
-        return postRecord;
+        return post;
     }
 }
-exports.default = PostService;
+exports.default = new PostService();
 //# sourceMappingURL=PostService.js.map

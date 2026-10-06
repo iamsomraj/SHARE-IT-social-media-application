@@ -1,7 +1,7 @@
-import { Model, RelationMappings, QueryBuilder } from 'objection';
-import { PostStory } from '@/types';
-import PostsModel from '@/models/PostsModel';
-import PersonsModel from '@/models/PersonsModel';
+import { Model, type QueryBuilder, type RelationMappings } from 'objection';
+import type { PostStory } from '../types';
+import PostsModel from './PostsModel';
+import PersonsModel from './PersonsModel';
 
 class StoriesModel extends Model implements PostStory {
   id!: number;
@@ -24,18 +24,6 @@ class StoriesModel extends Model implements PostStory {
 
   static override get idColumn(): string {
     return 'id';
-  }
-
-  static get postIdColumn(): string {
-    return 'post_id';
-  }
-
-  static get personIdColumn(): string {
-    return 'person_id';
-  }
-
-  static get createdAtColumn(): string {
-    return 'created_at';
   }
 
   static override get jsonSchema() {

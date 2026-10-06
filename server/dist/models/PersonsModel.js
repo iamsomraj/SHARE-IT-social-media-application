@@ -1,8 +1,17 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PersonsModel = void 0;
 const objection_1 = require("objection");
-const crypto_1 = require("crypto");
+const node_crypto_1 = require("node:crypto");
+const FollowingsModel_1 = __importDefault(require("./FollowingsModel"));
+const PersonStatsModel_1 = __importDefault(require("./PersonStatsModel"));
+const PostLikesModel_1 = __importDefault(require("./PostLikesModel"));
+const PostsModel_1 = __importDefault(require("./PostsModel"));
+const StoriesModel_1 = __importDefault(require("./StoriesModel"));
+const DETAILS_GRAPH = '[person_followers, person_followings, person_stats, person_posts.[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]]';
 class PersonsModel extends objection_1.Model {
     id;
     uuid;
@@ -23,31 +32,10 @@ class PersonsModel extends objection_1.Model {
     }
     $beforeInsert() {
         this.created_at = new Date().toISOString();
-        this.uuid = (0, crypto_1.randomUUID)();
+        this.uuid = (0, node_crypto_1.randomUUID)();
     }
     $beforeUpdate() {
         this.updated_at = new Date().toISOString();
-    }
-    static get idColumn() {
-        return 'id';
-    }
-    static get nameColumn() {
-        return 'name';
-    }
-    static get emailColumn() {
-        return 'email';
-    }
-    static get passwordColumn() {
-        return 'password';
-    }
-    static get createdAtColumn() {
-        return 'created_at';
-    }
-    static get updatedAtColumn() {
-        return 'updated_at';
-    }
-    static get isDeletedColumn() {
-        return 'is_deleted';
     }
     static get jsonSchema() {
         return {
@@ -57,7 +45,7 @@ class PersonsModel extends objection_1.Model {
                 id: { type: 'integer' },
                 uuid: { type: 'string' },
                 name: { type: 'string', minLength: 3, maxLength: 255 },
-                email: { type: 'string', minLength: 5, maxLength: 50 },
+                email: { type: 'string', minLength: 5, maxLength: 255 },
                 password: { type: 'string', minLength: 4, maxLength: 255 },
                 created_at: { type: 'string' },
                 updated_at: { type: 'string' },
@@ -65,16 +53,14 @@ class PersonsModel extends objection_1.Model {
             },
         };
     }
+    // Relation getters are evaluated lazily, so circular model imports are safe.
     static get relationMappings() {
-        const FollowingsModel = require('./FollowingsModel').default;
-        const PostsModel = require('./PostsModel').default;
-        const PostLikesModel = require('./PostLikesModel').default;
-        const PersonStatsModel = require('./PersonStatsModel').default;
-        const StoriesModel = require('./StoriesModel').default;
         return {
+            // NOTE: naming is historical and the client relies on it:
+            // `person_followers` are rows where this person is the follower.
             person_followers: {
                 relation: objection_1.Model.HasManyRelation,
-                modelClass: FollowingsModel,
+                modelClass: FollowingsModel_1.default,
                 join: {
                     from: 'public.persons.id',
                     to: 'public.followings.follower_id',
@@ -82,7 +68,7 @@ class PersonsModel extends objection_1.Model {
             },
             person_followings: {
                 relation: objection_1.Model.HasManyRelation,
-                modelClass: FollowingsModel,
+                modelClass: FollowingsModel_1.default,
                 join: {
                     from: 'public.persons.id',
                     to: 'public.followings.followed_id',
@@ -90,7 +76,7 @@ class PersonsModel extends objection_1.Model {
             },
             person_posts: {
                 relation: objection_1.Model.HasManyRelation,
-                modelClass: PostsModel,
+                modelClass: PostsModel_1.default,
                 join: {
                     from: 'public.persons.id',
                     to: 'public.posts.created_by',
@@ -98,7 +84,7 @@ class PersonsModel extends objection_1.Model {
             },
             person_stories: {
                 relation: objection_1.Model.HasManyRelation,
-                modelClass: StoriesModel,
+                modelClass: StoriesModel_1.default,
                 join: {
                     from: 'public.persons.id',
                     to: 'public.stories.person_id',
@@ -106,7 +92,7 @@ class PersonsModel extends objection_1.Model {
             },
             person_post_likes: {
                 relation: objection_1.Model.HasManyRelation,
-                modelClass: PostLikesModel,
+                modelClass: PostLikesModel_1.default,
                 join: {
                     from: 'public.persons.id',
                     to: 'public.post_likes.created_by',
@@ -114,7 +100,7 @@ class PersonsModel extends objection_1.Model {
             },
             person_stats: {
                 relation: objection_1.Model.HasOneRelation,
-                modelClass: PersonStatsModel,
+                modelClass: PersonStatsModel_1.default,
                 join: {
                     from: 'public.persons.id',
                     to: 'public.person_stats.person_id',
@@ -135,43 +121,23 @@ class PersonsModel extends objection_1.Model {
             },
         };
     }
+    /** Never serialize the password hash. */
+    $formatJson(json) {
+        const { password: _password, ...rest } = super.$formatJson(json);
+        return rest;
+    }
+    /** Fetches a person with their relations (password excluded). */
     static async getPersonDetailsByEmail(email) {
-        const personRecord = await PersonsModel.query()
+        const person = await PersonsModel.query()
             .findOne({ email })
-            .withGraphFetched('[person_followers, person_followings, person_stats, person_posts.[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]]');
-        if (personRecord) {
-            const { password, ...personWithoutPassword } = personRecord;
-            return personWithoutPassword;
-        }
-        return undefined;
+            .withGraphFetched(DETAILS_GRAPH);
+        return person?.toJSON();
     }
     static async checkIfPersonExistsByEmail(email) {
-        return await PersonsModel.query().findOne({
-            email,
-            is_deleted: false,
-        });
-    }
-    static async checkIfPersonExistsById(id) {
-        return await PersonsModel.query().findOne({
-            id,
-            is_deleted: false,
-        });
+        return PersonsModel.query().findOne({ email, is_deleted: false });
     }
     static async checkIfPersonExistsByUUID(uuid) {
-        return await PersonsModel.query().findOne({
-            uuid,
-            is_deleted: false,
-        });
-    }
-    static async getPersonDetailsByUUID(uuid) {
-        const personRecord = await PersonsModel.query()
-            .findOne({ uuid, is_deleted: false })
-            .withGraphFetched('[person_followers, person_followings, person_stats, person_posts.[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]]');
-        if (personRecord) {
-            const { password, ...personWithoutPassword } = personRecord;
-            return personWithoutPassword;
-        }
-        return undefined;
+        return PersonsModel.query().findOne({ uuid, is_deleted: false });
     }
 }
 exports.PersonsModel = PersonsModel;

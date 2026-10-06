@@ -1,5 +1,6 @@
-import { Model, RelationMappings } from 'objection';
-import { PostStats } from '@/types';
+import { Model, type RelationMappings } from 'objection';
+import type { PostStats } from '../types';
+import PostsModel from './PostsModel';
 
 class PostStatsModel extends Model implements PostStats {
   id!: number;
@@ -18,22 +19,6 @@ class PostStatsModel extends Model implements PostStats {
     return 'id';
   }
 
-  static get postIdColumn(): string {
-    return 'post_id';
-  }
-
-  static get likeCountColumn(): string {
-    return 'like_count';
-  }
-
-  static get commentCountColumn(): string {
-    return 'comment_count';
-  }
-
-  static get storyCountColumn(): string {
-    return 'story_count';
-  }
-
   static override get jsonSchema() {
     return {
       type: 'object',
@@ -49,8 +34,6 @@ class PostStatsModel extends Model implements PostStats {
   }
 
   static override get relationMappings(): RelationMappings {
-    // TODO: Import PostsModel when circular dependency is resolved
-    const PostsModel = require('@/models/PostsModel').default;
     return {
       post: {
         relation: Model.BelongsToOneRelation,

@@ -78,9 +78,10 @@ typings/
 # Nuxt 4 build output
 .output
 
-# Nuxt generate
+# Build output
 client/dist
 client/.output
+server/dist
 
 # Nitro build output
 .nitro

@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { User, SearchOperationResult } from '~/types/auth'
-import { getApiEndpoints } from '~/utils/constants'
+import type { SearchOperationResult, User } from '~/types/auth'
+import { apiRequest, toOperationResult } from '~/utils/api'
+import { API_ROUTES } from '~/utils/constants'
 
 export const useSearchStore = defineStore('search', () => {
   const searchResults = ref<User[]>([])
@@ -15,54 +16,21 @@ export const useSearchStore = defineStore('search', () => {
     query.value = searchQuery
 
     try {
-      const authStore = useAuthStore()
-      const token = authStore.token
-
+      const { token } = useAuthStore()
       if (!token) {
-        return {
-          success: false,
-          error: 'No authentication token',
-          state: false,
-        }
+        return { success: false, error: 'No authentication token' }
       }
 
-      const endpoints = getApiEndpoints()
-      const response = await $fetch<{
-        data?: User[]
-        state?: boolean
-        message?: string
-      }>(endpoints.SEARCH_PEOPLE, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: {
-          searchQuery,
-        },
-      })
-
-      if (response && response.data && response.state) {
-        searchResults.value = response.data
-        return {
-          success: true,
-          data: response.data,
-          state: true,
-        }
-      } else {
-        searchResults.value = []
-        return {
-          success: false,
-          error: response?.message || 'Search failed',
-          state: false,
-        }
-      }
-    } catch (error: unknown) {
-      searchResults.value = []
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Search failed',
-        state: false,
-      }
+      const result = await toOperationResult(
+        apiRequest<User[]>(API_ROUTES.SEARCH_PEOPLE, {
+          method: 'POST',
+          body: { searchQuery },
+          token,
+        }),
+        'Search failed'
+      )
+      searchResults.value = result.success && result.data ? result.data : []
+      return result
     } finally {
       loading.value = false
     }

@@ -1,419 +1,223 @@
-import RootService from '@/services/Root/RootService';
-import { HTTP_CODES } from '@/utils/constants/http-codes';
+import FollowingsModel from '../../models/FollowingsModel';
+import PersonStatsModel from '../../models/PersonStatsModel';
+import PostLikesModel from '../../models/PostLikesModel';
+import PostsModel from '../../models/PostsModel';
+import PostStatsModel from '../../models/PostStatsModel';
+import StoriesModel from '../../models/StoriesModel';
+import type { AuthUser } from '../../types';
+import { HTTP_CODES } from '../../utils/constants/http-codes';
 import {
-  PERSON_ERROR_MESSAGES,
   GENERAL_MESSAGES,
-} from '@/utils/constants/messages';
-import FollowingsModel from '@/models/FollowingsModel';
-import PostsModel from '@/models/PostsModel';
-import PostStatsModel from '@/models/PostStatsModel';
-import PersonStatsModel from '@/models/PersonStatsModel';
-import PostLikesModel from '@/models/PostLikesModel';
-import StoriesModel from '@/models/StoriesModel';
-import { Person } from '@/types';
+  PERSON_ERROR_MESSAGES,
+} from '../../utils/constants/messages';
+import { HttpError } from '../../utils/errors';
+
+const postNotFound = (): HttpError =>
+  new HttpError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
 
 /**
- * CLASS FOR HANDLING REQUESTS MADE BY ALL POST RELATED CONTROLLERS
+ * Handles all post-related business logic.
  */
-class PostService extends RootService {
-  constructor() {
-    super();
-  }
-
+class PostService {
   /**
-   * @description ADDS LIKE ON POST
-   * @param user - logged in user
-   * @param uuid - post's uuid
    * @route POST /api/v1/posts/like/:uuid
-   * @access private
    */
-  async addLike(user: Person, uuid: string): Promise<PostsModel> {
-    /* BEGIN: VALIDATIONS */
-    if (!uuid) {
-      this.raiseError(
-        HTTP_CODES.BAD_REQUEST,
-        GENERAL_MESSAGES.PROVIDE_POST_DETAILS,
-      );
-    }
-    /* END: VALIDATIONS */
+  async addLike(user: AuthUser, uuid: string): Promise<PostsModel> {
+    const post = await this.findActivePost(uuid);
 
-    /* BEGIN: DATABASE VALIDATIONS */
-    /* CHECKING IF POST RECORD EXISTS OR NOT */
-    const postRecord = await PostsModel.query().findOne({
-      uuid,
-      is_deleted: false,
-    });
-    if (!postRecord) {
-      this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
-    }
-
-    /* CHECKING IF POST LIKE RECORD FOR THE GIVEN USER EXISTS OR NOT */
-    const postLikeRecord = await PostLikesModel.query().findOne({
-      post_id: postRecord.id,
+    const existingLike = await PostLikesModel.query().findOne({
+      post_id: post.id,
       created_by: user.id,
     });
-    /* END: DATABASE VALIDATIONS */
 
-    /* BEGIN: DATABASE OPERATIONS */
-    if (!postLikeRecord) {
-      /* INSERT POST LIKE RECORD ONLY IF IT DOESN'T EXIST */
-      const likeRecord = await PostLikesModel.query().insert({
-        post_id: postRecord.id,
-        created_by: user.id,
-        updated_by: user.id,
+    if (!existingLike) {
+      await PostsModel.transaction(async trx => {
+        await PostLikesModel.query(trx).insert({
+          post_id: post.id,
+          created_by: user.id,
+          updated_by: user.id,
+        });
+        await PostStatsModel.query(trx)
+          .where('post_id', post.id)
+          .increment('like_count', 1);
       });
-      if (!likeRecord) {
-        this.raiseError(
-          HTTP_CODES.INTERNAL_SERVER_ERROR,
-          PERSON_ERROR_MESSAGES.LIKE_FAILURE,
-        );
-      }
-
-      /* UPDATE POST STAT RECORD */
-      await PostStatsModel.query()
-        .where('post_id', postRecord.id)
-        .increment('like_count', 1);
-    }
-    /* END: DATABASE OPERATIONS */
-
-    /* FETCH AND RETURN UPDATED POST DATA */
-    const updatedPost = await PostsModel.getPostDetails(uuid);
-    if (!updatedPost) {
-      this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
     }
 
-    return updatedPost;
+    return this.getPostDetailsOrThrow(uuid);
   }
 
   /**
-   * @description ADDS STORY ON POST
-   * @param user - logged in user
-   * @param post_uuid - post's uuid
-   * @route POST /api/v1/posts/add-story/:post_uuid
-   * @access private
+   * @route POST /api/v1/posts/unlike/:uuid
    */
-  async addStory(user: Person, post_uuid: string): Promise<PostsModel> {
-    /* BEGIN: VALIDATIONS */
-    if (!post_uuid) {
-      this.raiseError(
-        HTTP_CODES.BAD_REQUEST,
-        GENERAL_MESSAGES.PROVIDE_POST_DETAILS,
-      );
-    }
-    /* END: VALIDATIONS */
+  async removeLike(user: AuthUser, uuid: string): Promise<PostsModel> {
+    const post = await this.findActivePost(uuid);
 
-    /* BEGIN: DATABASE VALIDATIONS */
-    /* CHECKING IF POST RECORD EXISTS OR NOT */
-    const postRecord = await PostsModel.query().findOne({
-      uuid: post_uuid,
-      is_deleted: false,
+    await PostsModel.transaction(async trx => {
+      const deleted = await PostLikesModel.query(trx)
+        .delete()
+        .where({ post_id: post.id, created_by: user.id });
+
+      if (deleted > 0) {
+        await PostStatsModel.query(trx)
+          .where('post_id', post.id)
+          .decrement('like_count', deleted);
+      }
     });
-    if (!postRecord) {
-      this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
-    }
 
-    /* CHECKING IF STORY RECORD FOR THE GIVEN USER EXISTS OR NOT */
-    const storyRecord = await StoriesModel.query().findOne({
-      post_id: postRecord.id,
+    return this.getPostDetailsOrThrow(uuid);
+  }
+
+  /**
+   * @route POST /api/v1/posts/add-story/:post_uuid
+   */
+  async addStory(user: AuthUser, postUuid: string): Promise<PostsModel> {
+    const post = await this.findActivePost(postUuid);
+
+    const existingStory = await StoriesModel.query().findOne({
+      post_id: post.id,
       person_id: user.id,
     });
-    if (storyRecord) {
-      this.raiseError(
+    if (existingStory) {
+      throw new HttpError(
         HTTP_CODES.BAD_REQUEST,
         GENERAL_MESSAGES.ALREADY_STORY_POST,
       );
     }
-    /* END: DATABASE VALIDATIONS */
 
-    /* BEGIN: DATABASE OPERATIONS */
-    /* INSERT STORY RECORD */
-    const insertedStory = await StoriesModel.query().insert({
-      post_id: postRecord.id,
-      person_id: user.id,
+    await PostsModel.transaction(async trx => {
+      await StoriesModel.query(trx).insert({
+        post_id: post.id,
+        person_id: user.id,
+      });
+      await PostStatsModel.query(trx)
+        .where('post_id', post.id)
+        .increment('story_count', 1);
     });
-    if (!insertedStory) {
-      this.raiseError(
-        HTTP_CODES.INTERNAL_SERVER_ERROR,
-        PERSON_ERROR_MESSAGES.STORY_FAILURE,
-      );
-    }
 
-    /* UPDATE POST STAT RECORD */
-    await PostStatsModel.query()
-      .where('post_id', postRecord.id)
-      .increment('story_count', 1);
-    /* END: DATABASE OPERATIONS */
-
-    /* FETCH AND RETURN UPDATED POST DATA */
-    const updatedPost = await PostsModel.getPostDetails(post_uuid);
-    if (!updatedPost) {
-      this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
-    }
-
-    return updatedPost;
+    return this.getPostDetailsOrThrow(postUuid);
   }
 
   /**
-   * @description REMOVES STORY FROM POST
-   * @param user - logged in user
-   * @param post_uuid - post's uuid
    * @route POST /api/v1/posts/remove-story/:post_uuid
-   * @access private
    */
-  async removeStory(user: Person, post_uuid: string): Promise<PostsModel> {
-    /* BEGIN: VALIDATIONS */
-    if (!post_uuid) {
-      this.raiseError(
-        HTTP_CODES.BAD_REQUEST,
-        GENERAL_MESSAGES.PROVIDE_POST_DETAILS,
-      );
-    }
-    /* END: VALIDATIONS */
+  async removeStory(user: AuthUser, postUuid: string): Promise<PostsModel> {
+    const post = await this.findActivePost(postUuid);
 
-    /* BEGIN: DATABASE VALIDATIONS */
-    /* CHECKING IF POST RECORD EXISTS OR NOT */
-    const postRecord = await PostsModel.query().findOne({
-      uuid: post_uuid,
-      is_deleted: false,
-    });
-    if (!postRecord) {
-      this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
-    }
+    await PostsModel.transaction(async trx => {
+      const deleted = await StoriesModel.query(trx)
+        .delete()
+        .where({ post_id: post.id, person_id: user.id });
 
-    /* CHECKING IF STORY RECORD FOR THE GIVEN USER EXISTS OR NOT */
-    const storyRecord = await StoriesModel.query().findOne({
-      post_id: postRecord.id,
-      person_id: user.id,
-    });
-    if (!storyRecord) {
-      this.raiseError(HTTP_CODES.BAD_REQUEST, GENERAL_MESSAGES.NOT_STORY_YET);
-    }
-    /* END: DATABASE VALIDATIONS */
+      if (deleted === 0) {
+        throw new HttpError(
+          HTTP_CODES.BAD_REQUEST,
+          GENERAL_MESSAGES.NOT_STORY_YET,
+        );
+      }
 
-    /* BEGIN: DATABASE OPERATIONS */
-    /* DELETE STORY RECORD */
-    await StoriesModel.query().delete().where({
-      post_id: postRecord.id,
-      person_id: user.id,
+      await PostStatsModel.query(trx)
+        .where('post_id', post.id)
+        .decrement('story_count', deleted);
     });
 
-    /* UPDATE POST STAT RECORD */
-    await PostStatsModel.query()
-      .where('post_id', postRecord.id)
-      .decrement('story_count', 1);
-    /* END: DATABASE OPERATIONS */
-
-    /* FETCH AND RETURN UPDATED POST DATA */
-    const updatedPost = await PostsModel.getPostDetails(post_uuid);
-    if (!updatedPost) {
-      this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
-    }
-
-    return updatedPost;
+    return this.getPostDetailsOrThrow(postUuid);
   }
 
   /**
-   * @description REMOVES LIKE FROM POST
-   * @param user - logged in user
-   * @param uuid - post's uuid
-   * @route POST /api/v1/posts/unlike/:uuid
-   * @access private
+   * @route POST /api/v1/posts/create
    */
-  async removeLike(user: Person, uuid: string): Promise<PostsModel> {
-    /* BEGIN: VALIDATIONS */
-    if (!uuid) {
-      this.raiseError(
-        HTTP_CODES.BAD_REQUEST,
-        GENERAL_MESSAGES.PROVIDE_POST_DETAILS,
-      );
-    }
-    /* END: VALIDATIONS */
-
-    /* BEGIN: DATABASE VALIDATIONS */
-    /* CHECKING IF POST RECORD EXISTS OR NOT */
-    const postRecord = await PostsModel.query().findOne({
-      uuid,
-      is_deleted: false,
-    });
-    if (!postRecord) {
-      this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
-    }
-
-    /* CHECKING IF POST LIKE RECORD FOR THE GIVEN USER EXISTS OR NOT */
-    const postLikeRecord = await PostLikesModel.query().findOne({
-      post_id: postRecord.id,
-      created_by: user.id,
-    });
-    /* END: DATABASE VALIDATIONS */
-
-    /* BEGIN: DATABASE OPERATIONS */
-    if (postLikeRecord) {
-      /* DELETE POST LIKE RECORD ONLY IF IT EXISTS */
-      await PostLikesModel.query().delete().where({
-        post_id: postRecord.id,
+  async createPost(user: AuthUser, content: string): Promise<PostsModel> {
+    const post = await PostsModel.transaction(async trx => {
+      const inserted = await PostsModel.query(trx).insertAndFetch({
+        content,
         created_by: user.id,
+        updated_by: user.id,
+        is_deleted: false,
       });
 
-      /* UPDATE POST STAT RECORD */
-      await PostStatsModel.query()
-        .where('post_id', postRecord.id)
-        .decrement('like_count', 1);
-    }
-    /* END: DATABASE OPERATIONS */
+      await PostStatsModel.query(trx).insert({
+        post_id: inserted.id,
+        like_count: 0,
+        comment_count: 0,
+        story_count: 0,
+      });
 
-    /* FETCH AND RETURN UPDATED POST DATA */
-    const updatedPost = await PostsModel.getPostDetails(uuid);
-    if (!updatedPost) {
-      this.raiseError(HTTP_CODES.NOT_FOUND, GENERAL_MESSAGES.POST_NOT_FOUND);
-    }
+      await PersonStatsModel.query(trx)
+        .where('person_id', user.id)
+        .increment('post_count', 1);
 
-    return updatedPost;
-  }
-
-  /**
-   * @description CREATES A NEW POST
-   * @param user - logged in user
-   * @param content - post content
-   * @route POST /api/v1/posts/create
-   * @access private
-   */
-  async createPost(user: Person, content: string): Promise<PostsModel> {
-    /* BEGIN: VALIDATIONS */
-    if (!content) {
-      this.raiseError(
-        HTTP_CODES.BAD_REQUEST,
-        GENERAL_MESSAGES.PROVIDE_POST_DETAILS,
-      );
-    }
-    /* END: VALIDATIONS */
-
-    /* BEGIN: DATABASE OPERATIONS */
-    /* INSERT POST RECORD */
-    const postRecord = await PostsModel.query().insertAndFetch({
-      content,
-      created_by: user.id,
-      updated_by: user.id,
-      is_deleted: false,
+      return inserted;
     });
-    if (!postRecord) {
-      this.raiseError(
+
+    const details = await PostsModel.getPostDetails(post.uuid);
+    if (!details) {
+      throw new HttpError(
         HTTP_CODES.INTERNAL_SERVER_ERROR,
         PERSON_ERROR_MESSAGES.POST_FAILURE,
       );
     }
-
-    /* INSERT POST STATS RECORD */
-    await PostStatsModel.query().insert({
-      post_id: postRecord.id,
-      like_count: 0,
-      comment_count: 0,
-      story_count: 0,
-    });
-
-    /* UPDATE PERSON STATS RECORD */
-    await PersonStatsModel.query()
-      .where('person_id', user.id)
-      .increment('post_count', 1);
-    /* END: DATABASE OPERATIONS */
-
-    /* FETCH AND RETURN COMPLETE POST DATA WITH RELATIONS */
-    const completePostData = await PostsModel.getPostDetails(postRecord.uuid);
-    if (!completePostData) {
-      this.raiseError(
-        HTTP_CODES.INTERNAL_SERVER_ERROR,
-        PERSON_ERROR_MESSAGES.POST_FAILURE,
-      );
-    }
-
-    return completePostData;
+    return details;
   }
 
   /**
-   * @description GET FEED POSTS FOR USER
-   * @param user - logged in user
+   * Posts from the user and everyone they follow.
    * @route GET /api/v1/posts/feed
-   * @access private
    */
-  async getFeedPosts(user: Person): Promise<PostsModel[]> {
-    /* GET ALL FOLLOWING IDS */
-    const followingIds = await FollowingsModel.query()
-      .where('follower_id', user.id)
-      .select('followed_id');
+  async getFeedPosts(user: AuthUser): Promise<PostsModel[]> {
+    const followings = await FollowingsModel.query()
+      .select('followed_id')
+      .where('follower_id', user.id);
+    const personIds = [user.id, ...followings.map(f => f.followed_id)];
 
-    const followingPersonIds = followingIds.map(follow => follow.followed_id);
-    followingPersonIds.push(user.id); // Include user's own posts
-
-    /* GET POSTS FROM FOLLOWING PEOPLE */
-    const feedPosts = await PostsModel.query()
-      .whereIn('created_by', followingPersonIds)
+    return PostsModel.query()
+      .whereIn('created_by', personIds)
       .where('is_deleted', false)
       .withGraphFetched(
         '[creator(defaultSelects), post_likes(orderByLatest).creator(defaultSelects), post_stats, post_stories.creator(defaultSelects)]',
       )
       .modify('orderByLatest');
-
-    return feedPosts;
   }
 
   /**
-   * @description GET STORIES FOR USER
-   * @param user - logged in user
+   * Posts the user has added to their story.
    * @route GET /api/v1/posts/stories
-   * @access private
    */
-  async getStories(user: Person): Promise<PostsModel[]> {
-    /* GET ALL FOLLOWING IDS */
-    const followingIds = await FollowingsModel.query()
-      .where('follower_id', user.id)
-      .select('followed_id');
-
-    const followingPersonIds = followingIds.map(follow => follow.followed_id);
-    followingPersonIds.push(user.id); // Include user's own stories
-
-    /* GET POSTS WHERE USER HAS CREATED STORIES */
-    const postsWithStories = await PostsModel.query()
+  async getStories(user: AuthUser): Promise<PostsModel[]> {
+    return PostsModel.query()
       .whereExists(
         StoriesModel.query()
-          .whereColumn('post_id', 'posts.id')
-          .where('person_id', user.id),
+          .whereColumn('stories.post_id', 'posts.id')
+          .where('stories.person_id', user.id),
       )
       .where('is_deleted', false)
       .withGraphFetched(
         '[post_stories.creator(defaultSelects), creator(defaultSelects), post_stats, post_likes.creator(defaultSelects)]',
       )
       .modify('orderByLatest');
-
-    return postsWithStories;
   }
 
   /**
-   * @description FETCH SINGLE POST BY UUID
-   * @param uuid - post's uuid
    * @route GET /api/v1/posts/:uuid
-   * @access private
    */
   async fetchPost(uuid: string): Promise<PostsModel> {
-    /* BEGIN: VALIDATIONS */
-    if (!uuid) {
-      this.raiseError(
-        HTTP_CODES.BAD_REQUEST,
-        GENERAL_MESSAGES.PROVIDE_POST_DETAILS,
-      );
-    }
-    /* END: VALIDATIONS */
+    return this.getPostDetailsOrThrow(uuid);
+  }
 
-    /* BEGIN: DATABASE OPERATIONS */
-    const postRecord = await PostsModel.getPostDetails(uuid);
-    if (!postRecord) {
-      this.raiseError(
-        HTTP_CODES.INTERNAL_SERVER_ERROR,
-        GENERAL_MESSAGES.POST_NOT_FOUND,
-      );
+  private async findActivePost(uuid: string): Promise<PostsModel> {
+    const post = await PostsModel.query().findOne({ uuid, is_deleted: false });
+    if (!post) {
+      throw postNotFound();
     }
-    /* END: DATABASE OPERATIONS */
+    return post;
+  }
 
-    return postRecord;
+  private async getPostDetailsOrThrow(uuid: string): Promise<PostsModel> {
+    const post = await PostsModel.getPostDetails(uuid);
+    if (!post) {
+      throw postNotFound();
+    }
+    return post;
   }
 }
 
-export default PostService;
+export default new PostService();

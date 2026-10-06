@@ -1,39 +1,47 @@
-import { Request, Response, NextFunction } from 'express';
-import { IS_PRODUCTION, IS_DEVELOPMENT } from '@/utils/constants/environments';
-import { HTTP_CODES } from '@/utils/constants/http-codes';
-import { GENERAL_MESSAGES } from '@/utils/constants/messages';
-import { ApiResponse } from '@/types';
+import type { NextFunction, Request, Response } from 'express';
+import { isProduction } from '../config/env';
+import type { ApiResponse } from '../types';
+import { HTTP_CODES } from '../utils/constants/http-codes';
+import { GENERAL_MESSAGES } from '../utils/constants/messages';
+import { HttpError } from '../utils/errors';
 
 export const pageNotFound = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ): void => {
-  const error = new Error(`Page Not Found - ${req.originalUrl}`);
-  res.status(404);
-  next(error);
+  next(
+    new HttpError(HTTP_CODES.NOT_FOUND, `Page Not Found - ${req.originalUrl}`),
+  );
 };
 
 export const errorHandler = (
-  err: Error & { status?: number },
+  err: unknown,
   _req: Request,
   res: Response,
+  // Express identifies error handlers by arity, so `next` must stay.
   _next: NextFunction,
 ): void => {
-  const statusCode = !err.status
-    ? HTTP_CODES.INTERNAL_SERVER_ERROR
-    : err.status;
+  const isHttpError = err instanceof HttpError;
+  const statusCode = isHttpError
+    ? err.status
+    : HTTP_CODES.INTERNAL_SERVER_ERROR;
 
-  const result: ApiResponse = {
-    state: false,
-    message: err?.message || GENERAL_MESSAGES.SOMETHING_WENT_WRONG,
-    data: IS_PRODUCTION ? '' : err.stack,
-  };
-
-  if (IS_DEVELOPMENT) {
-    // eslint-disable-next-line no-console
-    console.error(result);
+  if (!isHttpError) {
+    console.error(err);
   }
+
+  // Never leak internal error details (SQL, stack traces) in production.
+  const message =
+    isHttpError || !isProduction()
+      ? (err as Error).message || GENERAL_MESSAGES.SOMETHING_WENT_WRONG
+      : GENERAL_MESSAGES.SOMETHING_WENT_WRONG;
+
+  const result: ApiResponse<string> = {
+    state: false,
+    message,
+    ...(isProduction() ? {} : { data: (err as Error).stack ?? '' }),
+  };
 
   res.status(statusCode).json(result);
 };

@@ -1,129 +1,63 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCurrentTimestamp = exports.formatDate = exports.isValidUUID = exports.isValidEmail = exports.sanitizeString = exports.generateSecureRandom = exports.generateUUID = exports.verifyToken = exports.generateToken = exports.validateHash = exports.hash = void 0;
-const crypto_1 = __importDefault(require("crypto"));
-const jwt = __importStar(require("jsonwebtoken"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const CRYPTO_CONFIG = {
-    RADIX: 'hex',
-    ALGORITHM: 'sha512',
-    ITERATIONS: 1000,
-    KEY_LENGTH: 64,
+exports.verifyToken = exports.generateToken = exports.verifyPassword = exports.hashPassword = void 0;
+const node_crypto_1 = require("node:crypto");
+const node_util_1 = require("node:util");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const env_1 = require("../../config/env");
+const scrypt = (0, node_util_1.promisify)(node_crypto_1.scrypt);
+const KEY_LENGTH = 64;
+const SALT_BYTES = 16;
+const JWT_ISSUER = 'share-it-api';
+const JWT_AUDIENCE = 'share-it-client';
+/**
+ * Hashes a password with scrypt and a per-password random salt.
+ * Output format: `<salt-hex>:<hash-hex>`.
+ */
+const hashPassword = async (password) => {
+    const salt = (0, node_crypto_1.randomBytes)(SALT_BYTES).toString('hex');
+    const derivedKey = await scrypt(password, salt, KEY_LENGTH);
+    return `${salt}:${derivedKey.toString('hex')}`;
 };
-if (!process.env.SALT) {
-    throw new Error('SALT environment variable is required');
-}
-if (!process.env.JWT_SECRET) {
-    throw new Error('JWT_SECRET environment variable is required');
-}
-const SALT = process.env.SALT;
-const JWT_SECRET = process.env.JWT_SECRET;
-const hash = (password) => {
-    return crypto_1.default
-        .pbkdf2Sync(password, SALT, CRYPTO_CONFIG.ITERATIONS, CRYPTO_CONFIG.KEY_LENGTH, CRYPTO_CONFIG.ALGORITHM)
-        .toString(CRYPTO_CONFIG.RADIX);
+exports.hashPassword = hashPassword;
+/** Constant-time comparison of a password against a stored scrypt hash. */
+const verifyPassword = async (password, storedHash) => {
+    const [salt, key] = storedHash.split(':');
+    if (!salt || !key) {
+        return false;
+    }
+    const storedKey = Buffer.from(key, 'hex');
+    const derivedKey = await scrypt(password, salt, storedKey.length);
+    return (storedKey.length === derivedKey.length &&
+        (0, node_crypto_1.timingSafeEqual)(storedKey, derivedKey));
 };
-exports.hash = hash;
-const validateHash = (password, hashedPassword) => {
-    const currentHash = crypto_1.default
-        .pbkdf2Sync(password, SALT, CRYPTO_CONFIG.ITERATIONS, CRYPTO_CONFIG.KEY_LENGTH, CRYPTO_CONFIG.ALGORITHM)
-        .toString(CRYPTO_CONFIG.RADIX);
-    return currentHash === hashedPassword;
-};
-exports.validateHash = validateHash;
+exports.verifyPassword = verifyPassword;
 const generateToken = (userId) => {
     const payload = { id: userId };
-    return jwt.sign(payload, JWT_SECRET, {
-        expiresIn: '7d',
-        issuer: 'share-it-api',
-        audience: 'share-it-client',
+    return jsonwebtoken_1.default.sign(payload, (0, env_1.env)().JWT_SECRET, {
+        expiresIn: (0, env_1.env)().JWT_EXPIRATION_DURATION,
+        issuer: JWT_ISSUER,
+        audience: JWT_AUDIENCE,
     });
 };
 exports.generateToken = generateToken;
+/**
+ * Verifies a JWT and returns its payload.
+ * @throws when the token is invalid, expired or malformed
+ */
 const verifyToken = (token) => {
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        if (!decoded.id || typeof decoded.id !== 'number') {
-            throw new Error('Invalid token payload');
-        }
-        return decoded;
+    const decoded = jsonwebtoken_1.default.verify(token, (0, env_1.env)().JWT_SECRET, {
+        issuer: JWT_ISSUER,
+        audience: JWT_AUDIENCE,
+    });
+    if (typeof decoded !== 'object' ||
+        typeof decoded.id !== 'number') {
+        throw new Error('Invalid token payload');
     }
-    catch (error) {
-        if (error instanceof jwt.JsonWebTokenError) {
-            throw new Error('Invalid token');
-        }
-        if (error instanceof jwt.TokenExpiredError) {
-            throw new Error('Token expired');
-        }
-        throw new Error('Token verification failed');
-    }
+    return { id: decoded.id };
 };
 exports.verifyToken = verifyToken;
-const generateUUID = () => {
-    return crypto_1.default.randomUUID();
-};
-exports.generateUUID = generateUUID;
-const generateSecureRandom = (length = 32) => {
-    return crypto_1.default.randomBytes(length).toString('hex');
-};
-exports.generateSecureRandom = generateSecureRandom;
-const sanitizeString = (input) => {
-    return input.trim().replace(/[<>]/g, '');
-};
-exports.sanitizeString = sanitizeString;
-const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-};
-exports.isValidEmail = isValidEmail;
-const isValidUUID = (uuid) => {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(uuid);
-};
-exports.isValidUUID = isValidUUID;
-const formatDate = (date = new Date()) => {
-    return date.toISOString();
-};
-exports.formatDate = formatDate;
-const getCurrentTimestamp = () => {
-    return new Date().toISOString();
-};
-exports.getCurrentTimestamp = getCurrentTimestamp;
 //# sourceMappingURL=index.js.map

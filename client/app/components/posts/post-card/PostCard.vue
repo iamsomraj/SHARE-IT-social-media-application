@@ -1,7 +1,7 @@
 <template>
   <div class="w-full md:w-1/2 md:px-6">
     <div
-      class="flex w-full flex-col items-start justify-center space-y-4 border-b border-t transition-all duration-300 dark:border-slate-600 md:rounded-xl md:border"
+      class="flex w-full flex-col items-start justify-center space-y-4 border-t border-b transition-all duration-300 md:rounded-xl md:border dark:border-slate-600"
     >
       <!-- BEGIN: HEADER SECTION -->
       <post-card-header

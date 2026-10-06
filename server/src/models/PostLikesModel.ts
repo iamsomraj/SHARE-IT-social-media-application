@@ -1,9 +1,9 @@
-import { Model, RelationMappings, QueryBuilder } from 'objection';
-import { PostLikeModel } from '@/types';
-import PostsModel from '@/models/PostsModel';
-import PersonsModel from '@/models/PersonsModel';
+import { Model, type QueryBuilder, type RelationMappings } from 'objection';
+import type { PostLike } from '../types';
+import PostsModel from './PostsModel';
+import PersonsModel from './PersonsModel';
 
-class PostLikesModel extends Model implements PostLikeModel {
+class PostLikesModel extends Model implements PostLike {
   id!: number;
   post_id!: number;
   created_at!: string;
@@ -25,26 +25,6 @@ class PostLikesModel extends Model implements PostLikeModel {
 
   static override get idColumn(): string {
     return 'id';
-  }
-
-  static get postIdColumn(): string {
-    return 'post_id';
-  }
-
-  static get createdAtColumn(): string {
-    return 'created_at';
-  }
-
-  static get updatedAtColumn(): string {
-    return 'updated_at';
-  }
-
-  static get createdByColumn(): string {
-    return 'created_by';
-  }
-
-  static get updatedByColumn(): string {
-    return 'updated_by';
   }
 
   static override get jsonSchema() {

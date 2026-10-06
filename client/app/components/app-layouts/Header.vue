@@ -1,6 +1,6 @@
 <template>
   <header
-    class="fixed bottom-0 z-10 flex w-full items-center justify-center border-t bg-white px-6 py-4 shadow-2xl transition-all duration-300 dark:border-slate-600 dark:bg-slate-800 dark:shadow-xl md:sticky md:top-0 md:border-b md:border-t-0 md:px-12 md:py-2 md:shadow dark:md:border-b-slate-600"
+    class="fixed bottom-0 z-10 flex w-full items-center justify-center border-t bg-white px-6 py-4 shadow-2xl transition-all duration-300 md:sticky md:top-0 md:border-t-0 md:border-b md:px-12 md:py-2 md:shadow dark:border-slate-600 dark:bg-slate-800 dark:shadow-xl dark:md:border-b-slate-600"
   >
     <div class="flex w-full items-center justify-between md:w-1/2">
       <NuxtLink
@@ -22,7 +22,7 @@
       <div v-else class="flex items-center justify-between space-x-6 font-bold">
         <div @click="redirectToFeed">
           <FeedIcon
-            class="h-8 w-8 cursor-pointer fill-slate-300 stroke-slate-300 hover:fill-blue-400 hover:stroke-blue-400 active:fill-blue-400 active:stroke-blue-400 dark:fill-slate-600 dark:stroke-slate-600 dark:hover:fill-blue-400 dark:hover:stroke-blue-400 dark:active:fill-blue-400 dark:active:stroke-blue-400 md:h-6 md:w-6"
+            class="h-8 w-8 cursor-pointer fill-slate-300 stroke-slate-300 hover:fill-blue-400 hover:stroke-blue-400 active:fill-blue-400 active:stroke-blue-400 md:h-6 md:w-6 dark:fill-slate-600 dark:stroke-slate-600 dark:hover:fill-blue-400 dark:hover:stroke-blue-400 dark:active:fill-blue-400 dark:active:stroke-blue-400"
             :class="{
               'fill-blue-400 stroke-blue-400 dark:fill-blue-400 dark:stroke-blue-400':
                 isActiveRoute(ROUTES.FEED),
@@ -31,7 +31,7 @@
         </div>
         <div @click="redirectToSearch">
           <SearchIcon
-            class="h-8 w-8 cursor-pointer fill-slate-300 stroke-slate-300 hover:fill-blue-400 hover:stroke-blue-400 active:fill-blue-400 active:stroke-blue-400 dark:fill-slate-600 dark:stroke-slate-600 dark:hover:fill-blue-400 dark:hover:stroke-blue-400 dark:active:fill-blue-400 dark:active:stroke-blue-400 md:h-6 md:w-6"
+            class="h-8 w-8 cursor-pointer fill-slate-300 stroke-slate-300 hover:fill-blue-400 hover:stroke-blue-400 active:fill-blue-400 active:stroke-blue-400 md:h-6 md:w-6 dark:fill-slate-600 dark:stroke-slate-600 dark:hover:fill-blue-400 dark:hover:stroke-blue-400 dark:active:fill-blue-400 dark:active:stroke-blue-400"
             :class="{
               'fill-blue-400 stroke-blue-400 dark:fill-blue-400 dark:stroke-blue-400':
                 isActiveRoute(ROUTES.SEARCH),
@@ -48,7 +48,7 @@
         <ThemeButton />
         <div @click="onLogout">
           <LogoutIcon
-            class="h-8 w-8 cursor-pointer stroke-slate-300 hover:stroke-blue-400 active:stroke-blue-400 dark:stroke-slate-600 dark:hover:stroke-blue-400 dark:active:stroke-blue-400 md:h-6 md:w-6"
+            class="h-8 w-8 cursor-pointer stroke-slate-300 hover:stroke-blue-400 active:stroke-blue-400 md:h-6 md:w-6 dark:stroke-slate-600 dark:hover:stroke-blue-400 dark:active:stroke-blue-400"
           />
         </div>
       </div>

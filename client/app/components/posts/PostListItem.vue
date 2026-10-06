@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-full flex-col items-start justify-center space-y-4 border-b border-t transition-all duration-300 dark:border-slate-600 md:w-1/2 md:rounded-xl md:border"
+    class="flex w-full flex-col items-start justify-center space-y-4 border-t border-b transition-all duration-300 md:w-1/2 md:rounded-xl md:border dark:border-slate-600"
   >
     <div class="flex items-center justify-start space-x-4 px-6 pt-2">
       <profile-picture
@@ -23,7 +23,7 @@
 
     <div class="flex flex-col items-start justify-center space-y-4 px-6">
       <div
-        class="cursor-pointer break-words text-2xl text-slate-600 underline-offset-4 transition-all duration-300 hover:underline dark:text-slate-200"
+        class="cursor-pointer text-2xl wrap-break-word text-slate-600 underline-offset-4 transition-all duration-300 hover:underline dark:text-slate-200"
         @click="navigateToPost"
       >
         {{ content }}

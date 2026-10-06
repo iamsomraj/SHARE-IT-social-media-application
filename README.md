@@ -18,6 +18,7 @@ A modern, full-stack social media platform built with Nuxt 4 and Express. Connec
 
 - **Live Demo**: [share-it-social.vercel.app](https://share-it-social.vercel.app/)
 - **Video Overview**: [Watch Demo](https://youtu.be/gM3WxzEyJSU)
+- **Changelog**: [CHANGELOG.md](./CHANGELOG.md). Read it when upgrading from 2.x (env vars and auth changed)
 
 ## 🛠️ Tech Stack
 

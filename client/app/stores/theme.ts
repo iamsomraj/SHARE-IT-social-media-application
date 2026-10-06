@@ -1,14 +1,18 @@
 import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
+import { LOCAL_STORAGE_KEYS } from '~/utils/constants'
+
+type Theme = 'light' | 'dark'
 
 export const useThemeStore = defineStore('theme', () => {
-  const theme = ref<'light' | 'dark'>('light')
+  const theme = ref<Theme>('light')
 
   const isDarkTheme = computed(() => theme.value === 'dark')
 
-  const setTheme = (newTheme: 'light' | 'dark') => {
+  const setTheme = (newTheme: Theme) => {
     theme.value = newTheme
     if (import.meta.client) {
-      localStorage.setItem('share-it-theme', newTheme)
+      localStorage.setItem(LOCAL_STORAGE_KEYS.THEME, newTheme)
       updateDocumentClass()
     }
   }
@@ -20,20 +24,14 @@ export const useThemeStore = defineStore('theme', () => {
 
   const updateDocumentClass = () => {
     if (import.meta.client) {
-      if (theme.value === 'dark') {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
+      document.documentElement.classList.toggle('dark', theme.value === 'dark')
     }
   }
 
   const initializeTheme = () => {
     if (import.meta.client) {
-      const storedTheme = localStorage.getItem('share-it-theme') as
-        | 'light'
-        | 'dark'
-      if (storedTheme) {
+      const storedTheme = localStorage.getItem(LOCAL_STORAGE_KEYS.THEME)
+      if (storedTheme === 'light' || storedTheme === 'dark') {
         setTheme(storedTheme)
       } else {
         const prefersDark = window.matchMedia(

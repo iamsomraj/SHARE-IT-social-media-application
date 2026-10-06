@@ -1,16 +1,25 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import type {
-  User,
   Post,
-  UserOperationResult,
   PostOperationResult,
+  User,
+  UserOperationResult,
 } from '~/types/auth'
-import { getApiEndpoints } from '~/utils/constants'
+import { apiRequest, toOperationResult } from '~/utils/api'
+import { API_ROUTES } from '~/utils/constants'
 
-export interface Profile extends User {}
+interface UuidPayload {
+  uuid: string
+  token: string
+}
 
-const defaultProfile: Profile = {
+interface PostActionPayload {
+  postUUID: string
+  token: string
+}
+
+const createDefaultProfile = (): User => ({
   id: 0,
   uuid: '',
   name: '',
@@ -30,261 +39,95 @@ const defaultProfile: Profile = {
     updated_at: '',
   },
   person_posts: [],
-}
+})
 
 export const useProfileStore = defineStore('profile', () => {
-  const profile = ref<Profile>(defaultProfile)
+  const profile = ref<User>(createDefaultProfile())
 
   const posts = computed(() => profile.value.person_posts)
 
-  const setProfile = (newProfile: Profile) => {
+  const setProfile = (newProfile: User) => {
     profile.value = newProfile
   }
 
   const clearProfile = () => {
-    profile.value = defaultProfile
+    profile.value = createDefaultProfile()
   }
 
   const updatePost = (updatedPost: Post) => {
-    profile.value.person_posts = profile.value.person_posts.map(postItem => {
-      if (Number(postItem?.id) === Number(updatedPost?.id)) {
-        return { ...updatedPost }
-      } else {
-        return postItem
-      }
-    })
+    profile.value.person_posts = profile.value.person_posts.map(postItem =>
+      postItem.id === updatedPost.id ? { ...updatedPost } : postItem
+    )
   }
 
-  const getUserProfile = async ({
-    uuid,
-    token,
-  }: {
-    uuid: string
-    token: string
-  }): Promise<UserOperationResult> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const responseData = await $fetch<{
-        data: Profile
-        state: boolean
-        message: string
-      }>(`${endpoints.GET_USER_PROFILE}/${uuid}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+  const fetchProfile = async (
+    { uuid, token }: UuidPayload,
+    fallbackError: string
+  ): Promise<UserOperationResult> => {
+    const result = await toOperationResult(
+      apiRequest<User>(API_ROUTES.GET_USER_PROFILE(uuid), { token }),
+      fallbackError
+    )
+    setProfile(
+      result.success && result.data ? result.data : createDefaultProfile()
+    )
+    return result
+  }
 
-      if (responseData.state) {
-        setProfile(responseData.data)
-        return {
-          success: true,
-          data: responseData.data,
-          message: responseData.message,
-        }
-      } else {
-        setProfile(defaultProfile)
-        return {
-          success: false,
-          error: responseData.message || 'Failed to fetch profile',
-        }
-      }
-    } catch (error: unknown) {
-      setProfile(defaultProfile)
-      return {
-        success: false,
-        error:
-          error instanceof Error ? error.message : 'Failed to fetch profile',
-      }
+  const getUserProfile = (payload: UuidPayload) =>
+    fetchProfile(payload, 'Failed to fetch profile')
+
+  const getSelfProfile = (payload: UuidPayload) =>
+    fetchProfile(payload, 'Failed to get profile')
+
+  /** Follow/unfollow return the current user's refreshed details. */
+  const runFollowAction = async (
+    path: string,
+    token: string,
+    fallbackError: string
+  ): Promise<UserOperationResult> => {
+    const result = await toOperationResult(
+      apiRequest<User>(path, { method: 'POST', token }),
+      fallbackError
+    )
+    if (result.success && result.data) {
+      const authStore = useAuthStore()
+      // The response omits posts, so keep the ones already loaded.
+      authStore.setUser({ ...authStore.user, ...result.data })
     }
+    return result
   }
 
-  const getSelfProfile = async ({
-    uuid,
-    token,
-  }: {
-    uuid: string
-    token: string
-  }): Promise<UserOperationResult> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const data = await $fetch<{
-        data?: Profile
-        state?: boolean
-        message?: string
-      }>(`${endpoints.GET_USER_PROFILE}/${uuid}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+  const follow = ({ uuid, token }: UuidPayload) =>
+    runFollowAction(API_ROUTES.FOLLOW(uuid), token, 'Follow failed')
 
-      if (data && data.state && data.data) {
-        setProfile(data.data)
-        return { success: true, data: data.data, state: true }
-      } else {
-        setProfile(defaultProfile)
-        return { success: false, error: 'Invalid profile data' }
-      }
-    } catch (error: unknown) {
-      setProfile(defaultProfile)
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Failed to get profile',
-        state: false,
-      }
+  const unfollow = ({ uuid, token }: UuidPayload) =>
+    runFollowAction(API_ROUTES.UNFOLLOW(uuid), token, 'Unfollow failed')
+
+  const runPostAction = async (
+    path: string,
+    token: string,
+    fallbackError: string
+  ): Promise<PostOperationResult> => {
+    const result = await toOperationResult(
+      apiRequest<Post>(path, { method: 'POST', token }),
+      fallbackError
+    )
+    if (result.success && result.data) {
+      updatePost(result.data)
     }
+    return result
   }
 
-  const follow = async ({
-    uuid,
-    token,
-  }: {
-    uuid: string
-    token: string
-  }): Promise<UserOperationResult> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const responseData = await $fetch<{
-        data: User
-        state: boolean
-        message: string
-      }>(`${endpoints.FOLLOW}/${uuid}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+  const likePost = ({ postUUID, token }: PostActionPayload) =>
+    runPostAction(API_ROUTES.ADD_LIKE(postUUID), token, 'Failed to like post')
 
-      if (responseData.state && responseData.data) {
-        const authStore = useAuthStore()
-        authStore.setUser(responseData.data)
-      }
-
-      return {
-        success: responseData.state,
-        data: responseData.data,
-        message: responseData.message,
-      }
-    } catch (error: unknown) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Follow failed',
-        state: false,
-      }
-    }
-  }
-
-  const unfollow = async ({
-    uuid,
-    token,
-  }: {
-    uuid: string
-    token: string
-  }): Promise<UserOperationResult> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const responseData = await $fetch<{
-        data: User
-        state: boolean
-        message: string
-      }>(`${endpoints.UNFOLLOW}/${uuid}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (responseData.state && responseData.data) {
-        const authStore = useAuthStore()
-        authStore.setUser(responseData.data)
-      }
-
-      return {
-        success: responseData.state,
-        data: responseData.data,
-        message: responseData.message,
-      }
-    } catch (error: unknown) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unfollow failed',
-        state: false,
-      }
-    }
-  }
-
-  const likePost = async ({
-    postUUID,
-    token,
-  }: {
-    postUUID: string
-    token: string
-  }): Promise<PostOperationResult> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const responseData = await $fetch<{
-        data: Post
-        state: boolean
-        message: string
-      }>(`${endpoints.ADD_LIKE}/${postUUID}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (responseData.state) {
-        updatePost(responseData.data)
-      }
-
-      return {
-        success: responseData.state,
-        data: responseData.data,
-        message: responseData.message,
-      }
-    } catch (error: unknown) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Failed to like post',
-      }
-    }
-  }
-
-  const unlikePost = async ({
-    postUUID,
-    token,
-  }: {
-    postUUID: string
-    token: string
-  }): Promise<PostOperationResult> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const responseData = await $fetch<{
-        data: Post
-        state: boolean
-        message: string
-      }>(`${endpoints.REMOVE_LIKE}/${postUUID}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (responseData.state) {
-        updatePost(responseData.data)
-      }
-
-      return {
-        success: responseData.state,
-        data: responseData.data,
-        message: responseData.message,
-      }
-    } catch (error: unknown) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Failed to unlike post',
-      }
-    }
-  }
+  const unlikePost = ({ postUUID, token }: PostActionPayload) =>
+    runPostAction(
+      API_ROUTES.REMOVE_LIKE(postUUID),
+      token,
+      'Failed to unlike post'
+    )
 
   return {
     profile,

@@ -10,10 +10,11 @@ export interface ToastMessage {
 
 export const useToastStore = defineStore('toast', () => {
   const toasts = ref<ToastMessage[]>([])
-  const timeouts = ref<Map<string, NodeJS.Timeout>>(new Map())
+  // Timer handles are not state, so they stay out of the reactive store.
+  const timeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
   const addToast = (toast: Omit<ToastMessage, 'id'>) => {
-    const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
     const newToast: ToastMessage = {
       id,
       duration: toast.duration ?? 3000,
@@ -27,7 +28,7 @@ export const useToastStore = defineStore('toast', () => {
         removeToast(id)
       }, newToast.duration)
 
-      timeouts.value.set(id, timeoutId)
+      timeouts.set(id, timeoutId)
     }
   }
 
@@ -37,10 +38,10 @@ export const useToastStore = defineStore('toast', () => {
       toasts.value.splice(index, 1)
     }
 
-    const timeoutId = timeouts.value.get(id)
+    const timeoutId = timeouts.get(id)
     if (timeoutId) {
       clearTimeout(timeoutId)
-      timeouts.value.delete(id)
+      timeouts.delete(id)
     }
   }
 
@@ -61,10 +62,10 @@ export const useToastStore = defineStore('toast', () => {
   }
 
   const clear = () => {
-    timeouts.value.forEach(timeoutId => {
+    timeouts.forEach(timeoutId => {
       clearTimeout(timeoutId)
     })
-    timeouts.value.clear()
+    timeouts.clear()
 
     toasts.value = []
   }

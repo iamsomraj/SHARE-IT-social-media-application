@@ -1,9 +1,14 @@
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  compatibilityDate: '2026-10-01',
+
+  // Devtools is disabled: its git integration depends on a vulnerable
+  // `simple-git` release (see `overrides` in package.json).
+  devtools: { enabled: false },
+
+  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/eslint'],
 
   typescript: {
     strict: true,
-    typeCheck: true,
   },
 
   app: {
@@ -32,15 +37,19 @@ export default defineNuxtConfig({
     },
   },
 
-  css: [],
-
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
+  // Authenticated pages depend on the localStorage session, so render them
+  // on the client only; the public login/register pages stay server-rendered.
+  routeRules: {
+    '/feed/**': { ssr: false },
+    '/post/**': { ssr: false },
+    '/profile/**': { ssr: false },
+    '/search/**': { ssr: false },
+  },
 
   runtimeConfig: {
     public: {
-      nodeEnv: process.env.NODE_ENV || 'development',
-      devApi: process.env.DEV_API || 'http://localhost:4500',
-      prodApi: process.env.PROD_API || 'https://share-it-social-api.vercel.app',
+      // Override with NUXT_PUBLIC_API_BASE at runtime/build time.
+      apiBase: 'http://localhost:4500/api/v1',
     },
   },
 
@@ -51,16 +60,25 @@ export default defineNuxtConfig({
     },
   ],
 
-  nitro: {
-    devProxy: {
-      '/api': {
-        target: 'http://localhost:4500',
-        changeOrigin: true,
-      },
+  postcss: {
+    plugins: {
+      // No nested CSS is used, and Tailwind v3's nesting plugin is not
+      // ESM-importable by Nuxt 4's PostCSS loader.
+      'tailwindcss/nesting': false,
     },
   },
 
-  build: {},
+  vite: {
+    build: {
+      // Keep the previous browser baseline so CSS output stays compatible
+      // (e.g. no media-query range syntax for Safari < 16.4).
+      cssTarget: ['chrome87', 'edge88', 'firefox78', 'safari14'],
+    },
+  },
 
-  compatibilityDate: '2024-11-01',
+  eslint: {
+    config: {
+      stylistic: false,
+    },
+  },
 })

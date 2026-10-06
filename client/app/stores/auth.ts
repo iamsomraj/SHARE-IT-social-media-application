@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import type {
-  User,
-  AuthResponse,
+  AuthenticatedUser,
   Post,
+  User,
   UserOperationResult,
 } from '~/types/auth'
-import type { ApiResponse } from '~/types/common'
-import { getApiEndpoints } from '~/utils/constants'
+import type { OperationResult } from '~/types/common'
+import { apiRequest, toOperationResult } from '~/utils/api'
+import { API_ROUTES, LOCAL_STORAGE_KEYS } from '~/utils/constants'
 
-const defaultUser: User = {
+const createDefaultUser = (): User => ({
   id: 0,
   uuid: '',
   name: '',
@@ -29,18 +30,16 @@ const defaultUser: User = {
     updated_at: '',
   },
   person_posts: [],
-}
+})
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User>(defaultUser)
+  const user = ref<User>(createDefaultUser())
   const token = ref<string | null>(null)
 
   const isLoggedIn = computed(
-    () => !!token.value && !!user.value?.id && !!user.value?.uuid
+    () => !!token.value && !!user.value.id && !!user.value.uuid
   )
-
   const uuid = computed(() => user.value.uuid)
-
   const posts = computed(() => user.value.person_posts)
   const followers = computed(() => user.value.person_followers)
   const followings = computed(() => user.value.person_followings)
@@ -51,131 +50,104 @@ export const useAuthStore = defineStore('auth', () => {
   const setUser = (userData: User) => {
     user.value = userData
     if (import.meta.client) {
-      localStorage.setItem('share-it-user', JSON.stringify(userData))
+      localStorage.setItem(LOCAL_STORAGE_KEYS.USER, JSON.stringify(userData))
     }
   }
 
   const setToken = (tokenValue: string) => {
     token.value = tokenValue
     if (import.meta.client) {
-      localStorage.setItem('share-it-token', tokenValue)
+      localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, tokenValue)
     }
   }
 
   const clear = () => {
-    user.value = defaultUser
+    user.value = createDefaultUser()
     token.value = null
     if (import.meta.client) {
-      localStorage.removeItem('share-it-token')
-      localStorage.removeItem('share-it-user')
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN)
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.USER)
     }
+  }
+
+  const setSession = ({ token: userToken, ...userData }: AuthenticatedUser) => {
+    setToken(userToken)
+    setUser(userData)
   }
 
   const login = async (credentials: {
     email: string
     password: string
-  }): Promise<ApiResponse<AuthResponse>> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const response = await $fetch<AuthResponse>(endpoints.LOGIN, {
+  }): Promise<OperationResult<AuthenticatedUser>> => {
+    const result = await toOperationResult(
+      apiRequest<AuthenticatedUser>(API_ROUTES.LOGIN, {
         method: 'POST',
         body: credentials,
-      })
-
-      if (response?.state && response?.data?.token) {
-        const { token: userToken, ...userData } = response.data
-        setToken(userToken)
-        setUser(userData)
-
-        return { success: true, data: response, state: true }
-      }
-
-      return {
-        success: false,
-        error: response?.message || 'Invalid credentials',
-      }
-    } catch (error: unknown) {
-      return {
-        success: false,
-        error:
-          error instanceof Error ? error.message : 'Network error during login',
-      }
+      }),
+      'Invalid credentials'
+    )
+    if (result.success && result.data?.token) {
+      setSession(result.data)
     }
+    return result
   }
 
   const register = async (userData: {
     name: string
     email: string
     password: string
-  }): Promise<ApiResponse<AuthResponse>> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const response = await $fetch<AuthResponse>(endpoints.REGISTER, {
+  }): Promise<OperationResult<AuthenticatedUser>> => {
+    const result = await toOperationResult(
+      apiRequest<AuthenticatedUser>(API_ROUTES.REGISTER, {
         method: 'POST',
         body: userData,
-      })
-
-      if (response?.state && response?.data && response?.data.token) {
-        const { token: userToken, ...userDataWithoutToken } = response.data
-        setToken(userToken)
-        setUser(userDataWithoutToken)
-
-        return { success: true, data: response, state: true }
-      }
-
-      return { success: false, error: 'Invalid response format' }
-    } catch (error: unknown) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Registration failed',
-      }
+      }),
+      'Registration failed'
+    )
+    if (result.success && result.data?.token) {
+      setSession(result.data)
     }
+    return result
   }
 
+  /** Restores the session persisted in localStorage (client only). */
   const initializeAuth = () => {
-    if (import.meta.client) {
-      const storedToken = localStorage.getItem('share-it-token')
-      const storedUser = localStorage.getItem('share-it-user')
+    if (!import.meta.client || token.value) {
+      return
+    }
 
-      if (storedToken && storedUser) {
-        try {
-          setToken(storedToken)
-          setUser(JSON.parse(storedUser))
-        } catch {
-          clear()
-        }
-      }
+    const storedToken = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN)
+    const storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.USER)
+    if (!storedToken || !storedUser) {
+      return
+    }
+
+    try {
+      token.value = storedToken
+      user.value = JSON.parse(storedUser) as User
+    } catch {
+      clear()
     }
   }
 
-  const checkAuth = async () => {
-    try {
-      if (!token.value) {
-        initializeAuth()
-        return { success: false, error: 'No token found' }
-      }
-
-      const endpoints = getApiEndpoints()
-      const response = await $fetch<{ user: User }>(endpoints.GET_USER_DATA, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      })
-
-      if (response?.user) {
-        setUser(response.user)
-        return { success: true, data: response }
-      }
-
-      return { success: false, error: 'Invalid user data' }
-    } catch (error: unknown) {
-      clear()
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Auth check failed',
-      }
+  /** Re-validates the stored token against the API and refreshes the user. */
+  const checkAuth = async (): Promise<UserOperationResult> => {
+    initializeAuth()
+    if (!token.value) {
+      return { success: false, error: 'No token found' }
     }
+
+    const result = await toOperationResult(
+      apiRequest<User>(API_ROUTES.GET_USER_DATA, { token: token.value }),
+      'Auth check failed'
+    )
+    if (result.success && result.data) {
+      // This endpoint omits posts, so keep the ones already loaded.
+      setUser({ ...user.value, ...result.data })
+    } else {
+      clear()
+    }
+    return result
   }
 
   const addPost = (post: Post) => {
@@ -205,36 +177,16 @@ export const useAuthStore = defineStore('auth', () => {
     uuid: string
     token: string
   }): Promise<UserOperationResult> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const responseData = await $fetch<{
-        data: User
-        state: boolean
-        message: string
-      }>(`${endpoints.GET_USER_PROFILE}/${uuid}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (responseData.state && responseData.data) {
-        setUser(responseData.data)
-      } else {
-        clear()
-      }
-
-      return {
-        success: responseData.state,
-        data: responseData.data,
-        message: responseData.message,
-      }
-    } catch (error: unknown) {
+    const result = await toOperationResult(
+      apiRequest<User>(API_ROUTES.GET_USER_PROFILE(uuid), { token }),
+      'Failed to get profile'
+    )
+    if (result.success && result.data) {
+      setUser(result.data)
+    } else {
       clear()
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Failed to get profile',
-      }
     }
+    return result
   }
 
   return {

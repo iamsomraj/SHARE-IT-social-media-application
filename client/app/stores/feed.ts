@@ -1,80 +1,46 @@
 import { defineStore } from 'pinia'
-import type { Post } from '~/types/auth'
-import type { ApiResponse } from '~/types/common'
-import { getApiEndpoints } from '~/utils/constants'
+import { ref } from 'vue'
+import type { Post, PostOperationResult } from '~/types/auth'
+import type { OperationResult } from '~/types/common'
+import { apiRequest, toOperationResult } from '~/utils/api'
+import { API_ROUTES } from '~/utils/constants'
 
 export const useFeedStore = defineStore('feed', () => {
   const posts = ref<Post[]>([])
   const stories = ref<Post[]>([])
   const loading = ref(false)
 
-  const fetchPosts = async (token: string): Promise<ApiResponse<Post[]>> => {
+  const fetchPosts = async (
+    token: string
+  ): Promise<OperationResult<Post[]>> => {
+    loading.value = true
     try {
-      loading.value = true
-      const endpoints = getApiEndpoints()
-      const responseData = await $fetch<{
-        data: Post[]
-        state: boolean
-        message: string
-      }>(endpoints.GET_POST_FEED, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (responseData.state) {
-        posts.value = responseData.data
+      const result = await toOperationResult(
+        apiRequest<Post[]>(API_ROUTES.GET_POST_FEED, { token }),
+        'Failed to fetch posts'
+      )
+      if (result.success && result.data) {
+        posts.value = result.data
       }
-
-      return {
-        success: responseData.state,
-        data: responseData.data,
-        message: responseData.message,
-      }
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to fetch posts'
-      return {
-        success: false,
-        error: errorMessage,
-      }
+      return result
     } finally {
       loading.value = false
     }
   }
 
-  const fetchStories = async (token: string): Promise<ApiResponse<Post[]>> => {
+  const fetchStories = async (
+    token: string
+  ): Promise<OperationResult<Post[]>> => {
+    loading.value = true
     try {
-      loading.value = true
-      const endpoints = getApiEndpoints()
-      const responseData = await $fetch<{
-        data: Post[]
-        state: boolean
-        message: string
-      }>(endpoints.GET_STORY_POSTS, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (responseData.state) {
-        stories.value = responseData.data
+      const result = await toOperationResult(
+        apiRequest<Post[]>(API_ROUTES.GET_STORY_POSTS, { token }),
+        'Failed to fetch stories'
+      )
+      if (result.success && result.data) {
+        stories.value = result.data
       }
-
-      return {
-        success: responseData.state,
-        data: responseData.data,
-        message: responseData.message,
-      }
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to fetch stories'
-      return {
-        success: false,
-        error: errorMessage,
-      }
+      return result
     } finally {
       loading.value = false
     }
@@ -97,49 +63,33 @@ export const useFeedStore = defineStore('feed', () => {
     )
   }
 
+  /** Applies an updated post to the feed and to the user's own posts. */
+  const syncUpdatedPost = (updatedPost: Post) => {
+    updatePostInFeed(updatedPost)
+    const authStore = useAuthStore()
+    if (authStore.posts.some(post => post.id === updatedPost.id)) {
+      authStore.updatePost(updatedPost)
+    }
+  }
+
   const likePost = async ({
     postUUID,
     token,
   }: {
     postUUID: string
     token: string
-  }): Promise<ApiResponse<Post>> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const responseData = await $fetch<{
-        data: Post
-        state: boolean
-        message: string
-      }>(`${endpoints.ADD_LIKE}/${postUUID}`, {
+  }): Promise<PostOperationResult> => {
+    const result = await toOperationResult(
+      apiRequest<Post>(API_ROUTES.ADD_LIKE(postUUID), {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (responseData.state) {
-        updatePostInFeed(responseData.data)
-
-        const authStore = useAuthStore()
-        if (authStore.posts.some(post => post.id === responseData.data.id)) {
-          authStore.updatePost(responseData.data)
-        }
-      }
-
-      return {
-        success: responseData.state,
-        data: responseData.data,
-        message: responseData.message,
-      }
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to like post'
-      return {
-        success: false,
-        error: errorMessage,
-      }
+        token,
+      }),
+      'Failed to like post'
+    )
+    if (result.success && result.data) {
+      syncUpdatedPost(result.data)
     }
+    return result
   }
 
   const unlikePost = async ({
@@ -148,43 +98,18 @@ export const useFeedStore = defineStore('feed', () => {
   }: {
     postUUID: string
     token: string
-  }): Promise<ApiResponse<Post>> => {
-    try {
-      const endpoints = getApiEndpoints()
-      const responseData = await $fetch<{
-        data: Post
-        state: boolean
-        message: string
-      }>(`${endpoints.REMOVE_LIKE}/${postUUID}`, {
+  }): Promise<PostOperationResult> => {
+    const result = await toOperationResult(
+      apiRequest<Post>(API_ROUTES.REMOVE_LIKE(postUUID), {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (responseData.state) {
-        updatePostInFeed(responseData.data)
-
-        const authStore = useAuthStore()
-        if (authStore.posts.some(post => post.id === responseData.data.id)) {
-          authStore.updatePost(responseData.data)
-        }
-      }
-
-      return {
-        success: responseData.state,
-        data: responseData.data,
-        message: responseData.message,
-      }
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to unlike post'
-      return {
-        success: false,
-        error: errorMessage,
-      }
+        token,
+      }),
+      'Failed to unlike post'
+    )
+    if (result.success && result.data) {
+      syncUpdatedPost(result.data)
     }
+    return result
   }
 
   return {

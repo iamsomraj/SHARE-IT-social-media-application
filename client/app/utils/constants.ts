@@ -1,5 +1,3 @@
-import type { ApiEndpoints } from '~/types/constants'
-
 export const ROUTES = Object.freeze({
   FEED: 'feed',
   PROFILE: 'profile',
@@ -37,42 +35,25 @@ export const LOCAL_STORAGE_KEYS = Object.freeze({
   THEME: 'share-it-theme',
 } as const)
 
-const PERSON_BASE = `/persons`
-const POST_BASE = `/posts`
-const AUTH_BASE = `/auth`
+/** API paths, relative to `runtimeConfig.public.apiBase`. */
+export const API_ROUTES = Object.freeze({
+  AUTHORIZE_USER: '/auth/',
 
-export const getApiBaseUrl = (): string => {
-  if (import.meta.client) {
-    const config = useRuntimeConfig()
-    return config.public.nodeEnv === 'production'
-      ? config.public.prodApi
-      : config.public.devApi
-  }
-  return ''
-}
+  LOGIN: '/persons/auth',
+  REGISTER: '/persons/',
+  GET_USER_DATA: '/persons/',
+  FOLLOW: (uuid: string) => `/persons/follow/${uuid}`,
+  UNFOLLOW: (uuid: string) => `/persons/unfollow/${uuid}`,
+  GET_USER_PROFILE: (uuid: string) => `/persons/${uuid}`,
+  SEARCH_PEOPLE: '/persons/search/',
+  GET_PEOPLE: '/persons/people',
 
-export const getApiEndpoints = (): ApiEndpoints => {
-  const baseUrl = getApiBaseUrl()
-
-  return {
-    AUTHORIZE_USER: `${baseUrl}${AUTH_BASE}/`,
-
-    LOGIN: `${baseUrl}${PERSON_BASE}/auth`,
-    REGISTER: `${baseUrl}${PERSON_BASE}/`,
-    GET_USER_DATA: `${baseUrl}${PERSON_BASE}/`,
-    FOLLOW: `${baseUrl}${PERSON_BASE}/follow`,
-    UNFOLLOW: `${baseUrl}${PERSON_BASE}/unfollow`,
-    GET_USER_PROFILE: `${baseUrl}${PERSON_BASE}`,
-    SEARCH_PEOPLE: `${baseUrl}${PERSON_BASE}/search/`,
-    GET_PEOPLE: `${baseUrl}${PERSON_BASE}/people`,
-
-    CREATE_POST: `${baseUrl}${POST_BASE}/create`,
-    GET_POST_FEED: `${baseUrl}${POST_BASE}/feed`,
-    GET_STORY_POSTS: `${baseUrl}${POST_BASE}/stories`,
-    ADD_LIKE: `${baseUrl}${POST_BASE}/like`,
-    REMOVE_LIKE: `${baseUrl}${POST_BASE}/unlike`,
-    FETCH_POST: `${baseUrl}${POST_BASE}`,
-    ADD_STORY: `${baseUrl}${POST_BASE}/add-story`,
-    REMOVE_STORY: `${baseUrl}${POST_BASE}/remove-story`,
-  }
-}
+  CREATE_POST: '/posts/create',
+  GET_POST_FEED: '/posts/feed',
+  GET_STORY_POSTS: '/posts/stories',
+  ADD_LIKE: (uuid: string) => `/posts/like/${uuid}`,
+  REMOVE_LIKE: (uuid: string) => `/posts/unlike/${uuid}`,
+  FETCH_POST: (uuid: string) => `/posts/${uuid}`,
+  ADD_STORY: (uuid: string) => `/posts/add-story/${uuid}`,
+  REMOVE_STORY: (uuid: string) => `/posts/remove-story/${uuid}`,
+} as const)

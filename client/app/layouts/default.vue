@@ -13,18 +13,25 @@
   const route = useRoute()
   const themeStore = useThemeStore()
 
+  // Logging out in another tab removes the token; send this tab to login.
+  const onStorageChange = (event: StorageEvent) => {
+    if (
+      event.key === LOCAL_STORAGE_KEYS.TOKEN &&
+      !event.newValue &&
+      route.path !== '/' &&
+      route.path !== '/register'
+    ) {
+      useAuthStore().clear()
+      router.push('/')
+    }
+  }
+
   onMounted(() => {
     themeStore.initializeTheme()
+    window.addEventListener('storage', onStorageChange)
+  })
 
-    setInterval(() => {
-      const tokenFromStorage = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN)
-      if (
-        !tokenFromStorage &&
-        route.path !== '/' &&
-        route.path !== '/register'
-      ) {
-        router.push('/')
-      }
-    }, 1000)
+  onBeforeUnmount(() => {
+    window.removeEventListener('storage', onStorageChange)
   })
 </script>

@@ -3,227 +3,197 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const FollowingsModel_1 = __importDefault(require("../../models/FollowingsModel"));
 const PersonsModel_1 = __importDefault(require("../../models/PersonsModel"));
 const PersonStatsModel_1 = __importDefault(require("../../models/PersonStatsModel"));
-const FollowingsModel_1 = __importDefault(require("../../models/FollowingsModel"));
-const helpers_1 = require("../../utils/helpers");
-const RootService_1 = __importDefault(require("../Root/RootService"));
 const http_codes_1 = require("../../utils/constants/http-codes");
 const messages_1 = require("../../utils/constants/messages");
-const schemas_1 = require("../../schemas");
-class PersonService extends RootService_1.default {
-    constructor() {
-        super();
-    }
-    validateLoginInput(email, password) {
-        return (0, schemas_1.validateWithZod)(schemas_1.ZodLoginSchema, { email, password });
-    }
-    validateRegisterInput(name, email, password) {
-        return (0, schemas_1.validateWithZod)(schemas_1.ZodRegisterSchema, { name, email, password });
-    }
+const errors_1 = require("../../utils/errors");
+const helpers_1 = require("../../utils/helpers");
+const SELF_GRAPH = '[person_stats, person_followers, person_followings]';
+const SEARCH_LIMIT = 20;
+const notFound = () => new errors_1.HttpError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+/** Escapes `%`, `_` and `\` so user input is matched literally by ILIKE. */
+const escapeLike = (value) => value.replace(/[\\%_]/g, '\\$&');
+/**
+ * Handles all person-related business logic.
+ */
+class PersonService {
+    /**
+     * @route POST /api/v1/persons/auth
+     */
     async loginPerson(email, password) {
-        const validatedInput = this.validateLoginInput(email, password);
-        const doesPersonExist = await PersonsModel_1.default.checkIfPersonExistsByEmail(validatedInput.email);
-        if (!doesPersonExist) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+        const person = await PersonsModel_1.default.checkIfPersonExistsByEmail(email);
+        if (!person) {
+            throw notFound();
         }
-        if (!(0, helpers_1.validateHash)(validatedInput.password, doesPersonExist.password)) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.PERSON_ERROR_MESSAGES.WRONG_CREDENTIALS);
+        if (!(await (0, helpers_1.verifyPassword)(password, person.password))) {
+            throw new errors_1.HttpError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.PERSON_ERROR_MESSAGES.WRONG_CREDENTIALS);
         }
-        const personRecord = await PersonsModel_1.default.getPersonDetailsByEmail(validatedInput.email);
-        if (!personRecord) {
-            this.raiseError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.PERSON_ERROR_MESSAGES.FETCH_USER_DATA_FAILURE);
-        }
-        const token = (0, helpers_1.generateToken)(personRecord.id);
-        const result = {
-            ...personRecord,
-            token,
-        };
-        return result;
+        return this.buildAuthResponse(email);
     }
+    /**
+     * @route POST /api/v1/persons/
+     */
     async registerPerson(name, email, password) {
-        const validatedInput = this.validateRegisterInput(name, email, password);
-        const doesUserExist = await PersonsModel_1.default.checkIfPersonExistsByEmail(validatedInput.email);
-        if (doesUserExist) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.PERSON_ERROR_MESSAGES.USER_ALREADY_EXISTS);
+        if (await PersonsModel_1.default.checkIfPersonExistsByEmail(email)) {
+            throw new errors_1.HttpError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.PERSON_ERROR_MESSAGES.USER_ALREADY_EXISTS);
         }
-        const insertedPerson = await PersonsModel_1.default.query().insertAndFetch({
-            name: validatedInput.name,
-            email: validatedInput.email,
-            password: (0, helpers_1.hash)(validatedInput.password),
-            is_deleted: false,
+        const hashedPassword = await (0, helpers_1.hashPassword)(password);
+        await PersonsModel_1.default.transaction(async (trx) => {
+            const person = await PersonsModel_1.default.query(trx).insertAndFetch({
+                name,
+                email,
+                password: hashedPassword,
+                is_deleted: false,
+            });
+            await PersonStatsModel_1.default.query(trx).insert({
+                person_id: person.id,
+                post_count: 0,
+                following_count: 0,
+                follower_count: 0,
+            });
         });
-        if (!insertedPerson) {
-            this.raiseError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.PERSON_ERROR_MESSAGES.REGISTER_PERSON_FAILURE);
-        }
-        const insertedStatRecord = await PersonStatsModel_1.default.query().insert({
-            person_id: insertedPerson.id,
-            post_count: 0,
-            following_count: 0,
-            follower_count: 0,
-        });
-        if (!insertedStatRecord) {
-            this.raiseError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.PERSON_ERROR_MESSAGES.REGISTER_PERSON_FAILURE);
-        }
-        const registeredPerson = await PersonsModel_1.default.getPersonDetailsByEmail(email);
-        if (!registeredPerson) {
-            this.raiseError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.PERSON_ERROR_MESSAGES.REGISTER_PERSON_FAILURE);
-        }
-        const token = (0, helpers_1.generateToken)(registeredPerson.id);
-        const result = {
-            ...registeredPerson,
-            token,
-        };
-        return result;
+        return this.buildAuthResponse(email);
     }
-    async getPeople(user, page = 1, limit = 10) {
-        const offset = (page - 1) * limit;
-        const people = await PersonsModel_1.default.query()
+    /**
+     * @route GET /api/v1/persons/people
+     */
+    async getPeople(user, page, limit) {
+        return PersonsModel_1.default.query()
             .where('id', '!=', user.id)
             .where('is_deleted', false)
             .modify('defaultSelects')
             .withGraphFetched('person_stats')
             .limit(limit)
-            .offset(offset)
+            .offset((page - 1) * limit)
             .modify('orderByLatest');
-        return people;
     }
+    /**
+     * @route GET /api/v1/persons/
+     */
     async getUserData(user) {
-        const userData = await PersonsModel_1.default.query()
-            .findById(user.id)
-            .modify('defaultSelects')
-            .withGraphFetched('[person_stats, person_followers, person_followings]');
-        if (!userData) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
-        }
-        return userData;
+        return this.getSelfDetails(user.id);
     }
+    /**
+     * @route GET /api/v1/persons/:uuid
+     */
     async getPersonProfile(uuid) {
-        const personProfile = await PersonsModel_1.default.query()
-            .findOne({ uuid })
-            .where('is_deleted', false)
+        const profile = await PersonsModel_1.default.query()
+            .findOne({ uuid, is_deleted: false })
             .select('id', 'uuid', 'name', 'email', 'created_at', 'updated_at', 'is_deleted')
             .withGraphFetched('[person_stats, person_followers, person_followings, person_posts.[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]]');
-        if (!personProfile) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+        if (!profile) {
+            throw notFound();
         }
-        return personProfile;
+        return profile;
     }
+    /**
+     * @route POST /api/v1/persons/follow/:uuid
+     */
     async followPerson(user, uuid) {
-        if (!uuid) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.PERSON_ERROR_MESSAGES.PROVIDE_PERSON_UUID);
+        const target = await PersonsModel_1.default.checkIfPersonExistsByUUID(uuid);
+        if (!target) {
+            throw notFound();
         }
-        const personToFollow = await PersonsModel_1.default.checkIfPersonExistsByUUID(uuid);
-        if (!personToFollow) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
+        if (target.id === user.id) {
+            throw new errors_1.HttpError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.PERSON_ERROR_MESSAGES.CANNOT_FOLLOW_YOURSELF);
         }
-        if (personToFollow.id === user.id) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.PERSON_ERROR_MESSAGES.CANNOT_FOLLOW_YOURSELF);
-        }
-        const existingFollow = await FollowingsModel_1.default.query().findOne({
+        const existing = await FollowingsModel_1.default.query().findOne({
             follower_id: user.id,
-            followed_id: personToFollow.id,
+            followed_id: target.id,
         });
-        if (existingFollow) {
-            this.raiseError(http_codes_1.HTTP_CODES.CONFLICT, messages_1.PERSON_ERROR_MESSAGES.ALREADY_FOLLOWING);
+        if (existing) {
+            throw new errors_1.HttpError(http_codes_1.HTTP_CODES.CONFLICT, messages_1.PERSON_ERROR_MESSAGES.ALREADY_FOLLOWING);
         }
-        await FollowingsModel_1.default.query().insert({
-            follower_id: user.id,
-            followed_id: personToFollow.id,
-            created_by: user.id,
-            updated_by: user.id,
+        await FollowingsModel_1.default.transaction(async (trx) => {
+            await FollowingsModel_1.default.query(trx).insert({
+                follower_id: user.id,
+                followed_id: target.id,
+                created_by: user.id,
+                updated_by: user.id,
+            });
+            await this.refreshPersonStats(target.id, trx);
+            await this.refreshPersonStats(user.id, trx);
         });
-        await this.updatePersonStats(personToFollow.id);
-        await this.updatePersonStats(user.id);
-        const updatedCurrentUserDetails = await PersonsModel_1.default.query()
-            .findById(user.id)
-            .modify('defaultSelects')
-            .withGraphFetched('[person_stats, person_followers, person_followings]');
-        if (!updatedCurrentUserDetails) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
-        }
-        return updatedCurrentUserDetails;
+        return this.getSelfDetails(user.id);
     }
+    /**
+     * @route POST /api/v1/persons/unfollow/:uuid
+     */
     async unfollowPerson(user, uuid) {
-        if (!uuid) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.PERSON_ERROR_MESSAGES.PROVIDE_PERSON_UUID);
+        const target = await PersonsModel_1.default.checkIfPersonExistsByUUID(uuid);
+        if (!target) {
+            throw notFound();
         }
-        const personToUnfollow = await PersonsModel_1.default.checkIfPersonExistsByUUID(uuid);
-        if (!personToUnfollow) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
-        }
-        const existingFollow = await FollowingsModel_1.default.query().findOne({
+        const existing = await FollowingsModel_1.default.query().findOne({
             follower_id: user.id,
-            followed_id: personToUnfollow.id,
+            followed_id: target.id,
         });
-        if (!existingFollow) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.PERSON_ERROR_MESSAGES.NOT_FOLLOWING);
+        if (!existing) {
+            throw new errors_1.HttpError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.PERSON_ERROR_MESSAGES.NOT_FOLLOWING);
         }
-        await FollowingsModel_1.default.query().delete().where({
-            follower_id: user.id,
-            followed_id: personToUnfollow.id,
+        await FollowingsModel_1.default.transaction(async (trx) => {
+            await FollowingsModel_1.default.query(trx)
+                .delete()
+                .where({ follower_id: user.id, followed_id: target.id });
+            await this.refreshPersonStats(target.id, trx);
+            await this.refreshPersonStats(user.id, trx);
         });
-        await this.updatePersonStats(personToUnfollow.id);
-        await this.updatePersonStats(user.id);
-        const updatedCurrentUserDetails = await PersonsModel_1.default.query()
-            .findById(user.id)
-            .modify('defaultSelects')
-            .withGraphFetched('[person_stats, person_followers, person_followings]');
-        if (!updatedCurrentUserDetails) {
-            this.raiseError(http_codes_1.HTTP_CODES.NOT_FOUND, messages_1.PERSON_ERROR_MESSAGES.USER_NOT_FOUND);
-        }
-        return updatedCurrentUserDetails;
+        return this.getSelfDetails(user.id);
     }
+    /**
+     * @route POST /api/v1/persons/search
+     */
     async search(user, searchQuery) {
-        if (!searchQuery || searchQuery.trim().length === 0) {
-            this.raiseError(http_codes_1.HTTP_CODES.BAD_REQUEST, messages_1.PERSON_ERROR_MESSAGES.PROVIDE_SEARCH_QUERY);
-        }
-        const searchResults = await PersonsModel_1.default.query()
+        const pattern = `%${escapeLike(searchQuery)}%`;
+        return PersonsModel_1.default.query()
             .where('id', '!=', user.id)
             .where('is_deleted', false)
             .where(builder => {
             builder
-                .where('name', 'ilike', `%${searchQuery}%`)
-                .orWhere('email', 'ilike', `%${searchQuery}%`);
+                .where('name', 'ilike', pattern)
+                .orWhere('email', 'ilike', pattern);
         })
             .modify('defaultSelects')
             .withGraphFetched('person_stats')
-            .limit(20)
+            .limit(SEARCH_LIMIT)
             .modify('orderByLatest');
-        return searchResults;
     }
-    async updatePersonStats(personId) {
-        const followerCountResult = await FollowingsModel_1.default.query()
-            .where('followed_id', personId)
-            .count('* as count')
-            .first();
-        const followingCountResult = await FollowingsModel_1.default.query()
-            .where('follower_id', personId)
-            .count('* as count')
-            .first();
-        const PostsModel = require('../../models/PostsModel').default;
-        const postCountResult = await PostsModel.query()
-            .where('created_by', personId)
-            .where('is_deleted', false)
-            .count('* as count')
-            .first();
-        const followerCount = Number(followerCountResult?.count || 0);
-        const followingCount = Number(followingCountResult?.count || 0);
-        const postCount = Number(postCountResult?.count || 0);
-        await PersonStatsModel_1.default.query()
-            .insert({
-            person_id: personId,
-            follower_count: followerCount,
-            following_count: followingCount,
-            post_count: postCount,
-        })
-            .onConflict('person_id')
-            .merge({
-            follower_count: followerCount,
-            following_count: followingCount,
-            post_count: postCount,
-        });
+    async buildAuthResponse(email) {
+        const person = await PersonsModel_1.default.getPersonDetailsByEmail(email);
+        if (!person) {
+            throw new errors_1.HttpError(http_codes_1.HTTP_CODES.INTERNAL_SERVER_ERROR, messages_1.PERSON_ERROR_MESSAGES.FETCH_USER_DATA_FAILURE);
+        }
+        return { ...person, token: (0, helpers_1.generateToken)(person.id) };
+    }
+    async getSelfDetails(personId) {
+        const person = await PersonsModel_1.default.query()
+            .findById(personId)
+            .modify('defaultSelects')
+            .withGraphFetched(SELF_GRAPH);
+        if (!person) {
+            throw notFound();
+        }
+        return person;
+    }
+    /**
+     * Recomputes follower/following/post counters from source tables
+     * in a single upsert (one round trip per person).
+     */
+    async refreshPersonStats(personId, trx) {
+        await trx.raw(`
+      INSERT INTO person_stats (person_id, follower_count, following_count, post_count)
+      SELECT :personId,
+        (SELECT count(*) FROM followings WHERE followed_id = :personId),
+        (SELECT count(*) FROM followings WHERE follower_id = :personId),
+        (SELECT count(*) FROM posts WHERE created_by = :personId AND is_deleted = false)
+      ON CONFLICT (person_id) DO UPDATE SET
+        follower_count = EXCLUDED.follower_count,
+        following_count = EXCLUDED.following_count,
+        post_count = EXCLUDED.post_count
+      `, { personId });
     }
 }
-exports.default = PersonService;
+exports.default = new PersonService();
 //# sourceMappingURL=PersonService.js.map

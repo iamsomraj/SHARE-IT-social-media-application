@@ -1,9 +1,9 @@
-import express from 'express';
-import { authorizeUser } from '@/controllers/auth';
-import { validateZodRequest, ZodAuthSchema } from '@/schemas';
+import { Router } from 'express';
+import { authorizeUser } from '../controllers/auth';
+import { AuthSchema, validate } from '../schemas';
 
-const router = express.Router();
+const router = Router();
 
-router.route('/').post(validateZodRequest(ZodAuthSchema), authorizeUser);
+router.post('/', validate('body', AuthSchema), authorizeUser);
 
 export default router;

@@ -1,178 +1,79 @@
-import crypto from 'crypto';
-import * as jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+import {
+  randomBytes,
+  scrypt as scryptCallback,
+  timingSafeEqual,
+  type BinaryLike,
+} from 'node:crypto';
+import { promisify } from 'node:util';
+import jwt, { type SignOptions } from 'jsonwebtoken';
+import { env } from '../../config/env';
+import type { TokenPayload } from '../../types';
 
-dotenv.config();
+const scrypt = promisify(scryptCallback) as (
+  password: BinaryLike,
+  salt: BinaryLike,
+  keylen: number,
+) => Promise<Buffer>;
 
-// Crypto configuration constants
-const CRYPTO_CONFIG = {
-  RADIX: 'hex' as const,
-  ALGORITHM: 'sha512' as const,
-  ITERATIONS: 1000,
-  KEY_LENGTH: 64,
-} as const;
-
-// Environment variables validation
-if (!process.env.SALT) {
-  throw new Error('SALT environment variable is required');
-}
-
-if (!process.env.JWT_SECRET) {
-  throw new Error('JWT_SECRET environment variable is required');
-}
-
-const SALT = process.env.SALT;
-const JWT_SECRET = process.env.JWT_SECRET;
+const KEY_LENGTH = 64;
+const SALT_BYTES = 16;
+const JWT_ISSUER = 'share-it-api';
+const JWT_AUDIENCE = 'share-it-client';
 
 /**
- * Hash a password using PBKDF2
- * @param password - The password to hash
- * @returns The hashed password
+ * Hashes a password with scrypt and a per-password random salt.
+ * Output format: `<salt-hex>:<hash-hex>`.
  */
-export const hash = (password: string): string => {
-  return crypto
-    .pbkdf2Sync(
-      password,
-      SALT,
-      CRYPTO_CONFIG.ITERATIONS,
-      CRYPTO_CONFIG.KEY_LENGTH,
-      CRYPTO_CONFIG.ALGORITHM,
-    )
-    .toString(CRYPTO_CONFIG.RADIX);
+export const hashPassword = async (password: string): Promise<string> => {
+  const salt = randomBytes(SALT_BYTES).toString('hex');
+  const derivedKey = await scrypt(password, salt, KEY_LENGTH);
+  return `${salt}:${derivedKey.toString('hex')}`;
 };
 
-/**
- * Validate a password against a hash
- * @param password - The password to validate
- * @param hashedPassword - The hash to validate against
- * @returns True if the password is valid
- */
-export const validateHash = (
+/** Constant-time comparison of a password against a stored scrypt hash. */
+export const verifyPassword = async (
   password: string,
-  hashedPassword: string,
-): boolean => {
-  const currentHash = crypto
-    .pbkdf2Sync(
-      password,
-      SALT,
-      CRYPTO_CONFIG.ITERATIONS,
-      CRYPTO_CONFIG.KEY_LENGTH,
-      CRYPTO_CONFIG.ALGORITHM,
-    )
-    .toString(CRYPTO_CONFIG.RADIX);
-
-  return currentHash === hashedPassword;
+  storedHash: string,
+): Promise<boolean> => {
+  const [salt, key] = storedHash.split(':');
+  if (!salt || !key) {
+    return false;
+  }
+  const storedKey = Buffer.from(key, 'hex');
+  const derivedKey = await scrypt(password, salt, storedKey.length);
+  return (
+    storedKey.length === derivedKey.length &&
+    timingSafeEqual(storedKey, derivedKey)
+  );
 };
 
-/**
- * Generate a JWT token
- * @param userId - The user ID to include in the token
- * @returns The JWT token
- */
 export const generateToken = (userId: number): string => {
-  const payload = { id: userId };
-
-  return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: '7d',
-    issuer: 'share-it-api',
-    audience: 'share-it-client',
+  const payload: TokenPayload = { id: userId };
+  return jwt.sign(payload, env().JWT_SECRET, {
+    expiresIn: env().JWT_EXPIRATION_DURATION as NonNullable<
+      SignOptions['expiresIn']
+    >,
+    issuer: JWT_ISSUER,
+    audience: JWT_AUDIENCE,
   });
 };
 
-interface TokenPayload {
-  id: number;
-  iat?: number;
-  exp?: number;
-  iss?: string;
-  aud?: string;
-}
-
 /**
- * Verify a JWT token
- * @param token - The token to verify
- * @returns The decoded token payload
- * @throws {Error} When token is invalid or expired
+ * Verifies a JWT and returns its payload.
+ * @throws when the token is invalid, expired or malformed
  */
 export const verifyToken = (token: string): TokenPayload => {
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as TokenPayload;
+  const decoded = jwt.verify(token, env().JWT_SECRET, {
+    issuer: JWT_ISSUER,
+    audience: JWT_AUDIENCE,
+  });
 
-    if (!decoded.id || typeof decoded.id !== 'number') {
-      throw new Error('Invalid token payload');
-    }
-
-    return decoded;
-  } catch (error) {
-    if (error instanceof jwt.JsonWebTokenError) {
-      throw new Error('Invalid token');
-    }
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Error('Token expired');
-    }
-    throw new Error('Token verification failed');
+  if (
+    typeof decoded !== 'object' ||
+    typeof (decoded as Partial<TokenPayload>).id !== 'number'
+  ) {
+    throw new Error('Invalid token payload');
   }
-};
 
-/**
- * Generate a UUID v4
- * @returns A UUID v4 string
- */
-export const generateUUID = (): string => {
-  return crypto.randomUUID();
-};
-
-/**
- * Generate a secure random string
- * @param length - The length of the random string
- * @returns A secure random string
- */
-export const generateSecureRandom = (length = 32): string => {
-  return crypto.randomBytes(length).toString('hex');
-};
-
-/**
- * Sanitize a string for safe use in queries
- * @param input - The input string to sanitize
- * @returns The sanitized string
- */
-export const sanitizeString = (input: string): string => {
-  return input.trim().replace(/[<>]/g, '');
-};
-
-/**
- * Check if a string is a valid email
- * @param email - The email to validate
- * @returns True if the email is valid
- */
-export const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-/**
- * Check if a string is a valid UUID
- * @param uuid - The UUID to validate
- * @returns True if the UUID is valid
- */
-export const isValidUUID = (uuid: string): boolean => {
-  const uuidRegex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  return uuidRegex.test(uuid);
-};
-
-/**
- * Format a date to ISO string
- * @param date - The date to format
- * @returns The formatted date string
- */
-export const formatDate = (date: Date = new Date()): string => {
-  return date.toISOString();
-};
-
-/**
- * Get current timestamp
- * @returns Current timestamp as ISO string
- */
-export const getCurrentTimestamp = (): string => {
-  return new Date().toISOString();
+  return { id: (decoded as TokenPayload).id };
 };

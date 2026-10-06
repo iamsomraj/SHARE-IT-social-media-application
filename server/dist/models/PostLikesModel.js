@@ -25,21 +25,6 @@ class PostLikesModel extends objection_1.Model {
     static get idColumn() {
         return 'id';
     }
-    static get postIdColumn() {
-        return 'post_id';
-    }
-    static get createdAtColumn() {
-        return 'created_at';
-    }
-    static get updatedAtColumn() {
-        return 'updated_at';
-    }
-    static get createdByColumn() {
-        return 'created_by';
-    }
-    static get updatedByColumn() {
-        return 'updated_by';
-    }
     static get jsonSchema() {
         return {
             type: 'object',

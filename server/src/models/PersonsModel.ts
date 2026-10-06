@@ -1,6 +1,14 @@
-import { Model, QueryBuilder, RelationMappings } from 'objection';
-import { randomUUID } from 'crypto';
-import type { Person, PersonWithStats } from '@/types';
+import { Model, type QueryBuilder, type RelationMappings } from 'objection';
+import { randomUUID } from 'node:crypto';
+import type { Person, PublicPerson } from '../types';
+import FollowingsModel from './FollowingsModel';
+import PersonStatsModel from './PersonStatsModel';
+import PostLikesModel from './PostLikesModel';
+import PostsModel from './PostsModel';
+import StoriesModel from './StoriesModel';
+
+const DETAILS_GRAPH =
+  '[person_followers, person_followings, person_stats, person_posts.[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]]';
 
 export class PersonsModel extends Model implements Person {
   id!: number;
@@ -12,13 +20,12 @@ export class PersonsModel extends Model implements Person {
   updated_at!: string;
   is_deleted!: boolean;
 
-  // Relations
-  person_followers?: any[];
-  person_followings?: any[];
-  person_posts?: any[];
-  person_stories?: any[];
-  person_post_likes?: any[];
-  person_stats?: any;
+  person_followers?: FollowingsModel[];
+  person_followings?: FollowingsModel[];
+  person_posts?: PostsModel[];
+  person_stories?: StoriesModel[];
+  person_post_likes?: PostLikesModel[];
+  person_stats?: PersonStatsModel;
 
   static override get tableName(): string {
     return 'public.persons';
@@ -33,35 +40,7 @@ export class PersonsModel extends Model implements Person {
     this.updated_at = new Date().toISOString();
   }
 
-  static override get idColumn(): string {
-    return 'id';
-  }
-
-  static get nameColumn(): string {
-    return 'name';
-  }
-
-  static get emailColumn(): string {
-    return 'email';
-  }
-
-  static get passwordColumn(): string {
-    return 'password';
-  }
-
-  static get createdAtColumn(): string {
-    return 'created_at';
-  }
-
-  static get updatedAtColumn(): string {
-    return 'updated_at';
-  }
-
-  static get isDeletedColumn(): string {
-    return 'is_deleted';
-  }
-
-  static override get jsonSchema(): object {
+  static override get jsonSchema() {
     return {
       type: 'object',
       required: ['name', 'email', 'password'],
@@ -69,7 +48,7 @@ export class PersonsModel extends Model implements Person {
         id: { type: 'integer' },
         uuid: { type: 'string' },
         name: { type: 'string', minLength: 3, maxLength: 255 },
-        email: { type: 'string', minLength: 5, maxLength: 50 },
+        email: { type: 'string', minLength: 5, maxLength: 255 },
         password: { type: 'string', minLength: 4, maxLength: 255 },
         created_at: { type: 'string' },
         updated_at: { type: 'string' },
@@ -78,15 +57,11 @@ export class PersonsModel extends Model implements Person {
     };
   }
 
+  // Relation getters are evaluated lazily, so circular model imports are safe.
   static override get relationMappings(): RelationMappings {
-    // Import other models dynamically to avoid circular dependencies
-    const FollowingsModel = require('@/models/FollowingsModel').default;
-    const PostsModel = require('@/models/PostsModel').default;
-    const PostLikesModel = require('@/models/PostLikesModel').default;
-    const PersonStatsModel = require('@/models/PersonStatsModel').default;
-    const StoriesModel = require('@/models/StoriesModel').default;
-
     return {
+      // NOTE: naming is historical and the client relies on it:
+      // `person_followers` are rows where this person is the follower.
       person_followers: {
         relation: Model.HasManyRelation,
         modelClass: FollowingsModel,
@@ -138,10 +113,7 @@ export class PersonsModel extends Model implements Person {
     };
   }
 
-  static override get modifiers(): Record<
-    string,
-    (builder: QueryBuilder<PersonsModel>) => void
-  > {
+  static override get modifiers() {
     return {
       defaultSelects(builder: QueryBuilder<PersonsModel>) {
         builder.select(
@@ -162,87 +134,32 @@ export class PersonsModel extends Model implements Person {
     };
   }
 
-  /**
-   * @description fetches details of a person
-   * @param email - person's email
-   */
-  static async getPersonDetailsByEmail(
-    email: string,
-  ): Promise<PersonWithStats | undefined> {
-    const personRecord = await PersonsModel.query()
-      .findOne({ email })
-      .withGraphFetched(
-        '[person_followers, person_followings, person_stats, person_posts.[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]]',
-      );
-
-    if (personRecord) {
-      // Remove password from response
-      const { password, ...personWithoutPassword } = personRecord;
-      return personWithoutPassword as PersonWithStats;
-    }
-
-    return undefined;
+  /** Never serialize the password hash. */
+  override $formatJson(json: Record<string, unknown>) {
+    const { password: _password, ...rest } = super.$formatJson(json);
+    return rest;
   }
 
-  /**
-   * @description checks if a person exists with the given email
-   * @param email - person's email
-   */
+  /** Fetches a person with their relations (password excluded). */
+  static async getPersonDetailsByEmail(
+    email: string,
+  ): Promise<PublicPerson | undefined> {
+    const person = await PersonsModel.query()
+      .findOne({ email })
+      .withGraphFetched(DETAILS_GRAPH);
+    return person?.toJSON() as PublicPerson | undefined;
+  }
+
   static async checkIfPersonExistsByEmail(
     email: string,
   ): Promise<PersonsModel | undefined> {
-    return await PersonsModel.query().findOne({
-      email,
-      is_deleted: false,
-    });
+    return PersonsModel.query().findOne({ email, is_deleted: false });
   }
 
-  /**
-   * @description checks if a person exists with the given id
-   * @param id - person's id
-   */
-  static async checkIfPersonExistsById(
-    id: number,
-  ): Promise<PersonsModel | undefined> {
-    return await PersonsModel.query().findOne({
-      id,
-      is_deleted: false,
-    });
-  }
-
-  /**
-   * @description checks if a person exists with the given uuid
-   * @param uuid - person's uuid
-   */
   static async checkIfPersonExistsByUUID(
     uuid: string,
   ): Promise<PersonsModel | undefined> {
-    return await PersonsModel.query().findOne({
-      uuid,
-      is_deleted: false,
-    });
-  }
-
-  /**
-   * @description fetches details of a person by UUID
-   * @param uuid - person's uuid
-   */
-  static async getPersonDetailsByUUID(
-    uuid: string,
-  ): Promise<PersonWithStats | undefined> {
-    const personRecord = await PersonsModel.query()
-      .findOne({ uuid, is_deleted: false })
-      .withGraphFetched(
-        '[person_followers, person_followings, person_stats, person_posts.[post_likes.creator(defaultSelects), post_stats, creator(defaultSelects)]]',
-      );
-
-    if (personRecord) {
-      // Remove password from response
-      const { password, ...personWithoutPassword } = personRecord;
-      return personWithoutPassword as PersonWithStats;
-    }
-
-    return undefined;
+    return PersonsModel.query().findOne({ uuid, is_deleted: false });
   }
 }
 

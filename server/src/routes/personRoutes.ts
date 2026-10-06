@@ -1,53 +1,61 @@
-import express from 'express';
+import { Router } from 'express';
 import {
-  getPersonProfile,
-  registerPerson,
-  loginPerson,
   followPerson,
   getPeople,
+  getPersonProfile,
   getUserData,
-  unfollowPerson,
+  loginPerson,
+  registerPerson,
   search,
-} from '@/controllers/person';
-import { authenticateToken as protect } from '@/middlewares/auth';
+  unfollowPerson,
+} from '../controllers/person';
+import { authenticateToken as protect } from '../middlewares/auth';
 import {
-  validateZodRequest,
-  validateZodParams,
-  validateZodQuery,
-  ZodRegisterSchema,
-  ZodLoginSchema,
-  ZodUuidParamsSchema,
-  ZodSearchQuerySchema,
-  ZodPaginationQuerySchema,
-} from '@/schemas';
+  LoginSchema,
+  PaginationQuerySchema,
+  RegisterSchema,
+  SearchSchema,
+  UuidParamsSchema,
+  validate,
+} from '../schemas';
 
-const router = express.Router();
+const router = Router();
 
 router
   .route('/')
-  .post(validateZodRequest(ZodRegisterSchema), registerPerson)
+  .post(validate('body', RegisterSchema), registerPerson)
   .get(protect, getUserData);
 
-router.route('/auth').post(validateZodRequest(ZodLoginSchema), loginPerson);
+router.post('/auth', validate('body', LoginSchema), loginPerson);
 
-router
-  .route('/follow/:uuid')
-  .post(protect, validateZodParams(ZodUuidParamsSchema), followPerson);
+router.post(
+  '/follow/:uuid',
+  protect,
+  validate('params', UuidParamsSchema),
+  followPerson,
+);
 
-router
-  .route('/unfollow/:uuid')
-  .post(protect, validateZodParams(ZodUuidParamsSchema), unfollowPerson);
+router.post(
+  '/unfollow/:uuid',
+  protect,
+  validate('params', UuidParamsSchema),
+  unfollowPerson,
+);
 
-router
-  .route('/people')
-  .get(protect, validateZodQuery(ZodPaginationQuerySchema), getPeople);
+router.get(
+  '/people',
+  protect,
+  validate('query', PaginationQuerySchema),
+  getPeople,
+);
 
-router
-  .route('/:uuid')
-  .get(protect, validateZodParams(ZodUuidParamsSchema), getPersonProfile);
+router.post('/search', protect, validate('body', SearchSchema), search);
 
-router
-  .route('/search/')
-  .post(protect, validateZodRequest(ZodSearchQuerySchema), search);
+router.get(
+  '/:uuid',
+  protect,
+  validate('params', UuidParamsSchema),
+  getPersonProfile,
+);
 
 export default router;

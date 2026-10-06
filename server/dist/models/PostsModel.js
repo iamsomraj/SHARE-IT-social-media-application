@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const objection_1 = require("objection");
-const crypto_1 = require("crypto");
+const node_crypto_1 = require("node:crypto");
 const PersonsModel_1 = __importDefault(require("./PersonsModel"));
 const PostLikesModel_1 = __importDefault(require("./PostLikesModel"));
 const PostStatsModel_1 = __importDefault(require("./PostStatsModel"));
@@ -23,31 +23,13 @@ class PostsModel extends objection_1.Model {
     }
     $beforeInsert() {
         this.created_at = new Date().toISOString();
-        this.uuid = (0, crypto_1.randomUUID)();
+        this.uuid = (0, node_crypto_1.randomUUID)();
     }
     $beforeUpdate() {
         this.updated_at = new Date().toISOString();
     }
     static get idColumn() {
         return 'id';
-    }
-    static get contentColumn() {
-        return 'content';
-    }
-    static get createdAtColumn() {
-        return 'created_at';
-    }
-    static get updatedAtColumn() {
-        return 'updated_at';
-    }
-    static get createdByColumn() {
-        return 'created_by';
-    }
-    static get updatedByColumn() {
-        return 'updated_by';
-    }
-    static get isDeletedColumn() {
-        return 'is_deleted';
     }
     static get jsonSchema() {
         return {
@@ -119,16 +101,11 @@ class PostsModel extends objection_1.Model {
             },
         };
     }
+    /** Fetches a post with likes, stories, stats and creator. */
     static async getPostDetails(uuid) {
-        const postRecord = await PostsModel.query()
-            .findOne({
-            uuid,
-        })
+        return PostsModel.query()
+            .findOne({ uuid })
             .withGraphFetched('[post_likes(orderByLatest).creator(defaultSelects), post_stories(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]');
-        if (postRecord && 'password' in postRecord) {
-            delete postRecord.password;
-        }
-        return postRecord;
     }
 }
 exports.default = PostsModel;

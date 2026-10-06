@@ -1,10 +1,10 @@
-import { Model, RelationMappings, QueryBuilder } from 'objection';
-import { randomUUID } from 'crypto';
-import { Post } from '@/types';
-import PersonsModel from '@/models/PersonsModel';
-import PostLikesModel from '@/models/PostLikesModel';
-import PostStatsModel from '@/models/PostStatsModel';
-import StoriesModel from '@/models/StoriesModel';
+import { Model, type QueryBuilder, type RelationMappings } from 'objection';
+import { randomUUID } from 'node:crypto';
+import type { Post } from '../types';
+import PersonsModel from './PersonsModel';
+import PostLikesModel from './PostLikesModel';
+import PostStatsModel from './PostStatsModel';
+import StoriesModel from './StoriesModel';
 
 class PostsModel extends Model implements Post {
   id!: number;
@@ -31,30 +31,6 @@ class PostsModel extends Model implements Post {
 
   static override get idColumn(): string {
     return 'id';
-  }
-
-  static get contentColumn(): string {
-    return 'content';
-  }
-
-  static get createdAtColumn(): string {
-    return 'created_at';
-  }
-
-  static get updatedAtColumn(): string {
-    return 'updated_at';
-  }
-
-  static get createdByColumn(): string {
-    return 'created_by';
-  }
-
-  static get updatedByColumn(): string {
-    return 'updated_by';
-  }
-
-  static get isDeletedColumn(): string {
-    return 'is_deleted';
   }
 
   static override get jsonSchema() {
@@ -130,25 +106,13 @@ class PostsModel extends Model implements Post {
     };
   }
 
-  /**
-   * @description fetches details of a post with the given uuid
-   * @param uuid - The UUID of the post
-   */
+  /** Fetches a post with likes, stories, stats and creator. */
   static async getPostDetails(uuid: string): Promise<PostsModel | undefined> {
-    const postRecord = await PostsModel.query()
-      .findOne({
-        uuid,
-      })
+    return PostsModel.query()
+      .findOne({ uuid })
       .withGraphFetched(
         '[post_likes(orderByLatest).creator(defaultSelects), post_stories(orderByLatest).creator(defaultSelects), post_stats, creator(defaultSelects)]',
       );
-
-    // Remove password field if it exists
-    if (postRecord && 'password' in postRecord) {
-      delete (postRecord as any).password;
-    }
-
-    return postRecord;
   }
 }
 

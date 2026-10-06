@@ -1,6 +1,6 @@
-import { Model, RelationMappings } from 'objection';
-import { PersonStats } from '@/types';
-import PersonsModel from '@/models/PersonsModel';
+import { Model, type RelationMappings } from 'objection';
+import type { PersonStats } from '../types';
+import PersonsModel from './PersonsModel';
 
 class PersonStatsModel extends Model implements PersonStats {
   id!: number;
@@ -17,22 +17,6 @@ class PersonStatsModel extends Model implements PersonStats {
 
   static override get idColumn(): string {
     return 'id';
-  }
-
-  static get personIdColumn(): string {
-    return 'person_id';
-  }
-
-  static get postCountColumn(): string {
-    return 'post_count';
-  }
-
-  static get followerCountColumn(): string {
-    return 'follower_count';
-  }
-
-  static get followingCountColumn(): string {
-    return 'following_count';
   }
 
   static override get jsonSchema() {

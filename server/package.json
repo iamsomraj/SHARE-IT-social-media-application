@@ -58,7 +58,7 @@
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
     "knex": "^3.3.0",
-    "objection": "^3.1.5",
+    "objection": "^4.0.0",
     "pg": "^8.23.1",
     "zod": "^4.6.5"
   },
